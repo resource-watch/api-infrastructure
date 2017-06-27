@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: client-ingress
+spec:
+  rules:
+  - host: resourcewatch.app
+    http:
+      paths:
+      - backend:
+          serviceName: test-rw-app
+          servicePort: 8080
+  - host: prep.app
+    http:
+      paths:
+      - backend:
+          serviceName: test-prep-app
+          servicePort: 8080
