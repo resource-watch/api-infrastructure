@@ -31,7 +31,8 @@ spec:
     spec:
       containers:
       - name: control-tower
-        image: rrequero/control-tower:1.0.1
+        image: rrequero/control-tower:latest
+        imagePullPolicy: Always
         args:
           - develop
         env:
