@@ -44,7 +44,7 @@ server:
   name: grafana
 
   adminUser: "vizzuality"
-  adminPassword: "C6XyNV5tDvL4dwhE"
+  adminPassword: "<notset>"
 
   ## Global imagePullPolicy
   ## Default: 'Always' if image tag is 'latest', else 'IfNotPresent'
