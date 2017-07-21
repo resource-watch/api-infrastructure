@@ -1,0 +1,10 @@
+[Unit]
+Description=Gcloud Credentials
+
+[Service]
+Type=oneshot
+Environment="HOME=/root"
+ExecStart=/usr/bin/gcloudstartup
+
+[Install]
+WantedBy=multi-user.target
