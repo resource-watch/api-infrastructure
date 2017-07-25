@@ -3,10 +3,10 @@ replicas: 3
 port: 27017
 
 auth:
-  enabled: false
-  # adminUser:
-  # adminPassword:
-  # key:
+  enabled: true
+  adminUser: vizzuality-super
+  adminPassword: notset
+  key: notset
   # existingKeySecret:
   # existingAdminSecret:
 

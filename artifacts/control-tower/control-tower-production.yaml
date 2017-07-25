@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: control-tower
-        image: rrequero/control-tower:1.0.3
+        image: rrequero/control-tower:1.0.6
         imagePullPolicy: Always
         resources:
           requests:
@@ -37,25 +37,92 @@ spec:
           limits:
             memory: "1Gi"
         args:
-          - develop
+          - startDev
         env:
           - name: PORT
             value: "9000"
           - name: LOGGER_TYPE
             value: console
           - name: NODE_ENV
-            value: dev
+            value: prod
           - name: NODE_PATH
             value: app/src
-          - name: EXEC_MIGRATION
-            value: "true"
+          - name: BASICAUTH_USERNAME
+            value: vizzuality
+          - name: CONFIRM_URL_REDIRECT
+            value: http://www.globalforestwatch.org
+          - name: PUBLIC_URL
+            value: http://production-api.globalforestwatch.org
+          - name: CT_MONGO_URI
+            valueFrom:
+                secretKeyRef:
+                  name: dbsecrets
+                  key: CT_MONGO_URI
           - name: SESSION_KEY
-            value: test
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: SESSION_KEY
           - name: JWT_SECRET
             valueFrom:
                 secretKeyRef:
                   name: ctsecrets
                   key: JWT_SECRET
+          - name: TWITTER_CONSUMER_KEY
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: TWITTER_CONSUMER_KEY
+          - name: TWITTER_CONSUMER_SECRET
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: TWITTER_CONSUMER_SECRET
+          - name: FACEBOOK_CLIENT_ID
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: FACEBOOK_CLIENT_ID
+          - name: FACEBOOK_CLIENT_SECRET
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: FACEBOOK_CLIENT_SECRET
+          - name: GOOGLE_CLIENT_ID
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: GOOGLE_CLIENT_ID
+          - name: GOOGLE_CLIENT_SECRET
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: GOOGLE_CLIENT_SECRET
+          - name: BASICAUTH_PASSWORD
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: BASICAUTH_PASSWORD
+          - name: SPARKPOST_KEY
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: SPARKPOST_KEY
+          - name: INSTAPUSH_TOKEN
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: INSTAPUSH_TOKEN
+          - name: INSTAPUSH_ID
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: INSTAPUSH_ID
+          - name: INSTAPUSH_SECRET
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: INSTAPUSH_SECRET
 
         ports:
           - containerPort: 9000
