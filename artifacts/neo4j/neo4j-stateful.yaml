@@ -1,0 +1,46 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: neo4j
+  labels:
+    component: neo4j
+spec:
+  serviceName: neo4j
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: neo4j
+    spec:
+      containers:
+      - name: neo4j
+        securityContext:
+          privileged: true
+          capabilities:
+            add:
+              - IPC_LOCK
+        image: neo4j:3.2
+        imagePullPolicy: Always
+        env:
+        - name: NEO4J_AUTH
+          value: "none"
+        ports:
+        - containerPort: 7687
+          name: transport
+          protocol: TCP
+        - containerPort: 7474
+          name: web
+          protocol: TCP
+        volumeMounts:
+        - name: neo4j-storage
+          mountPath: /data
+  volumeClaimTemplates:
+  - metadata:
+      name: neo4j-storage
+      annotations:
+        volume.beta.kubernetes.io/storage-class: standard
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 50Gi
