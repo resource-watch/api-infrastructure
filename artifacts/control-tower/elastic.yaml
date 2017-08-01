@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: elastic
+  name: elastic
+spec:
+  ports:
+    - port: 9200
+  selector:
+    name: elastic
+
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  labels:
+    name: elastic
+  name: elastic
+spec:
+  serviceName: "elastic"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: elastic
+    spec:
+      containers:
+      - image: elasticsearch
+        name: elastic
+        ports:
+        - name: elastic
+          containerPort: 9200
+        volumeMounts:
+            - name: elastic-persistent-storage
+              mountPath: /usr/share/elasticsearch/data
+  volumeClaimTemplates:
+  - metadata:
+      name: elastic-persistent-storage
+      annotations:
+        volume.beta.kubernetes.io/storage-class: standard
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 50Gi
