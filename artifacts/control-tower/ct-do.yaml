@@ -34,7 +34,7 @@ spec:
         image: rrequero/control-tower:latest
         imagePullPolicy: Always
         args:
-          - develop
+          - start
         env:
           - name: PORT
             value: "9000"
