@@ -64,7 +64,7 @@ spec:
           protocol: TCP
         volumeMounts:
             - name: elastic-persistent-storage
-              mountPath: /usr/share/elasticsearch/data
+              mountPath: /data
   volumeClaimTemplates:
   - metadata:
       name: elastic-persistent-storage
