@@ -24,13 +24,44 @@ spec:
     metadata:
       labels:
         name: elastic
+      annotations:
+        pod.beta.kubernetes.io/init-containers: '[
+          {
+          "name": "sysctl",
+            "image": "busybox",
+            "imagePullPolicy": "IfNotPresent",
+            "command": ["sysctl", "-w", "vm.max_map_count=262144"],
+            "securityContext": {
+              "privileged": true
+            }
+          }
+        ]'
     spec:
       containers:
-      - image: elasticsearch
+      - image: quay.io/pires/docker-elasticsearch:5.5.0
+        imagePullPolicy: Always
         name: elastic
+        env:
+        - name: "ES_JAVA_OPTS"
+          value: "-Xms1g -Xmx1g"
+        - name: HTTP_ENABLE
+          value: "true"
+        - name: "ES_PLUGINS_INSTALL"
+          value: "https://github.com/NLPchina/elasticsearch-sql/releases/download/5.5.0.0/elasticsearch-sql-5.5.0.1.zip"
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+        securityContext:
+          privileged: true
+          capabilities:
+            add:
+              - IPC_LOCK
+              - SYS_RESOURCE
         ports:
         - name: elastic
           containerPort: 9200
+          protocol: TCP
         volumeMounts:
             - name: elastic-persistent-storage
               mountPath: /usr/share/elasticsearch/data
