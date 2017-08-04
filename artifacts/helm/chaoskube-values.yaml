@@ -8,10 +8,10 @@ image: quay.io/linki/chaoskube
 imageTag: v0.5.0
 
 # number of replicas to run
-replicas: 1
+replicas: 2
 
 # interval between pod terminations
-interval: 3m
+interval: 1m
 
 # label selector to filter pods by, e.g. app=foo,stage!=prod
 labels:

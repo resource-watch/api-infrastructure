@@ -2,23 +2,17 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    name: node
-  name: node
+    name: ubuntu
+  name: ubuntu
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        name: node
+        name: ubuntu
     spec:
       containers:
-      - name: node
-        image: node
+      - name: ubuntu
+        image: ubuntu
         command: ["sleep"]
         args: ["100000"]
-        env:
-        - name: CT_MONGO_URI
-          valueFrom:
-              secretKeyRef:
-                name: dbsecrets
-                key: CT_MONGO_URI
