@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    name: kubecron
+  name: kubecron
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: kubecron
+    spec:
+      containers:
+      - name: kubecron
+        image: vizzuality/kubecron:1.0.0
+        imagePullPolicy: Always
+        args:
+        - start
+        env:
+        - name: GCLOUD_BACKUPS_CREDENTIALS
+          valueFrom:
+              secretKeyRef:
+                name: mssecrets
+                key: GCLOUD_BACKUPS_CREDENTIALS

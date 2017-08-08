@@ -2,17 +2,17 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    name: ubuntu
-  name: ubuntu
+    name: node
+  name: node
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        name: ubuntu
+        name: node
     spec:
       containers:
-      - name: ubuntu
-        image: ubuntu
+      - name: node
+        image: node
         command: ["sleep"]
         args: ["100000"]

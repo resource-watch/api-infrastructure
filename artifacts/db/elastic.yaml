@@ -57,7 +57,6 @@ spec:
           capabilities:
             add:
               - IPC_LOCK
-              - SYS_RESOURCE
         ports:
         - name: elastic
           containerPort: 9200
