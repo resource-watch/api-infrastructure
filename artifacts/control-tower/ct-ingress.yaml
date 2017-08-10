@@ -11,9 +11,25 @@ spec:
   - hosts:
     - api-rw.vizzuality.com
     - ui.pingkapong.com
+    - api.resourcewatch.org
+    - production-api.globalforestwatch.org
     secretName: ct-prod-tls
   rules:
   - host: api-rw.vizzuality.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: api.resourcewatch.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: production-api.globalforestwatch.org
     http:
       paths:
       - path: /*

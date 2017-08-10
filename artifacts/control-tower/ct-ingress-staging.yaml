@@ -9,11 +9,11 @@ metadata:
 spec:
   tls:
   - hosts:
-    - staging.pingkapong.com
+    - staging-api.globalforestwatch.org
     - ui-staging.pingkapong.com
     secretName: ct-staging-tls
   rules:
-  - host: staging.pingkapong.com
+  - host: staging-api.globalforestwatch.org
     http:
       paths:
       - path: /*
