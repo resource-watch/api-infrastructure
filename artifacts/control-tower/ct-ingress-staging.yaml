@@ -4,7 +4,26 @@ metadata:
   name: gateway-ingress
   annotations:
     kubernetes.io/ingress.global-static-ip-name: ct-staging-static-ip
+    kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.class: "gce"
 spec:
-  backend:
-    serviceName: control-tower
-    servicePort: 80
+  tls:
+  - hosts:
+    - staging.pingkapong.com
+    - ui-staging.pingkapong.com
+    secretName: ct-staging-tls
+  rules:
+  - host: staging.pingkapong.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: ui-staging.pingkapong.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: ct-ui
+          servicePort: 80

@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: rasdaman
+  name: rasdaman
+spec:
+  ports:
+    - port: 8080
+  selector:
+    name: rasdaman
+
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  labels:
+    name: rasdaman
+  name: rasdaman
+spec:
+  serviceName: "rasdaman"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: rasdaman
+    spec:
+      containers:
+      - image: ecornejo/rasdaman-docker:0.0.1
+        name: rasdaman
+        ports:
+        - name: rasdaman
+          containerPort: 8080
+          protocol: TCP
+        volumeMounts:
+            - name: rasdaman-persistent-storage
+              mountPath: /opt/rasdaman/data
+  volumeClaimTemplates:
+  - metadata:
+      name: rasdaman-persistent-storage
+      annotations:
+        volume.beta.kubernetes.io/storage-class: standard
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 50Gi

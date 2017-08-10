@@ -1,0 +1,49 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    name: ct-ui
+  name: ct-ui
+spec:
+  template:
+    metadata:
+      labels:
+        name: ct-ui
+    spec:
+      containers:
+      - name: ct-ui
+        image: rrequero/ct-ui-wri:0.0.2
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "128Mi"
+          limits:
+            memory: "1Gi"
+        ports:
+          - containerPort: 80
+        readinessProbe:
+          httpGet:
+            scheme: HTTP
+            path: /index.html
+            port: 80
+            scheme: HTTP
+          initialDelaySeconds: 15
+          timeoutSeconds: 1
+          periodSeconds: 15
+
+      restartPolicy: Always
+
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ct-ui
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1beta1
+    kind: Deployment
+    name: ct-ui
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 60
