@@ -5,7 +5,6 @@ metadata:
    name: control-tower
  name: control-tower
 spec:
-  type: NodePort
   ports:
   - name: http
     protocol: TCP
@@ -29,7 +28,7 @@ spec:
     spec:
       containers:
       - name: control-tower
-        image: rrequero/control-tower:1.0.6
+        image: rrequero/control-tower:1.0.8
         imagePullPolicy: Always
         resources:
           requests:
@@ -126,16 +125,6 @@ spec:
 
         ports:
           - containerPort: 9000
-        readinessProbe:
-          httpGet:
-            scheme: HTTP
-            path: /healthz
-            port: 9000
-            scheme: HTTP
-          initialDelaySeconds: 15
-          timeoutSeconds: 1
-          periodSeconds: 15
-
       restartPolicy: Always
 
 ---
