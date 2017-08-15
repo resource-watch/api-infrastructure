@@ -11,9 +11,17 @@ spec:
   - hosts:
     - staging-api.globalforestwatch.org
     - ui-staging.pingkapong.com
+    - emissions.vizzuality.com
     secretName: ct-staging-tls
   rules:
   - host: staging-api.globalforestwatch.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: emissions.vizzuality.com
     http:
       paths:
       - path: /*
