@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: control-tower
-        image: rrequero/control-tower:1.0.10
+        image: rrequero/control-tower:1.0.13
         imagePullPolicy: Always
         resources:
           requests:
@@ -54,6 +54,12 @@ spec:
             value: http://www.globalforestwatch.org
           - name: PUBLIC_URL
             value: http://production-api.globalforestwatch.org
+          - name: APP_NAME
+            value: "WRI API"
+          - name: APP_LOGO
+            value: http://www.wri.org/sites/all/themes/wri/images/logo.png
+          - name: APP_COLOR
+            value: "#f1b319"
           - name: CT_MONGO_URI
             valueFrom:
                 secretKeyRef:

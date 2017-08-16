@@ -13,9 +13,17 @@ spec:
     - ui.resourcewatch.org
     - api.resourcewatch.org
     - production-api.globalforestwatch.org
+    - www.emissionspathways.org
     secretName: ct-prod-tls
   rules:
   - host: api-rw.vizzuality.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: www.emissionspathways.org
     http:
       paths:
       - path: /*
