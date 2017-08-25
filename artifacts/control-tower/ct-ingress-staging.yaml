@@ -28,6 +28,13 @@ spec:
         backend:
           serviceName: nginx
           servicePort: 80
+  - host: climate-watch.vizzuality.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
   - host: ui-staging.resourcewatch.org
     http:
       paths:
