@@ -24,6 +24,7 @@ COPY cronjobs.sh /cronjobs/cronjobs.sh
 # Backups
 RUN mkdir /cronjobs/backups/mongo
 COPY automongobackup.sh /cronjobs/automongobackup.sh
+COPY autoelasticbackup.sh /cronjobs/autoelasticbackup.sh
 
 # Add crontab file in the cron directory
 ADD crontab /etc/cron.d/cron

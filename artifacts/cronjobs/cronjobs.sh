@@ -4,3 +4,5 @@ echo "start automongobackup"
 # GCLOUD STORAGE BUCKET rsync
 gsutil rsync -r /cronjobs/backups/mongo gs://api-backups/mongo
 rm -rf /cronjobs/backups/mongo/*
+echo "start autoelasticbackup"
+/cronjobs/autoelasticbackup.sh | true
