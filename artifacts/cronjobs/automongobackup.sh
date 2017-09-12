@@ -49,6 +49,7 @@ DBUSERNAME="vizzuality-super"
 
 # Password to access the mongo server e.g. password
 # Unnecessary if authentication is off
+# @TODO!
 DBPASSWORD="notset"
 
 # Database for authentication to the mongo server e.g. admin
