@@ -9,6 +9,7 @@ metadata:
 spec:
   tls:
   - hosts:
+    - rw-blog.vizzuality.com
     - api-rw.vizzuality.com
     - ui.resourcewatch.org
     - api.resourcewatch.org
@@ -38,6 +39,13 @@ spec:
           serviceName: nginx
           servicePort: 80
   - host: production-api.globalforestwatch.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: rw-blog.vizzuality.com
     http:
       paths:
       - path: /*
