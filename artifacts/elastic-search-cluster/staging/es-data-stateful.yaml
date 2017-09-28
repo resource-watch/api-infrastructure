@@ -56,16 +56,10 @@ spec:
           value: "-Xms1g -Xmx1g"
         - name: "ES_PLUGINS_INSTALL"
           value: "https://github.com/NLPchina/elasticsearch-sql/releases/download/5.5.0.0/elasticsearch-sql-5.5.0.1.zip,repository-s3"
-        - name: AWS_ACCESS_KEY_ID
-          valueFrom:
-              secretKeyRef:
-                name: dbsecrets
-                key: BACKUP_S3_ACCESS_KEY
-        - name: AWS_SECRET_ACCESS_KEY
-          valueFrom:
-              secretKeyRef:
-                name: dbsecrets
-                key: BACKUP_S3_SECRET_KEY
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
         ports:
         - containerPort: 9300
           name: transport
