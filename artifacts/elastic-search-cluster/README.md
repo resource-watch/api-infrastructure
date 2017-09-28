@@ -19,7 +19,6 @@ Wait until `es-master` deployment is provisioned, and
 
 ```
 kubectl create -f es-client.yaml
-kubectl create -f gce-storage-class.yaml
 kubectl create -f es-data-svc.yaml
 kubectl create -f es-data-stateful.yaml
 ```

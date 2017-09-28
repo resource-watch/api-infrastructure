@@ -42,12 +42,14 @@ spec:
         imagePullPolicy: Always
         name: elastic
         env:
+        - name: NODE_NAME
+          value: "node"
         - name: "ES_JAVA_OPTS"
           value: "-Xms1g -Xmx1g"
         - name: HTTP_ENABLE
           value: "true"
         - name: "ES_PLUGINS_INSTALL"
-          value: "https://github.com/NLPchina/elasticsearch-sql/releases/download/5.5.0.0/elasticsearch-sql-5.5.0.1.zip"
+          value: "https://github.com/NLPchina/elasticsearch-sql/releases/download/5.5.0.0/elasticsearch-sql-5.5.0.1.zip,repository-s3"
         resources:
           requests:
             memory: "1Gi"

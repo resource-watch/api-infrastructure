@@ -6,20 +6,25 @@ metadata:
     component: elasticsearch
     role: client
 spec:
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
         component: elasticsearch
         role: client
+      annotations:
+        pod.beta.kubernetes.io/init-containers: '[
+          {
+          "name": "sysctl",
+            "image": "busybox",
+            "imagePullPolicy": "IfNotPresent",
+            "command": ["sysctl", "-w", "vm.max_map_count=262144"],
+            "securityContext": {
+              "privileged": true
+            }
+          }
+        ]'
     spec:
-      initContainers:
-      - name: init-sysctl
-        image: busybox
-        imagePullPolicy: IfNotPresent
-        command: ["sysctl", "-w", "vm.max_map_count=262144"]
-        securityContext:
-          privileged: true
       containers:
       - name: es-client
         securityContext:
@@ -28,7 +33,7 @@ spec:
             add:
               - IPC_LOCK
               - SYS_RESOURCE
-        image: quay.io/pires/docker-elasticsearch-kubernetes:5.5.1
+        image: quay.io/pires/docker-elasticsearch-kubernetes:5.5.0
         imagePullPolicy: Always
         env:
         - name: NAMESPACE
@@ -48,7 +53,9 @@ spec:
         - name: HTTP_ENABLE
           value: "true"
         - name: "ES_JAVA_OPTS"
-          value: "-Xms256m -Xmx256m"
+          value: "-Xms1g -Xmx1g"
+        - name: "ES_PLUGINS_INSTALL"
+          value: "https://github.com/NLPchina/elasticsearch-sql/releases/download/5.5.0.0/elasticsearch-sql-5.5.0.1.zip,repository-s3"
         ports:
         - containerPort: 9200
           name: http
