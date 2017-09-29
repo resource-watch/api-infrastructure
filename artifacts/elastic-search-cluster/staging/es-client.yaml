@@ -56,6 +56,10 @@ spec:
           value: "-Xms1g -Xmx1g"
         - name: "ES_PLUGINS_INSTALL"
           value: "https://github.com/NLPchina/elasticsearch-sql/releases/download/5.5.0.0/elasticsearch-sql-5.5.0.1.zip,repository-s3"
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
         ports:
         - containerPort: 9200
           name: http

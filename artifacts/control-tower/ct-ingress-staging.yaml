@@ -16,6 +16,7 @@ spec:
     - prep-manager.vizzuality.com
     - staging.resourcewatch.org
     - staging.prepdata.org
+    - staging.climatewatchdata.org
     secretName: ct-staging-tls
   rules:
   - host: staging-api.globalforestwatch.org
@@ -33,6 +34,13 @@ spec:
           serviceName: nginx
           servicePort: 80
   - host: climate-watch.vizzuality.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: staging.climatewatchdata.org
     http:
       paths:
       - path: /*
