@@ -33,6 +33,20 @@ spec:
         backend:
           serviceName: nginx
           servicePort: 80
+  - host: staging.resourcewatch.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: staging.prepdata.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
   - host: climate-watch.vizzuality.com
     http:
       paths:

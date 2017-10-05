@@ -1,0 +1,67 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: neo4j
+  labels:
+    component: neo4j
+spec:
+  serviceName: neo4j
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: neo4j
+      annotations:
+        pod.beta.kubernetes.io/init-containers: '[
+          {
+          "name": "sysctl",
+            "image": "busybox",
+            "imagePullPolicy": "IfNotPresent",
+            "command": ["sysctl", "-w", "vm.max_map_count=262144"],
+            "securityContext": {
+              "privileged": true
+            }
+          }
+        ]'
+    spec:
+      containers:
+      - name: neo4j
+        securityContext:
+          privileged: true
+          capabilities:
+            add:
+              - IPC_LOCK
+        image: neo4j:3.2
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "2048Mi"
+        env:
+        - name: NEO4J_AUTH
+          value: "none"
+        - name: NEO4J_dbms_memory_heap_max__size
+          value: "2048M"
+        - name: NEO4J_dbms_memory_heap_initial__size
+          value: "2048M"
+        - name: NEO4J_dbms_threads_worker__count
+          value: "5"
+        ports:
+        - containerPort: 7687
+          name: transport
+          protocol: TCP
+        - containerPort: 7474
+          name: web
+          protocol: TCP
+        volumeMounts:
+        - name: neo4j-storage
+          mountPath: /data
+  volumeClaimTemplates:
+  - metadata:
+      name: neo4j-storage
+      annotations:
+        volume.beta.kubernetes.io/storage-class: standard
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 50Gi
