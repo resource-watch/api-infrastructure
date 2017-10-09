@@ -19,6 +19,7 @@ spec:
     - www.climatewatchdata.org
     - emissionspathways.org
     - staging.resourcewatch.org
+    - climate-watch.vizzuality.com
     secretName: ct-prod-tls
   rules:
   - host: api-rw.vizzuality.com
@@ -85,6 +86,13 @@ spec:
           serviceName: ct-ui
           servicePort: 80
   - host: staging.resourcewatch.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: climate-watch.vizzuality.com
     http:
       paths:
       - path: /*
