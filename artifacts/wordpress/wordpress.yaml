@@ -1,0 +1,113 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: rw-wordpress
+  name: rw-wordpress
+  
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rw-wordpress
+    spec:
+      containers:
+      - env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "yes"
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: mariadb-root-password
+              name: testing-mariadb
+        - name: MARIADB_HOST
+          value: testing-mariadb
+        - name: MARIADB_PORT_NUMBER
+          value: "3306"
+        - name: WORDPRESS_DATABASE_NAME
+          value: bitnami_wordpress
+        - name: WORDPRESS_DATABASE_USER
+          value: bn_wordpress
+        - name: WORDPRESS_DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: mariadb-password
+              name: testing-mariadb
+        - name: WORDPRESS_USERNAME
+          value: admin
+        - name: WORDPRESS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: wordpress-password
+              name: testing-wordpress
+        - name: WORDPRESS_EMAIL
+          value: admin@resourcewatch.org
+        - name: WORDPRESS_FIRST_NAME
+          value: Resource Watch
+        - name: WORDPRESS_LAST_NAME
+          value: Admin
+        - name: WORDPRESS_BLOG_NAME
+          value: Resorce Watch Blog
+        - name: SMTP_HOST
+        - name: SMTP_PORT
+        - name: SMTP_USER
+        - name: SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: smtp-password
+              name: testing-wordpress
+        - name: SMTP_USERNAME
+        - name: SMTP_PROTOCOL
+        image: bitnami/wordpress:4.8.1-r1
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /wp-login.php
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 120
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: testing-wordpress
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        - containerPort: 443
+          name: https
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /wp-login.php
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 3
+        resources:
+          requests:
+            cpu: 300m
+            memory: 512Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /bitnami/apache
+          name: wordpress-data
+          subPath: apache
+        - mountPath: /bitnami/wordpress
+          name: wordpress-data
+          subPath: wordpress
+        - mountPath: /bitnami/php
+          name: wordpress-data
+          subPath: php
+      
+      restartPolicy: Always
+      volumes:
+      - name: wordpress-data
+        persistentVolumeClaim:
+          claimName: wordpress-claim
