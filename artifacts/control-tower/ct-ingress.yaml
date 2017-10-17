@@ -16,10 +16,10 @@ spec:
     - production-api.globalforestwatch.org
     - www.emissionspathways.org
     - climatewatchdata.org
-    - www.climatewatchdata.org
     - emissionspathways.org
     - staging.resourcewatch.org
     - climate-watch.vizzuality.com
+    - beta.climatewatchdata.org
     secretName: ct-prod-tls
   rules:
   - host: api-rw.vizzuality.com
@@ -36,21 +36,7 @@ spec:
         backend:
           serviceName: nginx
           servicePort: 80
-  - host: www.climatewatchdata.org
-    http:
-      paths:
-      - path: /*
-        backend:
-          serviceName: nginx
-          servicePort: 80
   - host: climatewatchdata.org
-    http:
-      paths:
-      - path: /*
-        backend:
-          serviceName: nginx
-          servicePort: 80
-  - host: www.climatewatchdata.org
     http:
       paths:
       - path: /*
@@ -93,6 +79,13 @@ spec:
           serviceName: nginx
           servicePort: 80
   - host: climate-watch.vizzuality.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: beta.climatewatchdata.org
     http:
       paths:
       - path: /*
