@@ -15,4 +15,4 @@ spec:
       - name: node
         image: node
         command: ["sleep"]
-        args: ["100000"]
+        args: ["1000000"]
