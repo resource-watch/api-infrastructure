@@ -45,6 +45,8 @@ spec:
           value: "2048M"
         - name: NEO4J_dbms_threads_worker__count
           value: "5"
+        - name: NEO4J_dbms_shell_enabled
+          value: "true"
         ports:
         - containerPort: 7687
           name: transport

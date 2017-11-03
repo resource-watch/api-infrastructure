@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: control-tower
-        image: rrequero/control-tower:1.0.15
+        image: rrequero/control-tower:1.0.21
         imagePullPolicy: Always
         resources:
           requests:

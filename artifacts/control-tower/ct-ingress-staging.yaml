@@ -81,3 +81,10 @@ spec:
         backend:
           serviceName: ct-ui
           servicePort: 80
+  - host: fastly.requero.es
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
