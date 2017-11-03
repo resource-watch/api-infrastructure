@@ -11,19 +11,77 @@ spec:
   - hosts:
     - rw-blog.vizzuality.com
     - api-rw.vizzuality.com
+    - climate-watch.vizzuality.com
+    - resourcewatch.vizzuality.com
     - ui.resourcewatch.org
     - api.resourcewatch.org
+    - staging.resourcewatch.org
     - production-api.globalforestwatch.org
+    - emissionspathways.org
     - www.emissionspathways.org
     - climatewatchdata.org
-    - emissionspathways.org
-    - staging.resourcewatch.org
-    - climate-watch.vizzuality.com
+    - www.climatewatchdata.org
     - beta.climatewatchdata.org
     - resourcewatch.vizzuality.com
     secretName: ct-prod-tls
   rules:
+  - host: rw-blog.vizzuality.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
   - host: api-rw.vizzuality.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: climate-watch.vizzuality.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: resourcewatch.vizzuality.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: ui.resourcewatch.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: ct-ui
+          servicePort: 80
+  - host: api.resourcewatch.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: staging.resourcewatch.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: production-api.globalforestwatch.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: emissionspathways.org
     http:
       paths:
       - path: /*
@@ -44,41 +102,6 @@ spec:
         backend:
           serviceName: nginx
           servicePort: 80
-  - host: api.resourcewatch.org
-    http:
-      paths:
-      - path: /*
-        backend:
-          serviceName: nginx
-          servicePort: 80
-  - host: production-api.globalforestwatch.org
-    http:
-      paths:
-      - path: /*
-        backend:
-          serviceName: nginx
-          servicePort: 80
-  - host: rw-blog.vizzuality.com
-    http:
-      paths:
-      - path: /*
-        backend:
-          serviceName: nginx
-          servicePort: 80
-  - host: ui.resourcewatch.org
-    http:
-      paths:
-      - path: /*
-        backend:
-          serviceName: ct-ui
-          servicePort: 80
-  - host: staging.resourcewatch.org
-    http:
-      paths:
-      - path: /*
-        backend:
-          serviceName: nginx
-          servicePort: 80
   - host: resourcewatch.vizzuality.com
     http:
       paths:
@@ -87,6 +110,13 @@ spec:
           serviceName: nginx
           servicePort: 80
   - host: climate-watch.vizzuality.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: www.climatewatchdata.org
     http:
       paths:
       - path: /*
