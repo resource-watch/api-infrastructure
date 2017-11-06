@@ -10,9 +10,17 @@ spec:
   tls:
   - hosts:
     - half-earth.vizzuality.com
+    - half-earth-staging.vizzuality.com
     secretName: ct-vizz-tls
   rules:
   - host: half-earth.vizzuality.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: half-earth-staging.vizzuality.com
     http:
       paths:
       - path: /*
