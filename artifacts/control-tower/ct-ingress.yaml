@@ -23,8 +23,32 @@ spec:
     - www.climatewatchdata.org
     - beta.climatewatchdata.org
     - resourcewatch.vizzuality.com
+    - staging.prepdata.org
+    - beta.prepdata.org
+    - preproduction.prepdata.org
     secretName: ct-prod-tls
   rules:
+  - host: staging.prepdata.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: beta.prepdata.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: preproduction.prepdata.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
   - host: rw-blog.vizzuality.com
     http:
       paths:
