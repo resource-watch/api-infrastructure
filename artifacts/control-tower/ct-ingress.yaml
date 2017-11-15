@@ -26,6 +26,8 @@ spec:
     - staging.prepdata.org
     - beta.prepdata.org
     - preproduction.prepdata.org
+    - climatedata.org
+    - www.climatedata.org
     secretName: ct-prod-tls
   rules:
   - host: staging.prepdata.org
@@ -141,6 +143,20 @@ spec:
           serviceName: nginx
           servicePort: 80
   - host: www.climatewatchdata.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: climatedata.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: www.climatedata.org
     http:
       paths:
       - path: /*
