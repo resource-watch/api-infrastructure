@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: control-tower
-        image: rrequero/control-tower:1.0.29
+        image: rrequero/control-tower:1.0.30
         imagePullPolicy: Always
         resources:
           requests:
@@ -147,6 +147,6 @@ spec:
     apiVersion: apps/v1beta1
     kind: Deployment
     name: control-tower
-  minReplicas: 2
+  minReplicas: 1
   maxReplicas: 10
   targetCPUUtilizationPercentage: 60
