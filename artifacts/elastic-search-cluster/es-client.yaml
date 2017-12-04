@@ -53,7 +53,7 @@ spec:
         - name: HTTP_ENABLE
           value: "true"
         - name: "ES_JAVA_OPTS"
-          value: "-Xms1g -Xmx1g"
+          value: "-Xms2g -Xmx2g"
         - name: "ES_PLUGINS_INSTALL"
           value: "https://github.com/NLPchina/elasticsearch-sql/releases/download/5.5.0.0/elasticsearch-sql-5.5.0.1.zip,repository-s3"
         - name: AWS_ACCESS_KEY_ID
