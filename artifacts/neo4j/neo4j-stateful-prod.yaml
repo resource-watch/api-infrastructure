@@ -34,15 +34,18 @@ spec:
         image: neo4j:3.2
         imagePullPolicy: Always
         resources:
-          requests:
+          limits:
             memory: "2048Mi"
+            cpu: "1000m"
+          requests:
+            memory: "1536Mi"
         env:
         - name: NEO4J_AUTH
           value: "none"
         - name: NEO4J_dbms_memory_heap_max__size
-          value: "2048M"
+          value: "1024M"
         - name: NEO4J_dbms_memory_heap_initial__size
-          value: "2048M"
+          value: "1024M"
         - name: NEO4J_dbms_threads_worker__count
           value: "5"
         - name: NEO4J_dbms_shell_enabled
