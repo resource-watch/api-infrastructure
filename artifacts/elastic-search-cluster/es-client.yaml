@@ -35,6 +35,9 @@ spec:
               - SYS_RESOURCE
         image: quay.io/pires/docker-elasticsearch-kubernetes:5.5.0
         imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "4Gi"
         env:
         - name: NAMESPACE
           valueFrom:
@@ -53,7 +56,7 @@ spec:
         - name: HTTP_ENABLE
           value: "true"
         - name: "ES_JAVA_OPTS"
-          value: "-Xms2g -Xmx2g"
+          value: "-Xms4g -Xmx4g"
         - name: "ES_PLUGINS_INSTALL"
           value: "https://github.com/NLPchina/elasticsearch-sql/releases/download/5.5.0.0/elasticsearch-sql-5.5.0.1.zip,repository-s3"
         - name: AWS_ACCESS_KEY_ID
