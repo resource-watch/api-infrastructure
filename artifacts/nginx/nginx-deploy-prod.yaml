@@ -26,6 +26,9 @@ spec:
         volumeMounts:
         - mountPath: /etc/nginx/conf.d
           name: nginx-conf
+        - mountPath: /etc/nginx/nginx.conf
+          name: nginx-default-conf
+          subPath: nginx.conf
         readinessProbe:
           httpGet:
             scheme: HTTP
@@ -40,6 +43,12 @@ spec:
         - name: nginx-conf
           configMap:
             name: nginx-conf
+        - name: nginx-default-conf
+          configMap:
+            name: nginx-default-conf
+            items:
+              - key: nginx.conf
+                path: nginx.conf
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
