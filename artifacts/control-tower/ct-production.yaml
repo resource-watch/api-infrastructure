@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: control-tower
-        image: rrequero/control-tower:1.0.31
+        image: rrequero/control-tower:1.0.33
         imagePullPolicy: Always
         resources:
           requests:
@@ -73,36 +73,96 @@ spec:
                 secretKeyRef:
                   name: ctsecrets
                   key: JWT_SECRET
-          - name: TWITTER_CONSUMER_KEY
+          - name: GFW_TWITTER_CONSUMER_KEY
             valueFrom:
                 secretKeyRef:
                   name: ctsecrets
-                  key: TWITTER_CONSUMER_KEY
-          - name: TWITTER_CONSUMER_SECRET
+                  key: GFW_TWITTER_CONSUMER_KEY
+          - name: GFW_TWITTER_CONSUMER_SECRET
             valueFrom:
                 secretKeyRef:
                   name: ctsecrets
-                  key: TWITTER_CONSUMER_SECRET
-          - name: FACEBOOK_CLIENT_ID
+                  key: GFW_TWITTER_CONSUMER_SECRET
+          - name: GFW_FACEBOOK_CLIENT_ID
             valueFrom:
                 secretKeyRef:
                   name: ctsecrets
-                  key: FACEBOOK_CLIENT_ID
-          - name: FACEBOOK_CLIENT_SECRET
+                  key: GFW_FACEBOOK_CLIENT_ID
+          - name: GFW_FACEBOOK_CLIENT_SECRET
             valueFrom:
                 secretKeyRef:
                   name: ctsecrets
-                  key: FACEBOOK_CLIENT_SECRET
-          - name: GOOGLE_CLIENT_ID
+                  key: GFW_FACEBOOK_CLIENT_SECRET
+          - name: GFW_GOOGLE_CLIENT_ID
             valueFrom:
                 secretKeyRef:
                   name: ctsecrets
-                  key: GOOGLE_CLIENT_ID
-          - name: GOOGLE_CLIENT_SECRET
+                  key: GFW_GOOGLE_CLIENT_ID
+          - name: GFW_GOOGLE_CLIENT_SECRET
             valueFrom:
                 secretKeyRef:
                   name: ctsecrets
-                  key: GOOGLE_CLIENT_SECRET
+                  key: GFW_GOOGLE_CLIENT_SECRET
+          - name: RW_TWITTER_CONSUMER_KEY
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: RW_TWITTER_CONSUMER_KEY
+          - name: RW_TWITTER_CONSUMER_SECRET
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: RW_TWITTER_CONSUMER_SECRET
+          - name: RW_FACEBOOK_CLIENT_ID
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: RW_FACEBOOK_CLIENT_ID
+          - name: RW_FACEBOOK_CLIENT_SECRET
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: RW_FACEBOOK_CLIENT_SECRET
+          - name: RW_GOOGLE_CLIENT_ID
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: RW_GOOGLE_CLIENT_ID
+          - name: RW_GOOGLE_CLIENT_SECRET
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: RW_GOOGLE_CLIENT_SECRET
+          - name: PREP_TWITTER_CONSUMER_KEY
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: PREP_TWITTER_CONSUMER_KEY
+          - name: PREP_TWITTER_CONSUMER_SECRET
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: PREP_TWITTER_CONSUMER_SECRET
+          - name: PREP_FACEBOOK_CLIENT_ID
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: PREP_FACEBOOK_CLIENT_ID
+          - name: PREP_FACEBOOK_CLIENT_SECRET
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: PREP_FACEBOOK_CLIENT_SECRET
+          - name: PREP_GOOGLE_CLIENT_ID
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: PREP_GOOGLE_CLIENT_ID
+          - name: PREP_GOOGLE_CLIENT_SECRET
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: PREP_GOOGLE_CLIENT_SECRET
           - name: BASICAUTH_PASSWORD
             valueFrom:
                 secretKeyRef:
