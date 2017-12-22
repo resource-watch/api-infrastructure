@@ -1,0 +1,60 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    name: control-tower-cron
+  name: control-tower-cron
+spec:
+  template:
+    metadata:
+      labels:
+        name: control-tower-cron
+    spec:
+      containers:
+      - name: control-tower-cron
+        image: rrequero/control-tower:1.0.33-crons.1
+        imagePullPolicy: Always
+        env:
+          - name: PORT
+            value: "9000"
+          - name: LOGGER_TYPE
+            value: console
+          - name: DEBUG
+            value: "oauth-plugin"
+          - name: NODE_ENV
+            value: prod
+          - name: NODE_PATH
+            value: app/src
+          - name: BASICAUTH_USERNAME
+            value: vizzuality
+          - name: CONFIRM_URL_REDIRECT
+            value: http://www.globalforestwatch.org
+          - name: PUBLIC_URL
+            value: http://production-api.globalforestwatch.org
+          - name: APP_NAME
+            value: "WRI API"
+          - name: APP_LOGO
+            value: http://www.wri.org/sites/all/themes/wri/images/logo.png
+          - name: APP_COLOR
+            value: "#f1b319"
+          - name: CT_MONGO_URI
+            valueFrom:
+                secretKeyRef:
+                  name: dbsecrets
+                  key: CT_MONGO_URI
+          - name: SESSION_KEY
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: SESSION_KEY
+          - name: JWT_SECRET
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: JWT_SECRET
+
+        args:
+          - startCron
+      restartPolicy: Always
+
+
