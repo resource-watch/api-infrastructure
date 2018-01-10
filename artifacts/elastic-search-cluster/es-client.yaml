@@ -1,30 +1,50 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: es-client
+  name: es-client-v2
   labels:
-    component: elasticsearch
+    type: db-elastic
+    component: elasticsearchV2
     role: client
 spec:
-  replicas: 2
+  replicas: 4
   template:
     metadata:
       labels:
-        component: elasticsearch
+        type: db-elastic
+        component: elasticsearchV2
         role: client
-      annotations:
-        pod.beta.kubernetes.io/init-containers: '[
-          {
-          "name": "sysctl",
-            "image": "busybox",
-            "imagePullPolicy": "IfNotPresent",
-            "command": ["sysctl", "-w", "vm.max_map_count=262144"],
-            "securityContext": {
-              "privileged": true
-            }
-          }
-        ]'
     spec:
+      initContainers:
+      - name: sysctl
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        securityContext:
+          privileged: true
+      tolerations:
+      - key: "type"
+        operator: "Equal"
+        value: "db-elastic"
+        effect: "NoSchedule"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: type
+                operator: In
+                values:
+                - db-elastic
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: role
+                operator: In
+                values:
+                - client
+            topologyKey: "kubernetes.io/hostname"
       containers:
       - name: es-client
         securityContext:
@@ -37,7 +57,7 @@ spec:
         imagePullPolicy: Always
         resources:
           requests:
-            memory: "4Gi"
+            memory: "3Gi"
         env:
         - name: NAMESPACE
           valueFrom:
@@ -51,12 +71,14 @@ spec:
           value: "myesdb"
         - name: NODE_MASTER
           value: "false"
+        - name: NODE_INGEST
+          value: "true"
         - name: NODE_DATA
           value: "false"
         - name: HTTP_ENABLE
           value: "true"
         - name: "ES_JAVA_OPTS"
-          value: "-Xms4g -Xmx4g"
+          value: "-Xms3g -Xmx3g"
         - name: "ES_PLUGINS_INSTALL"
           value: "https://github.com/NLPchina/elasticsearch-sql/releases/download/5.5.0.0/elasticsearch-sql-5.5.0.1.zip,repository-s3"
         - name: AWS_ACCESS_KEY_ID

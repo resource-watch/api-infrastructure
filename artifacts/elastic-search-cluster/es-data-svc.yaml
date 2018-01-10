@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: elasticsearch-data
+  name: elasticsearch-data-v2
   labels:
-    component: elasticsearch
+    component: elasticsearchV2
     role: data
 spec:
   ports:
@@ -11,5 +11,5 @@ spec:
     name: transport
   clusterIP: None
   selector:
-    component: elasticsearch
+    component: elasticsearchV2
     role: data

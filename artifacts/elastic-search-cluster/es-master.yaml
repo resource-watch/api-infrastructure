@@ -1,30 +1,50 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: es-master
+  name: es-master-v2
   labels:
-    component: elasticsearch
+    type: db-elastic
+    component: elasticsearchV2
     role: master
 spec:
-  replicas: 3
+  replicas: 4
   template:
     metadata:
       labels:
-        component: elasticsearch
+        type: db-elastic
+        component: elasticsearchV2
         role: master
-      annotations:
-        pod.beta.kubernetes.io/init-containers: '[
-          {
-          "name": "sysctl",
-            "image": "busybox",
-            "imagePullPolicy": "IfNotPresent",
-            "command": ["sysctl", "-w", "vm.max_map_count=262144"],
-            "securityContext": {
-              "privileged": true
-            }
-          }
-        ]'
     spec:
+      initContainers:
+      - name: sysctl
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        securityContext:
+          privileged: true
+      tolerations:
+      - key: "type"
+        operator: "Equal"
+        value: "db-elastic"
+        effect: "NoSchedule"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: type
+                operator: In
+                values:
+                - db-elastic
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: role
+                operator: In
+                values:
+                - master
+            topologyKey: "kubernetes.io/hostname"
       containers:
       - name: es-master
         securityContext:
@@ -47,7 +67,7 @@ spec:
         - name: "CLUSTER_NAME"
           value: "myesdb"
         - name: "NUMBER_OF_MASTERS"
-          value: "2"
+          value: "4"
         - name: NODE_MASTER
           value: "true"
         - name: NODE_INGEST
