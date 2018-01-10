@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: control-tower-cron
-        image: rrequero/control-tower:1.0.33-crons.1
+        image: rrequero/control-tower:1.0.35-crons.1
         imagePullPolicy: Always
         env:
           - name: PORT
