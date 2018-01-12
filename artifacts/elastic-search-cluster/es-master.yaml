@@ -64,8 +64,10 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
+        - name: "DISCOVERY_SERVICE"
+          value: "elasticsearch-discovery-v2"
         - name: "CLUSTER_NAME"
-          value: "myesdb"
+          value: "myesdbV2"
         - name: "NUMBER_OF_MASTERS"
           value: "4"
         - name: NODE_MASTER
