@@ -25,6 +25,8 @@ spec:
     - resourcewatch.vizzuality.com
     - staging.prepdata.org
     - beta.prepdata.org
+    - www.prepdata.org
+    - prepdata.org
     - preproduction.prepdata.org
     - climatedata.org
     - www.climatedata.org
@@ -39,6 +41,20 @@ spec:
           serviceName: nginx
           servicePort: 80
   - host: beta.prepdata.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: www.prepdata.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: prepdata.org
     http:
       paths:
       - path: /*
