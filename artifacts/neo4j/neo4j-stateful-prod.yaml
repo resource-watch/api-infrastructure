@@ -11,19 +11,14 @@ spec:
     metadata:
       labels:
         component: neo4j
-      annotations:
-        pod.beta.kubernetes.io/init-containers: '[
-          {
-          "name": "sysctl",
-            "image": "busybox",
-            "imagePullPolicy": "IfNotPresent",
-            "command": ["sysctl", "-w", "vm.max_map_count=262144"],
-            "securityContext": {
-              "privileged": true
-            }
-          }
-        ]'
     spec:
+      initContainers:
+      - name: sysctl
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        securityContext:
+          privileged: true
       containers:
       - name: neo4j
         securityContext:
@@ -31,7 +26,7 @@ spec:
           capabilities:
             add:
               - IPC_LOCK
-        image: neo4j:3.2
+        image: neo4j:3.2-enterprise
         imagePullPolicy: Always
         resources:
           limits:
@@ -41,7 +36,7 @@ spec:
             memory: "1536Mi"
         env:
         - name: NEO4J_AUTH
-          value: "none"
+          value: "neo4j/none"
         - name: NEO4J_dbms_memory_heap_max__size
           value: "1024M"
         - name: NEO4J_dbms_memory_heap_initial__size
@@ -50,6 +45,8 @@ spec:
           value: "5"
         - name: NEO4J_dbms_shell_enabled
           value: "true"
+        - name: NEO4J_ACCEPT_LICENSE_AGREEMENT
+          value: "yes"
         ports:
         - containerPort: 7687
           name: transport
