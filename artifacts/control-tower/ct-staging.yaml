@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: control-tower
-        image: rrequero/control-tower:1.0.37
+        image: rrequero/control-tower:1.0.41
         imagePullPolicy: Always
         resources:
           requests:
@@ -190,6 +190,16 @@ spec:
                 secretKeyRef:
                   name: ctsecrets
                   key: INSTAPUSH_SECRET
+          - name: FASTLY_APIKEY
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: FASTLY_APIKEY
+          - name: FASTLY_SERVICEID
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: FASTLY_SERVICEID
 
         ports:
           - containerPort: 9000

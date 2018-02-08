@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: control-tower-cron
-        image: rrequero/control-tower:1.0.35-crons.1
+        image: rrequero/control-tower:1.0.41-cron
         imagePullPolicy: Always
         env:
           - name: PORT
@@ -52,7 +52,16 @@ spec:
                 secretKeyRef:
                   name: ctsecrets
                   key: JWT_SECRET
-
+          - name: FASTLY_APIKEY
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: FASTLY_APIKEY
+          - name: FASTLY_SERVICEID
+            valueFrom:
+                secretKeyRef:
+                  name: ctsecrets
+                  key: FASTLY_SERVICEID
         args:
           - startCron
       restartPolicy: Always
