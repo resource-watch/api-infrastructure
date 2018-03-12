@@ -3,28 +3,25 @@ kind: Deployment
 metadata:
   name: es-master
   labels:
+    type: db-elastic
     component: elasticsearch
     role: master
 spec:
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       labels:
+        type: db-elastic
         component: elasticsearch
         role: master
-      annotations:
-        pod.beta.kubernetes.io/init-containers: '[
-          {
-          "name": "sysctl",
-            "image": "busybox",
-            "imagePullPolicy": "IfNotPresent",
-            "command": ["sysctl", "-w", "vm.max_map_count=262144"],
-            "securityContext": {
-              "privileged": true
-            }
-          }
-        ]'
     spec:
+      initContainers:
+      - name: sysctl
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        securityContext:
+          privileged: true
       containers:
       - name: es-master
         securityContext:
@@ -33,11 +30,7 @@ spec:
             add:
               - IPC_LOCK
               - SYS_RESOURCE
-<<<<<<< Updated upstream:artifacts/elastic-search-cluster/staging/es-master.yaml
         image: quay.io/pires/docker-elasticsearch-kubernetes:5.5.0
-=======
-        image: quay.io/pires/docker-elasticsearch-kubernetes:5.6.0
->>>>>>> Stashed changes:artifacts/es-master.yaml
         imagePullPolicy: Always
         env:
         - name: NAMESPACE
@@ -48,10 +41,12 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
+        - name: "DISCOVERY_SERVICE"
+          value: "elasticsearch-discovery"
         - name: "CLUSTER_NAME"
           value: "myesdb"
         - name: "NUMBER_OF_MASTERS"
-          value: "1"
+          value: "3"
         - name: NODE_MASTER
           value: "true"
         - name: NODE_INGEST
@@ -64,6 +59,16 @@ spec:
           value: "-Xms256m -Xmx256m"
         - name: "ES_PLUGINS_INSTALL"
           value: "https://github.com/NLPchina/elasticsearch-sql/releases/download/5.5.0.0/elasticsearch-sql-5.5.0.1.zip,repository-s3"
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+              secretKeyRef:
+                name: dbsecrets
+                key: BACKUP_S3_ACCESS_KEY
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+              secretKeyRef:
+                name: dbsecrets
+                key: BACKUP_S3_SECRET_KEY
         ports:
         - containerPort: 9300
           name: transport
