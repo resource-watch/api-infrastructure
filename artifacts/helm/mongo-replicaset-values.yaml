@@ -5,7 +5,7 @@ port: 27017
 auth:
   enabled: true
   adminUser: vizzuality-super
-  adminPassword: notset
+  adminPassword: 8Xf45BmMQrWPhJct
   key: notset
   # existingKeySecret:
   # existingAdminSecret:
@@ -27,13 +27,9 @@ podAnnotations: {}
 
 podAntiAffinity: "soft"
 
-resources: {}
-# limits:
-#   cpu: 100m
-#   memory: 512Mi
-# requests:
-#   cpu: 500m
-#   memory: 1Gi
+resources:
+  requests:
+    memory: 4Gi
 
 persistentVolume:
   enabled: true

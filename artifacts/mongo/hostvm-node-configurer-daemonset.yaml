@@ -1,0 +1,43 @@
+kind: DaemonSet
+apiVersion: extensions/v1beta1
+metadata:
+  name: hostvm-configurer
+  labels:
+    app: startup-script
+spec:
+  template:
+    metadata:
+      labels:
+        app: startup-script
+    spec:
+      tolerations:
+      - key: "type"
+        operator: "Equal"
+        value: "db-mongo"
+        effect: "NoSchedule"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: type
+                operator: In
+                values:
+                - db-mongo
+      hostPID: true
+      containers:
+      - name: hostvm-configurer-container
+        image: gcr.io/google-containers/startup-script:v1
+        securityContext:
+          privileged: true
+        env:
+        - name: STARTUP_SCRIPT
+          value: |
+            #! /bin/bash
+            set -o errexit
+            set -o pipefail
+            set -o nounset
+
+            # Disable hugepages
+            echo 'never' > /sys/kernel/mm/transparent_hugepage/enabled
+            echo 'never' > /sys/kernel/mm/transparent_hugepage/defrag

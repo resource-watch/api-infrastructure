@@ -1,19 +1,19 @@
 apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
-  name: es-data-v2
+  name: es-data
   labels:
     type: db-elastic
-    component: elasticsearchV2
+    component: elasticsearch
     role: data
 spec:
   serviceName: elasticsearch-data
-  replicas: 4
+  replicas: 3
   template:
     metadata:
       labels:
         type: db-elastic
-        component: elasticsearchV2
+        component: elasticsearch
         role: data
     spec:
       initContainers:
@@ -57,7 +57,7 @@ spec:
         imagePullPolicy: Always
         resources:
           requests:
-            memory: "16Gi"
+            memory: "6Gi"
         env:
         - name: NAMESPACE
           valueFrom:
@@ -68,9 +68,9 @@ spec:
             fieldRef:
               fieldPath: metadata.name
         - name: "DISCOVERY_SERVICE"
-          value: "elasticsearch-discovery-v2"
+          value: "elasticsearch-discovery"
         - name: "CLUSTER_NAME"
-          value: "myesdbV2"
+          value: "myesdb"
         - name: NODE_MASTER
           value: "false"
         - name: NODE_INGEST
@@ -80,7 +80,7 @@ spec:
         - name: HTTP_ENABLE
           value: "false"
         - name: "ES_JAVA_OPTS"
-          value: "-Xms16g -Xmx16g"
+          value: "-Xms6g -Xmx6g"
         - name: "ES_PLUGINS_INSTALL"
           value: "https://github.com/NLPchina/elasticsearch-sql/releases/download/5.5.0.0/elasticsearch-sql-5.5.0.1.zip,repository-s3"
         - name: AWS_ACCESS_KEY_ID
@@ -104,9 +104,9 @@ spec:
   - metadata:
       name: storage
       annotations:
-        volume.beta.kubernetes.io/storage-class: ssd
+        volume.beta.kubernetes.io/storage-class: standard
     spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
-          storage: 300Gi
+          storage: 150Gi

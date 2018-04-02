@@ -1,18 +1,18 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: es-master-v2
+  name: es-master
   labels:
     type: db-elastic
-    component: elasticsearchV2
+    component: elasticsearch
     role: master
 spec:
-  replicas: 4
+  replicas: 3
   template:
     metadata:
       labels:
         type: db-elastic
-        component: elasticsearchV2
+        component: elasticsearch
         role: master
     spec:
       initContainers:
@@ -65,11 +65,11 @@ spec:
             fieldRef:
               fieldPath: metadata.name
         - name: "DISCOVERY_SERVICE"
-          value: "elasticsearch-discovery-v2"
+          value: "elasticsearch-discovery"
         - name: "CLUSTER_NAME"
-          value: "myesdbV2"
+          value: "myesdb"
         - name: "NUMBER_OF_MASTERS"
-          value: "4"
+          value: "3"
         - name: NODE_MASTER
           value: "true"
         - name: NODE_INGEST
