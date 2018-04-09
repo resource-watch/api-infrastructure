@@ -31,6 +31,8 @@ spec:
     - climatedata.org
     - www.climatedata.org
     - data.emissionspathways.org
+    - www.resourcewatch.org
+    - resourcewatch.org
     secretName: ct-prod-tls
   rules:
   - host: staging.prepdata.org
@@ -188,6 +190,20 @@ spec:
           serviceName: nginx
           servicePort: 80
   - host: data.emissionspathways.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: resourcewatch.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: www.resourcewatch.org
     http:
       paths:
       - path: /*
