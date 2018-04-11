@@ -10,6 +10,20 @@ spec:
       labels:
         name: control-tower-cron
     spec:
+      tolerations:
+      - key: "type"
+        operator: "Equal"
+        value: "gateway"
+        effect: "NoSchedule"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: type
+                operator: In
+                values:
+                - gateway
       containers:
       - name: control-tower-cron
         image: rrequero/control-tower:1.0.41-cron

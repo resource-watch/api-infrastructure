@@ -10,6 +10,20 @@ spec:
       labels:
         name: nginx
     spec:
+      tolerations:
+      - key: "type"
+        operator: "Equal"
+        value: "nginx"
+        effect: "NoSchedule"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: type
+                operator: In
+                values:
+                - nginx
       containers:
       - name: nginx
         image: nginx

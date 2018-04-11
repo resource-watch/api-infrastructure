@@ -26,9 +26,23 @@ spec:
       labels:
         name: control-tower
     spec:
+      tolerations:
+      - key: "type"
+        operator: "Equal"
+        value: "gateway"
+        effect: "NoSchedule"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: type
+                operator: In
+                values:
+                - gateway
       containers:
       - name: control-tower
-        image: rrequero/control-tower:1.0.44
+        image: rrequero/control-tower:1.0.49
         imagePullPolicy: Always
         resources:
           requests:
@@ -214,6 +228,6 @@ spec:
     apiVersion: apps/v1beta1
     kind: Deployment
     name: control-tower
-  minReplicas: 3
-  maxReplicas: 10
-  targetCPUUtilizationPercentage: 60
+  minReplicas: 15
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 50
