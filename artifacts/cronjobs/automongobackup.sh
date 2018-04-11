@@ -45,19 +45,18 @@
 
 # Username to access the mongo server e.g. dbuser
 # Unnecessary if authentication is off
-DBUSERNAME="vizzuality-super"
+#DBUSERNAME="vizzuality-super"
 
 # Password to access the mongo server e.g. password
 # Unnecessary if authentication is off
-# @TODO!
-DBPASSWORD="notset"
+#DBPASSWORD="notset"
 
 # Database for authentication to the mongo server e.g. admin
 # Unnecessary if authentication is off
 #DBAUTHDB="admin"
 
 # Host name (or IP address) of mongo server e.g localhost
-DBHOST="mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local:27017,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local:27017,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local:27017"
+DBHOST="mongo-mongodb-replicaset.default.svc.cluster.local:27017"
 
 # Port that mongo is listening on
 DBPORT="27017"

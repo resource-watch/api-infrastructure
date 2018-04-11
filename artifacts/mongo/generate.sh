@@ -14,7 +14,7 @@ gcloud container clusters create "gke-mongodb-demo-cluster" --image-type=UBUNTU 
 
 # Configure host VM using daemonset to disable hugepages
 echo "Deploying GKE Daemon Set"
-kubectl apply -f ../resources/hostvm-node-configurer-daemonset.yaml
+kubectl apply -f ./hostvm-node-configurer-daemonset.yaml
 
 
 # Define storage class for dynamically generated persistent volumes
@@ -65,23 +65,23 @@ rm $TMPFILE
 
 # Deploy a MongoDB ConfigDB Service ("Config Server Replica Set") using a Kubernetes StatefulSet
 echo "Deploying GKE StatefulSet & Service for MongoDB Config Server Replica Set"
-kubectl apply -f ../resources/mongodb-configdb-service.yaml
+kubectl apply -f mongodb-configdb-service.yaml
 
 
 # Deploy each MongoDB Shard Service using a Kubernetes StatefulSet
 echo "Deploying GKE StatefulSet & Service for each MongoDB Shard Replica Set"
-sed -e 's/shardX/shard1/g; s/ShardX/Shard1/g' ../resources/mongodb-maindb-service.yaml > /tmp/mongodb-maindb-service.yaml
+sed -e 's/shardX/shard1/g; s/ShardX/Shard1/g' mongodb-maindb-service.yaml > /tmp/mongodb-maindb-service.yaml
 kubectl apply -f /tmp/mongodb-maindb-service.yaml
-sed -e 's/shardX/shard2/g; s/ShardX/Shard2/g' ../resources/mongodb-maindb-service.yaml > /tmp/mongodb-maindb-service.yaml
+sed -e 's/shardX/shard2/g; s/ShardX/Shard2/g' mongodb-maindb-service.yaml > /tmp/mongodb-maindb-service.yaml
 kubectl apply -f /tmp/mongodb-maindb-service.yaml
-sed -e 's/shardX/shard3/g; s/ShardX/Shard3/g' ../resources/mongodb-maindb-service.yaml > /tmp/mongodb-maindb-service.yaml
+sed -e 's/shardX/shard3/g; s/ShardX/Shard3/g' mongodb-maindb-service.yaml > /tmp/mongodb-maindb-service.yaml
 kubectl apply -f /tmp/mongodb-maindb-service.yaml
 rm /tmp/mongodb-maindb-service.yaml
 
 
 # Deploy some Mongos Routers using a Kubernetes StatefulSet
 echo "Deploying GKE Deployment & Service for some Mongos Routers"
-kubectl apply -f ../resources/mongodb-mongos-service.yaml
+kubectl apply -f mongodb-mongos-service.yaml
 
 
 # Wait until the final mongod of each Shard + the ConfigDB has started properly
@@ -147,7 +147,7 @@ echo
 
 # Add Shards to the Configdb
 echo "Configuring ConfigDB to be aware of the 3 Shards"
-kubectl exec mongos-router-0 -c mongos-container -- mongo --eval 'sh.addShard("Shard1RepSet/mongod-shard1-0.mongodb-shard1-service.default.svc.cluster.local:27017");'
+kubectl exec mongos-router-0 -c mongos-container -- mongo admin -u 'vizzuality-super' -p '8Xf45BmMQrWPhJct' --eval 'sh.addShard("Shard1RepSet/mongod-shard1-0.mongodb-shard1-service.default.svc.cluster.local:27017");'
 kubectl exec mongos-router-0 -c mongos-container -- mongo --eval 'sh.addShard("Shard2RepSet/mongod-shard2-0.mongodb-shard2-service.default.svc.cluster.local:27017");'
 kubectl exec mongos-router-0 -c mongos-container -- mongo --eval 'sh.addShard("Shard3RepSet/mongod-shard3-0.mongodb-shard3-service.default.svc.cluster.local:27017");'
 sleep 3
