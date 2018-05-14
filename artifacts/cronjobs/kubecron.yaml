@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: kubecron
-        image: vizzuality/kubecron:1.0.6
+        image: vizzuality/kubecron:1.0.10
         imagePullPolicy: Always
         args:
         - start
@@ -28,3 +28,8 @@ spec:
               secretKeyRef:
                 name: mssecrets
                 key: CT_TOKEN
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+              secretKeyRef:
+                name: dbsecrets
+                key: POSTGRES_PASSWORD
