@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: client-apps-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: client-apps-ingress
+    kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.class: "gce"
+spec:
+  tls:
+  - hosts:
+    - preproduction.resourcewatch.orgcl
+    secretName: ct-prod-tls-client-apps
+  rules:
+  - host: preproduction.resourcewatch.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80

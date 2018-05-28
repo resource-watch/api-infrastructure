@@ -315,7 +315,7 @@ fi
 
 # If backing up all DBs on the server
 if [ "$DBNAMES" = "all" ]; then
-	DBNAMES="`psql -U $USERNAME -h $HOST -l -A -F: | sed -ne "/:/ { /Name:Owner/d; /template0/d; s/:.*$//; p }"`"
+	DBNAMES="`psql -U $USERNAME $HOST -l -A -F: | sed -ne "/:/ { /Name:Owner/d; /template0/d; s/:.*$//; p }"`"
 
 	# If DBs are excluded
 	for exclude in $DBEXCLUDE
@@ -482,11 +482,11 @@ then
 		BACKUPFILES=`echo "$BACKUPFILES" | sed -e "s# # -a #g"`	#enable multiple attachments
 		mutt -s "PostgreSQL Backup Log and SQL Files for $DBHOST - $DATE" $BACKUPFILES $MAILADDR < $LOGFILE		#send via mutt
 	else
-		cat "$LOGFILE" | mail -s "WARNING! - PostgreSQL Backup exceeds set maximum attachment size on $HOST - $DATE" $MAILADDR
+		cat "$LOGFILE"
 	fi
 elif [ "$MAILCONTENT" = "log" ]
 then
-	cat "$LOGFILE" | mail -s "PostgreSQL Backup Log for $DBHOST - $DATE" $MAILADDR
+	cat "$LOGFILE"
 else
 	cat "$LOGFILE"
 fi
