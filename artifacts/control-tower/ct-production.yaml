@@ -42,7 +42,7 @@ spec:
                 - gateway
       containers:
       - name: control-tower
-        image: rrequero/control-tower:1.0.49
+        image: rrequero/control-tower:1.0.58
         imagePullPolicy: Always
         resources:
           requests:
@@ -228,6 +228,6 @@ spec:
     apiVersion: apps/v1beta1
     kind: Deployment
     name: control-tower
-  minReplicas: 15
-  maxReplicas: 100
+  minReplicas: 1
+  maxReplicas: 1
   targetCPUUtilizationPercentage: 50
