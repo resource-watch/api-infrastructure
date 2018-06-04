@@ -228,6 +228,6 @@ spec:
     apiVersion: apps/v1beta1
     kind: Deployment
     name: control-tower
-  minReplicas: 1
-  maxReplicas: 1
+  minReplicas: 15
+  maxReplicas: 100
   targetCPUUtilizationPercentage: 50
