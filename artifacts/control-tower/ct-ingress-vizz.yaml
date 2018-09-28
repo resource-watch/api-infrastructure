@@ -27,3 +27,11 @@ spec:
         backend:
           serviceName: nginx
           servicePort: 80
+  - host: earth-pulse.vizzuality.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+

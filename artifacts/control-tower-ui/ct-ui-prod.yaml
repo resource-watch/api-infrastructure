@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: ct-ui
-        image: rrequero/ct-ui-wri-prod:0.0.4
+        image: rrequero/ct-ui-wri-prod:0.0.6
         imagePullPolicy: Always
         resources:
           requests:
