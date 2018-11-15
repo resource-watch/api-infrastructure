@@ -9,10 +9,18 @@ metadata:
 spec:
   tls:
   - hosts:
-    - preproduction.resourcewatch.orgcl
-    secretName: ct-prod-tls-client-apps
+    - preproduction.resourcewatch.org
+    - south-africa-platform.vizzuality.com
+    secretName: ct-prod-tls-client-apps-ingress
   rules:
   - host: preproduction.resourcewatch.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: south-africa-platform.vizzuality.com
     http:
       paths:
       - path: /*
