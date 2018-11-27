@@ -4,37 +4,54 @@ metadata:
   name: gateway-ingress
   annotations:
     kubernetes.io/ingress.global-static-ip-name: ct-static-ip
-    kubernetes.io/tls-acme: "true"
-    kubernetes.io/ingress.class: "gce"
 spec:
   tls:
   - hosts:
     - rw-blog.vizzuality.com
     - api-rw.vizzuality.com
-    - climate-watch.vizzuality.com
     - resourcewatch.vizzuality.com
+    - production-api.globalforestwatch.org
+    - resourcewatch.org  
+    - www.resourcewatch.org
     - ui.resourcewatch.org
     - api.resourcewatch.org
     - staging.resourcewatch.org
-    - production-api.globalforestwatch.org
     - emissionspathways.org
     - www.emissionspathways.org
     - climatewatchdata.org
     - www.climatewatchdata.org
     - beta.climatewatchdata.org
-    - resourcewatch.vizzuality.com
+    - climatedata.org
+    - www.climatedata.org
+    - prepdata.org
     - staging.prepdata.org
     - beta.prepdata.org
     - www.prepdata.org
-    - prepdata.org
     - preproduction.prepdata.org
-    - climatedata.org
-    - www.climatedata.org
     - data.emissionspathways.org
-    - www.resourcewatch.org
-    - resourcewatch.org
     secretName: ct-prod-tls
   rules:
+  - host: rw-blog.vizzuality.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: api-rw.vizzuality.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: resourcewatch.vizzuality.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80  
   - host: staging.prepdata.org
     http:
       paths:
@@ -64,34 +81,6 @@ spec:
           serviceName: nginx
           servicePort: 80
   - host: preproduction.prepdata.org
-    http:
-      paths:
-      - path: /*
-        backend:
-          serviceName: nginx
-          servicePort: 80
-  - host: rw-blog.vizzuality.com
-    http:
-      paths:
-      - path: /*
-        backend:
-          serviceName: nginx
-          servicePort: 80
-  - host: api-rw.vizzuality.com
-    http:
-      paths:
-      - path: /*
-        backend:
-          serviceName: nginx
-          servicePort: 80
-  - host: climate-watch.vizzuality.com
-    http:
-      paths:
-      - path: /*
-        backend:
-          serviceName: nginx
-          servicePort: 80
-  - host: resourcewatch.vizzuality.com
     http:
       paths:
       - path: /*
@@ -141,13 +130,6 @@ spec:
           serviceName: nginx
           servicePort: 80
   - host: climatewatchdata.org
-    http:
-      paths:
-      - path: /*
-        backend:
-          serviceName: nginx
-          servicePort: 80
-  - host: resourcewatch.vizzuality.com
     http:
       paths:
       - path: /*

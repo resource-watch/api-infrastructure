@@ -1,0 +1,24 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: ct-prod-tls-client-apps-ingress
+  namespace: default
+spec:
+  secretName: ct-prod-tls-client-apps-ingress
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-prod
+  dnsNames:
+  - preproduction.resourcewatch.org
+  - south-africa-platform.vizzuality.com
+  - indonesia-platform-staging.vizzuality.com
+  acme:
+    config:
+    - domains:
+      - preproduction.resourcewatch.org
+      - south-africa-platform.vizzuality.com
+      - indonesia-platform-staging.vizzuality.com
+      http01:
+        ingress: client-apps-ingress
+
+

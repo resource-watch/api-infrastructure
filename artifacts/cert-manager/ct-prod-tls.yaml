@@ -1,0 +1,60 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: ct-prod-tls
+  namespace: default
+spec:
+  secretName: ct-prod-tls
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-prod
+  dnsNames:
+  - rw-blog.vizzuality.com
+  - api-rw.vizzuality.com
+  - resourcewatch.vizzuality.com
+  - production-api.globalforestwatch.org
+  - resourcewatch.org  
+  - www.resourcewatch.org
+  - ui.resourcewatch.org
+  - api.resourcewatch.org
+  - staging.resourcewatch.org
+  - emissionspathways.org
+  - www.emissionspathways.org
+  - climatewatchdata.org
+  - www.climatewatchdata.org
+  - beta.climatewatchdata.org
+  - climatedata.org
+  - www.climatedata.org
+  - prepdata.org
+  - staging.prepdata.org
+  - beta.prepdata.org
+  - www.prepdata.org
+  - preproduction.prepdata.org
+  - data.emissionspathways.org
+  acme:
+    config:
+    - domains:
+      - rw-blog.vizzuality.com
+      - api-rw.vizzuality.com
+      - resourcewatch.vizzuality.com
+      - production-api.globalforestwatch.org
+      - resourcewatch.org  
+      - www.resourcewatch.org
+      - ui.resourcewatch.org
+      - api.resourcewatch.org
+      - staging.resourcewatch.org
+      - emissionspathways.org
+      - www.emissionspathways.org
+      - climatewatchdata.org
+      - www.climatewatchdata.org
+      - beta.climatewatchdata.org
+      - climatedata.org
+      - www.climatedata.org
+      - prepdata.org
+      - staging.prepdata.org
+      - beta.prepdata.org
+      - www.prepdata.org
+      - preproduction.prepdata.org
+      - data.emissionspathways.org
+      http01:
+        ingress: gateway-ingress
