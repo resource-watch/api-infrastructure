@@ -4,13 +4,12 @@ metadata:
   name: gateway-ingress
   annotations:
     kubernetes.io/ingress.global-static-ip-name: vizz-static-ip
-    kubernetes.io/tls-acme: "true"
-    kubernetes.io/ingress.class: "gce"
 spec:
   tls:
   - hosts:
     - half-earth.vizzuality.com
     - half-earth-staging.vizzuality.com
+    - earth-pulse.vizzuality.com
     secretName: ct-vizz-tls
   rules:
   - host: half-earth.vizzuality.com

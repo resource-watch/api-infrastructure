@@ -12,12 +12,14 @@ spec:
   - preproduction.resourcewatch.org
   - south-africa-platform.vizzuality.com
   - indonesia-platform-staging.vizzuality.com
+  - india-platform-staging.vizzuality.com
   acme:
     config:
     - domains:
       - preproduction.resourcewatch.org
       - south-africa-platform.vizzuality.com
       - indonesia-platform-staging.vizzuality.com
+      - india-platform-staging.vizzuality.com
       http01:
         ingress: client-apps-ingress
 

@@ -10,6 +10,7 @@ spec:
     - preproduction.resourcewatch.org
     - south-africa-platform.vizzuality.com
     - indonesia-platform-staging.vizzuality.com
+    - india-platform-staging.vizzuality.com
     secretName: ct-prod-tls-client-apps-ingress
   rules:
   - host: preproduction.resourcewatch.org
@@ -27,6 +28,13 @@ spec:
           serviceName: nginx
           servicePort: 80
   - host: indonesia-platform-staging.vizzuality.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: india-platform-staging.vizzuality.com
     http:
       paths:
       - path: /*
