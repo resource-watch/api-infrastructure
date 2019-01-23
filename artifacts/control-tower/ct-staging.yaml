@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: control-tower
-        image: vizzuality/control-tower:1.0.79
+        image: vizzuality/control-tower:2.0.3
         imagePullPolicy: Always
         resources:
           requests:
@@ -36,7 +36,7 @@ spec:
           limits:
             memory: "1Gi"
         args:
-          - startDev
+          - start
         env:
           - name: PORT
             value: "9000"
