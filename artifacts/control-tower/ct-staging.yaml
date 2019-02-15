@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: control-tower
-        image: vizzuality/control-tower:2.0.3
+        image: vizzuality/control-tower:2.0.6
         imagePullPolicy: Always
         resources:
           requests:

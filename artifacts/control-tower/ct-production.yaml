@@ -42,7 +42,7 @@ spec:
                 - gateway
       containers:
       - name: control-tower
-        image: vizzuality/control-tower:2.0.3
+        image: vizzuality/control-tower:2.0.4
         imagePullPolicy: Always
         resources:
           requests:
