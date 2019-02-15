@@ -24,7 +24,7 @@ In this section we are going to see how to deploy a production-ready Kubernetes 
 
 ### Creating the Instances.
 
-To create a Kuberentes Cluster on VM instances you need to do the following:
+To create a Kubernetes Cluster on VM instances you need to do the following:
 
 1. Be sure that you already have at least 3 VM instances (from now, Nodes)
 2. Enable a private network between them. If you are using Digital Ocean Droplets, you can do it when creating the instances. This should be
