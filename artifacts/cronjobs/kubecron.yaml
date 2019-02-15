@@ -33,3 +33,13 @@ spec:
               secretKeyRef:
                 name: dbsecrets
                 key: POSTGRES_PASSWORD
+        - name: CT_MONGO_ADMIN_USER
+          valueFrom:
+              secretKeyRef:
+                name: dbsecrets
+                key: CT_MONGO_ADMIN_USER
+        - name: CT_MONGO_ADMIN_PASSWORD
+          valueFrom:
+              secretKeyRef:
+                name: dbsecrets
+                key: CT_MONGO_ADMIN_PASSWORD
