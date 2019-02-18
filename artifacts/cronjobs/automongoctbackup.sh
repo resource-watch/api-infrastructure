@@ -273,7 +273,7 @@ REQUIREDBAUTHDB="yes"
 #       - Initial Release
 #
 # VER 0.2 - (2015-09-10)
-#       - Added configurable backup rentention options, even for
+#       - Added configurable backup retention options, even for
 #         monthly backups.
 #
 #=====================================================================
@@ -450,7 +450,11 @@ dbdump () {
         echo "ERROR: mongodump failed: $1" >&2
         return 1
     fi
-    [ -e "$1" ] && return 0
+    if [ -e "$1" ]; then
+        OUTPUT_SIZE=$(du -hs $1 | cut -f1)
+        echo "SUCCESS: mongodump created dumpfile $1 with size $OUTPUT_SIZE"
+        return 0
+    fi
     echo "ERROR: mongodump failed to create dumpfile: $1" >&2
     return 1
 }
@@ -589,7 +593,7 @@ echo ======================================================================
 if [[ $DOM = "01" ]] && [[ $DOMONTHLY = "yes" ]]; then
     echo Monthly Full Backup
     echo
-    # Delete old monthly backups while respecting the set rentention policy.
+    # Delete old monthly backups while respecting the set retention policy.
     if [[ $MONTHLYRETENTION -ge 0 ]] ; then
         NUM_OLD_FILES=$(find $BACKUPDIR/monthly -depth -not -newermt "$MONTHLYRETENTION month ago" -type f | wc -l)
         if [[ $NUM_OLD_FILES -gt 0 ]] ; then
@@ -604,7 +608,7 @@ elif [[ "$DNOW" = "$WEEKLYDAY" ]] && [[ "$DOWEEKLY" = "yes" ]] ; then
     echo Weekly Backup
     echo
     if [[ $WEEKLYRETENTION -ge 0 ]] ; then
-        # Delete old weekly backups while respecting the set rentention policy.
+        # Delete old weekly backups while respecting the set retention policy.
         NUM_OLD_FILES=$(find $BACKUPDIR/weekly -depth -not -newermt "$WEEKLYRETENTION week ago" -type f | wc -l)
         if [[ $NUM_OLD_FILES -gt 0 ]] ; then
             echo Deleting "$NUM_OLD_FILES" global setting backup file\(s\) older than "$WEEKLYRETENTION" week\(s\) old.
@@ -617,7 +621,7 @@ elif [[ "$DNOW" = "$WEEKLYDAY" ]] && [[ "$DOWEEKLY" = "yes" ]] ; then
 elif [[ $DODAILY = "yes" ]] ; then
     echo Daily Backup of Databases
     echo
-    # Delete old daily backups while respecting the set rentention policy.
+    # Delete old daily backups while respecting the set retention policy.
     if [[ $DAILYRETENTION -ge 0 ]] ; then
         NUM_OLD_FILES=$(find $BACKUPDIR/daily -depth -not -newermt "$DAILYRETENTION days ago" -type f | wc -l)
         if [[ $NUM_OLD_FILES -gt 0 ]] ; then
@@ -631,7 +635,7 @@ elif [[ $DODAILY = "yes" ]] ; then
 elif [[ $DOHOURLY = "yes" ]] ; then
     echo Hourly Backup of Databases
     echo
-    # Delete old hourly backups while respecting the set rentention policy.
+    # Delete old hourly backups while respecting the set retention policy.
     if [[ $HOURLYRETENTION -ge 0 ]] ; then
         NUM_OLD_FILES=$(find $BACKUPDIR/hourly -depth -not -newermt "$HOURLYRETENTION hour ago" -type f | wc -l)
         if [[ $NUM_OLD_FILES -gt 0 ]] ; then
