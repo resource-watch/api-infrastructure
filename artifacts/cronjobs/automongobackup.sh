@@ -438,21 +438,33 @@ dbdump () {
     if [ -n "$QUERY" ]; then
         # filter for point-in-time snapshotting and if DOHOURLY=yes
         # shellcheck disable=SC2086
-        mongodump --quiet --host=$DBHOST --out="$1" $OPT -q "$QUERY"
-        MDUMPSTATUS=$?
+        MONGODUMP_CMD="mongodump --quiet --host=$DBHOST --out=\"$1\" $OPT -q \"$QUERY\""
       else
         # all others backups type
         # shellcheck disable=SC2086
-        mongodump --quiet --host=$DBHOST --out="$1" $OPT
-        MDUMPSTATUS=$?
+        MONGODUMP_CMD="mongodump --quiet --host=$DBHOST --out=\"$1\" $OPT"
     fi
+
+    $MONGODUMP_CMD
+    MDUMPSTATUS=$?
+
     if [ $MDUMPSTATUS -ne 0 ]; then
         echo "ERROR: mongodump failed: $1" >&2
+        echo "ERROR: mongodump command: $MONGODUMP_CMD" >&2
+        echo "ERROR: mongodump exit status: $MDUMPSTATUS" >&2
+
         return 1
     fi
-    [ -e "$1" ] && return 0
-    echo "ERROR: mongodump failed to create dumpfile: $1" >&2
-    return 1
+    if [ -e "$1" ]; then
+        OUTPUT_SIZE=$(du -hs $1 | cut -f1)
+        echo "SUCCESS: mongodump created dumpfile $1 with size $OUTPUT_SIZE"
+        return 0
+    else
+        echo "ERROR: mongodump failed to create dumpfile: $1" >&2
+        echo "ERROR: mongodump command: $MONGODUMP_CMD" >&2
+        echo "ERROR: mongodump exit status: $MDUMPSTATUS" >&2
+        return 1
+    fi
 }
 
 #
@@ -651,7 +663,7 @@ if [[ -z "$FILE" ]] ; then
   exit 1
 fi
 
-dbdump "$FILE" | true
+dbdump "$FILE"
 compression "$FILE"
 
 echo ----------------------------------------------------------------------
