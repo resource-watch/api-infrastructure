@@ -432,17 +432,18 @@ exec 2> "$LOGERR"     # stderr replaced with file $LOGERR.
 # Database dump function
 dbdump () {
     echo "------------------------------------------------------------------------------------------------------------------------------------"
-    echo $DBHOST
-    echo $OPT
+    echo "Host: $DBHOST"
+    echo "Opts: $OPT"
     echo "------------------------------------------------------------------------------------------------------------------------------------"
+    echo "Running mongodump command..."
     if [ -n "$QUERY" ]; then
         # filter for point-in-time snapshotting and if DOHOURLY=yes
         # shellcheck disable=SC2086
-        MONGODUMP_CMD="mongodump --quiet --host=$DBHOST --out=\"$1\" $OPT -q \"$QUERY\""
+        MONGODUMP_CMD="mongodump -v --host=$DBHOST --out=\"$1\" $OPT -q \"$QUERY\""
       else
         # all others backups type
         # shellcheck disable=SC2086
-        MONGODUMP_CMD="mongodump --quiet --host=$DBHOST --out=\"$1\" $OPT"
+        MONGODUMP_CMD="mongodump -v --host=$DBHOST --out=\"$1\" $OPT"
     fi
 
     $MONGODUMP_CMD
