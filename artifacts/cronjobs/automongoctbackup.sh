@@ -56,7 +56,7 @@ DBPASSWORD=$CT_MONGO_ADMIN_PASSWORD
 DBAUTHDB="admin"
 
 # Host name (or IP address) of mongo server e.g localhost
-DBHOST="mongo-rs-gateway-mongodb-replicaset.default.svc.cluster.local:27017"
+DBHOST="replSet/mongo-rs-gateway-mongodb-replicaset-0.mongo-rs-gateway-mongodb-replicaset.default.svc.cluster.local:27017,mongo-rs-gateway-mongodb-replicaset-1.mongo-rs-gateway-mongodb-replicaset.default.svc.cluster.local:27017,mongo-rs-gateway-mongodb-replicaset-2.mongo-rs-gateway-mongodb-replicaset.default.svc.cluster.local:27017"
 
 # Port that mongo is listening on
 DBPORT="27017"
@@ -317,8 +317,8 @@ DOM=$(date +%d)                                   # Date of the Month e.g. 27
 M=$(date +%B)                                     # Month e.g January
 W=$(date +%V)                                     # Week Number e.g 37
 VER=0.11                                          # Version Number
-LOGFILE=$BACKUPDIR/rs0-$(date +%H%M).log       # Logfile Name
-LOGERR=$BACKUPDIR/ERRORS_rs0-$(date +%H%M).log # Logfile Name
+LOGFILE=$BACKUPDIR/rs0-$(date +%H%M).log          # Logfile Name
+LOGERR=$BACKUPDIR/ERRORS_rs0-$(date +%H%M).log    # Logfile Name
 OPT=""                                            # OPT string for use with mongodump
 OPTSEC=""                                         # OPT string for use with mongodump in select_secondary_member function
 QUERY=""                                          # QUERY string for use with mongodump
