@@ -10,7 +10,9 @@ spec:
     - preproduction.resourcewatch.org
     - south-africa-platform.vizzuality.com
     - indonesia-platform-staging.vizzuality.com
+    - indonesia.climatewatchdata.org
     - india-platform-staging.vizzuality.com
+    - india.climatewatchdata.org
     secretName: ct-prod-tls-client-apps-ingress
   rules:
   - host: preproduction.resourcewatch.org
@@ -34,7 +36,21 @@ spec:
         backend:
           serviceName: nginx
           servicePort: 80
+  - host: indonesia.climatewatchdata.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
   - host: india-platform-staging.vizzuality.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: india.climatewatchdata.org
     http:
       paths:
       - path: /*

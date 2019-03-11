@@ -12,14 +12,18 @@ spec:
   - preproduction.resourcewatch.org
   - south-africa-platform.vizzuality.com
   - indonesia-platform-staging.vizzuality.com
+  - indonesia.climatewatchdata.org
   - india-platform-staging.vizzuality.com
+  - india.climatewatchdata.org
   acme:
     config:
     - domains:
       - preproduction.resourcewatch.org
       - south-africa-platform.vizzuality.com
       - indonesia-platform-staging.vizzuality.com
+      - indonesia.climatewatchdata.org
       - india-platform-staging.vizzuality.com
+      - india.climatewatchdata.org
       http01:
         ingress: client-apps-ingress
 
