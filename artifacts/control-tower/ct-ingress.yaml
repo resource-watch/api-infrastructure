@@ -29,6 +29,10 @@ spec:
     - www.prepdata.org
     - preproduction.prepdata.org
     - data.emissionspathways.org
+    - india.climatewatchdata.org
+    - www.india.climatewatchdata.org
+    - indonesia.climatewatchdata.org
+    - www.indonesia.climatewatchdata.org
     secretName: ct-prod-tls
   rules:
   - host: rw-blog.vizzuality.com
@@ -186,6 +190,34 @@ spec:
           serviceName: nginx
           servicePort: 80
   - host: www.resourcewatch.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: india.climatewatchdata.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: www.india.climatewatchdata.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: indonesia.climatewatchdata.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: www.indonesia.climatewatchdata.org
     http:
       paths:
       - path: /*
