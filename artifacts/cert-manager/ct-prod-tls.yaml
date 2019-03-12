@@ -32,9 +32,7 @@ spec:
   - preproduction.prepdata.org
   - data.emissionspathways.org
   - india.climatewatchdata.org
-  - www.india.climatewatchdata.org
   - indonesia.climatewatchdata.org
-  - www.indonesia.climatewatchdata.org
   acme:
     config:
     - domains:
@@ -61,8 +59,6 @@ spec:
       - preproduction.prepdata.org
       - data.emissionspathways.org
       - india.climatewatchdata.org
-      - www.india.climatewatchdata.org
       - indonesia.climatewatchdata.org
-      - www.indonesia.climatewatchdata.org
       http01:
         ingress: gateway-ingress
