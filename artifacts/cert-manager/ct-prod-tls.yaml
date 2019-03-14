@@ -9,9 +9,7 @@ spec:
     kind: ClusterIssuer
     name: letsencrypt-prod
   dnsNames:
-  - rw-blog.vizzuality.com
   - api-rw.vizzuality.com
-  - resourcewatch.vizzuality.com
   - production-api.globalforestwatch.org
   - resourcewatch.org  
   - www.resourcewatch.org
@@ -37,9 +35,7 @@ spec:
   acme:
     config:
     - domains:
-      - rw-blog.vizzuality.com
       - api-rw.vizzuality.com
-      - resourcewatch.vizzuality.com
       - production-api.globalforestwatch.org
       - resourcewatch.org  
       - www.resourcewatch.org
