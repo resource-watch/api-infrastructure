@@ -29,6 +29,7 @@ spec:
     - preproduction.prepdata.org
     - data.emissionspathways.org
     - india.climatewatchdata.org
+    - indiaclimateexplorer.org
     - indonesia.climatewatchdata.org
     secretName: ct-prod-tls
   rules:
@@ -180,6 +181,13 @@ spec:
           serviceName: nginx
           servicePort: 80
   - host: india.climatewatchdata.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: indiaclimateexplorer.org
     http:
       paths:
       - path: /*

@@ -15,6 +15,7 @@ spec:
   - indonesia.climatewatchdata.org
   - india-platform-staging.vizzuality.com
   - india.climatewatchdata.org
+  - indiaclimateexplorer.org
   acme:
     config:
     - domains:
@@ -24,6 +25,7 @@ spec:
       - indonesia.climatewatchdata.org
       - india-platform-staging.vizzuality.com
       - india.climatewatchdata.org
+      - indiaclimateexplorer.org
       http01:
         ingress: client-apps-ingress
 

@@ -31,6 +31,7 @@ spec:
   - preproduction.prepdata.org
   - data.emissionspathways.org
   - india.climatewatchdata.org
+  - indiaclimateexplorer.org
   - indonesia.climatewatchdata.org
   acme:
     config:
@@ -57,6 +58,7 @@ spec:
       - preproduction.prepdata.org
       - data.emissionspathways.org
       - india.climatewatchdata.org
+      - indiaclimateexplorer.org
       - indonesia.climatewatchdata.org
       http01:
         ingress: gateway-ingress

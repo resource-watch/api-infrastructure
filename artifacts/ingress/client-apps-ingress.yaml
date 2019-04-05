@@ -13,6 +13,7 @@ spec:
     - indonesia.climatewatchdata.org
     - india-platform-staging.vizzuality.com
     - india.climatewatchdata.org
+    - indiaclimateexplorer.org
     secretName: ct-prod-tls-client-apps-ingress
   rules:
   - host: preproduction.resourcewatch.org
@@ -51,6 +52,13 @@ spec:
           serviceName: nginx
           servicePort: 80
   - host: india.climatewatchdata.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: indiaclimateexplorer.org
     http:
       paths:
       - path: /*
