@@ -16,10 +16,6 @@ RUN curl http://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 RUN echo 'deb https://debian.neo4j.org/repo stable/' | tee -a /etc/apt/sources.list.d/neo4j.list
 RUN curl https://debian.neo4j.org/neotechnology.gpg.key | apt-key add -
 
-RUN add-apt-repository ppa:webupd8team/java
-RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886
-
 RUN apt-get update && apt-get -y install cron \
     openssh-client \
     apt-transport-https \
@@ -29,7 +25,7 @@ RUN apt-get update && apt-get -y install cron \
     build-essential \
     postgresql-client \
     google-cloud-sdk \
-    oracle-java8-installer \
+    openjdk-8-jdk \
     neo4j-enterprise=1:3.4.1
 
 # Cron
