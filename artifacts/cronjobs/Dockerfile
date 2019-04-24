@@ -2,7 +2,7 @@ FROM ubuntu:latest
 ENV CLOUD_SDK_VERSION 165.0.0
 ENV CLOUD_SDK_REPO cloud-sdk-trusty
 
-RUN apt-get update && apt-get -y install gnupg curl software-properties-common
+RUN apt-get update && apt-get -y install gnupg curl software-properties-common nano
 
 # MongoDB Tools
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6
