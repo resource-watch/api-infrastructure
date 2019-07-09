@@ -24,3 +24,24 @@ kubectl create -f es-data-stateful.yaml
 ```
 
 Kubernetes creates the pods for a `StatefulSet` one at a time, waiting for each to come up before starting the next, so it may take a few minutes for all pods to be provisioned. Refer back to the documentation in the root directory for details on testing the cluster, and configuring a curator job to clean up.
+
+
+# Backups
+
+## To S3
+
+- Ensure Elasticsearch has the correct [repository](https://www.elastic.co/guide/en/elasticsearch/reference/5.5/modules-snapshots.html) configured. If not, use something like the `curl` request below:
+
+```bash
+curl -X PUT \
+  http://elasticsearch.default.svc.cluster.local:9200/_snapshot/wri-api-backups/ \
+  -d '{
+  "type": "s3",
+  "settings": {
+    "bucket": "wri-api-backups",
+    "region": "us-east-1",
+    "base_path": "autoelasticbackup"
+  }
+}'
+```
+

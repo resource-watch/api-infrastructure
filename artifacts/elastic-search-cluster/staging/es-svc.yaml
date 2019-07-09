@@ -4,13 +4,13 @@ metadata:
   name: elasticsearch
   labels:
     component: elasticsearch
-    role: client
+    role: ingest
 spec:
   type: ClusterIP
   selector:
     component: elasticsearch
-    role: client
+    role: ingest
   ports:
-  - name: http
-    port: 9200
-    protocol: TCP
+    - name: http
+      port: 9200
+      protocol: TCP

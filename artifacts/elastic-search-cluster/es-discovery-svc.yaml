@@ -10,6 +10,6 @@ spec:
     component: elasticsearchV2
     role: master
   ports:
-  - name: transport
-    port: 9300
-    protocol: TCP
+    - name: transport
+      port: 9300
+      protocol: TCP

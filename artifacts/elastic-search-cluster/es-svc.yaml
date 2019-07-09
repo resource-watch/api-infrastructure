@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: elasticsearch-v2
+  name: elasticsearch
   labels:
-    component: elasticsearchV2
-    role: client
+    component: elasticsearch
+    role: ingest
 spec:
   type: ClusterIP
   selector:
-    component: elasticsearchV2
-    role: client
+    component: elasticsearch
+    role: ingest
   ports:
-  - name: http
-    port: 9200
-    protocol: TCP
+    - name: http
+      port: 9200
+      protocol: TCP

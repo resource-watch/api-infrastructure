@@ -1,11 +1,11 @@
 apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
-  name: es-data
+  name: es-data-ssd
   labels:
     type: db-elastic
     component: elasticsearch
-    role: data
+    role: data-ssd
 spec:
   serviceName: elasticsearch-data
   replicas: 3
@@ -14,7 +14,7 @@ spec:
       labels:
         type: db-elastic
         component: elasticsearch
-        role: data
+        role: data-ssd
     spec:
       initContainers:
         - name: sysctl
@@ -44,10 +44,10 @@ spec:
                   - key: role
                     operator: In
                     values:
-                      - data
+                      - data-ssd
               topologyKey: "kubernetes.io/hostname"
       containers:
-        - name: es-data
+        - name: es-data-ssd
           securityContext:
             privileged: true
             capabilities:
@@ -104,9 +104,9 @@ spec:
     - metadata:
         name: storage
         annotations:
-          volume.beta.kubernetes.io/storage-class: standard
+          volume.beta.kubernetes.io/storage-class: ssd
       spec:
         accessModes: [ "ReadWriteOnce" ]
         resources:
           requests:
-            storage: 150Gi
+            storage: 200Gi

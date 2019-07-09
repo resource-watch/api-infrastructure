@@ -1,20 +1,19 @@
-apiVersion: apps/v1beta1
-kind: StatefulSet
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
-  name: es-data
+  name: es-ingest
   labels:
     type: db-elastic
     component: elasticsearch
-    role: data
+    role: ingest
 spec:
-  serviceName: elasticsearch-data
-  replicas: 3
+  replicas: 2
   template:
     metadata:
       labels:
         type: db-elastic
         component: elasticsearch
-        role: data
+        role: ingest
     spec:
       initContainers:
         - name: sysctl
@@ -44,20 +43,21 @@ spec:
                   - key: role
                     operator: In
                     values:
-                      - data
+                      - ingest
               topologyKey: "kubernetes.io/hostname"
       containers:
-        - name: es-data
+        - name: es-ingest
           securityContext:
-            privileged: true
+            privileged: false
             capabilities:
               add:
                 - IPC_LOCK
+                - SYS_RESOURCE
           image: quay.io/pires/docker-elasticsearch-kubernetes:5.5.0
           imagePullPolicy: Always
           resources:
             requests:
-              memory: "6Gi"
+              memory: "2Gi"
           env:
             - name: NAMESPACE
               valueFrom:
@@ -74,13 +74,13 @@ spec:
             - name: NODE_MASTER
               value: "false"
             - name: NODE_INGEST
-              value: "false"
-            - name: NODE_DATA
               value: "true"
-            - name: HTTP_ENABLE
+            - name: NODE_DATA
               value: "false"
+            - name: HTTP_ENABLE
+              value: "true"
             - name: "ES_JAVA_OPTS"
-              value: "-Xms6g -Xmx6g"
+              value: "-Xms2g -Xmx2g"
             - name: "ES_PLUGINS_INSTALL"
               value: "https://github.com/NLPchina/elasticsearch-sql/releases/download/5.5.0.0/elasticsearch-sql-5.5.0.1.zip,repository-s3,repository-gcs"
             - name: AWS_ACCESS_KEY_ID
@@ -94,19 +94,16 @@ spec:
                   name: dbsecrets
                   key: BACKUP_S3_SECRET_KEY
           ports:
+            - containerPort: 9200
+              name: http
+              protocol: TCP
             - containerPort: 9300
               name: transport
               protocol: TCP
           volumeMounts:
             - name: storage
               mountPath: /data
-  volumeClaimTemplates:
-    - metadata:
-        name: storage
-        annotations:
-          volume.beta.kubernetes.io/storage-class: standard
-      spec:
-        accessModes: [ "ReadWriteOnce" ]
-        resources:
-          requests:
-            storage: 150Gi
+      volumes:
+        - emptyDir:
+            medium: ""
+          name: "storage"
