@@ -70,7 +70,7 @@ spec:
             - name: "DISCOVERY_SERVICE"
               value: "elasticsearch-discovery"
             - name: "CLUSTER_NAME"
-              value: "myesdb-offline"
+              value: "myesdb"
             - name: NODE_MASTER
               value: "false"
             - name: NODE_INGEST
