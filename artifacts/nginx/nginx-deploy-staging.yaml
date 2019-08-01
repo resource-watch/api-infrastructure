@@ -24,7 +24,6 @@ spec:
             scheme: HTTP
             path: /health_check
             port: 80
-            scheme: HTTP
           initialDelaySeconds: 10
           timeoutSeconds: 1
           periodSeconds: 10
