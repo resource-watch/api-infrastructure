@@ -14,6 +14,7 @@ spec:
     - ui.resourcewatch.org
     - api.resourcewatch.org
     - staging.resourcewatch.org
+    - mapbox.resourcewatch.org
     - emissionspathways.org
     - www.emissionspathways.org
     - climatewatchdata.org
@@ -167,6 +168,13 @@ spec:
           serviceName: nginx
           servicePort: 80
   - host: resourcewatch.org
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx
+          servicePort: 80
+  - host: mapbox.resourcewatch.org
     http:
       paths:
       - path: /*

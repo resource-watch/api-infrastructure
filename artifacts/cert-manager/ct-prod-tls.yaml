@@ -16,6 +16,7 @@ spec:
   - ui.resourcewatch.org
   - api.resourcewatch.org
   - staging.resourcewatch.org
+  - mapbox.resourcewatch.org
   - emissionspathways.org
   - www.emissionspathways.org
   - climate-watch.vizzuality.com
@@ -43,6 +44,7 @@ spec:
       - ui.resourcewatch.org
       - api.resourcewatch.org
       - staging.resourcewatch.org
+      - mapbox.resourcewatch.org
       - emissionspathways.org
       - www.emissionspathways.org
       - climate-watch.vizzuality.com
