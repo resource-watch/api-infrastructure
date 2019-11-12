@@ -1,19 +1,19 @@
 replicas: 3
 port: 27017
 
-replicaSetName: rs0
+replicaSetName: rs1
 
 podDisruptionBudget: {}
-  # maxUnavailable: 1
-  # minAvailable: 2
+# maxUnavailable: 1
+# minAvailable: 2
 
 auth:
   enabled: false
   adminUser: vizzuality-super
   adminPassword: 8Xf45BmMQrWPhJct
-  # key: keycontent
-  # existingKeySecret:
-  # existingAdminSecret:
+
+extraLabels:
+  role: db-mongo-gateway
 
 # Specs for the Docker image for the init container that establishes the replica set
 installImage:
@@ -35,13 +35,11 @@ securityContext:
 
 resources:
   requests:
-    memory: 4Gi
-# limits:
-#   cpu: 500m
-#   memory: 512Mi
-# requests:
-#   cpu: 100m
-#   memory: 256Mi
+    cpu: 1
+    memory: 512M
+  limits:
+    cpu: 4
+    memory: 4G
 
 ## Node selector
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
@@ -51,16 +49,26 @@ affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
       nodeSelectorTerms:
-      - matchExpressions:
-        - key: type
-          operator: In
-          values:
-          - db-gateway-mongo
+        - matchExpressions:
+            - key: type
+              operator: In
+              values:
+                - db-mongo-gateway
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+            - key: role
+              operator: In
+              values:
+                - db-mongo-gateway
+        topologyKey: "kubernetes.io/hostname"
+
 tolerations:
-- key: "type"
-  operator: "Equal"
-  value: "db-gateway-mongo"
-  effect: "NoSchedule"
+  - key: "type"
+    operator: "Equal"
+    value: "db-mongo-gateway"
+    effect: "NoSchedule"
 
 persistentVolume:
   enabled: true
