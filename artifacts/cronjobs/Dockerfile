@@ -30,7 +30,6 @@ RUN apt-get update && apt-get -y install cron \
 
 # Cron
 RUN mkdir /cronjobs && mkdir /cronjobs/backups
-COPY cronjobs.sh /cronjobs/cronjobs.sh
 COPY cronjobs-check.sh /cronjobs/cronjobs-check.sh
 COPY main.py /cronjobs/main.py
 

@@ -1,4 +1,3 @@
 # DO NOT TOUCH
-30 01 * * * /cronjobs/cronjobs.sh >> /var/log/cron.log 2>&1
 30 02 * * * /cronjobs/cronjobs-check.sh >> /var/log/cron-check.log 2>&1
 # An empty line is required at the end of this file for a valid cron file.
