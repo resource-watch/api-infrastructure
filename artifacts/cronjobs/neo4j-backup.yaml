@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: mongo-ct-backup
+  name: neo4j-backup
 spec:
   schedule: "35 01 * * *"
   concurrencyPolicy: Replace
@@ -40,5 +40,5 @@ spec:
                       name: dbsecrets
                       key: CT_MONGO_ADMIN_PASSWORD
               args:
-                - mongo-ct
+                - neo4j
           restartPolicy: OnFailure
