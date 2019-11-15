@@ -7,7 +7,7 @@ metadata:
     component: elasticsearch
     role: ingest
 spec:
-  replicas: 2
+  replicas: 3
   template:
     metadata:
       labels:
@@ -53,11 +53,15 @@ spec:
               add:
                 - IPC_LOCK
                 - SYS_RESOURCE
-          image: quay.io/pires/docker-elasticsearch-kubernetes:5.5.0
+          image: quay.io/pires/docker-elasticsearch-kubernetes:5.5.2
           imagePullPolicy: Always
           resources:
             requests:
-              memory: "2Gi"
+              cpu: "1"
+              memory: "4G"
+            limits:
+              cpu: "4"
+              memory: "8G"
           env:
             - name: NAMESPACE
               valueFrom:
@@ -82,7 +86,7 @@ spec:
             - name: "ES_JAVA_OPTS"
               value: "-Xms2g -Xmx2g"
             - name: "ES_PLUGINS_INSTALL"
-              value: "https://github.com/NLPchina/elasticsearch-sql/releases/download/5.5.0.0/elasticsearch-sql-5.5.0.1.zip,repository-s3,repository-gcs"
+              value: "https://github.com/NLPchina/elasticsearch-sql/releases/download/5.5.2.0/elasticsearch-sql-5.5.2.0.zip,repository-s3,repository-gcs"
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
