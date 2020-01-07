@@ -1,0 +1,24 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: ct-staging-tls
+  namespace: default
+spec:
+  secretName: ct-staging-tls
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-staging
+  dnsNames:
+    - staging-api.globalforestwatch.org
+    - staging.emissionspathways.org
+    - ui-staging.resourcewatch.org
+    - prep-manager.vizzuality.com
+  acme:
+    config:
+      - domains:
+          - staging-api.globalforestwatch.org
+          - staging.emissionspathways.org
+          - ui-staging.resourcewatch.org
+          - prep-manager.vizzuality.com
+        http01:
+          ingress: gateway-ingress
