@@ -4,7 +4,6 @@ metadata:
   name: gateway-ingress
   annotations:
     kubernetes.io/ingress.global-static-ip-name: ct-staging-static-ip
-    kubernetes.io/ingress.class: "gce"
     cert-manager.io/cluster-issuer: letsencrypt-staging
 spec:
   tls:
