@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Issuer
+metadata:
+  name: gateway-issuer
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: tiago.garcia@vizzuality.com
+    privateKeySecretRef:
+      name: letsencrypt-private-key-gateway-issuer
+    solvers:
+      - http01:
+          ingress:
+            name: gateway-ingress
