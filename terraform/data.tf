@@ -5,12 +5,12 @@ data "aws_caller_identity" "current" {}
 data "aws_ami" "amazon_linux_ami" {
   most_recent = true
   owners = [
-    "amazon"]
+  "amazon"]
 
   filter {
     name = "name"
     values = [
-      "amzn2-ami-hvm*"]
+    "amzn2-ami-hvm*"]
   }
 }
 
@@ -20,12 +20,12 @@ data "template_file" "authorized_keys_ec2_user" {
   vars = {
     user = "ec2-user"
     echo_rows = <<EOT
-%{ for row in formatlist("echo \"%v\" >> /home/ec2-user/.ssh/authorized_keys",
-    values(aws_key_pair.all)[*].public_key) ~}
+%{for row in formatlist("echo \"%v\" >> /home/ec2-user/.ssh/authorized_keys",
+values(aws_key_pair.all)[*].public_key)~}
 ${row}
-%{ endfor ~}
+%{endfor~}
 EOT
-  }
+}
 }
 
 
