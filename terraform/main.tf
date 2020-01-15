@@ -27,7 +27,7 @@ module "bootstrap" {
 module "vpc" {
   source             = "./modules/vpc"
   region             = var.aws_region
-  key_name           = aws_key_pair.tmaschler_gfw.key_name
+  key_name           = var.ssh_key_name
   bastion_ami        = data.aws_ami.amazon_linux_ami.id
   project            = local.project
   tags               = local.tags
