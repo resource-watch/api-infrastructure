@@ -9,11 +9,6 @@ variable "environment" {
   description = "An environment namespace for the infrastructure."
 }
 
-variable "ssh_key_name" {
-  type        = string
-  description = "Name of the SSH key to import."
-}
-
 variable "aws_region" {
   default     = "us-east-1"
   type        = string

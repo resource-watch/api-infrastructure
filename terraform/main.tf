@@ -23,11 +23,11 @@ module "bootstrap" {
   tags                 = local.tags
 }
 
-
+# Internal module which defines the VPC
 module "vpc" {
   source             = "./modules/vpc"
   region             = var.aws_region
-  key_name           = var.ssh_key_name
+  user_data          = data.template_file.authorized_keys_ec2_user.rendered
   bastion_ami        = data.aws_ami.amazon_linux_ami.id
   project            = local.project
   tags               = local.tags
