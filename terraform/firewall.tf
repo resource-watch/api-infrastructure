@@ -18,7 +18,7 @@ resource "aws_security_group_rule" "default_ssh_ingress" {
   from_port         = 22
   to_port           = 22
   protocol          = "tcp"
-  cidr_blocks       = ["216.70.220.184/32"] # WRI Office
+  cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.default.id
 }
 
