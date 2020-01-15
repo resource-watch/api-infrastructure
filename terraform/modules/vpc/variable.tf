@@ -8,11 +8,6 @@ variable "region" {
   description = "A valid AWS region to house VPC resources."
 }
 
-variable "key_name" {
-  type        = string
-  description = "A key pair used to control login access to EC2 instances."
-}
-
 variable "cidr_block" {
   default     = "10.0.0.0/16" // 10.0.0.0 - 10.0.255.255
   type        = string
@@ -67,4 +62,8 @@ variable "tags" {
 variable "security_group_ids" {
   type        = list(string)
   description = "A list of security groups to use for the bastion"
+}
+
+variable "user_data" {
+  description = "User data for bootstrapping Bastion host"
 }
