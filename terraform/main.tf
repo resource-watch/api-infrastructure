@@ -33,3 +33,18 @@ module "vpc" {
   tags               = local.tags
   security_group_ids = [aws_security_group.default.id]
 }
+
+# Internal module which defines the VPC
+module "eks" {
+  source      = "./modules/eks"
+  project     = local.project
+  vpc_id      = module.vpc.id
+  environment = var.environment
+  subnet_ids = [
+    module.vpc.private_subnets[0].id,
+    module.vpc.private_subnets[1].id,
+    module.vpc.private_subnets[2].id,
+    module.vpc.private_subnets[3].id,
+    module.vpc.private_subnets[5].id
+  ]
+}

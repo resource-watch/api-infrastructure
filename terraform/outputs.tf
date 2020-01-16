@@ -60,3 +60,8 @@ output "authorized_keys_ec2_user" {
   value       = data.template_file.authorized_keys_ec2_user.rendered
   description = "User data script to add keypairs to authorized_key file on EC2 instance"
 }
+
+output "kubectl_config" {
+  value       = module.eks.kubeconfig
+  description = "Configuration snippet for the kubectl CLI tool that allows access to this EKS cluster"
+}
