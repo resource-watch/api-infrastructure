@@ -67,7 +67,8 @@ resource "aws_subnet" "private" {
     {
       Name = "${var.project}-PrivateSubnet-${var.availability_zones[count.index]}"
     },
-    var.tags
+    var.tags,
+    var.subnet_tags
   )
 }
 
