@@ -59,6 +59,12 @@ variable "tags" {
   description = "A mapping of keys and values to apply as tags to all resources that support them."
 }
 
+variable "subnet_tags" {
+  default     = {}
+  type        = map(string)
+  description = "A mapping of keys and values to apply as tags to all subnets managed by this module."
+}
+
 variable "security_group_ids" {
   type        = list(string)
   description = "A list of security groups to use for the bastion"
