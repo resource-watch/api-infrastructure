@@ -27,3 +27,8 @@ variable "dynamo_db_lock_table_name" {
   description = "Name of the lock table in Dynamo DB"
 }
 
+variable "ingress_allow_cidr_block" {
+  type        = string
+  description = "The CIDR block of IPs allowed to connect to the bastion host."
+}
+
