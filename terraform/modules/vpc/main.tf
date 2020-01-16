@@ -44,7 +44,7 @@ resource "aws_route_table" "public" {
 
   tags = merge(
     {
-      Name = "{var.project}-PublicRouteTable"
+      Name = "${var.project}-PublicRouteTable"
     },
     var.tags
   )
@@ -65,7 +65,7 @@ resource "aws_subnet" "private" {
 
   tags = merge(
     {
-      Name = "{var.project}-PrivateSubnet-${var.availability_zones[count.index]}"
+      Name = "${var.project}-PrivateSubnet-${var.availability_zones[count.index]}"
     },
     var.tags
   )
@@ -81,7 +81,7 @@ resource "aws_subnet" "public" {
 
   tags = merge(
     {
-      Name = "{var.project}-PublicSubnet-${var.availability_zones[count.index]}"
+      Name = "${var.project}-PublicSubnet-${var.availability_zones[count.index]}"
     },
     var.tags
   )
