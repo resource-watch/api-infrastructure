@@ -28,7 +28,7 @@ variable "public_subnet_cidr_blocks" {
 variable "private_subnet_cidr_blocks" {
   type = list(string)
   default = ["10.0.112.0/20", # 10.0.112.0 - 10.0.127.255
-    "10.0.128.0/20",          # 10.0.127.0 - 10.0.143.255
+    "10.0.128.0/20",          # 10.0.128.0 - 10.0.143.255
     "10.0.144.0/20",          # 10.0.144.0 - 10.0.159.255
     "10.0.160.0/20",          # 10.0.160.0 - 10.0.175.255
     "10.0.176.0/20",          # 10.0.176.0 - 10.0.191.255
@@ -59,10 +59,16 @@ variable "tags" {
   description = "A mapping of keys and values to apply as tags to all resources that support them."
 }
 
-variable "subnet_tags" {
+variable "private_subnet_tags" {
   default     = {}
   type        = map(string)
-  description = "A mapping of keys and values to apply as tags to all subnets managed by this module."
+  description = "A mapping of keys and values to apply as tags to all private subnets managed by this module."
+}
+
+variable "public_subnet_tags" {
+  default     = {}
+  type        = map(string)
+  description = "A mapping of keys and values to apply as tags to all public subnets managed by this module."
 }
 
 variable "security_group_ids" {

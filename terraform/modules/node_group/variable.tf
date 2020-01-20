@@ -3,6 +3,10 @@ variable "node_group_name" {
   description = "Name of the node group"
 }
 
+variable "cluster" {
+  description = "The EKS cluster to which this node group will be attached"
+}
+
 variable "cluster_name" {
   type        = string
   description = "Name of the EKS cluster to which this node group will be attached"

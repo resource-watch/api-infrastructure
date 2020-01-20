@@ -25,14 +25,19 @@ module "bootstrap" {
 
 # Internal module which defines the VPC
 module "vpc" {
-  source             = "./modules/vpc"
-  region             = var.aws_region
-  user_data          = data.template_file.authorized_keys_ec2_user.rendered
-  bastion_ami        = data.aws_ami.amazon_linux_ami.id
-  project            = local.project
-  tags               = local.tags
-  subnet_tags        = {
-    "kubernetes.io/cluster/${lower(replace(local.project, " ", "-"))}-k8s-cluster": "shared"
+  source      = "./modules/vpc"
+  region      = var.aws_region
+  user_data   = data.template_file.authorized_keys_ec2_user.rendered
+  bastion_ami = data.aws_ami.amazon_linux_ami.id
+  project     = local.project
+  tags        = local.tags
+  private_subnet_tags = {
+    "kubernetes.io/cluster/${lower(replace(local.project, " ", "-"))}-k8s-cluster" : "shared"
+    "kubernetes.io/role/internal-elb" : 1
+  }
+  public_subnet_tags = {
+    "kubernetes.io/cluster/${lower(replace(local.project, " ", "-"))}-k8s-cluster" : "shared"
+    "kubernetes.io/role/elb" : 1
   }
   security_group_ids = [aws_security_group.default.id]
 }
@@ -48,13 +53,19 @@ module "eks" {
     module.vpc.private_subnets[1].id,
     module.vpc.private_subnets[2].id,
     module.vpc.private_subnets[3].id,
-    module.vpc.private_subnets[5].id
+    module.vpc.private_subnets[5].id,
+    module.vpc.public_subnets[0].id,
+    module.vpc.public_subnets[1].id,
+    module.vpc.public_subnets[2].id,
+    module.vpc.public_subnets[3].id,
+    module.vpc.public_subnets[5].id
   ]
 }
 
 # Create a k8s cluster using AWS EKS
 module "node_group" {
   source          = "./modules/node_group"
+  cluster         = module.eks.cluster
   cluster_name    = module.eks.cluster_name
   node_group_name = "ct-node-group"
   subnet_ids = [

@@ -15,6 +15,7 @@ resource "aws_eks_node_group" "eks-node-group-admin" {
   # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
   # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
   depends_on = [
+    var.cluster,
     aws_iam_role_policy_attachment.eks-node-group-admin-AmazonEKSWorkerNodePolicy,
     aws_iam_role_policy_attachment.eks-node-group-admin-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.eks-node-group-admin-AmazonEC2ContainerRegistryReadOnly,
@@ -34,6 +35,23 @@ resource "aws_iam_role" "eks-node-group-admin" {
     }]
     Version = "2012-10-17"
   })
+}
+
+data "aws_iam_policy_document" "eks-admin-ALBIngressControllerIAMPolicy-document" {
+  source_json = file("${path.module}/iam-policy.json")
+}
+
+resource "aws_iam_policy" "eks-admin-ALBIngressControllerIAMPolicy" {
+  name   = "ALBIngressControllerIAMPolicy"
+  path   = "/"
+  policy = data.aws_iam_policy_document.eks-admin-ALBIngressControllerIAMPolicy-document.json
+}
+
+data "aws_caller_identity" "current" {}
+
+resource "aws_iam_role_policy_attachment" "eks-admin-ALBIngressControllerIAMPolicy" {
+  policy_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/ALBIngressControllerIAMPolicy"
+  role       = aws_iam_role.eks-node-group-admin.name
 }
 
 resource "aws_iam_role_policy_attachment" "eks-node-group-admin-AmazonEKSWorkerNodePolicy" {

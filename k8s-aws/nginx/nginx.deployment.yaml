@@ -1,0 +1,63 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    name: nginx
+  name: nginx
+spec:
+  template:
+    metadata:
+      labels:
+        name: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "0"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /etc/nginx/nginx.conf
+              name: nginx-conf
+              subPath: nginx.conf
+            - mountPath: /etc/nginx/conf.d
+              name: nginx-hosts
+          readinessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /health_check
+              port: 80
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 10
+      restartPolicy: Always
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: nginx-conf
+            items:
+              - key: nginx-config.configmap.conf
+                path: nginx.conf
+        - name: nginx-hosts
+          configMap:
+            name: nginx-hosts
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: nginx
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1beta1
+    kind: Deployment
+    name: nginx
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 60
