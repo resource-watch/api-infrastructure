@@ -1,0 +1,214 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gateway-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: ct-static-ip
+    kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.class: "gce"
+    cert-manager.io/issuer: gateway-issuer
+spec:
+  tls:
+    - hosts:
+        - api-rw.vizzuality.com
+        - production-api.globalforestwatch.org
+        - resourcewatch.org
+        - www.resourcewatch.org
+        - ui.resourcewatch.org
+        - api.resourcewatch.org
+        - staging.resourcewatch.org
+        - mapbox.resourcewatch.org
+        - emissionspathways.org
+        - www.emissionspathways.org
+        - climatewatchdata.org
+        - www.climatewatchdata.org
+        - climate-watch.vizzuality.com
+        - beta.climatewatchdata.org
+        - climatedata.org
+        - www.climatedata.org
+        - prepdata.org
+        - staging.prepdata.org
+        - beta.prepdata.org
+        - www.prepdata.org
+        - preproduction.prepdata.org
+        - data.emissionspathways.org
+        - india.climatewatchdata.org
+        - indiaclimateexplorer.org
+        - indonesia.climatewatchdata.org
+      secretName: gateway-certificate
+  rules:
+    - host: api-rw.vizzuality.com
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: staging.prepdata.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: beta.prepdata.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: www.prepdata.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: prepdata.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: preproduction.prepdata.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: ui.resourcewatch.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: ct-ui
+              servicePort: 80
+    - host: api.resourcewatch.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: staging.resourcewatch.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: production-api.globalforestwatch.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: emissionspathways.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: www.emissionspathways.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: climatewatchdata.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: climate-watch.vizzuality.com
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: www.climatewatchdata.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: climatedata.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: www.climatedata.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: beta.climatewatchdata.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: data.emissionspathways.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: resourcewatch.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: mapbox.resourcewatch.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: www.resourcewatch.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: india.climatewatchdata.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: indiaclimateexplorer.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: indonesia.climatewatchdata.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80

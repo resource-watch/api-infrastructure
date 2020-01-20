@@ -1,0 +1,35 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: gateway-certificate
+  namespace: default
+spec:
+  secretName: gateway-certificate
+  issuerRef:
+    name: gateway-issuer
+  dnsNames:
+  - api-rw.vizzuality.com
+  - production-api.globalforestwatch.org
+  - resourcewatch.org  
+  - www.resourcewatch.org
+  - ui.resourcewatch.org
+  - api.resourcewatch.org
+  - staging.resourcewatch.org
+  - mapbox.resourcewatch.org
+  - emissionspathways.org
+  - www.emissionspathways.org
+  - climate-watch.vizzuality.com
+  - climatewatchdata.org
+  - www.climatewatchdata.org
+  - beta.climatewatchdata.org
+  - climatedata.org
+  - www.climatedata.org
+  - prepdata.org
+  - staging.prepdata.org
+  - beta.prepdata.org
+  - www.prepdata.org
+  - preproduction.prepdata.org
+  - data.emissionspathways.org
+  - india.climatewatchdata.org
+  - indiaclimateexplorer.org
+  - indonesia.climatewatchdata.org

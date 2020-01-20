@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: ct-staging-tls
+  namespace: default
+spec:
+  secretName: ct-staging-tls
+  issuerRef:
+    name: letsencrypt-staging
+    kind: ClusterIssuer
+  dnsNames:
+    - staging-api.globalforestwatch.org
+    - staging.emissionspathways.org
+    - ui-staging.resourcewatch.org
+    - prep-manager.vizzuality.com
