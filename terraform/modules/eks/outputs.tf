@@ -1,13 +1,17 @@
+output "cluster" {
+  value = aws_eks_cluster.eks_cluster
+}
+
 output "cluster_name" {
-  value = aws_eks_cluster.rw_api.name
+  value = aws_eks_cluster.eks_cluster.name
 }
 
 output "endpoint" {
-  value = aws_eks_cluster.rw_api.endpoint
+  value = aws_eks_cluster.eks_cluster.endpoint
 }
 
 output "kubeconfig-certificate-authority-data" {
-  value = aws_eks_cluster.rw_api.certificate_authority.0.data
+  value = aws_eks_cluster.eks_cluster.certificate_authority.0.data
 }
 
 locals {
@@ -17,12 +21,12 @@ locals {
 apiVersion: v1
 clusters:
 - cluster:
-    server: ${aws_eks_cluster.rw_api.endpoint}
-    certificate-authority-data: ${aws_eks_cluster.rw_api.certificate_authority.0.data}
-  name: ${aws_eks_cluster.rw_api.name}-${var.environment}
+    server: ${aws_eks_cluster.eks_cluster.endpoint}
+    certificate-authority-data: ${aws_eks_cluster.eks_cluster.certificate_authority.0.data}
+  name: ${aws_eks_cluster.eks_cluster.name}-${var.environment}
 contexts:
 - context:
-    cluster: ${aws_eks_cluster.rw_api.name}-${var.environment}
+    cluster: ${aws_eks_cluster.eks_cluster.name}-${var.environment}
     user: aws-rw-${var.environment}
   name: aws-rw-${var.environment}
 kind: Config
@@ -37,7 +41,7 @@ users:
         - "eks"
         - "get-token"
         - "--cluster-name"
-        - "${aws_eks_cluster.rw_api.name}"
+        - "${aws_eks_cluster.eks_cluster.name}"
         # - "-r"
         # - "<role-arn>"
       # env:
