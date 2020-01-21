@@ -14,6 +14,10 @@ output "kubeconfig-certificate-authority-data" {
   value = aws_eks_cluster.eks_cluster.certificate_authority.0.data
 }
 
+output "node_role_arn" {
+  value = aws_iam_role.eks-node-group-iam-role.arn
+}
+
 locals {
   kubeconfig = <<KUBECONFIG
 # see also: https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html
@@ -53,3 +57,19 @@ KUBECONFIG
 output "kubeconfig" {
   value = local.kubeconfig
 }
+
+output "eks-node-group-admin-AmazonEKSWorkerNodePolicy" {
+  value = aws_iam_role_policy_attachment.eks-node-group-admin-AmazonEKSWorkerNodePolicy
+}
+
+
+output "eks-node-group-admin-AmazonEKS_CNI_Policy" {
+  value = aws_iam_role_policy_attachment.eks-node-group-admin-AmazonEKS_CNI_Policy
+}
+
+
+output "eks-node-group-admin-AmazonEC2ContainerRegistryReadOnly" {
+  value = aws_iam_role_policy_attachment.eks-node-group-admin-AmazonEC2ContainerRegistryReadOnly
+}
+
+

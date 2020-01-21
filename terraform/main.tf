@@ -62,12 +62,71 @@ module "eks" {
   ]
 }
 
-# Create a k8s cluster using AWS EKS
-module "node_group" {
+# Node groups for Mongodb server that serves the gateway app (control tower)
+module "mongodb-gateway-node-group-az1" {
   source          = "./modules/node_group"
   cluster         = module.eks.cluster
   cluster_name    = module.eks.cluster_name
-  node_group_name = "ct-node-group"
+  node_group_name = "mongodb-gateway-node-group-az1"
+  instance_types  = "m5a.large"
+  min_size        = 1
+  max_size        = 1
+  desired_size    = 1
+  node_role_arn   = module.eks.node_role_arn
+  subnet_ids = [
+    module.vpc.private_subnets[0].id
+  ]
+  labels = {
+    type : "mongodb-gateway"
+  }
+}
+
+module "mongodb-gateway-node-group-az2" {
+  source          = "./modules/node_group"
+  cluster         = module.eks.cluster
+  cluster_name    = module.eks.cluster_name
+  node_group_name = "mongodb-gateway-node-group-az2"
+  instance_types  = "m5a.large"
+  min_size        = 1
+  max_size        = 1
+  desired_size    = 1
+  node_role_arn   = module.eks.node_role_arn
+  subnet_ids = [
+    module.vpc.private_subnets[1].id
+  ]
+  labels = {
+    type : "mongodb-gateway"
+  }
+}
+
+module "mongodb-gateway-node-group-az3" {
+  source          = "./modules/node_group"
+  cluster         = module.eks.cluster
+  cluster_name    = module.eks.cluster_name
+  node_group_name = "mongodb-gateway-node-group-az3"
+  instance_types  = "m5a.large"
+  min_size        = 1
+  max_size        = 1
+  desired_size    = 1
+  node_role_arn   = module.eks.node_role_arn
+  subnet_ids = [
+    module.vpc.private_subnets[2].id
+  ]
+  labels = {
+    type : "mongodb-gateway"
+  }
+}
+
+module "gateway-node-group" {
+  source          = "./modules/node_group"
+  cluster         = module.eks.cluster
+  cluster_name    = module.eks.cluster_name
+  node_group_name = "gateway-node-group"
+  instance_types  = "m5a.large"
+  min_size        = 2
+  max_size        = 4
+  desired_size    = 3
+  node_role_arn   = module.eks.node_role_arn
   subnet_ids = [
     module.vpc.private_subnets[0].id,
     module.vpc.private_subnets[1].id,
@@ -75,4 +134,16 @@ module "node_group" {
     module.vpc.private_subnets[3].id,
     module.vpc.private_subnets[5].id
   ]
+  labels = {
+    type : "gateway"
+  }
+}
+
+resource "aws_acm_certificate" "aws-dev-resourcewatch-org-certificate" {
+  domain_name       = "aws-dev.resourcewatch.org"
+  validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }

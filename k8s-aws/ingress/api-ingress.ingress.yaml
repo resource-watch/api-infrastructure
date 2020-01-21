@@ -6,9 +6,16 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/healthcheck-path: /health_check
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    cert-manager.io/issuer: api-gateway-issuer
 spec:
+  tls:
+    - hosts:
+        - aws-dev.resourcewatch.org
+      secretName: api-gateway-certificate
   rules:
-    - http:
+    - host: aws-dev.resourcewatch.org
+      http:
         paths:
           - path: /*
             backend:

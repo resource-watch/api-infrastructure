@@ -12,6 +12,11 @@ variable "cluster_name" {
   description = "Name of the EKS cluster to which this node group will be attached"
 }
 
+variable "node_role_arn" {
+  type        = string
+  description = "Amazon Resource Name (ARN) of the IAM Role that provides permissions for the EKS Node Group"
+}
+
 variable "subnet_ids" {
   type        = list(string)
   description = "A list of public subnet ids to which the EKS cluster will be connected."
@@ -33,6 +38,12 @@ variable "max_size" {
   type        = number
   default     = 1
   description = "Maximum number of nodes in the group"
+}
+
+variable "labels" {
+  type        = map(string)
+  default     = {}
+  description = "Labels to apply to nodes"
 }
 
 variable "instance_types" {

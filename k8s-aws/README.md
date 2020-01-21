@@ -7,7 +7,9 @@ The `boostrap.sh` is a convenience command for getting the cluster up and runnin
 
 ## ALB automatic creation from Ingress objects
 
-See also: [https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html](https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html).
+See also: 
+- [ALB Ingress Controller user guide](https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html).
+- [ALB Ingress Controller reference docs](https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation)
 
 The included terraform configuration includes certain configuration elements to support the above functionality. Once the cluster is created, the additional commands must be executed to support automatically provisioning ALBs from Ingress objects:
 
@@ -15,3 +17,25 @@ The included terraform configuration includes certain configuration elements to 
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.4/docs/examples/rbac-role.yaml
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.4/docs/examples/alb-ingress-controller.yaml
 ```
+
+## Certificate management
+
+See also: 
+
+- [SSL annotations for ALB Ingress Controller](https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation/#ssl)
+- [Why we can use cert-manager.io](https://github.com/jetstack/cert-manager/issues/333)
+
+SSL certificates are manages through a mix of AWS ACM and AWS ALB Ingress Controller. 
+
+Prior to creating the Ingress, you need to add the relevant certificates on AWS ACM, with the corresponding domains.
+
+On the ingress side, you need to specify the following annotations:
+
+```yaml
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+``` 
+
+The Ingress should also specify the domains for which it will have HTTPS support. 
+The ALB Ingress Controller will then match that with the ACM certificates.
+
+You can see logs + debug the process by looking into the pods associated with the `alb-ingress-controller` deployment (`kube-system` namespace).
