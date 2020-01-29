@@ -4,6 +4,9 @@ This cluster configuration assumes that the AWS resources were provisioned using
 
 The `boostrap.sh` is a convenience command for getting the cluster up and running, mostly as a way to help get the cluster up to a certain state after creation. It will probably not be useful once the cluster is up and running, and day-to-day maintenance of the cluster is needed.
 
+## Helm
+
+Parts of this infrastructure setup rely on Helm 3, so you need to install that beforehand.
 
 ## ALB automatic creation from Ingress objects
 

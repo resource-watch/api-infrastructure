@@ -4,7 +4,7 @@ This directory contains Kubernetes configurations which run elasticsearch data p
 ## Storage
 The [`gce-storage-class.yaml`](gce-storage-class.yaml) file creates a `StorageClass` which allocates persistent disks in a google compute engine environment. It should be relatively simple to modify this file to suit your needs for a different environment.
 
-The [`es-data-stateful.yaml`](es-data-stateful.yaml) file contains a `volumeClaimTemplates` section which references the `StorageClass` defined in [`gce-storage-class.yaml`](gce-storage-class.yaml), and requests a 12 GB disk. This is plenty of space for a demonstration cluster, but will fill up quickly under moderate to heavy load. Consider modifying the disk size to your needs.
+The [`es-data-stateful.yaml`](production/es-data-stateful.yaml) file contains a `volumeClaimTemplates` section which references the `StorageClass` defined in [`gce-storage-class.yaml`](gce-storage-class.yaml), and requests a 12 GB disk. This is plenty of space for a demonstration cluster, but will fill up quickly under moderate to heavy load. Consider modifying the disk size to your needs.
 
 ## Deploy
 The root directory contains instructions for deploying elasticsearch using a `Deployment` with transient storage for data pods. These brief instructions show a deployment using the `StatefulSet` and `StorageClass`.

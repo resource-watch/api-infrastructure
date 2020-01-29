@@ -139,6 +139,60 @@ module "gateway-node-group" {
   }
 }
 
+module "elasticsearch-node-group-az1" {
+  source          = "./modules/node_group"
+  cluster         = module.eks.cluster
+  cluster_name    = module.eks.cluster_name
+  node_group_name = "elasticsearch-node-group-az1"
+  instance_types  = "m5a.xlarge"
+  min_size        = 1
+  max_size        = 1
+  desired_size    = 1
+  node_role_arn   = module.eks.node_role_arn
+  subnet_ids = [
+    module.vpc.private_subnets[1].id
+  ]
+  labels = {
+    type : "elasticsearch"
+  }
+}
+
+module "elasticsearch-node-group-az2" {
+  source          = "./modules/node_group"
+  cluster         = module.eks.cluster
+  cluster_name    = module.eks.cluster_name
+  node_group_name = "elasticsearch-node-group-az2"
+  instance_types  = "m5a.xlarge"
+  min_size        = 1
+  max_size        = 1
+  desired_size    = 1
+  node_role_arn   = module.eks.node_role_arn
+  subnet_ids = [
+    module.vpc.private_subnets[1].id
+  ]
+  labels = {
+    type : "elasticsearch"
+  }
+}
+
+module "elasticsearch-node-group-az3" {
+  source          = "./modules/node_group"
+  cluster         = module.eks.cluster
+  cluster_name    = module.eks.cluster_name
+  node_group_name = "elasticsearch-node-group-az3"
+  instance_types  = "m5a.xlarge"
+  min_size        = 1
+  max_size        = 1
+  desired_size    = 1
+  node_role_arn   = module.eks.node_role_arn
+  subnet_ids = [
+    module.vpc.private_subnets[2].id
+  ]
+  labels = {
+    type : "elasticsearch"
+  }
+}
+
 resource "aws_acm_certificate" "aws-dev-resourcewatch-org-certificate" {
   domain_name       = "aws-dev.resourcewatch.org"
   validation_method = "DNS"

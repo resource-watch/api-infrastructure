@@ -4,6 +4,7 @@ metadata:
  labels:
    name: nginx
  name: nginx
+ namespace: gateway
 spec:
   type: NodePort
   ports:
