@@ -194,10 +194,20 @@ module "elasticsearch-node-group-az3" {
 }
 
 resource "aws_acm_certificate" "aws-dev-resourcewatch-org-certificate" {
-  domain_name       = "aws-dev.resourcewatch.org"
+  domain_name       = "${var.dns_prefix}.resourcewatch.org"
   validation_method = "DNS"
 
   lifecycle {
     create_before_destroy = true
   }
+}
+
+module "jenkins" {
+  source             = "./modules/jenkins"
+  jenkins_ami        = data.aws_ami.latest-ubuntu-lts.id
+  vpc_id             = module.vpc.id
+  project            = local.project
+  subnet_id          = module.vpc.public_subnets[0].id
+  security_group_ids = [aws_security_group.default.id]
+  user_data          = data.template_file.jenkins_config_on_ubuntu.rendered
 }

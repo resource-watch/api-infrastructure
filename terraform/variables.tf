@@ -32,3 +32,8 @@ variable "ingress_allow_cidr_block" {
   description = "The CIDR block of IPs allowed to connect to the bastion host."
 }
 
+variable "dns_prefix" {
+  type        = string
+  description = "DNS prefix for public URLs created in this project."
+}
+
