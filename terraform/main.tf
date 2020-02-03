@@ -15,6 +15,12 @@ provider "aws" {
   version = "~> 2.38.0"
 }
 
+provider "cloudflare" {
+  version = "~> 2.0"
+  email   = var.cloudflare_email
+  api_key = var.cloudflare_api_key
+}
+
 # Call the seed_module to build our ADO seed info
 module "bootstrap" {
   source               = "./modules/bootstrap"
@@ -210,4 +216,21 @@ module "jenkins" {
   subnet_id          = module.vpc.public_subnets[0].id
   security_group_ids = [aws_security_group.default.id]
   user_data          = data.template_file.jenkins_config_on_ubuntu.rendered
+}
+
+data "cloudflare_zones" "resourcewatch" {
+  filter {
+    name   = "resourcewatch.org"
+    status = "active"
+    paused = false
+  }
+}
+
+# Add a DNS record for Jenkins
+resource "cloudflare_record" "jenkins_dns" {
+  zone_id = data.cloudflare_zones.resourcewatch.zones[0].id
+  name    = "jenkins.${var.dns_prefix}"
+  value   = module.jenkins.jenkins_hostname
+  type    = "CNAME"
+  ttl     = 120
 }

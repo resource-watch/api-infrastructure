@@ -49,7 +49,7 @@ data "template_file" "jenkins_config_on_ubuntu" {
   template = file("${path.module}/templates/jenkins_setup.sh.tpl")
   vars = {
     user = "ubuntu"
-    ${} = var.dns_prefix
+    dns_prefix = var.dns_prefix
     authorized_ssh_keys = <<EOT
 %{for row in formatlist("echo \"%v\" >> /home/ubuntu/.ssh/authorized_keys",
 values(aws_key_pair.all)[*].public_key)~}
