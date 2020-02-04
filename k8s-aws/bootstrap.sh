@@ -39,12 +39,17 @@ kubectl apply -f ingress/api-ingress.ingress.yaml
 
 # TODO: Apply `core/mongodb-gateway` secrets
 kubectl taint nodes <mongodb gateway node ids> type=mongodb-gateway:NoSchedule
-helm install --name mongodb-gateway stable/mongodb-replicaset -f mongodb-gateway/mongo-gateway-values.yaml --namespace core
+helm install mongodb-gateway stable/mongodb-replicaset -f mongodb-gateway/mongo-gateway-values.yaml --namespace gateway
 # TODO: Create user in MongoDB for Control Tower
 # TODO: Apply `default/secrets-ct` secrets
 # TODO: Apply `default/secrets-db` secrets
 # TODO: Deploy Control Tower
 
+#
+# MongoDB + Replicaset for Microserrvices
+#
+kubectl taint nodes <mongodb gateway node ids> type=mongodb:NoSchedule
+helm install mongodb stable/mongodb-replicaset -f mongodb/mongo-values.yaml --namespace core
 
 #
 # Elasticsearch
