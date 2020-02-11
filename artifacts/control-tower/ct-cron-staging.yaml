@@ -12,15 +12,20 @@ spec:
     spec:
       containers:
       - name: control-tower-cron
-        image: rrequero/control-tower:1.0.41-cron
+        image: vizzuality/control-tower
         imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: "0.35"
+            memory: "256M"
+          limits:
+            cpu: "1"
+            memory: "512M"
         env:
           - name: PORT
             value: "9000"
           - name: LOGGER_TYPE
             value: console
-          - name: DEBUG
-            value: "oauth-plugin"
           - name: NODE_ENV
             value: prod
           - name: NODE_PATH
@@ -32,36 +37,151 @@ spec:
           - name: PUBLIC_URL
             value: http://production-api.globalforestwatch.org
           - name: APP_NAME
-            value: "WRI API"
+            value: "RW API"
           - name: APP_LOGO
             value: http://www.wri.org/sites/all/themes/wri/images/logo.png
           - name: APP_COLOR
             value: "#f1b319"
           - name: CT_MONGO_URI
             valueFrom:
-                secretKeyRef:
-                  name: dbsecrets
-                  key: CT_MONGO_URI
+              secretKeyRef:
+                name: dbsecrets
+                key: CT_MONGO_URI
           - name: SESSION_KEY
             valueFrom:
-                secretKeyRef:
-                  name: ctsecrets
-                  key: SESSION_KEY
+              secretKeyRef:
+                name: ctsecrets
+                key: SESSION_KEY
           - name: JWT_SECRET
             valueFrom:
-                secretKeyRef:
-                  name: ctsecrets
-                  key: JWT_SECRET
+              secretKeyRef:
+                name: ctsecrets
+                key: JWT_SECRET
+          - name: GFW_TWITTER_CONSUMER_KEY
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: GFW_TWITTER_CONSUMER_KEY
+          - name: GFW_TWITTER_CONSUMER_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: GFW_TWITTER_CONSUMER_SECRET
+          - name: GFW_FACEBOOK_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: GFW_FACEBOOK_CLIENT_ID
+          - name: GFW_FACEBOOK_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: GFW_FACEBOOK_CLIENT_SECRET
+          - name: GFW_GOOGLE_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: GFW_GOOGLE_CLIENT_ID
+          - name: GFW_GOOGLE_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: GFW_GOOGLE_CLIENT_SECRET
+          - name: RW_TWITTER_CONSUMER_KEY
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: RW_TWITTER_CONSUMER_KEY
+          - name: RW_TWITTER_CONSUMER_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: RW_TWITTER_CONSUMER_SECRET
+          - name: RW_FACEBOOK_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: RW_FACEBOOK_CLIENT_ID
+          - name: RW_FACEBOOK_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: RW_FACEBOOK_CLIENT_SECRET
+          - name: RW_GOOGLE_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: RW_GOOGLE_CLIENT_ID
+          - name: RW_GOOGLE_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: RW_GOOGLE_CLIENT_SECRET
+          - name: PREP_TWITTER_CONSUMER_KEY
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: PREP_TWITTER_CONSUMER_KEY
+          - name: PREP_TWITTER_CONSUMER_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: PREP_TWITTER_CONSUMER_SECRET
+          - name: PREP_FACEBOOK_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: PREP_FACEBOOK_CLIENT_ID
+          - name: PREP_FACEBOOK_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: PREP_FACEBOOK_CLIENT_SECRET
+          - name: PREP_GOOGLE_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: PREP_GOOGLE_CLIENT_ID
+          - name: PREP_GOOGLE_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: PREP_GOOGLE_CLIENT_SECRET
+          - name: BASICAUTH_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: BASICAUTH_PASSWORD
+          - name: SPARKPOST_KEY
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: SPARKPOST_KEY
+          - name: INSTAPUSH_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: INSTAPUSH_TOKEN
+          - name: INSTAPUSH_ID
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: INSTAPUSH_ID
+          - name: INSTAPUSH_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: ctsecrets
+                key: INSTAPUSH_SECRET
           - name: FASTLY_APIKEY
             valueFrom:
-                secretKeyRef:
-                  name: ctsecrets
-                  key: FASTLY_APIKEY
+              secretKeyRef:
+                name: ctsecrets
+                key: FASTLY_APIKEY
           - name: FASTLY_SERVICEID
             valueFrom:
-                secretKeyRef:
-                  name: ctsecrets
-                  key: FASTLY_SERVICEID
+              secretKeyRef:
+                name: ctsecrets
+                key: FASTLY_SERVICEID
 
         args:
           - startCron
