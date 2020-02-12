@@ -11,3 +11,15 @@ Before deploying the RabbitMQ server, make sure that:
 ```shell
 helm install rabbitmq -f rabbitmq.yaml stable/rabbitmq --namespace=core
 ```
+
+## Uninstall
+
+```shell
+helm uninstall rabbitmq --namespace=core
+```
+
+## Update cluster configuration based from an updated local file
+
+```shell 
+helm upgrade rabbitmq -f rabbitmq.yaml stable/rabbitmq --namespace=core 
+```
