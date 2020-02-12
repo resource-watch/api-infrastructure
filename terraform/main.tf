@@ -69,53 +69,19 @@ module "eks" {
 }
 
 # Node groups for Mongodb server that serves the gateway app (control tower)
-module "mongodb-gateway-node-group-az1" {
+module "mongodb-gateway-node-group" {
   source          = "./modules/node_group"
   cluster         = module.eks.cluster
   cluster_name    = module.eks.cluster_name
-  node_group_name = "mongodb-gateway-node-group-az1"
+  node_group_name = "mongodb-gateway-node-group"
   instance_types  = "m5a.large"
-  min_size        = 1
-  max_size        = 1
-  desired_size    = 1
+  min_size        = 3
+  max_size        = 3
+  desired_size    = 3
   node_role_arn   = module.eks.node_role_arn
   subnet_ids = [
-    module.vpc.private_subnets[0].id
-  ]
-  labels = {
-    type : "mongodb-gateway"
-  }
-}
-
-module "mongodb-gateway-node-group-az2" {
-  source          = "./modules/node_group"
-  cluster         = module.eks.cluster
-  cluster_name    = module.eks.cluster_name
-  node_group_name = "mongodb-gateway-node-group-az2"
-  instance_types  = "m5a.large"
-  min_size        = 1
-  max_size        = 1
-  desired_size    = 1
-  node_role_arn   = module.eks.node_role_arn
-  subnet_ids = [
-    module.vpc.private_subnets[1].id
-  ]
-  labels = {
-    type : "mongodb-gateway"
-  }
-}
-
-module "mongodb-gateway-node-group-az3" {
-  source          = "./modules/node_group"
-  cluster         = module.eks.cluster
-  cluster_name    = module.eks.cluster_name
-  node_group_name = "mongodb-gateway-node-group-az3"
-  instance_types  = "m5a.large"
-  min_size        = 1
-  max_size        = 1
-  desired_size    = 1
-  node_role_arn   = module.eks.node_role_arn
-  subnet_ids = [
+    module.vpc.private_subnets[0].id,
+    module.vpc.private_subnets[1].id,
     module.vpc.private_subnets[2].id
   ]
   labels = {
@@ -145,53 +111,19 @@ module "gateway-node-group" {
   }
 }
 
-module "elasticsearch-node-group-az1" {
+module "elasticsearch-node-group" {
   source          = "./modules/node_group"
   cluster         = module.eks.cluster
   cluster_name    = module.eks.cluster_name
-  node_group_name = "elasticsearch-node-group-az1"
+  node_group_name = "elasticsearch-node-group"
   instance_types  = "m5a.xlarge"
-  min_size        = 1
-  max_size        = 1
-  desired_size    = 1
+  min_size        = 3
+  max_size        = 3
+  desired_size    = 3
   node_role_arn   = module.eks.node_role_arn
   subnet_ids = [
-    module.vpc.private_subnets[1].id
-  ]
-  labels = {
-    type : "elasticsearch"
-  }
-}
-
-module "elasticsearch-node-group-az2" {
-  source          = "./modules/node_group"
-  cluster         = module.eks.cluster
-  cluster_name    = module.eks.cluster_name
-  node_group_name = "elasticsearch-node-group-az2"
-  instance_types  = "m5a.xlarge"
-  min_size        = 1
-  max_size        = 1
-  desired_size    = 1
-  node_role_arn   = module.eks.node_role_arn
-  subnet_ids = [
-    module.vpc.private_subnets[1].id
-  ]
-  labels = {
-    type : "elasticsearch"
-  }
-}
-
-module "elasticsearch-node-group-az3" {
-  source          = "./modules/node_group"
-  cluster         = module.eks.cluster
-  cluster_name    = module.eks.cluster_name
-  node_group_name = "elasticsearch-node-group-az3"
-  instance_types  = "m5a.xlarge"
-  min_size        = 1
-  max_size        = 1
-  desired_size    = 1
-  node_role_arn   = module.eks.node_role_arn
-  subnet_ids = [
+    module.vpc.private_subnets[0].id,
+    module.vpc.private_subnets[1].id,
     module.vpc.private_subnets[2].id
   ]
   labels = {
@@ -199,57 +131,23 @@ module "elasticsearch-node-group-az3" {
   }
 }
 
-module "mongodb-node-group-az1" {
+module "mongodb-apps-node-group" {
   source          = "./modules/node_group"
   cluster         = module.eks.cluster
   cluster_name    = module.eks.cluster_name
-  node_group_name = "mongodb-node-group-az1"
+  node_group_name = "mongodb-apps-node-group"
   instance_types  = "m5a.large"
-  min_size        = 1
-  max_size        = 1
-  desired_size    = 1
+  min_size        = 3
+  max_size        = 3
+  desired_size    = 3
   node_role_arn   = module.eks.node_role_arn
   subnet_ids = [
-    module.vpc.private_subnets[0].id
-  ]
-  labels = {
-    type : "mongodb"
-  }
-}
-
-module "mongodb-node-group-az2" {
-  source          = "./modules/node_group"
-  cluster         = module.eks.cluster
-  cluster_name    = module.eks.cluster_name
-  node_group_name = "mongodb-node-group-az2"
-  instance_types  = "m5a.large"
-  min_size        = 1
-  max_size        = 1
-  desired_size    = 1
-  node_role_arn   = module.eks.node_role_arn
-  subnet_ids = [
-    module.vpc.private_subnets[1].id
-  ]
-  labels = {
-    type : "mongodb"
-  }
-}
-
-module "mongodb-node-group-az3" {
-  source          = "./modules/node_group"
-  cluster         = module.eks.cluster
-  cluster_name    = module.eks.cluster_name
-  node_group_name = "mongodb-node-group-az3"
-  instance_types  = "m5a.large"
-  min_size        = 1
-  max_size        = 1
-  desired_size    = 1
-  node_role_arn   = module.eks.node_role_arn
-  subnet_ids = [
+    module.vpc.private_subnets[0].id,
+    module.vpc.private_subnets[1].id,
     module.vpc.private_subnets[2].id
   ]
   labels = {
-    type : "mongodb"
+    type : "mongodb-apps"
   }
 }
 

@@ -1,7 +1,7 @@
 replicas: 3
 port: 27017
 
-replicaSetName: mongodb
+replicaSetName: bW9uZ29kYjovL21vbmdvZGItYXBwcy1tb25nb2RiLXJlcGxpY2FzZXQtMC5tb25nb2RiLWFwcHMtbW9uZ29kYi1yZXBsaWNhc2V0LmNvcmUuc3ZjLmNsdXN0ZXIubG9jYWw6MjcwMTcsbW9uZ29kYi1hcHBzLW1vbmdvZGItcmVwbGljYXNldC0xLm1vbmdvZGItYXBwcy1tb25nb2RiLXJlcGxpY2FzZXQuY29yZS5zdmMuY2x1c3Rlci5sb2NhbDoyNzAxNyxtb25nb2RiLWFwcHMtbW9uZ29kYi1yZXBsaWNhc2V0LTIubW9uZ29kYi1hcHBzLW1vbmdvZGItcmVwbGljYXNldC5jb3JlLnN2Yy5jbHVzdGVyLmxvY2FsOjI3MDE3L2RhdGFzZXQ/cmVwbGljYVNldD1tb25nb2RiLWFwcHM=
 
 podDisruptionBudget: {}
 # maxUnavailable: 1
@@ -12,7 +12,7 @@ auth:
   enabled: false
 
 extraLabels:
-  role: mongodb
+  role: mongodb-apps
 
 # Specs for the MongoDB image
 image:
@@ -43,7 +43,7 @@ affinity:
             - key: type
               operator: In
               values:
-                - mongodb
+                - mongodb-apps
   podAntiAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
       - labelSelector:
@@ -51,13 +51,13 @@ affinity:
             - key: role
               operator: In
               values:
-                - mongodb
+                - mongodb-apps
         topologyKey: "kubernetes.io/hostname"
 
 tolerations:
   - key: "type"
     operator: "Equal"
-    value: "mongodb"
+    value: "mongodb-apps"
     effect: "NoSchedule"
 
 persistentVolume:
@@ -103,4 +103,4 @@ configmap:
     #   CAFile: /ca/tls.crt
     #   PEMKeyFile: /work-dir/mongo.pem
   replication:
-    replSetName: mongodb
+    replSetName: mongodb-apps

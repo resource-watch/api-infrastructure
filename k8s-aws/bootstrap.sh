@@ -38,6 +38,7 @@ kubectl apply -f ingress/api-ingress.ingress.yaml
 #
 
 # TODO: Apply `core/mongodb-gateway` secrets
+kubectl get nodes --selector='type=mongodb-gateway'
 kubectl taint nodes <mongodb gateway node ids> type=mongodb-gateway:NoSchedule
 helm install mongodb-gateway stable/mongodb-replicaset -f mongodb-gateway/mongo-gateway-values.yaml --namespace gateway
 # TODO: Create user in MongoDB for Control Tower
@@ -48,12 +49,14 @@ helm install mongodb-gateway stable/mongodb-replicaset -f mongodb-gateway/mongo-
 #
 # MongoDB + Replicaset for Microserrvices
 #
-kubectl taint nodes <mongodb gateway node ids> type=mongodb:NoSchedule
-helm install mongodb stable/mongodb-replicaset -f mongodb/mongo-values.yaml --namespace core
+kubectl get nodes --selector='type=mongodb-apps'
+kubectl taint nodes <mongodb gateway node ids> type=mongodb-apps:NoSchedule
+helm install mongodb-apps stable/mongodb-replicaset -f mongodb/mongo-apps-values.yaml --namespace core
 
 #
 # Elasticsearch
 #
+kubectl get nodes --selector='type=elasticsearch'
 kubectl taint nodes <Elasticsearch node ids> type=elasticsearch:NoSchedule
 # See elasticsearch/README.md
 

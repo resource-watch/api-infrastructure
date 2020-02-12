@@ -9,5 +9,5 @@ Before deploying the RabbitMQ server, make sure that:
 
 
 ```shell
-helm install rabbitmq stable/rabbitmq --namespace=core
+helm install rabbitmq -f rabbitmq.yaml stable/rabbitmq --namespace=core
 ```

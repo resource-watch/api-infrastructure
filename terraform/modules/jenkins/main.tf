@@ -72,6 +72,10 @@ resource "aws_instance" "jenkins" {
   associate_public_ip_address = true
   user_data                   = var.user_data
 
+  lifecycle {
+    ignore_changes = ["user_data"]
+  }
+
   root_block_device {
     volume_type = "gp2"
     volume_size = 150
