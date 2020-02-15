@@ -48,7 +48,7 @@ EOT
 data "template_file" "jenkins_config_on_ubuntu" {
   template = file("${path.module}/templates/jenkins_setup.sh.tpl")
   vars = {
-    user = "ubuntu"
+    user       = "ubuntu"
     dns_prefix = var.dns_prefix
     authorized_ssh_keys = <<EOT
 %{for row in formatlist("echo \"%v\" >> /home/ubuntu/.ssh/authorized_keys",
@@ -56,7 +56,7 @@ values(aws_key_pair.all)[*].public_key)~}
 ${row}
 %{endfor~}
 EOT
-    nginx_jenkins_host = <<EOT
+nginx_jenkins_host = <<EOT
 server {
 	server_name jenkins.${var.dns_prefix}.resourcewatch.org;
 	location / {
@@ -69,7 +69,7 @@ server {
 	}
 }
 EOT
-  }
+}
 }
 
 

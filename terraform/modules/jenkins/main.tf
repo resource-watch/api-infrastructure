@@ -62,18 +62,18 @@ resource "aws_security_group_rule" "jenkins_ingress_ssh" {
 #
 
 resource "aws_instance" "jenkins" {
-  ami                    = var.jenkins_ami
-  availability_zone      = var.availability_zones[0]
-  ebs_optimized          = true
-  instance_type          = var.jenkins_instance_type
-  monitoring             = true
-  subnet_id              = var.subnet_id
-  vpc_security_group_ids = concat(var.security_group_ids, [aws_security_group.jenkins_egress_security_group.id, aws_security_group.jenkins_ingress_security_group.id])
+  ami                         = var.jenkins_ami
+  availability_zone           = var.availability_zones[0]
+  ebs_optimized               = true
+  instance_type               = var.jenkins_instance_type
+  monitoring                  = true
+  subnet_id                   = var.subnet_id
+  vpc_security_group_ids      = concat(var.security_group_ids, [aws_security_group.jenkins_egress_security_group.id, aws_security_group.jenkins_ingress_security_group.id])
   associate_public_ip_address = true
   user_data                   = var.user_data
 
   lifecycle {
-    ignore_changes = ["user_data"]
+    ignore_changes = [user_data, ami]
   }
 
   root_block_device {

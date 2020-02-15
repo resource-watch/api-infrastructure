@@ -44,6 +44,8 @@ helm install mongodb-gateway stable/mongodb-replicaset -f mongodb-gateway/mongo-
 # TODO: Create user in MongoDB for Control Tower
 # TODO: Apply `default/secrets-ct` secrets
 # TODO: Apply `default/secrets-db` secrets
+kubectl get nodes --selector='type=gateway'
+kubectl taint nodes <gateway node ids> type=gateway:NoSchedule
 # TODO: Deploy Control Tower
 
 #

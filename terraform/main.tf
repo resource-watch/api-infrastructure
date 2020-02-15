@@ -151,6 +151,29 @@ module "mongodb-apps-node-group" {
   }
 }
 
+module "apps-node-group" {
+  source          = "./modules/node_group"
+  cluster         = module.eks.cluster
+  cluster_name    = module.eks.cluster_name
+  node_group_name = "apps-node-group"
+  instance_types  = "m5a.xlarge"
+  min_size        = 3
+  max_size        = 10
+  desired_size    = 4
+  node_role_arn   = module.eks.node_role_arn
+  subnet_ids = [
+    module.vpc.private_subnets[0].id,
+    module.vpc.private_subnets[1].id,
+    module.vpc.private_subnets[2].id,
+    module.vpc.private_subnets[3].id,
+    module.vpc.private_subnets[4].id,
+    module.vpc.private_subnets[5].id
+  ]
+  labels = {
+    type : "apps"
+  }
+}
+
 resource "aws_acm_certificate" "aws-dev-resourcewatch-org-certificate" {
   domain_name       = "${var.dns_prefix}.resourcewatch.org"
   validation_method = "DNS"

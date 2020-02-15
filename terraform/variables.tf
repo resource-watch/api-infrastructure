@@ -38,11 +38,11 @@ variable "dns_prefix" {
 }
 
 variable "cloudflare_email" {
-    type        = string
-    description = "Email address of the Cloudflare account to use."
+  type        = string
+  description = "Email address of the Cloudflare account to use."
 }
 
 variable "cloudflare_api_key" {
-    type        = string
-    description = "API key of the Cloudflare account to use."
+  type        = string
+  description = "API key of the Cloudflare account to use."
 }

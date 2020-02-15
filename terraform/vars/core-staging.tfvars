@@ -1,3 +1,3 @@
 environment              = "staging"
 ingress_allow_cidr_block = "216.70.220.184/32" # WRI Office
-dns_prefix    = "aws-staging"
+dns_prefix               = "aws-staging"
