@@ -166,6 +166,10 @@ resource "aws_instance" "bastion" {
   associate_public_ip_address = true
   user_data                   = var.user_data
 
+  lifecycle {
+    ignore_changes = [ami]
+  }
+
   tags = merge(
     {
       Name = "${var.project}-Bastion"
