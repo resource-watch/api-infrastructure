@@ -10,11 +10,12 @@ spec:
   dnsNames:
   - api-rw.vizzuality.com
   - production-api.globalforestwatch.org
-  - resourcewatch.org  
+  - resourcewatch.org
   - www.resourcewatch.org
   - ui.resourcewatch.org
   - api.resourcewatch.org
   - staging.resourcewatch.org
+  - explore.resourcewatch.org
   - emissionspathways.org
   - www.emissionspathways.org
   - climate-watch.vizzuality.com
