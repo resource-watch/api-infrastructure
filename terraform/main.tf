@@ -174,6 +174,29 @@ module "apps-node-group" {
   }
 }
 
+module "webapps-node-group" {
+  source          = "./modules/node_group"
+  cluster         = module.eks.cluster
+  cluster_name    = module.eks.cluster_name
+  node_group_name = "webapps-node-group"
+  instance_types  = "m5a.large"
+  min_size        = 2
+  max_size        = 4
+  desired_size    = 2
+  node_role_arn   = module.eks.node_role_arn
+  subnet_ids = [
+    module.vpc.private_subnets[0].id,
+    module.vpc.private_subnets[1].id,
+    module.vpc.private_subnets[2].id,
+    module.vpc.private_subnets[3].id,
+    module.vpc.private_subnets[4].id,
+    module.vpc.private_subnets[5].id
+  ]
+  labels = {
+    type : "webapps"
+  }
+}
+
 resource "aws_acm_certificate" "aws-dev-resourcewatch-org-certificate" {
   domain_name       = "${var.dns_prefix}.resourcewatch.org"
   validation_method = "DNS"
