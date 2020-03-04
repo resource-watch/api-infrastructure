@@ -62,3 +62,9 @@ kubectl get nodes --selector='type=elasticsearch'
 kubectl taint nodes <Elasticsearch node ids> type=elasticsearch:NoSchedule
 # See elasticsearch/README.md
 
+
+#
+# Log aggregation on AWS CloudWatch
+# See also: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/deploy-container-insights-EKS.html
+#
+curl https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/latest/k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring/quickstart/cwagent-fluentd-quickstart.yaml | sed "s/{{cluster_name}}/core-k8s-cluster/;s/{{region_name}}/us-east-1/" | kubectl apply -f -

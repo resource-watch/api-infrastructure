@@ -44,7 +44,7 @@ users:
       args:
         - "eks"
         - "get-token"
-        - "--cluster-name"
+        - "--core-k8s-cluster"
         - "${aws_eks_cluster.eks_cluster.name}"
         # - "-r"
         # - "<role-arn>"
@@ -57,19 +57,3 @@ KUBECONFIG
 output "kubeconfig" {
   value = local.kubeconfig
 }
-
-output "eks-node-group-admin-AmazonEKSWorkerNodePolicy" {
-  value = aws_iam_role_policy_attachment.eks-node-group-admin-AmazonEKSWorkerNodePolicy
-}
-
-
-output "eks-node-group-admin-AmazonEKS_CNI_Policy" {
-  value = aws_iam_role_policy_attachment.eks-node-group-admin-AmazonEKS_CNI_Policy
-}
-
-
-output "eks-node-group-admin-AmazonEC2ContainerRegistryReadOnly" {
-  value = aws_iam_role_policy_attachment.eks-node-group-admin-AmazonEC2ContainerRegistryReadOnly
-}
-
-
