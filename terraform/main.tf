@@ -166,7 +166,6 @@ module "apps-node-group" {
     module.vpc.private_subnets[1].id,
     module.vpc.private_subnets[2].id,
     module.vpc.private_subnets[3].id,
-    module.vpc.private_subnets[4].id,
     module.vpc.private_subnets[5].id
   ]
   labels = {
