@@ -63,6 +63,18 @@ kubectl taint nodes <Elasticsearch node ids> type=elasticsearch:NoSchedule
 # See elasticsearch/README.md
 
 
+
+#
+# AWS Metrics Server for HPAs
+# Read and follow the instructions on ./metrics-server/README.md
+#
+
+
+#
+# AWS Cluster Autoscaller
+# Read and follow the instructions on ./cluster-autoscaller/README.md
+#
+
 #
 # Log aggregation on AWS CloudWatch
 # See also: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/deploy-container-insights-EKS.html
