@@ -2,7 +2,7 @@
 
 ## Installation
 
-Before deploying the RabbitMQ server, make sure that:
+Before deploying the PostgreSQL server, make sure that:
 - The `core` namespace has been created.
 - The `postgresql` secret has been created in the `core` namespace.
     - `postgres-password` must be defined in the secret.
