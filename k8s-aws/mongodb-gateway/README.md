@@ -44,3 +44,15 @@ db.createUser({
     ]
 })
 ```
+
+## Backup restore
+
+To restore a backup, you need a few things:
+- The backup files on your local FS, uncompressed and in a folder. These instructions assume that this folder is called `control-tower`
+- You can port forward to the mongodb pod on the cluster
+
+```shell script
+kubectl port-forward mongo-mongodb-replicaset-1 27019:27017
+
+mongorestore -d control-tower --port=27019 --dir=control-tower --username=control-tower --password=<password>
+```
