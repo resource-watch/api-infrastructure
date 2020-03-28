@@ -32,7 +32,9 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_staging }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_staging }}
         AWS_DEFAULT_REGION: ${{ secrets.aws_region_staging }}
+        LOCK_ID: ${{ secrets.lock_id_staging }}
       run: |
+        ./scripts/infra force-unlock
         ./scripts/infra plan
         ./scripts/infra apply
     - name: Deploy dev
