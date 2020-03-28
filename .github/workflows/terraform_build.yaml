@@ -34,7 +34,7 @@ jobs:
         AWS_DEFAULT_REGION: ${{ secrets.aws_region_staging }}
         LOCK_ID: ${{ secrets.lock_id_staging }}
       run: |
-        ./scripts/infra force-unlock
+        ./scripts/infra init
         ./scripts/infra plan
         ./scripts/infra apply
     - name: Deploy dev

@@ -59,6 +59,9 @@ if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
     force-unlock)
       terraform force-unlock -force "${LOCK_ID}"
       ;;
+    init)
+      terraform init
+      ;;
     apply)
       terraform apply \
         "core.tfplan"
