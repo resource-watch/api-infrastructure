@@ -36,13 +36,3 @@ variable "dns_prefix" {
   type        = string
   description = "DNS prefix for public URLs created in this project."
 }
-
-variable "cloudflare_email" {
-  type        = string
-  description = "Email address of the Cloudflare account to use."
-}
-
-variable "cloudflare_api_key" {
-  type        = string
-  description = "API key of the Cloudflare account to use."
-}
