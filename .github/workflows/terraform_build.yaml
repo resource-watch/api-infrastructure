@@ -35,8 +35,8 @@ jobs:
         CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_email_staging }}
         CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_api_key_staging }}
       run: |
-        ./scripts/infra plan
-        ./scripts/infra apply
+        ./scripts/infra plan -var="cloudflare_email=${{ secrets.cloudflare_email_staging }}" -var="cloudflare_api_key=${{ secrets.cloudflare_api_key_staging }}"
+        ./scripts/infra apply -var="cloudflare_email=${{ secrets.cloudflare_email_staging }}" -var="cloudflare_api_key=${{ secrets.cloudflare_api_key_staging }}"
     - name: Deploy dev
       if: success() && (! contains(github.ref, 'develop')) && (! contains(github.ref, 'master'))
       env:
