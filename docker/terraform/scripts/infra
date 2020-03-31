@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 function usage {
   echo -n \
     "Usage: $(basename "$0") COMMAND OPTION[S]
@@ -47,6 +46,7 @@ if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
       terraform fmt -recursive .
       ;;
     plan)
+      shift
       # Clear stale modules, then re-initialize
       rm -rf .terraform
       # select or create the current workspace
@@ -54,7 +54,8 @@ if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
         -backend-config=vars/backend-${ENV}.tfvars
       terraform plan \
         -var-file="vars/core-${ENV}.tfvars" \
-        -out="core.tfplan"
+        -out="core.tfplan" \
+        "$@"
       ;;
     force-unlock)
       terraform force-unlock -force "${LOCK_ID}"
@@ -63,8 +64,10 @@ if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
       terraform init
       ;;
     apply)
+      shift
       terraform apply \
-        "core.tfplan"
+        "core.tfplan" \
+        "$@"
       ;;
     destroy)
       terraform destroy \
