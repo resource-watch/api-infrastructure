@@ -23,8 +23,8 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_production }}
         AWS_DEFAULT_REGION: ${{ secrets.aws_region_production }}
       run: |
-        ./scripts/infra plan -var cloudflare_email=${{ secrets.cloudflare_email_production }} -var cloudflare_api_key=${{ secrets.cloudflare_api_key_production }}
-        ./scripts/infra apply -var cloudflare_email=${{ secrets.cloudflare_email_production }} -var cloudflare_api_key=${{ secrets.cloudflare_api_key_production }}
+        ./scripts/infra plan -var="cloudflare_email=${{ secrets.cloudflare_email_production }}" -var="cloudflare_api_key=${{ secrets.cloudflare_api_key_production }}"
+        ./scripts/infra apply -var="cloudflare_email=${{ secrets.cloudflare_email_production }}" -var="cloudflare_api_key=${{ secrets.cloudflare_api_key_production }}"
     - name: Deploy staging
       if: success() && contains(github.ref, 'develop')
       env:
@@ -33,8 +33,8 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_staging }}
         AWS_DEFAULT_REGION: ${{ secrets.aws_region_staging }}
       run: |
-        ./scripts/infra plan -var cloudflare_email=${{ secrets.cloudflare_email_staging }} -var cloudflare_api_key=${{ secrets.cloudflare_api_key_staging }}
-        ./scripts/infra apply -var cloudflare_email=${{ secrets.cloudflare_email_staging }} -var cloudflare_api_key=${{ secrets.cloudflare_api_key_staging }}
+        ./scripts/infra plan -var="cloudflare_email=${{ secrets.cloudflare_email_staging }}" -var="cloudflare_api_key=${{ secrets.cloudflare_api_key_staging }}"
+        ./scripts/infra apply -var="cloudflare_email=${{ secrets.cloudflare_email_staging }}" -var="cloudflare_api_key=${{ secrets.cloudflare_api_key_staging }}"
     - name: Deploy dev
       if: success() && (! contains(github.ref, 'develop')) && (! contains(github.ref, 'master'))
       env:
@@ -43,5 +43,5 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_dev }}
         AWS_DEFAULT_REGION: ${{ secrets.aws_region_dev }}
       run: |
-        ./scripts/infra plan -var cloudflare_email=${{ secrets.cloudflare_email_dev }} -var cloudflare_api_key=${{ secrets.cloudflare_api_key_dev }}
-        ./scripts/infra apply -var cloudflare_email=${{ secrets.cloudflare_email_dev }} -var cloudflare_api_key=${{ secrets.cloudflare_api_key_dev }}
+        ./scripts/infra plan -var="cloudflare_email=${{ secrets.cloudflare_email_dev }}" -var="cloudflare_api_key=${{ secrets.cloudflare_api_key_dev }}"
+        ./scripts/infra apply -var="cloudflare_email=${{ secrets.cloudflare_email_dev }}" -var="cloudflare_api_key=${{ secrets.cloudflare_api_key_dev }}"
