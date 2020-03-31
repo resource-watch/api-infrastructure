@@ -12,5 +12,7 @@ services:
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
       - AWS_DEFAULT_REGION
+      - CLOUDFLARE_EMAIL
+      - CLOUDFLARE_API_KEY
     working_dir: /usr/local/src
     entrypoint: infra
