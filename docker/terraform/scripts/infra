@@ -51,7 +51,8 @@ if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
       rm -rf .terraform
       # select or create the current workspace
       terraform init \
-        -backend-config=vars/backend-${ENV}.tfvars
+        -backend-config=vars/backend-${ENV}.tfvars \
+        "$@"
       terraform plan \
         -var-file="vars/core-${ENV}.tfvars" \
         -out="core.tfplan" \
