@@ -46,34 +46,44 @@ if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
       terraform fmt -recursive .
       ;;
     plan)
+      echo "Starting terraform plan..."
       shift
       # Clear stale modules, then re-initialize
       rm -rf .terraform
       # select or create the current workspace
+      echo "Terraform plan - Running pre-plan init"
       terraform init \
         -backend-config=vars/backend-${ENV}.tfvars \
         "$@"
+      echo "Terraform plan - Running plan"
       terraform plan \
         -var-file="vars/core-${ENV}.tfvars" \
         -out="core.tfplan" \
         "$@"
+      echo "Terraform plan finished."
       ;;
     force-unlock)
       terraform force-unlock -force "${LOCK_ID}"
       ;;
     init)
+      echo "Starting terraform init..."
       terraform init
+      echo "Terraform init finished."
       ;;
     apply)
       shift
+      echo "Starting terraform apply..."
       terraform apply \
         "core.tfplan" \
         "$@"
+      echo "Terraform apply finished."
       ;;
     destroy)
+      echo "Starting terraform destroy..."
       terraform destroy \
         -var-file="vars/core-${ENV}.tfvars" \
         -auto-approve
+      echo "Terraform destroy finished."
       ;;
     *)
       echo "ERROR: I don't have support for that Terraform subcommand!"
