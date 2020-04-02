@@ -27,14 +27,15 @@ clusters:
 - cluster:
     server: ${aws_eks_cluster.eks_cluster.endpoint}
     certificate-authority-data: ${aws_eks_cluster.eks_cluster.certificate_authority.0.data}
-  name: ${aws_eks_cluster.eks_cluster.name}-${var.environment}
+  name: ${aws_eks_cluster.eks_cluster.name}
 contexts:
 - context:
-    cluster: ${aws_eks_cluster.eks_cluster.name}-${var.environment}
+    cluster: ${aws_eks_cluster.eks_cluster.name}
     user: aws-rw-${var.environment}
   name: aws-rw-${var.environment}
 kind: Config
 preferences: {}
+current-context: aws-rw-${var.environment}
 users:
 - name: aws-rw-${var.environment}
   user:
@@ -44,7 +45,7 @@ users:
       args:
         - "eks"
         - "get-token"
-        - "--core-k8s-cluster"
+        - "--cluster-name"
         - "${aws_eks_cluster.eks_cluster.name}"
         # - "-r"
         # - "<role-arn>"

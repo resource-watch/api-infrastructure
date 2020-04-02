@@ -1,3 +1,3 @@
 environment              = "production"
-ingress_allow_cidr_block = "216.70.220.184/32" # WRI Office
-dns_prefix               = "aws-prod"
+ingress_allow_cidr_block = "0.0.0.0/0"
+dns_prefix               = "aws_prod"

@@ -36,3 +36,108 @@ variable "dns_prefix" {
   type        = string
   description = "DNS prefix for public URLs created in this project."
 }
+
+
+variable "mongodb_gateway_node_group_instance_types" {
+  type    = string
+  default = "m5a.large"
+}
+
+variable "mongodb_gateway_node_group_min_size" {
+  type    = number
+  default = 3
+}
+
+variable "mongodb_gateway_node_group_max_size" {
+  type    = number
+  default = 3
+}
+variable "mongodb_gateway_node_group_desired_size" {
+  type    = number
+  default = 3
+}
+
+variable "gateway_node_group_instance_types" {
+  type    = string
+  default = "m5a.large"
+}
+variable "gateway_node_group_min_size" {
+  type    = number
+  default = 2
+}
+variable "gateway_node_group_max_size" {
+  type    = number
+  default = 6
+}
+variable "gateway_node_group_desired_size" {
+  type    = number
+  default = 2
+}
+
+variable "elasticsearch_node_group_instance_types" {
+  type    = string
+  default = "m5a.xlarge"
+}
+variable "elasticsearch_node_group_min_size" {
+  type    = number
+  default = 3
+}
+variable "elasticsearch_node_group_max_size" {
+  type    = number
+  default = 3
+}
+variable "elasticsearch_node_group_desired_size" {
+  type    = number
+  default = 3
+}
+
+variable "mongodb_apps_node_group_instance_types" {
+  type    = string
+  default = "m5a.large"
+}
+variable "mongodb_apps_node_group_min_size" {
+  type    = number
+  default = 3
+}
+variable "mongodb_apps_node_group_max_size" {
+  type    = number
+  default = 3
+}
+variable "mongodb_apps_node_group_desired_size" {
+  type    = number
+  default = 3
+}
+
+variable "apps_node_group_instance_types" {
+  type    = string
+  default = "m5a.xlarge"
+}
+variable "apps_node_group_min_size" {
+  type    = number
+  default = 3
+}
+variable "apps_node_group_max_size" {
+  type    = number
+  default = 10
+}
+variable "apps_node_group_desired_size" {
+  type    = number
+  default = 3
+}
+
+variable "webapps_node_group_instance_types" {
+  type    = string
+  default = "m5a.large"
+}
+variable "webapps_node_group_min_size" {
+  type    = number
+  default = 2
+}
+variable "webapps_node_group_max_size" {
+  type    = number
+  default = 4
+}
+variable "webapps_node_group_desired_size" {
+  type    = number
+  default = 2
+}

@@ -20,12 +20,34 @@ output "bastion_hostname" {
   description = "Hostname of bastion host for VPC"
 }
 
-output "kubectl_config" {
-  value       = module.eks.kubeconfig
-  description = "Configuration snippet for the kubectl CLI tool that allows access to this EKS cluster"
-}
-
 output "jenkins_hostname" {
   value       = module.jenkins.jenkins_hostname
   description = "Hostname for Jenkins"
+}
+
+locals {
+  kube_configmap = <<KUBECONFIGMAP
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aws-auth
+  namespace: kube-system
+data:
+  mapRoles: |
+    - rolearn: ${module.vpc.eks_manager_role.arn}
+      username: system:node:{{EC2PrivateDNSName}}
+      groups:
+        - system:bootstrappers
+        - system:nodes
+    - rolearn: ${module.eks.node_role_arn}
+      username: system:node:{{EC2PrivateDNSName}}
+      groups:
+        - system:bootstrappers
+        - system:nodes
+
+KUBECONFIGMAP
+}
+
+output "kube_configmap" {
+  value = local.kube_configmap
 }

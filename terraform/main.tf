@@ -15,6 +15,7 @@ provider "aws" {
   version = "~> 2.38.0"
 }
 
+# Cloudflare provider, so we can manage DNS
 provider "cloudflare" {
   version = "~> 2.0"
 }
@@ -31,16 +32,16 @@ module "bootstrap" {
 module "vpc" {
   source      = "./modules/vpc"
   region      = var.aws_region
-  user_data   = data.template_file.authorized_keys_ec2_user.rendered
-  bastion_ami = data.aws_ami.amazon_linux_ami.id
+  user_data   = data.template_file.bastion_setup.rendered
+  bastion_ami = data.aws_ami.latest-ubuntu-lts.id
   project     = local.project
   tags        = local.tags
   private_subnet_tags = {
-    "kubernetes.io/cluster/${lower(replace(local.project, " ", "-"))}-k8s-cluster" : "shared"
+    "kubernetes.io/cluster/${lower(replace(local.project, " ", "-"))}-k8s-cluster-${var.environment}" : "shared"
     "kubernetes.io/role/internal-elb" : 1
   }
   public_subnet_tags = {
-    "kubernetes.io/cluster/${lower(replace(local.project, " ", "-"))}-k8s-cluster" : "shared"
+    "kubernetes.io/cluster/${lower(replace(local.project, " ", "-"))}-k8s-cluster-${var.environment}" : "shared"
     "kubernetes.io/role/elb" : 1
   }
   security_group_ids = [aws_security_group.default.id]
@@ -57,12 +58,7 @@ module "eks" {
     module.vpc.private_subnets[1].id,
     module.vpc.private_subnets[2].id,
     module.vpc.private_subnets[3].id,
-    module.vpc.private_subnets[5].id,
-    module.vpc.public_subnets[0].id,
-    module.vpc.public_subnets[1].id,
-    module.vpc.public_subnets[2].id,
-    module.vpc.public_subnets[3].id,
-    module.vpc.public_subnets[5].id
+    module.vpc.private_subnets[5].id
   ]
 }
 
@@ -72,10 +68,10 @@ module "mongodb-gateway-node-group" {
   cluster         = module.eks.cluster
   cluster_name    = module.eks.cluster_name
   node_group_name = "mongodb-gateway-node-group"
-  instance_types  = "m5a.large"
-  min_size        = 3
-  max_size        = 3
-  desired_size    = 3
+  instance_types  = var.mongodb_gateway_node_group_instance_types
+  min_size        = var.mongodb_gateway_node_group_min_size
+  max_size        = var.mongodb_gateway_node_group_max_size
+  desired_size    = var.mongodb_gateway_node_group_desired_size
   node_role_arn   = module.eks.node_role_arn
   subnet_ids = [
     module.vpc.private_subnets[0].id,
@@ -92,10 +88,10 @@ module "gateway-node-group" {
   cluster         = module.eks.cluster
   cluster_name    = module.eks.cluster_name
   node_group_name = "gateway-node-group"
-  instance_types  = "m5a.large"
-  min_size        = 2
-  max_size        = 6
-  desired_size    = 2
+  instance_types  = var.gateway_node_group_instance_types
+  min_size        = var.gateway_node_group_min_size
+  max_size        = var.gateway_node_group_max_size
+  desired_size    = var.gateway_node_group_desired_size
   node_role_arn   = module.eks.node_role_arn
   subnet_ids = [
     module.vpc.private_subnets[0].id,
@@ -114,10 +110,10 @@ module "elasticsearch-node-group" {
   cluster         = module.eks.cluster
   cluster_name    = module.eks.cluster_name
   node_group_name = "elasticsearch-node-group"
-  instance_types  = "m5a.xlarge"
-  min_size        = 3
-  max_size        = 3
-  desired_size    = 3
+  instance_types  = var.elasticsearch_node_group_instance_types
+  min_size        = var.elasticsearch_node_group_min_size
+  max_size        = var.elasticsearch_node_group_max_size
+  desired_size    = var.elasticsearch_node_group_desired_size
   node_role_arn   = module.eks.node_role_arn
   subnet_ids = [
     module.vpc.private_subnets[0].id,
@@ -134,10 +130,10 @@ module "mongodb-apps-node-group" {
   cluster         = module.eks.cluster
   cluster_name    = module.eks.cluster_name
   node_group_name = "mongodb-apps-node-group"
-  instance_types  = "m5a.large"
-  min_size        = 3
-  max_size        = 3
-  desired_size    = 3
+  instance_types  = var.mongodb_apps_node_group_instance_types
+  min_size        = var.mongodb_apps_node_group_min_size
+  max_size        = var.mongodb_apps_node_group_max_size
+  desired_size    = var.mongodb_apps_node_group_desired_size
   node_role_arn   = module.eks.node_role_arn
   subnet_ids = [
     module.vpc.private_subnets[0].id,
@@ -154,10 +150,10 @@ module "apps-node-group" {
   cluster         = module.eks.cluster
   cluster_name    = module.eks.cluster_name
   node_group_name = "apps-node-group"
-  instance_types  = "m5a.xlarge"
-  min_size        = 3
-  max_size        = 10
-  desired_size    = 3
+  instance_types  = var.apps_node_group_instance_types
+  min_size        = var.apps_node_group_min_size
+  max_size        = var.apps_node_group_max_size
+  desired_size    = var.apps_node_group_desired_size
   node_role_arn   = module.eks.node_role_arn
   subnet_ids = [
     module.vpc.private_subnets[0].id,
@@ -176,10 +172,10 @@ module "webapps-node-group" {
   cluster         = module.eks.cluster
   cluster_name    = module.eks.cluster_name
   node_group_name = "webapps-node-group"
-  instance_types  = "m5a.large"
-  min_size        = 2
-  max_size        = 4
-  desired_size    = 2
+  instance_types  = var.webapps_node_group_instance_types
+  min_size        = var.webapps_node_group_min_size
+  max_size        = var.webapps_node_group_max_size
+  desired_size    = var.webapps_node_group_desired_size
   node_role_arn   = module.eks.node_role_arn
   subnet_ids = [
     module.vpc.private_subnets[0].id,

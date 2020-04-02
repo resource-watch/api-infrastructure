@@ -1,5 +1,3 @@
-
-
 resource "aws_security_group" "jenkins_egress_security_group" {
   name        = "${replace(var.project, " ", "-")}-jenkins-egress-security-group"
   description = "Jenkins egress SG to the world"
