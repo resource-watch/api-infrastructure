@@ -20,6 +20,11 @@ output "bastion_hostname" {
   description = "Hostname of bastion host for VPC"
 }
 
+output "kubectl_config" {
+  value       = module.eks.kubeconfig
+  description = "Configuration snippet for the kubectl CLI tool that allows access to this EKS cluster"
+}
+
 output "jenkins_hostname" {
   value       = module.jenkins.jenkins_hostname
   description = "Hostname for Jenkins"
