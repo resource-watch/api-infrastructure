@@ -2,6 +2,7 @@
 
 
 ## Cluster setup
+
 To setup the cluster cloud resources, use the following command:
 
 ```shell script
