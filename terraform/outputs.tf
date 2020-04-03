@@ -20,14 +20,24 @@ output "bastion_hostname" {
   description = "Hostname of bastion host for VPC"
 }
 
+output "jenkins_hostname" {
+  value       = module.jenkins.jenkins_hostname
+  description = "Hostname of the Jenkins host"
+}
+
+output "bastion_dns" {
+  value       = cloudflare_record.bastion_dns.hostname
+  description = "DNS name of bastion host for VPC"
+}
+
+output "jenkins_dns" {
+  value       = cloudflare_record.jenkins_dns.hostname
+  description = "DNS name of the Jenkins host"
+}
+
 output "kubectl_config" {
   value       = module.eks.kubeconfig
   description = "Configuration snippet for the kubectl CLI tool that allows access to this EKS cluster"
-}
-
-output "jenkins_hostname" {
-  value       = module.jenkins.jenkins_hostname
-  description = "Hostname for Jenkins"
 }
 
 locals {

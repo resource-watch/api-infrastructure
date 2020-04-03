@@ -224,3 +224,12 @@ resource "cloudflare_record" "jenkins_dns" {
   type    = "CNAME"
   ttl     = 120
 }
+
+# Add a DNS record for bastion
+resource "cloudflare_record" "bastion_dns" {
+  zone_id = data.cloudflare_zones.resourcewatch.zones[0].id
+  name    = "bastion.${var.dns_prefix}"
+  value   = module.vpc.bastion_hostname
+  type    = "CNAME"
+  ttl     = 120
+}
