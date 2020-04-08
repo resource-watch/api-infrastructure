@@ -3,8 +3,8 @@
 Start by deploying the nginx configuration `configmaps`
 
 ```shell
-kubectl create configmap nginx-hosts --from-file=nginx-hosts.configmap.conf --namespace=gateway
-kubectl create configmap nginx-conf --from-file=nginx-config.configmap.conf --namespace=gateway
+kubectl create configmap nginx-hosts --namespace=gateway --from-file=nginx-hosts.configmap.conf 
+kubectl create configmap nginx-conf --namespace=gateway --from-file=nginx-config.configmap.conf
 ```
 
 Next, deploy the service and deployment

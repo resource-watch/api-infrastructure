@@ -52,8 +52,7 @@ data:
     - rolearn: ${module.vpc.eks_manager_role.arn}
       username: system:node:{{EC2PrivateDNSName}}
       groups:
-        - system:bootstrappers
-        - system:nodes
+        - system:masters
     - rolearn: ${module.eks.node_role_arn}
       username: system:node:{{EC2PrivateDNSName}}
       groups:

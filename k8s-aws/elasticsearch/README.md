@@ -202,4 +202,5 @@ You can see your cluster's overall status with the following command:
 curl -X GET http://elasticsearch.core.svc.cluster.local:9200/_cluster/health?pretty
 ```
 
-Notice that the cluster status may be yellow, as the shards are being replicated across multiple nodes. Your data should be available while this takes place, but it never hurts to wait for full replication to end (status = green) before starting to hammer the elasticsearch server.
+Notice that the cluster status may be yellow, as the shards are being replicated across 
+multiple nodes. Your data should be available while this takes place, but it never hurts to wait for full replication to end (status = green) before starting to hammer the elasticsearch server.

@@ -136,7 +136,7 @@ resource "aws_eip" "nat" {
 }
 
 resource "aws_nat_gateway" "default" {
-  depends_on = [aws_internet_gateway.default]
+  depends_on = [aws_internet_gateway.default, aws_eip.nat]
 
   count = length(var.public_subnet_cidr_blocks)
 

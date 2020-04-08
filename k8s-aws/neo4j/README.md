@@ -50,7 +50,14 @@ To work around this, the `restore` folder has a custom deployment using `initCon
 This approach is based on [this link](https://medium.com/google-cloud/how-to-restore-neo4j-backups-on-kubernetes-and-gke-6841aa1e3961), with minor modifications
 to support the current infrastructure, and all assets have been migrated to this repo, for auditability.
 
+It basically deploys Neo4j with `initContainers` - a container that is executed before the "main" Neo4j container. This container will restore the backup from GCP to the PV, and exit. Once it exits, the Neo4J server "main" container starts, with the restored backup already in place.
+
+The restore container has a few env var requirements:
+
+- `REMOTE_BACKUPSET`: GCP path to the folder containing the neo4j backup. Something like `gs://backups-bucket/neo4j/some-date/`
+- `GOOGLE_APPLICATION_CREDENTIALS`: Google auth credentials, in JSON format.
+
 As of the date of this writing, the currently deployed `statefulSet` has the initContainer that restores the backup
-which should NOT restore a backup if the existing container already has data - hopefully I will have the oportunity to test this soon.
+which should NOT restore a backup if the existing container already has data - hopefully I will have the opportunity to test this soon.
 
 Ideally, we would remove those `initContainers` from the `statefulSet` config.

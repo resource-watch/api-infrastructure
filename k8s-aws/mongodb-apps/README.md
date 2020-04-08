@@ -27,3 +27,15 @@ This should deploy the configured number of pods (3 in this setting), one per ea
 ```shell
 helm uninstall mongodb-apps --namespace=core
 ```
+
+## Backup restore
+
+To restore a backup, you need a few things:
+- The backup files on your local FS, uncompressed and in a folder. These instructions assume that this folder is called `control-tower`
+- You can port forward to the mongodb pod on the cluster
+
+```shell script
+kubectl port-forward mongodb-apps-mongodb-replicaset-0 27019:27017 -n core
+
+mongorestore -d <database> --port=27019 --dir=<directory>
+```

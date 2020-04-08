@@ -26,7 +26,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingre
 See also: 
 
 - [SSL annotations for ALB Ingress Controller](https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation/#ssl)
-- [Why we can use cert-manager.io](https://github.com/jetstack/cert-manager/issues/333)
+- [Why we can't use cert-manager.io](https://github.com/jetstack/cert-manager/issues/333)
 
 SSL certificates are manages through a mix of AWS ACM and AWS ALB Ingress Controller. 
 

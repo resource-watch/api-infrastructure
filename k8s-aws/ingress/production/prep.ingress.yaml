@@ -1,0 +1,56 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: prep
+  namespace: gateway
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/healthcheck-path: /health_check
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    cert-manager.io/issuer: prep-issuer
+spec:
+  tls:
+    - hosts:
+        - prepdata.org
+        - staging.prepdata.org
+        - beta.prepdata.org
+        - www.prepdata.org
+        - preproduction.prepdata.org
+      secretName: prep-certificate
+  rules:
+    - host: staging.prepdata.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: beta.prepdata.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: www.prepdata.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: prepdata.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: preproduction.prepdata.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80

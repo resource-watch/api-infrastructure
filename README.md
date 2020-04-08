@@ -34,8 +34,7 @@ data:
     - rolearn: arn:aws:iam::843801476059:role/eks_manager
       username: system:node:{{EC2PrivateDNSName}}
       groups:
-        - system:bootstrappers
-        - system:nodes
+        - system:masters
     - rolearn: arn:aws:iam::843801476059:role/eks-node-group-admin
       username: system:node:{{EC2PrivateDNSName}}
       groups:
