@@ -24,11 +24,6 @@ spec:
           command: ["sysctl", "-w", "vm.max_map_count=262144"]
           securityContext:
             privileged: true
-      tolerations:
-        - key: "type"
-          operator: "Equal"
-          value: "elasticsearch"
-          effect: "NoSchedule"
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:

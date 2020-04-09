@@ -56,12 +56,6 @@ affinity:
                 - mongodb-gateway
         topologyKey: "kubernetes.io/hostname"
 
-tolerations:
-  - key: "type"
-    operator: "Equal"
-    value: "mongodb-gateway"
-    effect: "NoSchedule"
-
 persistentVolume:
   enabled: true
   ## mongodb-replicaset data Persistent Volume Storage Class

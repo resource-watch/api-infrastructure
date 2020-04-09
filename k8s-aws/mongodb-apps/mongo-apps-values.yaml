@@ -54,12 +54,6 @@ affinity:
                 - mongodb-apps
         topologyKey: "kubernetes.io/hostname"
 
-tolerations:
-  - key: "type"
-    operator: "Equal"
-    value: "mongodb-apps"
-    effect: "NoSchedule"
-
 persistentVolume:
   enabled: true
   ## mongodb-replicaset data Persistent Volume Storage Class

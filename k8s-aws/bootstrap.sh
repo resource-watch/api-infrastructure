@@ -29,19 +29,6 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingre
 
 
 #
-# Taint nodes
-#
-kubectl get nodes --selector='type=mongodb-gateway'
-kubectl taint nodes <mongodb gateway node ids> type=mongodb-gateway:NoSchedule
-kubectl get nodes --selector='type=gateway'
-kubectl taint nodes <gateway node ids> type=gateway:NoSchedule
-kubectl get nodes --selector='type=mongodb-apps'
-kubectl taint nodes <mongodb gateway node ids> type=mongodb-apps:NoSchedule
-kubectl get nodes --selector='type=elasticsearch'
-kubectl taint nodes <Elasticsearch node ids> type=elasticsearch:NoSchedule
-
-
-#
 # Ingress
 #
 

@@ -6,12 +6,6 @@ Control Tower expects Mongodb version 3.x. This deployment uses version 3.6.16 b
 
 ## Installation
 
-While not required, we recommend setting aside a dedicated set of nodes for this database. To do so, you can use [Kubernetes taints and tolerations](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/). Specifically, you can run the command below to flag nodes as NOT being available for scheduling pods. Our deployment will then include specific logic that allows it to bypass this, ensuring only these MongoDB pods are scheduled on these nodes.
-
-```shell
-kubectl taint nodes <mongodb gateway node ids> type=mongodb-gateway:NoSchedule
-```
-
 Deployment of the actual MongoDB server is done using the attached file and Helm 3 and the following command:
 
 ```shell
