@@ -52,3 +52,10 @@ variable "instance_types" {
   description = "Name of the EC2 instance type to use"
 }
 
+
+variable "instance_disk_size" {
+  type        = number
+  default     = 50
+  description = "Disk size of the EC2 instances to use"
+}
+

@@ -55,6 +55,17 @@ resource "aws_security_group_rule" "jenkins_ingress_ssh" {
   type              = "ingress"
 }
 
+# IAM role to access the EKS cluster
+resource "aws_iam_instance_profile" "jenkins_profile" {
+  name = "jenkins_profile"
+  role = var.iam_instance_profile_role.name
+
+  depends_on = [
+    var.iam_instance_profile_role
+  ]
+}
+
+
 #
 # Jenkins EC2
 #
@@ -69,6 +80,7 @@ resource "aws_instance" "jenkins" {
   vpc_security_group_ids      = concat(var.security_group_ids, [aws_security_group.jenkins_egress_security_group.id, aws_security_group.jenkins_ingress_security_group.id])
   associate_public_ip_address = true
   user_data                   = var.user_data
+  iam_instance_profile        = aws_iam_instance_profile.jenkins_profile.name
 
   lifecycle {
     ignore_changes = [user_data, ami]

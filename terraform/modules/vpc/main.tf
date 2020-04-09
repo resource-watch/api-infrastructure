@@ -188,11 +188,6 @@ resource "aws_iam_role_policy" "eks-admin-EKSManagerPolicy" {
   policy = data.aws_iam_policy_document.eks-admin-EKSManagerPolicy-document.json
 }
 
-//resource "aws_iam_role_policy_attachment" "eks-admin-EKSManagerPolicy" {
-//  policy_arn = aws_iam_policy.eks-admin-EKSManagerPolicy.arn
-//  role       = aws_iam_role.eks_manager.name
-//}
-
 resource "aws_iam_instance_profile" "bastion_profile" {
   name = "bastion_profile"
   role = aws_iam_role.eks_manager.name
