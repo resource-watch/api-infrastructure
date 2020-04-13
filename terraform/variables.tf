@@ -127,7 +127,7 @@ variable "apps_node_group_desired_size" {
 
 variable "webapps_node_group_instance_types" {
   type    = string
-  default = "m5a.large"
+  default = "m5a.xlarge"
 }
 variable "webapps_node_group_min_size" {
   type    = number
@@ -144,7 +144,7 @@ variable "webapps_node_group_desired_size" {
 
 variable "gfw_node_group_instance_types" {
   type    = string
-  default = "m5a.large"
+  default = "m5a.xlarge"
 }
 variable "gfw_node_group_min_size" {
   type    = number
@@ -172,6 +172,23 @@ variable "gfw_pro_node_group_max_size" {
   default = 4
 }
 variable "gfw_pro_node_group_desired_size" {
+  type    = number
+  default = 2
+}
+
+variable "core_node_group_instance_types" {
+  type    = string
+  default = "m5a.xlarge"
+}
+variable "core_node_group_min_size" {
+  type    = number
+  default = 2
+}
+variable "core_node_group_max_size" {
+  type    = number
+  default = 4
+}
+variable "core_node_group_desired_size" {
   type    = number
   default = 2
 }

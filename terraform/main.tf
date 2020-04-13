@@ -189,6 +189,24 @@ module "webapps-node-group" {
   }
 }
 
+module "core-node-group" {
+  source          = "./modules/node_group"
+  cluster         = module.eks.cluster
+  cluster_name    = module.eks.cluster_name
+  node_group_name = "core-node-group"
+  instance_types  = var.core_node_group_instance_types
+  min_size        = var.core_node_group_min_size
+  max_size        = var.core_node_group_max_size
+  desired_size    = var.core_node_group_desired_size
+  node_role_arn   = module.eks.node_role_arn
+  subnet_ids = [
+    module.vpc.private_subnets[5].id
+  ]
+  labels = {
+    type : "core"
+  }
+}
+
 module "gfw-node-group" {
   source          = "./modules/node_group"
   cluster         = module.eks.cluster
