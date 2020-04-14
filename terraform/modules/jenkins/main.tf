@@ -69,7 +69,6 @@ resource "aws_iam_instance_profile" "jenkins_profile" {
 #
 # Jenkins EC2
 #
-
 resource "aws_instance" "jenkins" {
   ami                         = var.jenkins_ami
   availability_zone           = var.availability_zones[0]
@@ -98,4 +97,54 @@ resource "aws_instance" "jenkins" {
     },
     var.tags
   )
+}
+
+resource "aws_backup_plan" "jenkins_backup_plan" {
+  name = "jenkins_backup_plan"
+
+  rule {
+    rule_name         = "jenkins_backup_rule"
+    target_vault_name = aws_backup_vault.default_backup_vault.name
+    schedule          = "cron(0 0 ? * SUN *)"
+    lifecycle {
+      delete_after = 120
+    }
+  }
+}
+
+resource "aws_backup_vault" "default_backup_vault" {
+  name = "default_backup_vault"
+}
+
+resource "aws_iam_role" "backup_role" {
+  name               = "backup_role"
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": ["sts:AssumeRole"],
+      "Effect": "allow",
+      "Principal": {
+        "Service": ["backup.amazonaws.com"]
+      }
+    }
+  ]
+}
+POLICY
+}
+
+resource "aws_iam_role_policy_attachment" "backup_role_policy_attachment" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
+  role       = aws_iam_role.backup_role.name
+}
+
+resource "aws_backup_selection" "jenkins_backup_selection" {
+  iam_role_arn = aws_iam_role.backup_role.arn
+  name         = "jenkins_backup_selection"
+  plan_id      = aws_backup_plan.jenkins_backup_plan.id
+
+  resources = [
+    aws_instance.jenkins.arn,
+  ]
 }
