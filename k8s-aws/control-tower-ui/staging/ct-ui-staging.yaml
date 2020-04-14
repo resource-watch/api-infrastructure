@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    name: ct-ui
+  name: ct-ui
+  namespace: gateway
+spec:
+  template:
+    metadata:
+      labels:
+        name: ct-ui
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: type
+                    operator: In
+                    values:
+                      - gateway
+      containers:
+        - name: ct-ui
+          image: vizzuality/ct-ui-wri:0.0.5-staging
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "128Mi"
+            limits:
+              memory: "1Gi"
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /index.html
+              port: 80
+            initialDelaySeconds: 15
+            timeoutSeconds: 1
+            periodSeconds: 15
+
+      restartPolicy: Always
