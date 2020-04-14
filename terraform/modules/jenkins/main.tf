@@ -1,5 +1,5 @@
 resource "aws_security_group" "jenkins_egress_security_group" {
-  count = var.enabled == "true" ? 1 : 0
+  count = var.enabled ? 1 : 0
 
   name        = "${replace(var.project, " ", "-")}-jenkins-egress-security-group"
   description = "Jenkins egress SG to the world"
@@ -18,7 +18,7 @@ resource "aws_security_group" "jenkins_egress_security_group" {
 }
 
 resource "aws_security_group" "jenkins_ingress_security_group" {
-  count = var.enabled == "true" ? 1 : 0
+  count = var.enabled ? 1 : 0
 
   name        = "${replace(var.project, " ", "-")}-jenkins-ingress-security-group"
   description = "Jenkins ingress SG from the world"
@@ -30,7 +30,7 @@ resource "aws_security_group" "jenkins_ingress_security_group" {
 }
 
 resource "aws_security_group_rule" "jenkins_ingress_https" {
-  count = var.enabled == "true" ? 1 : 0
+  count = var.enabled ? 1 : 0
 
   cidr_blocks       = ["0.0.0.0/0"]
   description       = "Allow HTTPS traffic to the Jenkins EC2 instance"
@@ -42,7 +42,7 @@ resource "aws_security_group_rule" "jenkins_ingress_https" {
 }
 
 resource "aws_security_group_rule" "jenkins_ingress_http" {
-  count = var.enabled == "true" ? 1 : 0
+  count = var.enabled ? 1 : 0
 
   cidr_blocks       = ["0.0.0.0/0"]
   description       = "Allow HTTP traffic to the Jenkins EC2 instance"
@@ -54,7 +54,7 @@ resource "aws_security_group_rule" "jenkins_ingress_http" {
 }
 
 resource "aws_security_group_rule" "jenkins_ingress_ssh" {
-  count = var.enabled == "true" ? 1 : 0
+  count = var.enabled ? 1 : 0
 
   cidr_blocks       = ["0.0.0.0/0"]
   description       = "Allow SSH traffic to the Jenkins EC2 instance"
@@ -67,7 +67,7 @@ resource "aws_security_group_rule" "jenkins_ingress_ssh" {
 
 # IAM role to access the EKS cluster
 resource "aws_iam_instance_profile" "jenkins_profile" {
-  count = var.enabled == "true" ? 1 : 0
+  count = var.enabled ? 1 : 0
 
   name = "jenkins_profile"
   role = var.iam_instance_profile_role.name
@@ -82,7 +82,7 @@ resource "aws_iam_instance_profile" "jenkins_profile" {
 # Jenkins EC2
 #
 resource "aws_instance" "jenkins" {
-  count = var.enabled == "true" ? 1 : 0
+  count = var.enabled ? 1 : 0
 
   ami                         = var.jenkins_ami
   availability_zone           = var.availability_zones[0]
@@ -114,7 +114,7 @@ resource "aws_instance" "jenkins" {
 }
 
 resource "aws_backup_plan" "jenkins_backup_plan" {
-  count = var.enabled == "true" ? 1 : 0
+  count = var.enabled ? 1 : 0
 
   name = "jenkins_backup_plan"
 
@@ -129,13 +129,13 @@ resource "aws_backup_plan" "jenkins_backup_plan" {
 }
 
 resource "aws_backup_vault" "default_backup_vault" {
-  count = var.enabled == "true" ? 1 : 0
+  count = var.enabled ? 1 : 0
 
   name = "default_backup_vault"
 }
 
 resource "aws_iam_role" "backup_role" {
-  count = var.enabled == "true" ? 1 : 0
+  count = var.enabled ? 1 : 0
 
   name               = "backup_role"
   assume_role_policy = <<POLICY
@@ -155,14 +155,14 @@ POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "backup_role_policy_attachment" {
-  count = var.enabled == "true" ? 1 : 0
+  count = var.enabled ? 1 : 0
 
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
   role       = aws_iam_role.backup_role[0].name
 }
 
 resource "aws_backup_selection" "jenkins_backup_selection" {
-  count = var.enabled == "true" ? 1 : 0
+  count = var.enabled ? 1 : 0
 
   iam_role_arn = aws_iam_role.backup_role[0].arn
   name         = "jenkins_backup_selection"

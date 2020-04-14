@@ -282,7 +282,7 @@ data "cloudflare_zones" "resourcewatch" {
 
 # Add a DNS record for Jenkins
 resource "cloudflare_record" "jenkins_dns" {
-  count = var.deploy_jenkins == "true" ? 1 : 0
+  count = var.deploy_jenkins ? 1 : 0
 
   zone_id = data.cloudflare_zones.resourcewatch.zones[0].id
   name    = "jenkins.${var.dns_prefix}"
