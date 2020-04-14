@@ -12,6 +12,7 @@ spec:
   tls:
     - hosts:
         - aws-production.resourcewatch.org
+        - ui.aws-production.resourcewatch.org
       secretName: aws-certificate
   rules:
     - host: aws-production.resourcewatch.org
@@ -20,4 +21,11 @@ spec:
           - path: /*
             backend:
               serviceName: nginx
+              servicePort: 80
+    - host: ui.aws-production.resourcewatch.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: ct-ui
               servicePort: 80
