@@ -108,7 +108,7 @@ Perhaps the most practical way to connect to the cluster is by creating an SSH t
 
 - Copy the `kubectl_config` settings from above into your local `~/.kube/config`
 - Modify the `server: https://<random string>.gr7.us-east-1.eks.amazonaws.com` line by adding `:4433` at the end, so it looks like this: `server: https://<random string>.gr7.us-east-1.eks.amazonaws.com:4433` (you can pick a different port if you want)
-- Modify your local `/etc/hosts` to include the following line: `127.0.0.1  https://<random string>.gr7.us-east-1.eks.amazonaws.com:4433`
+- Modify your local `/etc/hosts` to include the following line: `127.0.0.1  https://<random string>.gr7.us-east-1.eks.amazonaws.com`
   
 
 ```shell script
