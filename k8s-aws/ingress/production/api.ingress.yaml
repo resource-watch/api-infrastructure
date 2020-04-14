@@ -7,25 +7,17 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/healthcheck-path: /health_check
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-    cert-manager.io/issuer: api-issuer
+#    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
 spec:
   tls:
     - hosts:
-        - aws-production.resourcewatch.com
         - api-rw.vizzuality.com
         - production-api.globalforestwatch.org
         - ui.resourcewatch.org
         - api.resourcewatch.org
       secretName: api-certificate
   rules:
-    - host: aws-production.resourcewatch.org
-      http:
-        paths:
-          - path: /*
-            backend:
-              serviceName: nginx
-              servicePort: 80
     - host: api-rw.vizzuality.com
       http:
         paths:

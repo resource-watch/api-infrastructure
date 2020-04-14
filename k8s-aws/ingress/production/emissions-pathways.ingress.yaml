@@ -7,8 +7,8 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/healthcheck-path: /health_check
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-    cert-manager.io/issuer: emissions-pathways-issuer
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+#    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
 spec:
   tls:
     - hosts:
