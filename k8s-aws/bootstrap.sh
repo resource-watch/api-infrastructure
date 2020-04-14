@@ -75,3 +75,8 @@ helm install mongodb-apps stable/mongodb-replicaset -f mongodb/mongo-apps-values
 # See also: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/deploy-container-insights-EKS.html
 #
 curl https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/latest/k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring/quickstart/cwagent-fluentd-quickstart.yaml | sed "s/{{cluster_name}}/core-k8s-cluster/;s/{{region_name}}/us-east-1/" | kubectl apply -f -
+
+#
+# Once everything is up and running, you need to manually provision the SSL certificates on AWS ACM, using DNS validation.
+# Once provisioned and validated the ALB Ingress Controller should pick them up automagically (you may need to delete + re-apply the ingresses)
+#
