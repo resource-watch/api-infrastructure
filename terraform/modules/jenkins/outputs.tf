@@ -1,4 +1,4 @@
 output "jenkins_hostname" {
-  value       = aws_instance.jenkins.public_dns
+  value       = length(aws_instance.jenkins) > 0 ? aws_instance.jenkins[0].public_dns : ""
   description = "Jenkins hostname for SSH access."
 }

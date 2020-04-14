@@ -269,6 +269,7 @@ module "jenkins" {
   security_group_ids        = [aws_security_group.default.id]
   user_data                 = data.template_file.jenkins_config_on_ubuntu.rendered
   iam_instance_profile_role = module.vpc.eks_manager_role
+  enabled                   = var.deploy_jenkins
 }
 
 data "cloudflare_zones" "resourcewatch" {
@@ -281,6 +282,8 @@ data "cloudflare_zones" "resourcewatch" {
 
 # Add a DNS record for Jenkins
 resource "cloudflare_record" "jenkins_dns" {
+  count = var.deploy_jenkins == "true" ? 1 : 0
+
   zone_id = data.cloudflare_zones.resourcewatch.zones[0].id
   name    = "jenkins.${var.dns_prefix}"
   value   = module.jenkins.jenkins_hostname

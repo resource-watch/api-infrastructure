@@ -37,6 +37,11 @@ variable "dns_prefix" {
   description = "DNS prefix for public URLs created in this project."
 }
 
+variable "deploy_jenkins" {
+  type        = bool
+  description = "If a Jenkins should be deployed"
+}
+
 
 variable "mongodb_gateway_node_group_instance_types" {
   type    = string
