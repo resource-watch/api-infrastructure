@@ -261,13 +261,13 @@ resource "aws_acm_certificate" "aws-dev-resourcewatch-org-certificate" {
 }
 
 module "jenkins" {
-  source             = "./modules/jenkins"
-  jenkins_ami        = data.aws_ami.latest-ubuntu-lts.id
-  vpc_id             = module.vpc.id
-  project            = local.project
-  subnet_id          = module.vpc.public_subnets[0].id
-  security_group_ids = [aws_security_group.default.id]
-  user_data          = data.template_file.jenkins_config_on_ubuntu.rendered
+  source                    = "./modules/jenkins"
+  jenkins_ami               = data.aws_ami.latest-ubuntu-lts.id
+  vpc_id                    = module.vpc.id
+  project                   = local.project
+  subnet_id                 = module.vpc.public_subnets[0].id
+  security_group_ids        = [aws_security_group.default.id]
+  user_data                 = data.template_file.jenkins_config_on_ubuntu.rendered
   iam_instance_profile_role = module.vpc.eks_manager_role
 }
 

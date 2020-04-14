@@ -11,7 +11,7 @@ resource "aws_eks_node_group" "eks-node-group" {
   }
 
   instance_types = [var.instance_types]
-  disk_size = var.instance_disk_size
+  disk_size      = var.instance_disk_size
 
   labels = var.labels
 

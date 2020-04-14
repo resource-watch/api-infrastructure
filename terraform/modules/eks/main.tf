@@ -6,10 +6,10 @@ resource "aws_eks_cluster" "eks_cluster" {
   role_arn = aws_iam_role.eks-cluster-admin.arn
 
   vpc_config {
-    subnet_ids         = var.subnet_ids # At the time of this writing, AWS wasn't accepting EKS on us-east-1e
-    security_group_ids = [aws_security_group.eks_cluster_security_group.id]
+    subnet_ids              = var.subnet_ids # At the time of this writing, AWS wasn't accepting EKS on us-east-1e
+    security_group_ids      = [aws_security_group.eks_cluster_security_group.id]
     endpoint_private_access = true
-    endpoint_public_access = false
+    endpoint_public_access  = false
   }
 
   depends_on = [
