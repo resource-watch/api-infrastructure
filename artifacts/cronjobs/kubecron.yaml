@@ -23,6 +23,11 @@ spec:
               secretKeyRef:
                 name: mssecrets
                 key: GCLOUD_BACKUPS_CREDENTIALS
+        - name: GCLOUD_BACKUPS_BUCKET
+          valueFrom:
+              secretKeyRef:
+                name: mssecrets
+                key: GCLOUD_BACKUPS_BUCKET
         - name: CT_TOKEN
           valueFrom:
               secretKeyRef:
