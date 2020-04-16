@@ -161,7 +161,7 @@ variable "gfw_node_group_max_size" {
 }
 variable "gfw_node_group_desired_size" {
   type    = number
-  default = 2
+  default = 4
 }
 
 variable "gfw_pro_node_group_instance_types" {
