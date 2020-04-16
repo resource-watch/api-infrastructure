@@ -16,9 +16,9 @@ kubectl -n kube-system edit deployment.apps/cluster-autoscaler
 
 Edit the cluster-autoscaler container command to replace <YOUR CLUSTER NAME> with your cluster's name, and add the following options.
 
-    --balance-similar-node-groups
-    --skip-nodes-with-system-pods=false
-
+        - --balance-similar-node-groups
+        - --skip-nodes-with-system-pods=false
+        
 Example: 
 
 ```yaml
