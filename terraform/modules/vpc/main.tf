@@ -182,7 +182,7 @@ resource "aws_iam_policy" "eks-admin-EKSManagerPolicy" {
 }
 
 resource "aws_iam_role_policy" "eks-admin-EKSManagerPolicy" {
-  name = "test_policy"
+  name = "eks_manager"
   role = aws_iam_role.eks_manager.id
 
   policy = data.aws_iam_policy_document.eks-admin-EKSManagerPolicy-document.json
