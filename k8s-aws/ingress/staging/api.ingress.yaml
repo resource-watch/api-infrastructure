@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: api
+  namespace: gateway
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/healthcheck-path: /health_check
+#    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+spec:
+  tls:
+    - hosts:
+        - staging-api.globalforestwatch.org
+        - staging-api.resourcewatch.org
+      secretName: api-certificate
+  rules:
+    - host: staging-api.globalforestwatch.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: staging-api.resourcewatch.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80

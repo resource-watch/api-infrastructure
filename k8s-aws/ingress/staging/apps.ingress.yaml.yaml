@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: apps
+  namespace: gateway
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/healthcheck-path: /health_check
+#    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+spec:
+  tls:
+    - hosts:
+        - staging.emissionspathways.org
+        - ui-staging.resourcewatch.org
+        - prep-manager.vizzuality.com
+      secretName: apps-certificate
+  rules:
+    - host: staging.emissionspathways.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: prep-manager.vizzuality.com
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: ui-staging.resourcewatch.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: ct-ui
+              servicePort: 80
+
