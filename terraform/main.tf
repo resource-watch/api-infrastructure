@@ -251,15 +251,6 @@ module "gfw-pro-node-group" {
   }
 }
 
-resource "aws_acm_certificate" "aws-dev-resourcewatch-org-certificate" {
-  domain_name       = "${var.dns_prefix}.resourcewatch.org"
-  validation_method = "DNS"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
 module "jenkins" {
   source                    = "./modules/jenkins"
   jenkins_ami               = data.aws_ami.latest-ubuntu-lts.id
