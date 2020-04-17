@@ -57,6 +57,12 @@ The restore container has a few env var requirements:
 - `REMOTE_BACKUPSET`: GCP path to the folder containing the neo4j backup. Something like `gs://backups-bucket/neo4j/some-date/`
 - `GOOGLE_APPLICATION_CREDENTIALS`: Google auth credentials, in JSON format.
 
+Once the secrets are set, you can trigger the restore by deploying the specially crafted neo4j `statefulset`:
+
+```shell
+helm install neo4j -f restore/neo4j-restore.yaml stable/neo4j --set neo4jPassword=<admin password> --namespace=core
+```
+
 As of the date of this writing, the currently deployed `statefulSet` has the initContainer that restores the backup
 which should NOT restore a backup if the existing container already has data - hopefully I will have the opportunity to test this soon.
 
