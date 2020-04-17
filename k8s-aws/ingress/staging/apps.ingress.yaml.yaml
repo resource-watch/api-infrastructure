@@ -14,17 +14,9 @@ spec:
     - hosts:
         - staging.emissionspathways.org
         - ui-staging.resourcewatch.org
-        - prep-manager.vizzuality.com
       secretName: apps-certificate
   rules:
     - host: staging.emissionspathways.org
-      http:
-        paths:
-          - path: /*
-            backend:
-              serviceName: nginx
-              servicePort: 80
-    - host: prep-manager.vizzuality.com
       http:
         paths:
           - path: /*
