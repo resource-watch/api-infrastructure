@@ -95,7 +95,7 @@ You'll get something like:
       "snapshot": "2019-05-02_12h16m",
       "uuid": "4T1Jh6_JSSOSRHFCri0o1g",
       "version_id": 5050099,
-      "version": "5.5.0",
+      "version": "5.5.2",
       "indices": [
         <list of indexes>
       ],
@@ -116,7 +116,7 @@ You'll get something like:
       "snapshot": "2019-05-14_10h04m",
       "uuid": "iKKuZecrQWOZ7DIf5ovPXQ",
       "version_id": 5050099,
-      "version": "5.5.0",
+      "version": "5.5.2",
       "indices": [
         <list of indexes>
       ],
@@ -155,7 +155,7 @@ The backup will take a few minutes to be processed, after which you will get a J
     "snapshot": "2020-03-25_32h16m",
     "uuid": "avGC3m6hR2uqxw0rv6XDyA",
     "version_id": 5050099,
-    "version": "5.5.0",
+    "version": "5.5.2",
     "indices": [
         <list of indexes>
     ],
