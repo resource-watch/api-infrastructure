@@ -7,13 +7,14 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/healthcheck-path: /health_check
-#    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    #    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
 spec:
   tls:
     - hosts:
         - staging-api.globalforestwatch.org
         - staging-api.resourcewatch.org
+        - ui-staging.resourcewatch.org
       secretName: api-certificate
   rules:
     - host: staging-api.globalforestwatch.org
@@ -29,4 +30,11 @@ spec:
           - path: /*
             backend:
               serviceName: nginx
+              servicePort: 80
+    - host: ui-staging.resourcewatch.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: ct-ui
               servicePort: 80

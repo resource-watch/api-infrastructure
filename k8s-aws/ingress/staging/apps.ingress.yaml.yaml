@@ -13,7 +13,6 @@ spec:
   tls:
     - hosts:
         - staging.emissionspathways.org
-        - ui-staging.resourcewatch.org
       secretName: apps-certificate
   rules:
     - host: staging.emissionspathways.org
@@ -22,12 +21,5 @@ spec:
           - path: /*
             backend:
               serviceName: nginx
-              servicePort: 80
-    - host: ui-staging.resourcewatch.org
-      http:
-        paths:
-          - path: /*
-            backend:
-              serviceName: ct-ui
               servicePort: 80
 

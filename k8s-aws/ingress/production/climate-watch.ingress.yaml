@@ -21,6 +21,9 @@ spec:
         - india.climatewatchdata.org
         - indiaclimateexplorer.org
         - indonesia.climatewatchdata.org
+        - south-africa-platform.vizzuality.com
+        - indonesia-platform-staging.vizzuality.com
+        - india-platform-staging.vizzuality.com
       secretName: climate-watch-certificate
   rules:
     - host: climatewatchdata.org
@@ -80,6 +83,27 @@ spec:
               serviceName: nginx
               servicePort: 80
     - host: indonesia.climatewatchdata.org
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: south-africa-platform.vizzuality.com
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: indonesia-platform-staging.vizzuality.com
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx
+              servicePort: 80
+    - host: india-platform-staging.vizzuality.com
       http:
         paths:
           - path: /*
