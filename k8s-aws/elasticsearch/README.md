@@ -35,6 +35,21 @@ kubectl apply -f master/es-master.deployment.yaml
 kubectl apply -f master/es-master.service.yaml
 ```
 
+## Configuration
+
+The current configuration uses 3 1TB disks for storage, and it will most likely grow with time. The default configuration of Elasticsearch is to always have 15% of the disk's total size free, meaning lots of wasted spaced. So, to optimize,you should run the following command once, during the setup process:
+
+```shell script
+curl --location --request PUT 'http://elasticsearch.core.svc.cluster.local:9200/_cluster/settings' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "persistent" : {
+        "cluster.routing.allocation.disk.watermark.low" : "50gb",
+        "cluster.routing.allocation.disk.watermark.high": "40gb"
+    }
+}'
+```
+
 ## Backups
 
 
