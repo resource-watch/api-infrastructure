@@ -1,0 +1,50 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    name: kubecron
+  name: kubecron
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: kubecron
+    spec:
+      containers:
+      - name: kubecron
+        image: vizzuality/kubecron:1.0.22
+        imagePullPolicy: Always
+        args:
+        - start
+        env:
+        - name: GCLOUD_BACKUPS_CREDENTIALS
+          valueFrom:
+              secretKeyRef:
+                name: mssecrets
+                key: GCLOUD_BACKUPS_CREDENTIALS
+        - name: GCLOUD_BACKUPS_BUCKET
+          valueFrom:
+              secretKeyRef:
+                name: mssecrets
+                key: GCLOUD_BACKUPS_BUCKET
+        - name: CT_TOKEN
+          valueFrom:
+              secretKeyRef:
+                name: mssecrets
+                key: CT_TOKEN
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+              secretKeyRef:
+                name: dbsecrets
+                key: POSTGRES_PASSWORD
+        - name: CT_MONGO_ADMIN_USER
+          valueFrom:
+              secretKeyRef:
+                name: dbsecrets
+                key: CT_MONGO_ADMIN_USER
+        - name: CT_MONGO_ADMIN_PASSWORD
+          valueFrom:
+              secretKeyRef:
+                name: dbsecrets
+                key: CT_MONGO_ADMIN_PASSWORD
