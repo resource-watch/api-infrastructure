@@ -294,7 +294,15 @@ master:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption
   nodeSelector: {}
-  affinity: {}
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: type
+                operator: In
+                values:
+                  - core
   tolerations: []
   labels: {}
   annotations: {}
@@ -363,7 +371,7 @@ networkPolicy:
     # explicitNamespacesSelector:
     # matchLabels:
     # role: frontend
-    # matchExpressions:
+  # matchExpressions:
   # - {key: role, operator: In, values: [frontend]}
 
 ## Configure extra options for liveness and readiness probes
@@ -417,7 +425,7 @@ metrics:
       #   labels:
       #     severity: critical
       #   annotations:
-      #     description: replication for {{ template "postgresql.fullname" . }} PostgreSQL is lagging by {{ "{{ $value }}" }} hour(s).
+    #     description: replication for {{ template "postgresql.fullname" . }} PostgreSQL is lagging by {{ "{{ $value }}" }} hour(s).
     #     summary: PostgreSQL replication is lagging by {{ "{{ $value }}" }} hour(s).
   image:
     registry: docker.io
