@@ -333,7 +333,7 @@ echo
 echo Backup of Database Server - $DBHOST
 echo ======================================================================
 
-# Test is seperate DB backups are required
+# Test is separate DB backups are required
 if [ "$SEPDIR" = "yes" ]; then
 echo Backup Start Time `date`
 echo ======================================================================
