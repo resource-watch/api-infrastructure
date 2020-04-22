@@ -17,6 +17,12 @@ spec:
         - ui.aws-staging.resourcewatch.org
       secretName: aws-certificate
   rules:
+    - http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: ssl-redirect
+              servicePort: use-annotation
     - host: aws-staging.resourcewatch.org
       http:
         paths:

@@ -16,11 +16,17 @@ spec:
         - staging.emissionspathways.org
       secretName: apps-certificate
   rules:
+    - http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: ssl-redirect
+              servicePort: use-annotation
     - host: staging.emissionspathways.org
       http:
         paths:
           - path: /*
             backend:
-              serviceName: nginx
+              serviceName: emissions-scenario-portal
               servicePort: 80
 
