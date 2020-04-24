@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
             - name: kubecron
-              image: vizzuality/kubecron:1.0.22
+              image: vizzuality/kubecron:1.0.28
               imagePullPolicy: Always
               env:
                 - name: GCLOUD_BACKUPS_CREDENTIALS
@@ -19,6 +19,11 @@ spec:
                     secretKeyRef:
                       name: mssecrets
                       key: GCLOUD_BACKUPS_CREDENTIALS
+                - name: GCLOUD_BACKUPS_BUCKET
+                  valueFrom:
+                    secretKeyRef:
+                      name: mssecrets
+                      key: GCLOUD_BACKUPS_BUCKET
                 - name: CT_TOKEN
                   valueFrom:
                     secretKeyRef:

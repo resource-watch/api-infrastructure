@@ -20,7 +20,8 @@ case "$1" in
         gcloud config set project resource-watch
         echo "Starting auto postgres backup"
         /cronjobs/autopostgresbackup.sh | true
-        gsutil rsync -r /cronjobs/backups/postgres gs://api-backups/postgres
+        echo "Syncing to $GCLOUD_BACKUPS_BUCKET/postgres"
+        gsutil rsync -r /cronjobs/backups/postgres "$GCLOUD_BACKUPS_BUCKET/postgres"
         rm -rf /cronjobs/backups/postgres/*
         ;;
     neo4j)
@@ -29,7 +30,8 @@ case "$1" in
         gcloud config set project resource-watch
         echo "Starting auto neo backup"
         /cronjobs/autoneobackup.sh | true
-        gsutil rsync -r /cronjobs/backups/neo4j gs://api-backups/neo4j
+        echo "Syncing to $GCLOUD_BACKUPS_BUCKET/neo4j"
+        gsutil rsync -r /cronjobs/backups/neo4j "$GCLOUD_BACKUPS_BUCKET/neo4j"
         rm -rf /cronjobs/backups/neo4j/*
         ;;
     elasticsearch)
@@ -45,7 +47,8 @@ case "$1" in
         gcloud config set project resource-watch
         echo "Starting auto mongo backup"
         /cronjobs/automongobackup.sh | true
-        gsutil rsync -r /cronjobs/backups/mongo gs://api-backups/mongo
+        echo "Syncing to $GCLOUD_BACKUPS_BUCKET/mongo"
+        gsutil rsync -r /cronjobs/backups/mongo "$GCLOUD_BACKUPS_BUCKET/mongo"
         rm -rf /cronjobs/backups/mongo/*
         ;;
     mongo-ct)
@@ -54,7 +57,8 @@ case "$1" in
         gcloud config set project resource-watch
         echo "Starting auto mongo-ct backup"
         /cronjobs/automongoctbackup.sh | true
-        gsutil rsync -r /cronjobs/backups/mongo-ct gs://api-backups/mongo-ct
+        echo "Syncing to $GCLOUD_BACKUPS_BUCKET/mongo-ct"
+        gsutil rsync -r /cronjobs/backups/mongo-ct "$GCLOUD_BACKUPS_BUCKET/mongo-ct"
         rm -rf /cronjobs/backups/mongo-ct/*
         ;;
     *)

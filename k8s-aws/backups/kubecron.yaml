@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    name: kubecron
+  name: kubecron
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: kubecron
+    spec:
+      containers:
+      - name: kubecron
+        image: vizzuality/kubecron:1.0.31
+        imagePullPolicy: Always
+        args:
+        - start
+        env:
+        - name: AWS_BACKUPS_BUCKET_URI
+          valueFrom:
+              secretKeyRef:
+                name: mssecrets
+                key: AWS_BACKUPS_BUCKET_URI
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+              secretKeyRef:
+                name: dbsecrets
+                key: POSTGRES_PASSWORD
+        - name: CT_MONGO_ADMIN_USER
+          valueFrom:
+              secretKeyRef:
+                name: dbsecrets
+                key: CT_MONGO_ADMIN_USER
+        - name: CT_MONGO_ADMIN_PASSWORD
+          valueFrom:
+              secretKeyRef:
+                name: dbsecrets
+                key: CT_MONGO_ADMIN_PASSWORD

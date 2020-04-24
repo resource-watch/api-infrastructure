@@ -1,0 +1,25 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: mongo-backup
+  namespace: core
+spec:
+  schedule: "25 * * * *"
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: kubecron
+              image: vizzuality/kubecron:1.0.34
+              imagePullPolicy: Always
+              env:
+                - name: AWS_BACKUPS_BUCKET_URI
+                  valueFrom:
+                    secretKeyRef:
+                      name: backups
+                      key: AWS_BACKUPS_BUCKET_URI
+              args:
+                - mongo
+          restartPolicy: OnFailure
