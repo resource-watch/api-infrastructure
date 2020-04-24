@@ -4,7 +4,7 @@ metadata:
   name: mongo-backup
   namespace: core
 spec:
-  schedule: "25 * * * *"
+  schedule: "35 01 * * *"
   concurrencyPolicy: Replace
   jobTemplate:
     spec:
@@ -12,7 +12,7 @@ spec:
         spec:
           containers:
             - name: kubecron
-              image: vizzuality/kubecron:1.0.34
+              image: vizzuality/kubecron:1.0.38
               imagePullPolicy: Always
               env:
                 - name: AWS_BACKUPS_BUCKET_URI

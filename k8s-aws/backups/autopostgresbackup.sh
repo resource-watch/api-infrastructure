@@ -39,7 +39,7 @@ USERNAME='postgres'
 # the value of USERNAME
 
 # Host name (or IP address) of PostgreSQL server e.g localhost
-DBHOST="postgres-postgresql.default.svc.cluster.local"
+DBHOST="postgresql.core.svc.cluster.local"
 
 # List of DBNAMES for Daily/Weekly Backup e.g. "DB1 DB2 DB3"
 DBNAMES="all"

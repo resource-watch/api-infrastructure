@@ -56,7 +56,7 @@ DBPASSWORD=$CT_MONGO_ADMIN_PASSWORD
 DBAUTHDB="admin"
 
 # Host name (or IP address) of mongo server e.g localhost
-DBHOST="rs1/mongodb-gateway-mongodb-replicaset-0.mongodb-gateway-mongodb-replicaset.gateway.svc.cluster.local:27017,mongodb-gateway-mongodb-replicaset-1.mongodb-gateway-mongodb-replicaset.gateway.svc.cluster.local:27017,mongodb-gateway-mongodb-replicaset-2.mongodb-gateway-mongodb-replicaset.gateway.svc.cluster.local:27017"
+DBHOST="mongodb-gateway-mongodb-replicaset-1.mongodb-gateway-mongodb-replicaset.gateway.svc.cluster.local:27017"
 
 # Port that mongo is listening on
 DBPORT="27017"
