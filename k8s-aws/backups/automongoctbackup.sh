@@ -53,7 +53,7 @@ DBPASSWORD=$CT_MONGO_ADMIN_PASSWORD
 
 # Database for authentication to the mongo server e.g. admin
 # Unnecessary if authentication is off
-DBAUTHDB="admin"
+DBAUTHDB='control-tower'
 
 # Host name (or IP address) of mongo server e.g localhost
 DBHOST="mongodb-gateway-mongodb-replicaset-1.mongodb-gateway-mongodb-replicaset.gateway.svc.cluster.local:27017"
