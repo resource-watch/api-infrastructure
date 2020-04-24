@@ -14,3 +14,8 @@ variable "vpc_id" {
   type        = string
   description = "ID of the VPC."
 }
+
+variable "backups_bucket" {
+  type        = string
+  description = "S3 bucket to which backups will be performed"
+}

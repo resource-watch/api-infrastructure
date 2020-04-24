@@ -42,6 +42,10 @@ variable "deploy_jenkins" {
   description = "If a Jenkins should be deployed"
 }
 
+variable "backups_bucket" {
+  type        = string
+  description = "S3 bucket to which backups will be performed"
+}
 
 variable "mongodb_gateway_node_group_instance_types" {
   type    = string

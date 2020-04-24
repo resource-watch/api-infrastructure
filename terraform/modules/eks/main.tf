@@ -6,8 +6,10 @@ resource "aws_eks_cluster" "eks_cluster" {
   role_arn = aws_iam_role.eks-cluster-admin.arn
 
   vpc_config {
-    subnet_ids              = var.subnet_ids # At the time of this writing, AWS wasn't accepting EKS on us-east-1e
-    security_group_ids      = [aws_security_group.eks_cluster_security_group.id]
+    subnet_ids = var.subnet_ids
+    # At the time of this writing, AWS wasn't accepting EKS on us-east-1e
+    security_group_ids = [
+    aws_security_group.eks_cluster_security_group.id]
     endpoint_private_access = true
     endpoint_public_access  = false
   }
@@ -24,10 +26,11 @@ resource "aws_security_group" "eks_cluster_security_group" {
   vpc_id      = var.vpc_id
 
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+    cidr_blocks = [
+    "0.0.0.0/0"]
   }
 
   tags = {
@@ -36,7 +39,9 @@ resource "aws_security_group" "eks_cluster_security_group" {
 }
 
 resource "aws_security_group_rule" "eks_cluster_cluster_ingress_workstation_https" {
-  cidr_blocks       = ["0.0.0.0/0"] # TODO: restrict for improved security
+  cidr_blocks = [
+  "0.0.0.0/0"]
+  # TODO: restrict for improved security
   description       = "Allow workstation to communicate with the cluster API Server"
   from_port         = 443
   protocol          = "tcp"
@@ -49,12 +54,13 @@ resource "aws_iam_role" "eks-cluster-admin" {
   name = "${replace(var.project, " ", "-")}-eks-cluster-admin-role"
 
   assume_role_policy = jsonencode({
-    Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
-      Principal = {
-        Service = "eks.amazonaws.com"
-      }
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "eks.amazonaws.com"
+        }
     }]
     Version = "2012-10-17"
   })
@@ -71,7 +77,8 @@ resource "aws_iam_role_policy_attachment" "eks-admin-AmazonEKSServicePolicy" {
 }
 
 resource "aws_iam_openid_connect_provider" "example" {
-  client_id_list  = ["sts.amazonaws.com"]
+  client_id_list = [
+  "sts.amazonaws.com"]
   thumbprint_list = []
   url             = aws_eks_cluster.eks_cluster.identity.0.oidc.0.issuer
 }
@@ -83,12 +90,13 @@ resource "aws_iam_role" "eks-node-group-iam-role" {
   name = "eks-node-group-admin"
 
   assume_role_policy = jsonencode({
-    Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
-      Principal = {
-        Service = "ec2.amazonaws.com"
-      }
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
     }]
     Version = "2012-10-17"
   })
@@ -108,10 +116,48 @@ data "aws_iam_policy_document" "eks-admin-ClusterAutoscaleAccessPolicy-document"
   source_json = file("${path.module}/cluster-autoscale-access-policy.json")
 }
 
+data "aws_iam_policy_document" "eks-admin-DatabaseBackupToS3-document" {
+  statement {
+    actions = [
+      "s3:PutObject",
+      "s3:GetObject",
+      "s3:DeleteObject"
+    ]
+    resources = [
+      "arn:aws:s3:::${var.backups_bucket}/*"
+    ]
+  }
+
+  statement {
+    actions = [
+      "s3:ListBucketMultipartUploads",
+      "s3:AbortMultipartUpload",
+      "s3:ListMultipartUploadParts"
+    ]
+    resources = [
+      "arn:aws:s3:::${var.backups_bucket}",
+      "arn:aws:s3:::${var.backups_bucket}/*"
+    ]
+  }
+
+  statement {
+    actions = [
+      "s3:ListBucket"
+    ]
+    resources = ["*"]
+  }
+}
+
 resource "aws_iam_policy" "eks-admin-ClusterAutoscaleAccessPolicy" {
   name   = "ClusterAutoscaleAccessPolicy"
   path   = "/"
   policy = data.aws_iam_policy_document.eks-admin-ClusterAutoscaleAccessPolicy-document.json
+}
+
+resource "aws_iam_policy" "eks-admin-DatabaseBackupToS3Policy" {
+  name   = "DatabaseBackupToS3Policy"
+  path   = "/"
+  policy = data.aws_iam_policy_document.eks-admin-DatabaseBackupToS3-document.json
 }
 
 data "aws_caller_identity" "current" {}
@@ -123,6 +169,11 @@ resource "aws_iam_role_policy_attachment" "eks-admin-ALBIngressControllerIAMPoli
 
 resource "aws_iam_role_policy_attachment" "eks-admin-ClusterAutoscaleAccessPolicy" {
   policy_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/ClusterAutoscaleAccessPolicy"
+  role       = aws_iam_role.eks-node-group-iam-role.name
+}
+
+resource "aws_iam_role_policy_attachment" "eks-admin-DatabaseBackupToS3Policy" {
+  policy_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/DatabaseBackupToS3Policy"
   role       = aws_iam_role.eks-node-group-iam-role.name
 }
 
