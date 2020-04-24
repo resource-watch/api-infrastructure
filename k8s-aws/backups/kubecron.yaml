@@ -13,26 +13,16 @@ spec:
     spec:
       containers:
       - name: kubecron
-        image: vizzuality/kubecron:1.0.22
+        image: vizzuality/kubecron:1.0.31
         imagePullPolicy: Always
         args:
         - start
         env:
-        - name: GCLOUD_BACKUPS_CREDENTIALS
+        - name: AWS_BACKUPS_BUCKET_URI
           valueFrom:
               secretKeyRef:
                 name: mssecrets
-                key: GCLOUD_BACKUPS_CREDENTIALS
-        - name: GCLOUD_BACKUPS_BUCKET
-          valueFrom:
-              secretKeyRef:
-                name: mssecrets
-                key: GCLOUD_BACKUPS_BUCKET
-        - name: CT_TOKEN
-          valueFrom:
-              secretKeyRef:
-                name: mssecrets
-                key: CT_TOKEN
+                key: AWS_BACKUPS_BUCKET_URI
         - name: POSTGRES_PASSWORD
           valueFrom:
               secretKeyRef:

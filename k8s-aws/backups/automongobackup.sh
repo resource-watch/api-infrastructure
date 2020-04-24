@@ -56,7 +56,7 @@
 #DBAUTHDB="admin"
 
 # Host name (or IP address) of mongo server e.g localhost
-DBHOST="mongo-mongodb-replicaset.default.svc.cluster.local:27017"
+DBHOST="mongodb-apps-mongodb-replicaset-0.mongodb-apps-mongodb-replicaset.core.svc.cluster.local:27017"
 
 # Port that mongo is listening on
 DBPORT="27017"

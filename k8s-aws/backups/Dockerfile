@@ -26,12 +26,16 @@ RUN apt-get update && apt-get -y install cron \
     postgresql-client \
     google-cloud-sdk \
     openjdk-8-jdk \
-    neo4j-enterprise=1:3.4.1
+    neo4j-enterprise=1:3.4.1 \
+    unzip
+
+# Install AWS CLI
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN ./aws/install
 
 # Cron
 RUN mkdir /cronjobs && mkdir /cronjobs/backups
-COPY cronjobs-check.sh /cronjobs/cronjobs-check.sh
-COPY main.py /cronjobs/main.py
 
 # pip
 RUN apt-get -y install python-pip
@@ -48,12 +52,6 @@ COPY automongoctbackup.sh /cronjobs/automongoctbackup.sh
 COPY autoelasticbackup.sh /cronjobs/autoelasticbackup.sh
 COPY autopostgresbackup.sh /cronjobs/autopostgresbackup.sh
 COPY autoneobackup.sh /cronjobs/autoneobackup.sh
-
-# Add crontab file in the cron directory
-ADD crontab /etc/cron.d/cron
-
-# Give execution rights on the cron job
-RUN chmod 0644 /etc/cron.d/cron
 
 # Create the log file to be able to run tail
 RUN touch /var/log/cron.log
