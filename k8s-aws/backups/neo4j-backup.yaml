@@ -4,7 +4,7 @@ metadata:
   name: neo4j-backup
   namespace: core
 spec:
-  schedule: "50 14 * * *"
+  schedule: "35 01 * * *"
   concurrencyPolicy: Replace
   jobTemplate:
     spec:
@@ -12,7 +12,7 @@ spec:
         spec:
           containers:
             - name: kubecron
-              image: vizzuality/kubecron:1.0.38
+              image: vizzuality/kubecron:1.0.41-aws
               imagePullPolicy: Always
               env:
                 - name: AWS_BACKUPS_BUCKET_URI

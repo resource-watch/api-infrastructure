@@ -2,17 +2,11 @@
 set -e
 
 case "$1" in
-    start)
-        echo "Start cron"
-        echo postgres-postgresql.core.svc.cluster.local:5432:*:postgres:$POSTGRES_PASSWORD > $HOME/.pgpass
-        chmod 0600 /root/.pgpass
-        cron && tail -f /var/log/cron.log
-        ;;
     postgres)
-        echo postgres-postgresql.core.svc.cluster.local:5432:*:postgres:$POSTGRES_PASSWORD > $HOME/.pgpass
+        echo postgresql.core.svc.cluster.local:5432:*:postgres:$POSTGRES_PASSWORD > $HOME/.pgpass
         chmod 0600 /root/.pgpass
         echo "Starting auto postgres backup"
-        /cronjobs/autopostgresbackup.sh | true
+        /cronjobs/autopostgresbackup.sh
         echo "Syncing to $AWS_BACKUPS_BUCKET_URI/postgres"
         aws s3 sync /cronjobs/backups/postgres "$AWS_BACKUPS_BUCKET_URI/postgres"
         rm -rf /cronjobs/backups/postgres/*
