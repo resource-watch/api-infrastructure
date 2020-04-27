@@ -1,22 +1,22 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: emissions-pathways
+  name: climate-watch-india
   namespace: gateway
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/healthcheck-path: /health_check
-    alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-east-1:534760749991:certificate/5f24d8f4-d299-40e6-bf47-5ac54e4252df'
+    alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-east-1:534760749991:certificate/828679d0-d1fa-4ace-8a97-d5ca866e9178'
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
     alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
 spec:
   tls:
     - hosts:
-        - emissionspathways.org
-        - www.emissionspathways.org
-        - data.emissionspathways.org
-      secretName: emissions-pathways-certificate
+        - india.climatewatchdata.org
+        - indiaclimateexplorer.org
+        - india-platform-staging.vizzuality.com
+      secretName: climate-watch-india-certificate
   rules:
     - http:
         paths:
@@ -24,22 +24,21 @@ spec:
             backend:
               serviceName: ssl-redirect
               servicePort: use-annotation
-    - host: emissionspathways.org
+    - host: india.climatewatchdata.org
       http:
         paths:
           - path: /*
             backend:
               serviceName: nginx
               servicePort: 80
-    - host: www.emissionspathways.org
+    - host: indiaclimateexplorer.org
       http:
         paths:
           - path: /*
             backend:
               serviceName: nginx
               servicePort: 80
-
-    - host: data.emissionspathways.org
+    - host: india-platform-staging.vizzuality.com
       http:
         paths:
           - path: /*

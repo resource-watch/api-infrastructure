@@ -1,22 +1,20 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: emissions-pathways
+  name: climate-watch-south-africa
   namespace: gateway
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/healthcheck-path: /health_check
-    alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-east-1:534760749991:certificate/5f24d8f4-d299-40e6-bf47-5ac54e4252df'
+    alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-east-1:534760749991:certificate/a5399509-d269-4101-975a-4c7851a2820d'
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
     alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
 spec:
   tls:
     - hosts:
-        - emissionspathways.org
-        - www.emissionspathways.org
-        - data.emissionspathways.org
-      secretName: emissions-pathways-certificate
+        - south-africa-platform.vizzuality.com
+      secretName: climate-watch-south-africa-certificate
   rules:
     - http:
         paths:
@@ -24,22 +22,7 @@ spec:
             backend:
               serviceName: ssl-redirect
               servicePort: use-annotation
-    - host: emissionspathways.org
-      http:
-        paths:
-          - path: /*
-            backend:
-              serviceName: nginx
-              servicePort: 80
-    - host: www.emissionspathways.org
-      http:
-        paths:
-          - path: /*
-            backend:
-              serviceName: nginx
-              servicePort: 80
-
-    - host: data.emissionspathways.org
+    - host: south-africa-platform.vizzuality.com
       http:
         paths:
           - path: /*
