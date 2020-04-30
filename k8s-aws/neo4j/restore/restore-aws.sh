@@ -109,13 +109,14 @@ elif [[ $BACKUP_FILENAME =~ \.zip$ ]] ; then
 else
     # If user stores backups as uncompressed directories, we would have pulled down the entire directory
     echo "This backup $BACKUP_FILENAME looks uncompressed."
-    RESTORE_FROM="$RESTORE_ROOT/$BACKUP_FILENAME"
+    RESTORE_FROM="$RESTORE_ROOT"
 fi
 
 echo "BACKUP_FILENAME=$BACKUP_FILENAME"
 echo "UNTARRED_BACKUP_DIR=$UNTARRED_BACKUP_DIR"
 echo "UNZIPPED_BACKUP_DIR=$UNZIPPED_BACKUP_DIR"
 echo "RESTORE_FROM=$RESTORE_FROM"
+echo "RESTORE_ROOT=$RESTORE_ROOT"
 
 echo "Set to restore from $RESTORE_FROM"
 echo "Post uncompress backup size:"

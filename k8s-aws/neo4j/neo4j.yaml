@@ -51,7 +51,7 @@ testImageTag: "master"
 
 # Cores
 core:
-  numberOfServers: 3
+  numberOfServers: 1
   persistentVolume:
     ## whether or not persistence is enabled
     ##
@@ -85,6 +85,8 @@ core:
       value: "true"
     - name: NEO4J_dbms_backup_address
       value: 0.0.0.0:6362
+    - name: NEO4J_causal__clustering_expected__core__cluster__size
+      value: "1"
 
   sidecarContainers: []
   ## Additional containers to be added to the Neo4j core pod.

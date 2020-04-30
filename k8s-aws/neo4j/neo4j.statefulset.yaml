@@ -1,0 +1,112 @@
+apiVersion: "apps/v1"
+kind: StatefulSet
+metadata:
+  name: "neo4j-neo4j-core"
+  namespace: core
+spec:
+  serviceName: neo4j-neo4j
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: "neo4j"
+      app.kubernetes.io/name: neo4j
+      app.kubernetes.io/component: core
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/managed-by: "Helm"
+        app.kubernetes.io/instance: "neo4j"
+        helm.sh/chart: "neo4j-2.0.0"
+        app.kubernetes.io/name: neo4j
+        app.kubernetes.io/component: core
+    spec:
+      containers:
+      - name: neo4j-neo4j
+        image: "neo4j:3.2-enterprise"
+        imagePullPolicy: "IfNotPresent"
+        env:
+          - name: NEO4J_ACCEPT_LICENSE_AGREEMENT
+            value: "yes"
+          - name: NEO4J_dbms_mode
+            value: SINGLE
+          - name: NUMBER_OF_CORES
+            value: "1"
+          - name: AUTH_ENABLED
+            value: "true"
+          - name: NEO4J_causal__clustering_discovery__type
+            value: DNS
+          - name: NEO4J_causal__clustering_initial__discovery__members
+            value: "neo4j-neo4j.core.svc.cluster.local:5000"
+          - name: NEO4J_SECRETS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: neo4j
+                key: NEO4J_PASSWORD
+          - name: NEO4J_dbms_backup_enabled
+            value: "true"
+          - name: NEO4J_dbms_backup_address
+            value: 0.0.0.0:6362
+          - name: NEO4J_causal__clustering_expected__core__cluster__size
+            value: "1"
+        command:
+          - "/bin/bash"
+          - "-c"
+          - |
+            export NEO4J_dbms_connectors_default__advertised__address=$(hostname -f)
+            export NEO4J_causal__clustering_discovery__advertised__address=$(hostname -f):5000
+            export NEO4J_causal__clustering_transaction__advertised__address=$(hostname -f):6000
+            export NEO4J_causal__clustering_raft__advertised__address=$(hostname -f):7000
+
+            if [ "${AUTH_ENABLED:-}" == "true" ]; then
+              export NEO4J_AUTH="neo4j/${NEO4J_SECRETS_PASSWORD}"
+            else
+              export NEO4J_AUTH="none"
+            fi
+
+            exec /docker-entrypoint.sh "neo4j"
+        ports:
+        - containerPort: 5000
+          name: discovery
+        - containerPort: 7000
+          name: raft
+        - containerPort: 6000
+          name: tx
+        - containerPort: 7474
+          name: browser
+        - containerPort: 7687
+          name: bolt
+        volumeMounts:
+        - name: datadir
+          mountPath: "/data"
+        - name: plugins
+          mountPath: /plugins
+        resources:
+          limits:
+            cpu: 1
+            memory: 2Gi
+          requests:
+            cpu: 100m
+            memory: 512Mi
+      volumes:
+        - name: plugins
+          emptyDir: {}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: type
+                operator: In
+                values:
+                - core
+  volumeClaimTemplates:
+    - metadata:
+        name: datadir
+        annotations:
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: "gp2"
+        resources:
+          requests:
+            storage: "50Gi"
