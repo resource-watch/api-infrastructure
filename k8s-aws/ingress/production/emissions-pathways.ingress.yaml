@@ -9,7 +9,6 @@ metadata:
     alb.ingress.kubernetes.io/healthcheck-path: /health_check
     alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-east-1:534760749991:certificate/5f24d8f4-d299-40e6-bf47-5ac54e4252df'
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
 spec:
   tls:
     - hosts:
@@ -18,12 +17,6 @@ spec:
         - data.emissionspathways.org
       secretName: emissions-pathways-certificate
   rules:
-    - http:
-        paths:
-          - path: /*
-            backend:
-              serviceName: ssl-redirect
-              servicePort: use-annotation
     - host: emissionspathways.org
       http:
         paths:

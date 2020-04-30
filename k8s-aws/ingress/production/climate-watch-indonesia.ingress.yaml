@@ -9,7 +9,6 @@ metadata:
     alb.ingress.kubernetes.io/healthcheck-path: /health_check
     alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-east-1:534760749991:certificate/e9ce3345-288c-4f5a-af24-b3b5e0462d95'
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
 spec:
   tls:
     - hosts:
@@ -17,12 +16,6 @@ spec:
         - indonesia-platform-staging.vizzuality.com
       secretName: climate-watch-indonesia-certificate
   rules:
-    - http:
-        paths:
-          - path: /*
-            backend:
-              serviceName: ssl-redirect
-              servicePort: use-annotation
     - host: indonesia.climatewatchdata.org
       http:
         paths:
