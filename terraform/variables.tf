@@ -102,7 +102,7 @@ variable "elasticsearch_node_group_desired_size" {
 
 variable "mongodb_apps_node_group_instance_types" {
   type    = string
-  default = "m5a.large"
+  default = "r5a.large"
 }
 variable "mongodb_apps_node_group_min_size" {
   type    = number
