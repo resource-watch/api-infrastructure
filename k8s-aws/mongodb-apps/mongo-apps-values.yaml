@@ -17,7 +17,7 @@ extraLabels:
 # Specs for the MongoDB image
 image:
   repository: mongo
-  tag: 3.6
+  tag: 3.6.18
   pullPolicy: IfNotPresent
 
 # Annotations to be added to MongoDB pods
