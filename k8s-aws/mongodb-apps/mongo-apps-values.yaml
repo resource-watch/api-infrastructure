@@ -26,10 +26,7 @@ podAnnotations: {}
 resources:
   requests:
     cpu: 1
-    memory: 512M
-  limits:
-    cpu: 4
-    memory: 4G
+    memory: 1G
 
 ## Node selector
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
