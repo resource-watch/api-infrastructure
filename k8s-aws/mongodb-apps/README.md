@@ -33,3 +33,9 @@ kubectl port-forward mongodb-apps-mongodb-replicaset-0 27019:27017 -n core
 
 mongorestore -d <database> --port=27019 --dir=<directory>
 ```
+
+## Update cluster configuration based from an updated local file
+
+```shell 
+helm upgrade mongodb-apps stable/mongodb-replicaset -f mongo-apps-values.yaml --namespace=core 
+```
