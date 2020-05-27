@@ -45,7 +45,7 @@ kubectl apply -f ingress/<environment>
 # MongoDB + Replicaset for Control Tower
 #
 
-# TODO: Apply `core/mongodb-gateway` secrets
+# TODO: Apply `gateway/mongodb-gateway` secrets
 helm install mongodb-gateway stable/mongodb-replicaset -f mongodb-gateway/mongo-gateway-values.yaml --namespace gateway
 # TODO: Create user in MongoDB for Control Tower
 # TODO: Apply `default/secrets-ct` secrets
@@ -56,7 +56,7 @@ helm install mongodb-gateway stable/mongodb-replicaset -f mongodb-gateway/mongo-
 # MongoDB + Replicaset for Microserrvices
 #
 
-helm install mongodb-apps stable/mongodb-replicaset -f mongodb/mongo-apps-values.yaml --namespace core
+helm install mongodb-apps stable/mongodb-replicaset -f mongodb-apps/mongo-apps-values.yaml --namespace core
 
 #
 # Elasticsearch
