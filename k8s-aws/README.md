@@ -21,6 +21,18 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingre
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.4/docs/examples/alb-ingress-controller.yaml
 ```
 
+Note: The ALB Ingress Controller requires setting the name of the cluster in the configuration file (see step 3 of the "Deploy ALB Ingress Controller section [here](https://aws.amazon.com/pt/premiumsupport/knowledge-center/eks-alb-ingress-controller-setup/)). For the development cluster, you should do:
+
+```shell
+kubectl apply -f ingress/development/alb-ingress-controller.yaml
+```
+
+instead of:
+
+```shell
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.4/docs/examples/alb-ingress-controller.yaml
+```
+
 ## Certificate management
 
 See also:
