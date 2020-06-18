@@ -4,11 +4,9 @@ In this directory, you'll find all the artifacts needed to setup regular backups
 
 ## Where are the backups stored?
 
-[GCP cluster PRODUCTION backups are stored here](https://console.cloud.google.com/storage/browser/api-backups/?project=resource-watch&authuser=1)
+[AWS cluster PRODUCTION backups are stored here](https://s3.console.aws.amazon.com/s3/buckets/wri-api-production-backups/?region=us-east-1)
 
-[GCP cluster STAGING backups are stored here](https://console.cloud.google.com/storage/browser/api-backups-staging?forceOnBucketsSortingFiltering=false&authuser=1&project=resource-watch)
-
-TODO add backup buckets for AWS
+[AWS cluster STAGING backups are stored here](https://s3.console.aws.amazon.com/s3/buckets/wri-api-staging-backups/?region=us-east-1)
 
 ## Activating the backups
 

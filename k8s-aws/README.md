@@ -21,7 +21,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingre
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.4/docs/examples/alb-ingress-controller.yaml
 ```
 
-Note: The ALB Ingress Controller requires setting the name of the cluster in the configuration file (see step 3 of the "Deploy ALB Ingress Controller section [here](https://aws.amazon.com/pt/premiumsupport/knowledge-center/eks-alb-ingress-controller-setup/)). For the development cluster, you should do:
+Note: The ALB Ingress Controller requires setting the name of the cluster in the configuration file (see step 3 of the "Deploy ALB Ingress Controller section [here](https://aws.amazon.com/pt/premiumsupport/knowledge-center/eks-alb-ingress-controller-setup/)). As an example for the development cluster, you should do:
 
 ```shell
 kubectl apply -f ingress/development/alb-ingress-controller.yaml
@@ -54,3 +54,7 @@ The Ingress should also specify the domains for which it will have HTTPS support
 The ALB Ingress Controller will then match that with the ACM certificates.
 
 You can see logs + debug the process by looking into the pods associated with the `alb-ingress-controller` deployment (`kube-system` namespace).
+
+## DNS
+
+Don't forget to add DNS entries that point the ALB containers to the correct name servers.
