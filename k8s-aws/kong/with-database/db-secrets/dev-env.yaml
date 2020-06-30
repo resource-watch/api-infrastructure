@@ -1,0 +1,4 @@
+postgresDBEndpoint: kong-database.cgziicsg8pxi.us-east-1.rds.amazonaws.com
+username: postgres
+password: kongkongkong
+env: development
