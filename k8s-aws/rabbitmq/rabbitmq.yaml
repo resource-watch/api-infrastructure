@@ -316,15 +316,7 @@ updateStrategy:
 nodeSelector: {}
 
 tolerations: []
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: type
-              operator: In
-              values:
-                - core
+affinity: {}
 
 ## affinity: |
 ##   podAntiAffinity:

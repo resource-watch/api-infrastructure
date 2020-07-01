@@ -291,15 +291,7 @@ master:
   # tolerations: []
   ## Redis Master pod/node affinity/anti-affinity
   ##
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
-              - key: type
-                operator: In
-                values:
-                  - core
+  affinity: {}
 
   ## Redis Master Service properties
   service:
