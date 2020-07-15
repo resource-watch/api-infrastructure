@@ -6,6 +6,7 @@ RUN \
         make \
         python3 \
         zip \
+        py3-pip \
     && pip3 install awscli
 
 COPY scripts/infra /usr/local/bin/
