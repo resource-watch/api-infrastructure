@@ -53,7 +53,7 @@ helm install mongodb-gateway stable/mongodb-replicaset -f mongodb-gateway/mongo-
 # TODO: Deploy Control Tower
 
 #
-# MongoDB + Replicaset for Microserrvices
+# MongoDB + Replicaset for Microservices
 #
 
 helm install mongodb-apps stable/mongodb-replicaset -f mongodb-apps/mongo-apps-values.yaml --namespace core
