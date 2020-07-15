@@ -31,7 +31,7 @@ output "bastion_dns" {
 }
 
 output "jenkins_dns" {
-  value       = length(cloudflare_record.jenkins_dns) > 0 ? cloudflare_record.jenkins_dns[0].hostname : ""
+  value       = cloudflare_record.jenkins_dns.hostname
   description = "DNS name of the Jenkins host"
 }
 

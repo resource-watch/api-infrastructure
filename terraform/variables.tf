@@ -37,11 +37,6 @@ variable "dns_prefix" {
   description = "DNS prefix for public URLs created in this project."
 }
 
-variable "deploy_jenkins" {
-  type        = bool
-  description = "If a Jenkins should be deployed"
-}
-
 variable "backups_bucket" {
   type        = string
   description = "S3 bucket to which backups will be performed"

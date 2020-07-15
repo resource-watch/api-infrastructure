@@ -48,8 +48,3 @@ variable "jenkins_ami" {
 variable "iam_instance_profile_role" {
   description = "Role for the Jenkins EC2 instance profile."
 }
-
-variable "enabled" {
-  type        = bool
-  description = "If a Jenkins should be deployed."
-}
