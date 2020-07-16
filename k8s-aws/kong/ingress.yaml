@@ -4,7 +4,13 @@ metadata:
   name: kong-routing
   annotations:
     kubernetes.io/ingress.class: kong
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: aws-dev-issuer
 spec:
+  tls:
+    - secretName: aws-dev-ingress-tls-secret
+      hosts:
+        - aws-dev.resourcewatch.org
   rules:
   - http:
       paths:

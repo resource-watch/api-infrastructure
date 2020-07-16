@@ -8,7 +8,7 @@ To install Kong:
 helm repo add kong https://charts.konghq.com
 helm repo update
 
-helm install kong/kong --generate-name --set ingressController.installCRDs=false --set ingressController.enabled=true --set admin.type=LoadBalancer --set proxy.type=LoadBalancer
+helm install kong kong/kong -f values.yaml
 ```
 
 Note: It is not recommended exposing Kong's admin UI to the world (i.e. `--set admin.type=LoadBalancer`), but it is usually useful for the initial setup. Before rolling out any changes, don't forget to hide the admin UI.
@@ -40,7 +40,7 @@ $ kubectl apply -f kong-jwt-plugin.yaml
 You then need to apply the routing Ingress Controller in order to proxy all the routes correctly:
 
 ```bash
-kubectl apply -f kong-ingress.yaml
+kubectl apply -f ingress.yaml
 ```
 
 For more information, check the [docs for the JWT plugin](https://docs.konghq.com/hub/kong-inc/jwt/), or [this tutorial](https://blog.baeke.info/2019/06/15/api-management-with-kong-ingress-controller-on-kubernetes/) on how to setup authentication in Kong in Kubernetes.

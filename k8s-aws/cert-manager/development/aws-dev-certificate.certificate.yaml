@@ -1,0 +1,10 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: aws-dev-certificate
+spec:
+  dnsNames:
+    - aws-dev.resourcewatch.org
+  secretName: aws-dev-cert-tls
+  issuerRef:
+    name: aws-dev-issuer

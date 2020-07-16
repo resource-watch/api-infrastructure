@@ -77,8 +77,7 @@ resource "aws_iam_role_policy_attachment" "eks-admin-AmazonEKSServicePolicy" {
 }
 
 resource "aws_iam_openid_connect_provider" "example" {
-  client_id_list = [
-  "sts.amazonaws.com"]
+  client_id_list = ["sts.amazonaws.com"]
   thumbprint_list = []
   url             = aws_eks_cluster.eks_cluster.identity.0.oidc.0.issuer
 }

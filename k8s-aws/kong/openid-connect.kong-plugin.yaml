@@ -1,0 +1,7 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: openid-connect
+  labels:
+    global: "true"
+plugin: openid-connect
