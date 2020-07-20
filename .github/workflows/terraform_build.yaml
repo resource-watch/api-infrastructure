@@ -19,7 +19,7 @@ jobs:
         CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
         CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
       run: |
-        ./scripts/infra plan -var cloudflare_email=${{ secrets.cloudflare_email }} -var cloudflare_api_key=${{ secrets.cloudflare_api_key }}
+        ./scripts/infra plan
         ./scripts/infra apply
     - name: Deploy staging
       if: contains(github.ref, 'staging')
@@ -31,7 +31,7 @@ jobs:
         CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
         CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
       run: |
-        ./scripts/infra plan -var cloudflare_email=${{ secrets.cloudflare_email }} -var cloudflare_api_key=${{ secrets.cloudflare_api_key }}
+        ./scripts/infra plan
         ./scripts/infra apply
     - name: Deploy dev
       if: contains(github.ref, 'dev')
@@ -43,5 +43,5 @@ jobs:
         CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
         CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
       run: |
-        ./scripts/infra plan -var cloudflare_email=${{ secrets.cloudflare_email }} -var cloudflare_api_key=${{ secrets.cloudflare_api_key }}
+        ./scripts/infra plan
         ./scripts/infra apply
