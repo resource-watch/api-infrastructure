@@ -9,9 +9,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Install dependencies
-      run: |
-        ./scripts/setup
     - name: Deploy production
       if: contains(github.ref, 'production')
       env:
