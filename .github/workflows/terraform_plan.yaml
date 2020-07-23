@@ -15,6 +15,8 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_production }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_production }}
         AWS_DEFAULT_REGION: ${{ secrets.aws_region_production }}
+        CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
+        CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
       run: ./scripts/infra plan
     - name: Plan staging
       if: contains(github.base_ref, 'staging')
@@ -23,6 +25,8 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_staging }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_staging }}
         AWS_DEFAULT_REGION: ${{ secrets.aws_region_staging }}
+        CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
+        CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
       run: ./scripts/infra plan
     - name: Plan dev
       if: contains(github.base_ref, 'dev')
@@ -31,4 +35,6 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_dev }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_dev }}
         AWS_DEFAULT_REGION: ${{ secrets.aws_region_dev }}
+        CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
+        CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
       run: ./scripts/infra plan
