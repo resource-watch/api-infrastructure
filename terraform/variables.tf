@@ -122,7 +122,7 @@ variable "apps_node_group_min_size" {
 }
 variable "apps_node_group_max_size" {
   type    = number
-  default = 10
+  default = 16
 }
 variable "apps_node_group_desired_size" {
   type    = number
