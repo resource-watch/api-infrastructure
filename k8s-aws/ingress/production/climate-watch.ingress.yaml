@@ -7,8 +7,8 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/healthcheck-path: /health_check
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
-#    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-east-1:534760749991:certificate/b26feada-62f5-4539-bf09-80f2c1ba1f48'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
 spec:
   tls:
     - hosts:
@@ -18,12 +18,6 @@ spec:
         - beta.climatewatchdata.org
         - climatedata.org
         - www.climatedata.org
-        - india.climatewatchdata.org
-        - indiaclimateexplorer.org
-        - indonesia.climatewatchdata.org
-        - south-africa-platform.vizzuality.com
-        - indonesia-platform-staging.vizzuality.com
-        - india-platform-staging.vizzuality.com
       secretName: climate-watch-certificate
   rules:
     - host: climatewatchdata.org
@@ -62,48 +56,6 @@ spec:
               serviceName: nginx
               servicePort: 80
     - host: beta.climatewatchdata.org
-      http:
-        paths:
-          - path: /*
-            backend:
-              serviceName: nginx
-              servicePort: 80
-    - host: india.climatewatchdata.org
-      http:
-        paths:
-          - path: /*
-            backend:
-              serviceName: nginx
-              servicePort: 80
-    - host: indiaclimateexplorer.org
-      http:
-        paths:
-          - path: /*
-            backend:
-              serviceName: nginx
-              servicePort: 80
-    - host: indonesia.climatewatchdata.org
-      http:
-        paths:
-          - path: /*
-            backend:
-              serviceName: nginx
-              servicePort: 80
-    - host: south-africa-platform.vizzuality.com
-      http:
-        paths:
-          - path: /*
-            backend:
-              serviceName: nginx
-              servicePort: 80
-    - host: indonesia-platform-staging.vizzuality.com
-      http:
-        paths:
-          - path: /*
-            backend:
-              serviceName: nginx
-              servicePort: 80
-    - host: india-platform-staging.vizzuality.com
       http:
         paths:
           - path: /*

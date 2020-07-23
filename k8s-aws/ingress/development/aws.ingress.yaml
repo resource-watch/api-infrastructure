@@ -7,26 +7,18 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/healthcheck-path: /health_check
-    alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-east-1:843801476059:certificate/01942605-52bd-4967-9720-499e8ad30ea6'
+    alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-east-1:842534099497:certificate/15cd344d-288d-451c-bfee-4725bfe364dd'
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
 spec:
   tls:
     - hosts:
-        - aws-staging.resourcewatch.org
-        - ui.aws-staging.resourcewatch.org
+        - aws-dev.resourcewatch.org
       secretName: aws-certificate
   rules:
-    - host: aws-staging.resourcewatch.org
+    - host: aws-dev.resourcewatch.org
       http:
         paths:
           - path: /*
             backend:
               serviceName: nginx
-              servicePort: 80
-    - host: ui.aws-staging.resourcewatch.org
-      http:
-        paths:
-          - path: /*
-            backend:
-              serviceName: ct-ui
               servicePort: 80

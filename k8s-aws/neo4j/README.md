@@ -4,23 +4,14 @@
 
 Before deploying the neo4j server, make sure that:
 - The `core` namespace has been created.
+- The `neo4j` secret has been created in the `core` namespace.
+    - `NEO4J_PASSWORD` must be defined in the secret.
 
-To install, replace `<neo4j admin password>` in the line below, and run it:
-
-```shell
-helm install neo4j -f neo4j.yaml stable/neo4j --set neo4jPassword=<admin password> --namespace=core
-```
-
-## Uninstall
+To install, run the following commands:
 
 ```shell
-helm uninstall neo4j --namespace=core
-```
-
-## Update cluster configuration based from an updated local file
-
-```shell 
-helm upgrade neo4j -f neo4j.yaml stable/neo4j --set neo4jPassword=<admin password> --namespace=core
+kubectl apply -f neo4j.service.yaml
+kubectl apply -f neo4j.statefulset.yaml
 ```
 
 ## Port forwarding
@@ -50,20 +41,34 @@ To work around this, the `restore` folder has a custom deployment using `initCon
 This approach is based on [this link](https://medium.com/google-cloud/how-to-restore-neo4j-backups-on-kubernetes-and-gke-6841aa1e3961), with minor modifications
 to support the current infrastructure, and all assets have been migrated to this repo, for auditability.
 
-It basically deploys Neo4j with `initContainers` - a container that is executed before the "main" Neo4j container. This container will restore the backup from GCP to the PV, and exit. Once it exits, the Neo4J server "main" container starts, with the restored backup already in place.
+It basically deploys Neo4j with `initContainers` - a container that is executed before the "main" Neo4j container. This container will restore the backup from AWS S3 to the PV, and exit. Once it exits, the Neo4J server "main" container starts, with the restored backup already in place.
 
 The restore container has a few env var requirements:
 
-- `REMOTE_BACKUPSET`: GCP path to the folder containing the neo4j backup. Something like `gs://backups-bucket/neo4j/some-date/`
-- `GOOGLE_APPLICATION_CREDENTIALS`: Google auth credentials, in JSON format.
+- `REMOTE_BACKUPSET`: S3 path to the folder containing the neo4j backup. Something like `s3://backups/neo4j/graph.db-backup-2020-01-01/`
 
 Once the secrets are set, you can trigger the restore by deploying the specially crafted neo4j `statefulset`:
 
 ```shell
-helm install neo4j -f restore/neo4j-restore.yaml stable/neo4j --set neo4jPassword=<admin password> --namespace=core
+kubectl apply -f restore/neo4j-restore.service.yaml
+kubectl apply -f restore/neo4j-restore.statefulset.yaml
 ```
 
-As of the date of this writing, the currently deployed `statefulSet` has the initContainer that restores the backup
-which should NOT restore a backup if the existing container already has data - hopefully I will have the opportunity to test this soon.
+You can check the backup restore logs using the following command:
 
-Ideally, we would remove those `initContainers` from the `statefulSet` config.
+```shell
+kubectl logs -f neo4j-neo4j-core-0 -n core -c restore-from-file
+```
+
+Once the restore process is done, you should reconfigure the statefulset to stop using the initcontainer:
+
+```shell
+kubectl apply -f neo4j.statefulset.yaml
+```
+
+You may need to manually destroy the pod for this change to be picked up.
+
+## Reference files
+
+The service and statefulset files included are based on the `stable/neo4j` helm chart, with the necessary changes to have neo4j work in single server mode, as opposed to cluster.
+The helm config files are still included, for reference, but you should not apply them directly, as they will create a non-functioning cluster.

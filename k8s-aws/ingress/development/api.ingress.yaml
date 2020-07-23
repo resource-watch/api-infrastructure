@@ -12,26 +12,26 @@ metadata:
 spec:
   tls:
     - hosts:
-        - staging-api.globalforestwatch.org
-        - staging-api.resourcewatch.org
-        - ui-staging.resourcewatch.org
+        - dev-api.globalforestwatch.org
+        - dev-api.resourcewatch.org
+        - ui-dev.resourcewatch.org
       secretName: api-certificate
   rules:
-    - host: staging-api.globalforestwatch.org
+    - host: dev-api.globalforestwatch.org
       http:
         paths:
           - path: /*
             backend:
               serviceName: nginx
               servicePort: 80
-    - host: staging-api.resourcewatch.org
+    - host: dev-api.resourcewatch.org
       http:
         paths:
           - path: /*
             backend:
               serviceName: nginx
               servicePort: 80
-    - host: ui-staging.resourcewatch.org
+    - host: ui-dev.resourcewatch.org
       http:
         paths:
           - path: /*

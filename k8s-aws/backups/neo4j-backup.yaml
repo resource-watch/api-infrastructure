@@ -1,0 +1,25 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: neo4j-backup
+  namespace: core
+spec:
+  schedule: "35 01 * * *"
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: kubecron
+              image: vizzuality/kubecron:1.0.41-aws
+              imagePullPolicy: Always
+              env:
+                - name: AWS_BACKUPS_BUCKET_URI
+                  valueFrom:
+                    secretKeyRef:
+                      name: backups
+                      key: AWS_BACKUPS_BUCKET_URI
+              args:
+                - neo4j
+          restartPolicy: OnFailure

@@ -12,10 +12,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - staging.emissionspathways.org
+        - dev.emissionspathways.org
       secretName: apps-certificate
   rules:
-    - host: staging.emissionspathways.org
+    - host: dev.emissionspathways.org
       http:
         paths:
           - path: /*
