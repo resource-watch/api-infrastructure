@@ -42,25 +42,6 @@ variable "backups_bucket" {
   description = "S3 bucket to which backups will be performed"
 }
 
-variable "mongodb_gateway_node_group_instance_types" {
-  type    = string
-  default = "m5a.large"
-}
-
-variable "mongodb_gateway_node_group_min_size" {
-  type    = number
-  default = 3
-}
-
-variable "mongodb_gateway_node_group_max_size" {
-  type    = number
-  default = 3
-}
-variable "mongodb_gateway_node_group_desired_size" {
-  type    = number
-  default = 3
-}
-
 variable "gateway_node_group_instance_types" {
   type    = string
   default = "m5a.large"
