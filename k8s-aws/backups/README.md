@@ -19,9 +19,6 @@ docker apply -f elasticsearch-backup.yaml
 # Apply Mongo backups
 docker apply -f mongo-backup.yaml
 
-# Apply Mongo CT backups
-docker apply -f mongo-ct-backup.yaml
-
 # Apply Neo4j backups
 docker apply -f neo4j-backup.yaml
 
