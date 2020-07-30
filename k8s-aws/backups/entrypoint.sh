@@ -29,13 +29,6 @@ case "$1" in
         aws s3 sync /cronjobs/backups/mongo "$AWS_BACKUPS_BUCKET_URI/mongo"
         rm -rf /cronjobs/backups/mongo/*
         ;;
-    mongo-ct)
-        echo "Starting auto mongo-ct backup"
-        /cronjobs/automongoctbackup.sh | true
-        echo "Syncing to $AWS_BACKUPS_BUCKET_URI/mongo-ct"
-        aws s3 sync /cronjobs/backups/mongo-ct "$AWS_BACKUPS_BUCKET_URI/mongo-ct"
-        rm -rf /cronjobs/backups/mongo-ct/*
-        ;;
     *)
         exec "$@"
 esac
