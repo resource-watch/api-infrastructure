@@ -46,6 +46,5 @@ After this, you'll need to update the different YAML scripts to use this new ver
 
 * `elasticsearch-backup.yaml`
 * `mongo-backup.yaml`
-* `mongo-ct-backup.yaml`
 * `neo4j-backup.yaml`
 * `postgres-backup.yaml`

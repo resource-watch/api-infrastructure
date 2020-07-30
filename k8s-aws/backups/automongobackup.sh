@@ -41,7 +41,7 @@
 # Collections to exclude e.g. system.profile users
 # DBNAME is required
 # Unecessary if backup all collections
-EXCLUDE_COLLECTIONS="statistics"
+EXCLUDE_COLLECTIONS="control-tower.statistics"
 
 # Username to access the mongo server e.g. dbuser
 # Unnecessary if authentication is off
