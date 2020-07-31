@@ -19,6 +19,9 @@ docker apply -f elasticsearch-backup.yaml
 # Apply Mongo backups
 docker apply -f mongo-backup.yaml
 
+# Apply Mongo CT backups
+docker apply -f mongo-ct-backup.yaml
+
 # Apply Neo4j backups
 docker apply -f neo4j-backup.yaml
 
@@ -46,5 +49,6 @@ After this, you'll need to update the different YAML scripts to use this new ver
 
 * `elasticsearch-backup.yaml`
 * `mongo-backup.yaml`
+* `mongo-ct-backup.yaml`
 * `neo4j-backup.yaml`
 * `postgres-backup.yaml`

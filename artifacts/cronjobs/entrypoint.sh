@@ -51,6 +51,16 @@ case "$1" in
         gsutil rsync -r /cronjobs/backups/mongo "$GCLOUD_BACKUPS_BUCKET/mongo"
         rm -rf /cronjobs/backups/mongo/*
         ;;
+    mongo-ct)
+        echo -e "$GCLOUD_BACKUPS_CREDENTIALS" | base64 -d > /cronjobs/gcloudcredentials.json
+        gcloud auth activate-service-account --key-file=/cronjobs/gcloudcredentials.json
+        gcloud config set project resource-watch
+        echo "Starting auto mongo-ct backup"
+        /cronjobs/automongoctbackup.sh | true
+        echo "Syncing to $GCLOUD_BACKUPS_BUCKET/mongo-ct"
+        gsutil rsync -r /cronjobs/backups/mongo-ct "$GCLOUD_BACKUPS_BUCKET/mongo-ct"
+        rm -rf /cronjobs/backups/mongo-ct/*
+        ;;
     *)
         exec "$@"
 esac

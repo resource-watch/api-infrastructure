@@ -44,6 +44,7 @@ RUN mkdir /cronjobs/backups/mongo-ct
 RUN mkdir /cronjobs/backups/postgres
 RUN mkdir /cronjobs/backups/neo4j
 COPY automongobackup.sh /cronjobs/automongobackup.sh
+COPY automongoctbackup.sh /cronjobs/automongoctbackup.sh
 COPY autoelasticbackup.sh /cronjobs/autoelasticbackup.sh
 COPY autopostgresbackup.sh /cronjobs/autopostgresbackup.sh
 COPY autoneobackup.sh /cronjobs/autoneobackup.sh

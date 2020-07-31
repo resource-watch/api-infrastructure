@@ -31,7 +31,7 @@
 
 # Database name to specify a specific database only e.g. myawesomeapp
 # Unnecessary if backup all databases
-# DBNAME=""
+DBNAME="forms"
 
 # Collections name list to include e.g. system.profile users
 # DBNAME is required
@@ -41,7 +41,7 @@
 # Collections to exclude e.g. system.profile users
 # DBNAME is required
 # Unecessary if backup all collections
-EXCLUDE_COLLECTIONS="control-tower.statistics"
+#EXCLUDE_COLLECTIONS=""
 
 # Username to access the mongo server e.g. dbuser
 # Unnecessary if authentication is off
@@ -609,7 +609,7 @@ if [[ $DOM = "01" ]] && [[ $DOMONTHLY = "yes" ]]; then
             find $BACKUPDIR/monthly -not -newermt "$MONTHLYRETENTION month ago" -type f -delete
         fi
     fi
-    FILE="$BACKUPDIR/monthly/$DATE.$M"
+    FILE="$BACKUPDIR/monthly/$DBNAME-$DATE.$M"
 
 # Weekly Backup
 elif [[ "$DNOW" = "$WEEKLYDAY" ]] && [[ "$DOWEEKLY" = "yes" ]] ; then
@@ -623,7 +623,7 @@ elif [[ "$DNOW" = "$WEEKLYDAY" ]] && [[ "$DOWEEKLY" = "yes" ]] ; then
             find $BACKUPDIR/weekly -not -newermt "$WEEKLYRETENTION week ago" -type f -delete
         fi
     fi
-    FILE="$BACKUPDIR/weekly/week.$W.$DATE"
+    FILE="$BACKUPDIR/weekly/$DBNAME-week.$W.$DATE"
 
 # Daily Backup
 elif [[ $DODAILY = "yes" ]] ; then
@@ -637,7 +637,7 @@ elif [[ $DODAILY = "yes" ]] ; then
             find "$BACKUPDIR/daily" -not -newermt "$DAILYRETENTION days ago" -type f -delete
         fi
     fi
-    FILE="$BACKUPDIR/daily/$DATE.$DOW"
+    FILE="$BACKUPDIR/daily/$DBNAME-$DATE.$DOW"
 
 # Hourly Backup
 elif [[ $DOHOURLY = "yes" ]] ; then
@@ -651,7 +651,7 @@ elif [[ $DOHOURLY = "yes" ]] ; then
             find $BACKUPDIR/hourly -not -newermt "$HOURLYRETENTION hour ago" -type f -delete
         fi
     fi
-    FILE="$BACKUPDIR/hourly/$DATE.$DOW.$HOD"
+    FILE="$BACKUPDIR/hourly/$DBNAME-$DATE.$DOW.$HOD"
     # convert timestamp to date: echo $TIMESTAMP | gawk '{print strftime("%c", $0)}'
 
 fi
