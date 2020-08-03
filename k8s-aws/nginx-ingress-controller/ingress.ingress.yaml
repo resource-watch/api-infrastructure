@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: api
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+spec:
+  rules:
+    - http:
+        paths:
+          - backend:
+              serviceName: dataset
+              servicePort: 3000
+            path: /api/v1/dataset
+          - backend:
+              serviceName: widget
+              servicePort: 3050
+            path: /api/v1/widget
+          - backend:
+              serviceName: layer
+              servicePort: 6000
+            path: /api/v1/layer

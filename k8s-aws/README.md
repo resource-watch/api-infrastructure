@@ -10,28 +10,7 @@ Parts of this infrastructure setup rely on Helm 3, so you need to install that b
 
 ## ALB automatic creation from Ingress objects
 
-See also:
-- [ALB Ingress Controller user guide](https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html).
-- [ALB Ingress Controller reference docs](https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation)
 
-The included terraform configuration includes certain configuration elements to support the above functionality. Once the cluster is created, the additional commands must be executed to support automatically provisioning ALBs from Ingress objects:
-
-```shell
-kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.4/docs/examples/rbac-role.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.4/docs/examples/alb-ingress-controller.yaml
-```
-
-Note: The ALB Ingress Controller requires setting the name of the cluster in the configuration file (see step 3 of the "Deploy ALB Ingress Controller section [here](https://aws.amazon.com/pt/premiumsupport/knowledge-center/eks-alb-ingress-controller-setup/)). As an example for the development cluster, you should do:
-
-```shell
-kubectl apply -f ingress/development/alb-ingress-controller.yaml
-```
-
-instead of:
-
-```shell
-kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.4/docs/examples/alb-ingress-controller.yaml
-```
 
 ## Certificate management
 

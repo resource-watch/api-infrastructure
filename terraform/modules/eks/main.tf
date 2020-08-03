@@ -4,6 +4,7 @@
 resource "aws_eks_cluster" "eks_cluster" {
   name     = "${replace(var.project, " ", "-")}-k8s-cluster-${var.environment}"
   role_arn = aws_iam_role.eks-cluster-admin.arn
+  version  = "1.16"
 
   vpc_config {
     subnet_ids = var.subnet_ids

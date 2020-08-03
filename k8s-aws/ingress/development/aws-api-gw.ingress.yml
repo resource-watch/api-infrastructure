@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    apigateway.ingress.kubernetes.io/client-arns: "*"
+    apigateway.ingress.kubernetes.io/stage-name: prod
+    kubernetes.io/ingress.class: apigateway
+  name: api-aag
+  namespace: default
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: dataset
+          servicePort: 3000
+        path: /api/v1/dataset
+      - backend:
+          serviceName: widget
+          servicePort: 3050
+        path: /api/v1/widget
