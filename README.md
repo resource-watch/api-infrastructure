@@ -1,5 +1,6 @@
 # Resource Watch API - Cluster setup
 
+**Important**: this repo uses [git lfs](https://git-lfs.github.com/).
 
 ## Cluster setup
 
