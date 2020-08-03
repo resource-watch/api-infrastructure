@@ -10,6 +10,8 @@ provider "kubectl" {
 }
 
 provider "helm" {
+  version = "~> 1.2"
+
   kubernetes {
     host = var.cluster_endpoint
 

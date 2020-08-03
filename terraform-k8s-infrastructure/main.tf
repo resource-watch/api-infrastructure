@@ -20,11 +20,6 @@ provider "kubernetes" {
   version = "~> 1.12.0"
 }
 
-# kubectl provider
-# v1.6.1
-provider "kubectl" {
-}
-
 //module "k8s_core_services" {
 //  source               = "./modules/k8s_core_services"
 //}
@@ -47,14 +42,15 @@ module "k8s_infrastructure" {
 }
 
 module "k8s_data_layer" {
-  source           = "./modules/k8s_data_layer"
-  cluster_endpoint = "${data.aws_eks_cluster.rw_api.endpoint}:4433"
-  cluster_ca       = data.aws_eks_cluster.rw_api.certificate_authority.0.data
-  cluster_name     = data.aws_eks_cluster.rw_api.name
-  aws_region       = var.aws_region
-  vpc_id           = data.aws_vpc.eks_vpc.id
+  source                  = "./modules/k8s_data_layer"
+  cluster_endpoint        = "${data.aws_eks_cluster.rw_api.endpoint}:4433"
+  cluster_ca              = data.aws_eks_cluster.rw_api.certificate_authority.0.data
+  cluster_name            = data.aws_eks_cluster.rw_api.name
+  aws_region              = var.aws_region
+  vpc_id                  = data.aws_vpc.eks_vpc.id
+  elasticsearch_disk_size = var.elasticsearch_disk_size
 }
 
 module "k8s_namespaces" {
-  source           = "./modules/k8s_namespaces"
+  source = "./modules/k8s_namespaces"
 }

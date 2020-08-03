@@ -1,31 +1,27 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   labels:
     component: elasticsearch
-    role: master
+    role: data
     type: elasticsearch
-  name: es-master
+  name: es-data
   namespace: core
 spec:
-  progressDeadlineSeconds: 2147483647
+  podManagementPolicy: OrderedReady
   replicas: 3
-  revisionHistoryLimit: 2147483647
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       component: elasticsearch
-      role: master
+      role: data
       type: elasticsearch
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
-    type: RollingUpdate
+  serviceName: elasticsearch-data
   template:
     metadata:
       labels:
         component: elasticsearch
-        role: master
+        role: data
         type: elasticsearch
     spec:
       affinity:
@@ -44,7 +40,7 @@ spec:
                   - key: role
                     operator: In
                     values:
-                      - master
+                      - data
               topologyKey: kubernetes.io/hostname
       containers:
         - env:
@@ -62,18 +58,16 @@ spec:
               value: elasticsearch-master
             - name: CLUSTER_NAME
               value: document-dataset-storage
-            - name: NUMBER_OF_MASTERS
-              value: "3"
             - name: NODE_MASTER
-              value: "true"
+              value: "false"
             - name: NODE_INGEST
               value: "false"
             - name: NODE_DATA
-              value: "false"
+              value: "true"
             - name: HTTP_ENABLE
               value: "false"
             - name: ES_JAVA_OPTS
-              value: -Xms256m -Xmx256m
+              value: -Xms6g -Xmx6g
             - name: ES_PLUGINS_INSTALL
               value: https://github.com/NLPchina/elasticsearch-sql/releases/download/5.5.2.0/elasticsearch-sql-5.5.2.0.zip,repository-s3
             - name: AWS_ACCESS_KEY_ID
@@ -88,20 +82,19 @@ spec:
                   name: elasticsearch
           image: quay.io/pires/docker-elasticsearch-kubernetes:5.5.2
           imagePullPolicy: Always
-          name: es-master
+          name: es-data
           ports:
             - containerPort: 9300
               name: transport
               protocol: TCP
           resources:
             requests:
-              memory: 256Mi
+              memory: 6Gi
           securityContext:
             capabilities:
               add:
                 - IPC_LOCK
-                - SYS_RESOURCE
-            privileged: false
+            privileged: true
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
@@ -125,6 +118,19 @@ spec:
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
-      volumes:
-        - emptyDir: {}
-          name: storage
+  updateStrategy:
+    type: OnDelete
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        annotations:
+          volume.beta.kubernetes.io/storage-class: gp2
+        name: storage
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: ${size}
+        volumeMode: Filesystem

@@ -22,3 +22,8 @@ variable "aws_region" {
   type        = string
   description = "The name of the AWS region where the cluster lives"
 }
+
+variable "elasticsearch_disk_size" {
+  type        = string
+  description = "Disk size for each Elasticsearch data node"
+}

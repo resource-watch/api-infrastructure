@@ -14,7 +14,9 @@ resource "kubectl_manifest" "es_data_service" {
 }
 
 resource "kubectl_manifest" "es_data_statefulset" {
-  yaml_body = file("${path.module}/elasticsearch/data/es-data.statefulset.yaml")
+  yaml_body = templatefile("${path.module}/elasticsearch/data/es-data.statefulset.yaml.tmpl", {
+    size: var.elasticsearch_disk_size
+  })
 
   depends_on = [
     data.kubernetes_secret.elasticsearch_core

@@ -26,3 +26,8 @@ variable "dynamo_db_lock_table_name" {
   type        = string
   description = "Name of the lock table in Dynamo DB"
 }
+
+variable "elasticsearch_disk_size" {
+  type        = string
+  description = "Disk size for each Elasticsearch data node."
+}
