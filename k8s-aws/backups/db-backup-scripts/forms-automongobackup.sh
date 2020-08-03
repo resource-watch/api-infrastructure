@@ -31,7 +31,7 @@
 
 # Database name to specify a specific database only e.g. myawesomeapp
 # Unnecessary if backup all databases
-DBNAME="control-tower"
+DBNAME="forms"
 
 # Collections name list to include e.g. system.profile users
 # DBNAME is required
@@ -41,28 +41,28 @@ DBNAME="control-tower"
 # Collections to exclude e.g. system.profile users
 # DBNAME is required
 # Unecessary if backup all collections
-EXCLUDE_COLLECTIONS="statistics"
+#EXCLUDE_COLLECTIONS=""
 
 # Username to access the mongo server e.g. dbuser
 # Unnecessary if authentication is off
-DBUSERNAME=$CT_MONGO_ADMIN_USER
+#DBUSERNAME="vizzuality-super"
 
 # Password to access the mongo server e.g. password
 # Unnecessary if authentication is off
-DBPASSWORD=$CT_MONGO_ADMIN_PASSWORD
+#DBPASSWORD="notset"
 
 # Database for authentication to the mongo server e.g. admin
 # Unnecessary if authentication is off
-DBAUTHDB='control-tower'
+#DBAUTHDB="admin"
 
 # Host name (or IP address) of mongo server e.g localhost
-DBHOST="mongodb-gateway-mongodb-replicaset-1.mongodb-gateway-mongodb-replicaset.gateway.svc.cluster.local:27017"
+DBHOST="mongodb-apps-mongodb-replicaset-0.mongodb-apps-mongodb-replicaset.core.svc.cluster.local:27017"
 
 # Port that mongo is listening on
 DBPORT="27017"
 
 # Backup directory location e.g /backups
-BACKUPDIR="/cronjobs/backups/mongo-ct"
+BACKUPDIR="/cronjobs/backups/mongo"
 
 # Mail setup
 # What would you like to be mailed to you?
@@ -273,7 +273,7 @@ REQUIREDBAUTHDB="yes"
 #       - Initial Release
 #
 # VER 0.2 - (2015-09-10)
-#       - Added configurable backup retention options, even for
+#       - Added configurable backup rentention options, even for
 #         monthly backups.
 #
 #=====================================================================
@@ -317,8 +317,8 @@ DOM=$(date +%d)                                   # Date of the Month e.g. 27
 M=$(date +%B)                                     # Month e.g January
 W=$(date +%V)                                     # Week Number e.g 37
 VER=0.11                                          # Version Number
-LOGFILE=$BACKUPDIR/rs0-$(date +%H%M).log          # Logfile Name
-LOGERR=$BACKUPDIR/ERRORS_rs0-$(date +%H%M).log    # Logfile Name
+LOGFILE=$BACKUPDIR/rs0-$(date +%H%M).log       # Logfile Name
+LOGERR=$BACKUPDIR/ERRORS_rs0-$(date +%H%M).log # Logfile Name
 OPT=""                                            # OPT string for use with mongodump
 OPTSEC=""                                         # OPT string for use with mongodump in select_secondary_member function
 QUERY=""                                          # QUERY string for use with mongodump
@@ -432,18 +432,17 @@ exec 2> "$LOGERR"     # stderr replaced with file $LOGERR.
 # Database dump function
 dbdump () {
     echo "------------------------------------------------------------------------------------------------------------------------------------"
-    echo "Host: $DBHOST"
-    echo "Opts: $OPT"
+    echo $DBHOST
+    echo $OPT
     echo "------------------------------------------------------------------------------------------------------------------------------------"
-    echo "Running mongodump command..."
     if [ -n "$QUERY" ]; then
         # filter for point-in-time snapshotting and if DOHOURLY=yes
         # shellcheck disable=SC2086
-        MONGODUMP_CMD="mongodump -v --host=$DBHOST --out=\"$1\" $OPT -q \"$QUERY\""
+        MONGODUMP_CMD="mongodump --quiet --host=$DBHOST --out=\"$1\" $OPT -q \"$QUERY\""
       else
         # all others backups type
         # shellcheck disable=SC2086
-        MONGODUMP_CMD="mongodump -v --host=$DBHOST --out=\"$1\" $OPT"
+        MONGODUMP_CMD="mongodump --quiet --host=$DBHOST --out=\"$1\" $OPT"
     fi
 
     $MONGODUMP_CMD
@@ -602,7 +601,7 @@ echo ======================================================================
 if [[ $DOM = "01" ]] && [[ $DOMONTHLY = "yes" ]]; then
     echo Monthly Full Backup
     echo
-    # Delete old monthly backups while respecting the set retention policy.
+    # Delete old monthly backups while respecting the set rentention policy.
     if [[ $MONTHLYRETENTION -ge 0 ]] ; then
         NUM_OLD_FILES=$(find $BACKUPDIR/monthly -depth -not -newermt "$MONTHLYRETENTION month ago" -type f | wc -l)
         if [[ $NUM_OLD_FILES -gt 0 ]] ; then
@@ -610,27 +609,27 @@ if [[ $DOM = "01" ]] && [[ $DOMONTHLY = "yes" ]]; then
             find $BACKUPDIR/monthly -not -newermt "$MONTHLYRETENTION month ago" -type f -delete
         fi
     fi
-    FILE="$BACKUPDIR/monthly/$DATE.$M"
+    FILE="$BACKUPDIR/monthly/$DBNAME-$DATE.$M"
 
 # Weekly Backup
 elif [[ "$DNOW" = "$WEEKLYDAY" ]] && [[ "$DOWEEKLY" = "yes" ]] ; then
     echo Weekly Backup
     echo
     if [[ $WEEKLYRETENTION -ge 0 ]] ; then
-        # Delete old weekly backups while respecting the set retention policy.
+        # Delete old weekly backups while respecting the set rentention policy.
         NUM_OLD_FILES=$(find $BACKUPDIR/weekly -depth -not -newermt "$WEEKLYRETENTION week ago" -type f | wc -l)
         if [[ $NUM_OLD_FILES -gt 0 ]] ; then
             echo Deleting "$NUM_OLD_FILES" global setting backup file\(s\) older than "$WEEKLYRETENTION" week\(s\) old.
             find $BACKUPDIR/weekly -not -newermt "$WEEKLYRETENTION week ago" -type f -delete
         fi
     fi
-    FILE="$BACKUPDIR/weekly/week.$W.$DATE"
+    FILE="$BACKUPDIR/weekly/$DBNAME-week.$W.$DATE"
 
 # Daily Backup
 elif [[ $DODAILY = "yes" ]] ; then
     echo Daily Backup of Databases
     echo
-    # Delete old daily backups while respecting the set retention policy.
+    # Delete old daily backups while respecting the set rentention policy.
     if [[ $DAILYRETENTION -ge 0 ]] ; then
         NUM_OLD_FILES=$(find $BACKUPDIR/daily -depth -not -newermt "$DAILYRETENTION days ago" -type f | wc -l)
         if [[ $NUM_OLD_FILES -gt 0 ]] ; then
@@ -638,13 +637,13 @@ elif [[ $DODAILY = "yes" ]] ; then
             find "$BACKUPDIR/daily" -not -newermt "$DAILYRETENTION days ago" -type f -delete
         fi
     fi
-    FILE="$BACKUPDIR/daily/$DATE.$DOW"
+    FILE="$BACKUPDIR/daily/$DBNAME-$DATE.$DOW"
 
 # Hourly Backup
 elif [[ $DOHOURLY = "yes" ]] ; then
     echo Hourly Backup of Databases
     echo
-    # Delete old hourly backups while respecting the set retention policy.
+    # Delete old hourly backups while respecting the set rentention policy.
     if [[ $HOURLYRETENTION -ge 0 ]] ; then
         NUM_OLD_FILES=$(find $BACKUPDIR/hourly -depth -not -newermt "$HOURLYRETENTION hour ago" -type f | wc -l)
         if [[ $NUM_OLD_FILES -gt 0 ]] ; then
@@ -652,7 +651,7 @@ elif [[ $DOHOURLY = "yes" ]] ; then
             find $BACKUPDIR/hourly -not -newermt "$HOURLYRETENTION hour ago" -type f -delete
         fi
     fi
-    FILE="$BACKUPDIR/hourly/$DATE.$DOW.$HOD"
+    FILE="$BACKUPDIR/hourly/$DBNAME-$DATE.$DOW.$HOD"
     # convert timestamp to date: echo $TIMESTAMP | gawk '{print strftime("%c", $0)}'
 
 fi
