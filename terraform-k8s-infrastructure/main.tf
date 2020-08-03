@@ -15,12 +15,13 @@ provider "aws" {
   version = "~> 2.70.0"
 }
 
-# kubernetes provider, so we can manage the cluster
+# kubernetes provider
 provider "kubernetes" {
   version = "~> 1.12.0"
 }
 
-# kubernetes provider, so we can manage the cluster
+# kubectl provider
+# v1.6.1
 provider "kubectl" {
 }
 
