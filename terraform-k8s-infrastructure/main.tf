@@ -9,20 +9,10 @@ terraform {
   }
 }
 
-# Download any stable version in AWS provider of 2.70.0 or higher in 2.70 train
 provider "aws" {
   region  = "us-east-1"
   version = "~> 2.70.0"
 }
-
-# kubernetes provider
-provider "kubernetes" {
-  version = "~> 1.12.0"
-}
-
-//module "k8s_core_services" {
-//  source               = "./modules/k8s_core_services"
-//}
 
 data "aws_eks_cluster" "rw_api" {
   name = "${replace(local.project, " ", "-")}-k8s-cluster-${var.environment}"

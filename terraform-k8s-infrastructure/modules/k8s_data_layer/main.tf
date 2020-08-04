@@ -2,6 +2,10 @@ data "aws_eks_cluster_auth" "cluster" {
   name = var.cluster_name
 }
 
+provider "kubernetes" {
+  version = "~> 1.12.0"
+}
+
 provider "kubectl" {
   host = var.cluster_endpoint
   cluster_ca_certificate = base64decode(var.cluster_ca)
