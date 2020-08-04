@@ -2,7 +2,6 @@
 
 This cluster configuration assumes that the AWS resources were provisioned using the terraform configuration included in this repository (or equivalent).
 
-The `boostrap.sh` is a convenience command for getting the cluster up and running, mostly as a way to help get the cluster up to a certain state after creation. It will probably not be useful once the cluster is up and running, and day-to-day maintenance of the cluster is needed.
 
 ## Helm
 
