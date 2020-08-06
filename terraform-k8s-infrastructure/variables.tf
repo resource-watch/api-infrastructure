@@ -15,6 +15,11 @@ variable "aws_region" {
   description = "A valid AWS region to configure the underlying AWS SDK."
 }
 
+variable "dns_prefix" {
+  type        = string
+  description = "DNS prefix for public URLs created in this project."
+}
+
 variable "application" {
   default     = "wri-api-aws-core-infrastructure"
   type        = string
@@ -40,7 +45,7 @@ variable "elasticsearch_use_dedicated_master_nodes" {
 
 variable "elasticsearch_data_nodes_count" {
   type        = number
-  default = 3
+  default     = 3
   description = "Number of data nodes to use on the ES cluster"
 }
 
