@@ -1,12 +1,12 @@
 data "kubernetes_secret" "postgresql_core" {
   metadata {
-    name = "postgresql"
+    name      = "postgresql"
     namespace = "core"
   }
 }
 resource "helm_release" "postgresql" {
-  name       = "postgresql"
-  chart      = "stable/postgresql"
+  name      = "postgresql"
+  chart     = "stable/postgresql"
   namespace = "core"
 
   values = [

@@ -14,12 +14,18 @@ provider "aws" {
   version = "~> 3.0.0"
 }
 
+
+
 data "aws_eks_cluster" "rw_api" {
   name = "${replace(local.project, " ", "-")}-k8s-cluster-${var.environment}"
 }
 
 data "aws_vpc" "eks_vpc" {
   cidr_block = "10.0.0.0/16"
+}
+
+module "k8s_namespaces" {
+  source = "./modules/k8s_namespaces"
 }
 
 module "k8s_infrastructure" {
@@ -41,6 +47,16 @@ module "k8s_data_layer" {
   elasticsearch_disk_size = var.elasticsearch_disk_size
 }
 
-module "k8s_namespaces" {
-  source = "./modules/k8s_namespaces"
+module "k8s_core_services" {
+  source      = "./modules/k8s_core_services"
+  environment = var.environment
+  dns_prefix  = var.dns_prefix
+}
+
+data "cloudflare_zones" "resourcewatch" {
+  filter {
+    name   = "resourcewatch.org"
+    status = "active"
+    paused = false
+  }
 }

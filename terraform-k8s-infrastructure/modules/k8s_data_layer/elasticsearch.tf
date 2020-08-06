@@ -1,6 +1,6 @@
 data "kubernetes_secret" "elasticsearch_core" {
   metadata {
-    name = "elasticsearch"
+    name      = "elasticsearch"
     namespace = "core"
   }
 }
@@ -15,7 +15,7 @@ resource "kubectl_manifest" "es_data_service" {
 
 resource "kubectl_manifest" "es_data_statefulset" {
   yaml_body = templatefile("${path.module}/elasticsearch/data/es-data.statefulset.yaml.tmpl", {
-    size: var.elasticsearch_disk_size
+    size : var.elasticsearch_disk_size
   })
 
   depends_on = [

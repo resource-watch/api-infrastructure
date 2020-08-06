@@ -1,12 +1,12 @@
 data "kubernetes_secret" "rabbitmq_core" {
   metadata {
-    name = "rabbitmq-passwords"
+    name      = "rabbitmq-passwords"
     namespace = "core"
   }
 }
 resource "helm_release" "rabbitmq" {
-  name       = "rabbitmq"
-  chart      = "stable/rabbitmq"
+  name      = "rabbitmq"
+  chart     = "stable/rabbitmq"
   namespace = "core"
 
   values = [
