@@ -6,6 +6,10 @@ provider "cloudflare" {
 resource "aws_api_gateway_rest_api" "rw_api_gateway" {
   name        = "rw-api-${replace(var.environment, " ", "-")}"
   description = "API Gateway for the RW API ${var.environment} cluster"
+
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
 }
 
 resource "aws_api_gateway_deployment" "prod" {
