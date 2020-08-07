@@ -59,8 +59,8 @@ resource "aws_acm_certificate" "api_domain_cert" {
 
 resource "cloudflare_record" "api_dns_validation" {
   zone_id = data.cloudflare_zones.resourcewatch.zones[0].id
-  name    = aws_acm_certificate.api_domain_cert.domain_validation_options.0.resource_record_name
-  value   = trim(aws_acm_certificate.api_domain_cert.domain_validation_options.0.resource_record_value, ".")
+  name    = tolist(aws_acm_certificate.api_domain_cert.domain_validation_options)[0].resource_record_name
+  value   = trim(tolist(aws_acm_certificate.api_domain_cert.domain_validation_options)[0].resource_record_value, ".")
   type    = "CNAME"
   ttl     = 120
 }
