@@ -52,3 +52,38 @@ module "k8s_core_services" {
   environment = var.environment
   dns_prefix  = var.dns_prefix
 }
+
+resource "aws_cognito_user_pool" "rw_api_user_pool" {
+  name = "RW API user pool"
+  username_attributes = ["email"]
+
+  username_configuration {
+    case_sensitive = false
+  }
+
+  schema {
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    name                     = "role"
+    required                 = true
+
+    string_attribute_constraints {
+      min_length = 1
+      max_length = 256
+    }
+  }
+
+  schema {
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    name                     = "extraUserData"
+    required                 = true
+
+    string_attribute_constraints {
+      min_length = 1
+      max_length = 1024
+    }
+  }
+}
