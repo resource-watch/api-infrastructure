@@ -52,11 +52,3 @@ module "k8s_core_services" {
   environment = var.environment
   dns_prefix  = var.dns_prefix
 }
-
-data "cloudflare_zones" "resourcewatch" {
-  filter {
-    name   = "resourcewatch.org"
-    status = "active"
-    paused = false
-  }
-}
