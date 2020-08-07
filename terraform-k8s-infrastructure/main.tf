@@ -38,6 +38,12 @@ module "k8s_data_layer" {
   backups_bucket                           = var.backups_bucket
 }
 
+module "k8s_core_services" {
+  source      = "./modules/k8s_core_services"
+  environment = var.environment
+  dns_prefix  = var.dns_prefix
+}
+
 module "k8s_namespaces" {
   source = "./modules/k8s_namespaces"
 }
