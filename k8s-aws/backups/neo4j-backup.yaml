@@ -12,7 +12,7 @@ spec:
         spec:
           containers:
             - name: kubecron
-              image: vizzuality/kubecron:1.0.41-aws
+              image: vizzuality/kubecron:2.0.0
               imagePullPolicy: Always
               env:
                 - name: AWS_BACKUPS_BUCKET_URI

@@ -24,17 +24,68 @@ case "$1" in
         ;;
     mongo)
         echo "Starting auto mongo backup"
-        /cronjobs/automongobackup.sh | true
-        echo "Syncing to $AWS_BACKUPS_BUCKET_URI/mongo"
+
+        /cronjobs/area-automongobackup.sh | true
+        echo "Syncing areas backup to $AWS_BACKUPS_BUCKET_URI/mongo"
         aws s3 sync /cronjobs/backups/mongo "$AWS_BACKUPS_BUCKET_URI/mongo"
+
+        /cronjobs/clayers-automongobackup.sh | true
+        echo "Syncing clayers backup to $AWS_BACKUPS_BUCKET_URI/mongo"
+        aws s3 sync /cronjobs/backups/mongo "$AWS_BACKUPS_BUCKET_URI/mongo"
+
+        /cronjobs/control-tower-automongobackup.sh | true
+        echo "Syncing control-tower backup to $AWS_BACKUPS_BUCKET_URI/mongo"
+        aws s3 sync /cronjobs/backups/mongo "$AWS_BACKUPS_BUCKET_URI/mongo"
+
+        /cronjobs/dataset-automongobackup.sh | true
+        echo "Syncing dataset backup to $AWS_BACKUPS_BUCKET_URI/mongo"
+        aws s3 sync /cronjobs/backups/mongo "$AWS_BACKUPS_BUCKET_URI/mongo"
+
+        /cronjobs/doc-orchestrator-automongobackup.sh | true
+        echo "Syncing doc-orchestrator backup to $AWS_BACKUPS_BUCKET_URI/mongo"
+        aws s3 sync /cronjobs/backups/mongo "$AWS_BACKUPS_BUCKET_URI/mongo"
+
+        /cronjobs/forms-automongobackup.sh | true
+        echo "Syncing forms backup to $AWS_BACKUPS_BUCKET_URI/mongo"
+        aws s3 sync /cronjobs/backups/mongo "$AWS_BACKUPS_BUCKET_URI/mongo"
+
+        /cronjobs/geostore-automongobackup.sh | true
+        echo "Syncing geostore backup to $AWS_BACKUPS_BUCKET_URI/mongo"
+        aws s3 sync /cronjobs/backups/mongo "$AWS_BACKUPS_BUCKET_URI/mongo"
+
+        /cronjobs/layer-automongobackup.sh | true
+        echo "Syncing layer backup to $AWS_BACKUPS_BUCKET_URI/mongo"
+        aws s3 sync /cronjobs/backups/mongo "$AWS_BACKUPS_BUCKET_URI/mongo"
+
+        /cronjobs/layerbackup-automongobackup.sh | true
+        echo "Syncing layerbackup backup to $AWS_BACKUPS_BUCKET_URI/mongo"
+        aws s3 sync /cronjobs/backups/mongo "$AWS_BACKUPS_BUCKET_URI/mongo"
+
+        /cronjobs/metadata-automongobackup.sh | true
+        echo "Syncing metadata backup to $AWS_BACKUPS_BUCKET_URI/mongo"
+        aws s3 sync /cronjobs/backups/mongo "$AWS_BACKUPS_BUCKET_URI/mongo"
+
+        /cronjobs/story-automongobackup.sh | true
+        echo "Syncing story backup to $AWS_BACKUPS_BUCKET_URI/mongo"
+        aws s3 sync /cronjobs/backups/mongo "$AWS_BACKUPS_BUCKET_URI/mongo"
+
+        /cronjobs/subscription-automongobackup.sh | true
+        echo "Syncing subscription backup to $AWS_BACKUPS_BUCKET_URI/mongo"
+        aws s3 sync /cronjobs/backups/mongo "$AWS_BACKUPS_BUCKET_URI/mongo"
+
+        /cronjobs/user-automongobackup.sh | true
+        echo "Syncing user backup to $AWS_BACKUPS_BUCKET_URI/mongo"
+        aws s3 sync /cronjobs/backups/mongo "$AWS_BACKUPS_BUCKET_URI/mongo"
+
+        /cronjobs/vocabulary-automongobackup.sh | true
+        echo "Syncing vocabulary backup to $AWS_BACKUPS_BUCKET_URI/mongo"
+        aws s3 sync /cronjobs/backups/mongo "$AWS_BACKUPS_BUCKET_URI/mongo"
+
+        /cronjobs/widget-automongobackup.sh | true
+        echo "Syncing widget backup to $AWS_BACKUPS_BUCKET_URI/mongo"
+        aws s3 sync /cronjobs/backups/mongo "$AWS_BACKUPS_BUCKET_URI/mongo"
+
         rm -rf /cronjobs/backups/mongo/*
-        ;;
-    mongo-ct)
-        echo "Starting auto mongo-ct backup"
-        /cronjobs/automongoctbackup.sh | true
-        echo "Syncing to $AWS_BACKUPS_BUCKET_URI/mongo-ct"
-        aws s3 sync /cronjobs/backups/mongo-ct "$AWS_BACKUPS_BUCKET_URI/mongo-ct"
-        rm -rf /cronjobs/backups/mongo-ct/*
         ;;
     *)
         exec "$@"
