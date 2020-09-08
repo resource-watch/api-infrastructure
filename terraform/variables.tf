@@ -133,7 +133,7 @@ variable "gfw_node_group_instance_types" {
 }
 variable "gfw_node_group_min_size" {
   type    = number
-  default = 2
+  default = 1
 }
 variable "gfw_node_group_max_size" {
   type    = number
