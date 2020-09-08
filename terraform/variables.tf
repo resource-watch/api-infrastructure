@@ -99,7 +99,7 @@ variable "apps_node_group_instance_types" {
 }
 variable "apps_node_group_min_size" {
   type    = number
-  default = 3
+  default = 1
 }
 variable "apps_node_group_max_size" {
   type    = number
@@ -116,7 +116,7 @@ variable "webapps_node_group_instance_types" {
 }
 variable "webapps_node_group_min_size" {
   type    = number
-  default = 2
+  default = 1
 }
 variable "webapps_node_group_max_size" {
   type    = number
