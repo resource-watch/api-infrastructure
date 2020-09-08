@@ -65,7 +65,8 @@ resource "aws_subnet" "private" {
 
   tags = merge(
     {
-      Name = "${var.project}-PrivateSubnet-${var.availability_zones[count.index]}"
+      Name = "${var.project}-PrivateSubnet-${var.availability_zones[count.index]}",
+      tier = "private"
     },
     var.tags,
     var.private_subnet_tags
@@ -82,7 +83,8 @@ resource "aws_subnet" "public" {
 
   tags = merge(
     {
-      Name = "${var.project}-PublicSubnet-${var.availability_zones[count.index]}"
+      Name = "${var.project}-PublicSubnet-${var.availability_zones[count.index]}",
+      tier = "public"
     },
     var.tags,
     var.public_subnet_tags
