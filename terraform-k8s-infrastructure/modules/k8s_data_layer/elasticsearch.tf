@@ -68,6 +68,10 @@ data "aws_subnet_ids" "private_subnets" {
   }
 }
 
+resource "aws_iam_service_linked_role" "es-service-role" {
+  aws_service_name = "es.amazonaws.com"
+}
+
 resource "aws_security_group" "elasticsearch-sg" {
   name        = "elasticsearch-sg"
   description = "AWS SG for Elasticsearch"
