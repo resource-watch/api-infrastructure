@@ -1,6 +1,6 @@
 resource "helm_release" "mongodb_apps" {
-  name       = "mongodb-apps"
-  chart      = "stable/mongodb-replicaset"
+  name      = "mongodb-apps"
+  chart     = "stable/mongodb-replicaset"
   namespace = "core"
 
   values = [

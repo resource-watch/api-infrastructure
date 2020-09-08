@@ -31,3 +31,13 @@ variable "elasticsearch_disk_size" {
   type        = string
   description = "Disk size for each Elasticsearch data node."
 }
+
+variable "elasticsearch_disk_size_gb" {
+  type        = number
+  description = "Disk size for each Elasticsearch data node (numeric value in GBs)."
+}
+
+variable "backups_bucket" {
+  type        = string
+  description = "S3 bucket to which backups will be performed"
+}
