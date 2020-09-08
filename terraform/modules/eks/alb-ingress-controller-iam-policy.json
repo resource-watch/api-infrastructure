@@ -113,6 +113,29 @@
         "waf:GetWebACL"
       ],
       "Resource": "*"
+    },
+    {
+      "Action": [
+        "wafv2:GetWebACL",
+        "wafv2:GetWebACLForResource",
+        "wafv2:AssociateWebACL",
+        "wafv2:DisassociateWebACL"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    },
+    {
+      "Action": [
+        "shield:DescribeProtection",
+        "shield:GetSubscriptionState",
+        "shield:DeleteProtection",
+        "shield:CreateProtection",
+        "shield:DescribeSubscription",
+        "shield:ListProtections"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
     }
-  ]
+  ],
+  "Version": "2012-10-17"
 }

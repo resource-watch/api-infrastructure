@@ -1,7 +1,8 @@
 # Resource Watch API - Cluster setup
 
+**Important**: this repo uses [git lfs](https://git-lfs.github.com/).
 
-## Cluster setup
+## Setting up the AWS resources
 
 To setup the cluster cloud resources, use the following command:
 
@@ -89,8 +90,7 @@ nat_gateway_ips = [
 
 At this point, most of your resources should already be provisioned, and some things will be wrapping up (for example, EC2 `userdata` scripts).
 
-
-## Cluster access
+## Accessing the Kubernetes cluster
 
 The main resource you'll want to access at this stage is the bastion host. To do so, use ssh:
 
@@ -140,3 +140,31 @@ You'll need to replace the `data` section in this document with the one from the
 Next, delete your local `~/.aws/credentials` file - this will ensure that no authentication information remains inside the cluster, and that all access management is done using IAM Roles, which is the recommended way.
 
 You should now have access to the cluster from the bastion host.
+
+## Kubernetes base configuration
+
+With access configured as above, and with the SSH tunnel active, you can now proceed to configuring the Kubernetes cluster itself.
+
+### Namespaces
+
+At this point you should have the necessary cloud resources provisioned and access to them configured. The next steps will provision the logical resources (databases and other dependencies) on top of which the API will operate.
+
+The first step will be to create the necessary [Kubernetes namespaces](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/) using the following command from inside the `terraform-k8s-infrastructure` folder:
+
+```shell script
+terraform apply -var-file=vars/terraform-<your environment>.tfvars -target=module.k8s_namespaces
+```
+
+### Secrets
+
+Once the namespaces are created, you should apply all the necessary [Kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/), as some of them will be needed by the components we'll provision in the next step. Refer to the secrets repository for more details.
+
+### Kubernetes configuration
+
+After the necessary secrets are created, you can deploy the rest of the infrastructure using the following command:
+
+```shell script
+terraform apply -var-file=vars/terraform-<your environment>.tfvars
+```
+
+The command above will provision most of the resources needed by the API. However, some resources will still require manual deployment after this - check the `k8s-aws` folder and its sub-folders for more details.

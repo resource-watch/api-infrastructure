@@ -9,10 +9,9 @@ terraform {
   }
 }
 
-# Download any stable version in AWS provider of 2.70.0 or higher in 2.70 train
 provider "aws" {
   region  = "us-east-1"
-  version = "~> 2.70.0"
+  version = "~> 3.0.0"
 }
 
 # Cloudflare provider, so we can manage DNS
