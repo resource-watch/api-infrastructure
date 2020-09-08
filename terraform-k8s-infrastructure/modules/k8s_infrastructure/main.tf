@@ -3,10 +3,10 @@ data "aws_eks_cluster_auth" "cluster" {
 }
 
 provider "kubectl" {
-  host = var.cluster_endpoint
+  host                   = var.cluster_endpoint
   cluster_ca_certificate = base64decode(var.cluster_ca)
-  token = data.aws_eks_cluster_auth.cluster.token
-  load_config_file = false
+  token                  = data.aws_eks_cluster_auth.cluster.token
+  load_config_file       = false
 }
 
 // https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html
@@ -19,9 +19,9 @@ resource "kubectl_manifest" "alb_ingress_controller_rbac_role" {
 
 resource "kubectl_manifest" "alb_ingress_controller_main" {
   yaml_body = templatefile("${path.module}/alb_ingress/alb-ingress-controller.yaml.tmpl", {
-    vpc_id: var.vpc_id,
-    aws_region: var.aws_region,
-    cluster_name: var.cluster_name
+    vpc_id : var.vpc_id,
+    aws_region : var.aws_region,
+    cluster_name : var.cluster_name
   })
 }
 
@@ -30,7 +30,7 @@ resource "kubectl_manifest" "alb_ingress_controller_main" {
 // File has changes - see link above for details
 resource "kubectl_manifest" "cluster_autoscaler" {
   yaml_body = templatefile("${path.module}/cluster_autoscaler/cluster-autoscaler-autodiscover.yaml.tmpl", {
-    cluster_name: var.cluster_name
+    cluster_name : var.cluster_name
   })
 }
 
@@ -46,7 +46,7 @@ resource "kubectl_manifest" "metrics-server" {
 // File has changes - see link above for details
 resource "kubectl_manifest" "container_insights" {
   yaml_body = templatefile("${path.module}/container_insights/container_insights.yaml.tmpl", {
-    aws_region: var.aws_region,
-    cluster_name: var.cluster_name
+    aws_region : var.aws_region,
+    cluster_name : var.cluster_name
   })
 }

@@ -13,8 +13,11 @@ variable "cluster_name" {
   description = "The k8s cluster name"
 }
 
-variable "vpc_id" {
-  type        = string
+variable "vpc" {
+  type = object({
+    id         = string
+    cidr_block = string
+  })
   description = "The id of the VPC"
 }
 
@@ -26,4 +29,14 @@ variable "aws_region" {
 variable "elasticsearch_disk_size" {
   type        = string
   description = "Disk size for each Elasticsearch data node"
+}
+
+variable "elasticsearch_disk_size_gb" {
+  type        = number
+  description = "Disk size for each Elasticsearch data node (numeric value in GBs)"
+}
+
+variable "backups_bucket" {
+  type        = string
+  description = "Name of the S3 bucket containing ES backup snapshots"
 }
