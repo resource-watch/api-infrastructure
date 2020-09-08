@@ -204,6 +204,7 @@ resource "aws_elasticsearch_domain" "rw-api-elasticsearch" {
   lifecycle {
     ignore_changes = [
       vpc_options["subnet_ids"],
+      ebs_options,
       elasticsearch_version,
     ]
   }
