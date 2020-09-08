@@ -4,6 +4,7 @@
 resource "aws_eks_cluster" "eks_cluster" {
   name     = "${replace(var.project, " ", "-")}-k8s-cluster-${var.environment}"
   role_arn = aws_iam_role.eks-cluster-admin.arn
+  version  = "1.16"
 
   vpc_config {
     subnet_ids = var.subnet_ids
@@ -18,6 +19,10 @@ resource "aws_eks_cluster" "eks_cluster" {
     aws_iam_role_policy_attachment.eks-admin-AmazonEKSClusterPolicy,
     aws_iam_role_policy_attachment.eks-admin-AmazonEKSServicePolicy,
   ]
+
+  lifecycle {
+    ignore_changes = [version]
+  }
 }
 
 resource "aws_security_group" "eks_cluster_security_group" {
