@@ -21,7 +21,7 @@ resource "aws_eks_cluster" "eks_cluster" {
   ]
 
   lifecycle {
-    ignore_changes = ["version"]
+    ignore_changes = [version]
   }
 }
 
