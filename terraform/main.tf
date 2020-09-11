@@ -84,26 +84,6 @@ module "gateway-node-group" {
   }
 }
 
-module "elasticsearch-node-group" {
-  source          = "./modules/node_group"
-  cluster         = module.eks.cluster
-  cluster_name    = module.eks.cluster_name
-  node_group_name = "elasticsearch-node-group"
-  instance_types  = var.elasticsearch_node_group_instance_types
-  min_size        = var.elasticsearch_node_group_min_size
-  max_size        = var.elasticsearch_node_group_max_size
-  desired_size    = var.elasticsearch_node_group_desired_size
-  node_role_arn   = module.eks.node_role_arn
-  subnet_ids = [
-    module.vpc.private_subnets[0].id,
-    module.vpc.private_subnets[1].id,
-    module.vpc.private_subnets[2].id
-  ]
-  labels = {
-    type : "elasticsearch"
-  }
-}
-
 module "mongodb-apps-node-group" {
   source          = "./modules/node_group"
   cluster         = module.eks.cluster
