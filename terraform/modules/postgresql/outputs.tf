@@ -33,20 +33,20 @@ output "username" {
 }
 
 
-   output "engine"  {
-     value   = "postgresql"
-   }
-output    "dbname"      {
+output "engine" {
+  value = "postgresql"
+}
+output "dbname" {
   value = var.rds_db_name
 }
-  output  "host" {
+output "host" {
 
-    value = aws_rds_cluster.aurora_cluster.endpoint
-  }
+  value = aws_rds_cluster.aurora_cluster.endpoint
+}
 
- output   "port" {
-   value= var.rds_port
- }
+output "port" {
+  value = var.rds_port
+}
 output "aurora_cluster_instance_class" {
   value = aws_rds_cluster_instance.aurora_cluster_instance[0].instance_class
 }
