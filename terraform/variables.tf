@@ -197,3 +197,8 @@ variable "rds_password" {
   type        = string
   description = "Password of Aurora PostgreSQL superuser"
 }
+
+variable "log_retention_period" {
+  type        = number
+  description = "Time in days to keep log files in cloud watch"
+}
