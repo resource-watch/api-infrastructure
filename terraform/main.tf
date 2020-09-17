@@ -32,7 +32,7 @@ module "vpc" {
     "kubernetes.io/cluster/${lower(replace(local.project, " ", "-"))}-k8s-cluster-${var.environment}" : "shared"
     "kubernetes.io/role/elb" : 1
   }
-  security_group_ids = [aws_security_group.default.id]
+  security_group_ids = [aws_security_group.default.id, module.postgresql.security_group_id]
 }
 
 # Create a k8s cluster using AWS EKS
@@ -198,6 +198,27 @@ module "gfw-pro-node-group" {
     type : "gfw-pro"
   }
 }
+
+
+module "postgresql" {
+  source                      = "./modules/postgresql"
+  availability_zone_names     = [module.vpc.private_subnets[0].availability_zone, module.vpc.private_subnets[1].availability_zone, module.vpc.private_subnets[3].availability_zone]
+  log_retention_period        = 30
+  private_subnet_ids          = [module.vpc.private_subnets[0].id, module.vpc.private_subnets[1].id, module.vpc.private_subnets[3].id]
+  project                     = local.project
+  rds_backup_retention_period = var.rds_backup_retention_period
+  rds_db_name                 = "default" # default database, create app specific database at project level
+  rds_instance_class          = var.rds_instance_class
+  rds_instance_count          = var.rds_instance_count
+  rds_password                = var.rds_password
+  rds_user_name               = "wri" # superuser, create app specific users at project level
+  tags                        = local.tags
+  vpc_id                      = module.vpc.id
+  rds_port                    = 5432
+  //  rds_password_ro             = var.rds_password_ro
+  //  rds_user_name_ro            = "wri_read_only"
+}
+
 
 module "jenkins" {
   source                    = "./modules/jenkins"

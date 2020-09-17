@@ -65,3 +65,37 @@ KUBECONFIGMAP
 output "kube_configmap" {
   value = local.kube_configmap
 }
+
+output "postgresql_security_group_id" {
+  value       = module.postgresql.security_group_id
+  description = "Security group ID to access postgresql database"
+}
+
+output "secrets_postgresql-writer_arn" {
+  value = module.postgresql.secrets_postgresql-writer_arn
+}
+
+output "secrets_postgresql-writer_name" {
+  value = module.postgresql.secrets_postgresql-writer_name
+}
+
+output "secrets_postgresql-writer_policy_arn" {
+  value = module.postgresql.secrets_postgresql-writer_policy_arn
+}
+
+# TODO: enable once app have multiDB support
+//output "secrets_postgresql-reader_arn" {
+//  value = module.postgresql.secrets_postgresql-reader_arn
+//}
+//
+//output "secrets_postgresql-reader_name" {
+//  value = module.postgresql.secrets_postgresql-reader_name
+//}
+//
+//output "secrets_postgresql-reader_policy_arn" {
+//  value = module.postgresql.secrets_postgresql-reader_policy_arn
+//}
+
+output "aurora_cluster_instance_class" {
+  value = module.postgresql.aurora_cluster_instance_class
+}
