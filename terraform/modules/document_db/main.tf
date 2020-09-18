@@ -51,7 +51,7 @@ resource "aws_docdb_cluster_instance" "default" {
 
 # https://docs.aws.amazon.com/documentdb/latest/developerguide/db-cluster-parameter-group-create.html
 resource "aws_docdb_cluster_parameter_group" "default" {
-  name        = "${var.project}-documentdb-parameter-group"
+  name        = lower("${var.project}-documentdb-parameter-group")
   description = "DB cluster parameter group"
   family      = var.cluster_family
 
