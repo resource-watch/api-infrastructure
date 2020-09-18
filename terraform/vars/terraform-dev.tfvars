@@ -8,4 +8,4 @@ rds_instance_class          = "db.t3.medium"
 rds_instance_count          = 1
 db_instance_class           = "db.t3.medium"
 db_instance_count           = 1
-db_logs_exports             = ["audit", "error", "general", "slowquery"]
+db_logs_exports             = ["audit", "profiler"]

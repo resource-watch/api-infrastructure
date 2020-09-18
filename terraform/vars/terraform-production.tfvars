@@ -8,4 +8,4 @@ rds_instance_class          = "db.r5.large"
 rds_instance_count          = 1
 db_instance_class           = "db.r5.large"
 db_instance_count           = 3
-db_logs_exports             = ["error", "slowquery"]
+db_logs_exports             = ["audit", "profiler"]
