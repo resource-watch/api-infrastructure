@@ -177,3 +177,33 @@ variable "core_node_group_desired_size" {
   type    = number
   default = 2
 }
+
+variable "backup_retention_period"{
+  type = number
+  description = "Time in days to keep db backups"
+}
+
+variable "log_retention_period" {
+  type        = number
+  description = "Time in days to keep log files in cloud watch"
+}
+
+variable "db_instance_class" {
+  type        = string
+  description = "Instance type of DocumentDB server"
+}
+
+variable "db_instance_count" {
+  type        = number
+  description = "Number of DocumentDB instances"
+}
+
+variable "db_password" {
+  type        = string
+  description = "Password of DocumentDB superuser"
+}
+
+variable "db_logs_exports" {
+  type        = list(string)
+  description = "List of log types to export to cloudwatch. The following log types are supported: `audit`, `error`, `general`, `slowquery`"
+}

@@ -37,11 +37,12 @@ module "vpc" {
 
 # Create a k8s cluster using AWS EKS
 module "eks" {
-  source         = "./modules/eks"
-  project        = local.project
-  vpc_id         = module.vpc.id
-  environment    = var.environment
-  backups_bucket = var.backups_bucket
+  source             = "./modules/eks"
+  project            = local.project
+  vpc_id             = module.vpc.id
+  environment        = var.environment
+  backups_bucket     = var.backups_bucket
+  security_group_ids = [module.documentdb.security_group_id]
   subnet_ids = [
     module.vpc.private_subnets[0].id,
     module.vpc.private_subnets[1].id,
