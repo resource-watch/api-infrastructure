@@ -227,11 +227,10 @@ module "documentdb" {
   private_subnet_ids              = [module.vpc.private_subnets[0].id, module.vpc.private_subnets[1].id, module.vpc.private_subnets[3].id]
   project                         = local.project
   backup_retention_period         = var.rds_backup_retention_period
-  db_name                         = "default" # default database, create app specific database at project level
   instance_class                  = var.db_instance_class
   cluster_size                    = var.db_instance_count
   master_password                 = var.db_password
-  master_username                 = "wri" # superuser, create app specific users at project level
+  master_username                 = "wri"
   tags                            = local.tags
   vpc_id                          = module.vpc.id
   engine_version                  = "3.6.0"
