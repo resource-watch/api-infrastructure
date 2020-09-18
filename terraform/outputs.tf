@@ -99,3 +99,18 @@ output "secrets_postgresql-writer_policy_arn" {
 output "aurora_cluster_instance_class" {
   value = module.postgresql.aurora_cluster_instance_class
 }
+
+output "aurora_user_name" {
+  value = module.postgresql.username
+}
+
+output "aurora_host" {
+  value = module.postgresql.host
+}
+
+output "aurora_port" {
+  value = module.postgresql.port
+}
+output "aurora_dbname" {
+  value = module.postgresql.dbname
+}

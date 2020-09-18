@@ -28,6 +28,25 @@ output "secrets_postgresql-writer_policy_arn" {
 //  value = aws_iam_policy.secrets_postgresql-reader.arn
 //}
 
+output "username" {
+  value = var.rds_user_name
+}
+
+
+   output "engine"  {
+     value   = "postgresql"
+   }
+output    "dbname"      {
+  value = var.rds_db_name
+}
+  output  "host" {
+
+    value = aws_rds_cluster.aurora_cluster.endpoint
+  }
+
+ output   "port" {
+   value= var.rds_port
+ }
 output "aurora_cluster_instance_class" {
   value = aws_rds_cluster_instance.aurora_cluster_instance[0].instance_class
 }
