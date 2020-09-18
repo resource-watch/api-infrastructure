@@ -51,7 +51,7 @@ resource "aws_docdb_cluster_instance" "default" {
 
 # https://docs.aws.amazon.com/documentdb/latest/developerguide/db-cluster-parameter-group-create.html
 resource "aws_docdb_cluster_parameter_group" "default" {
-  name        = "${var.project}-documentdb-parameter_group"
+  name        = "${var.project}-documentdb-parameter-group"
   description = "DB cluster parameter group"
   family      = var.cluster_family
 
@@ -77,7 +77,7 @@ resource "aws_docdb_cluster_parameter_group" "default" {
 ###############
 
 resource "aws_docdb_subnet_group" "default" {
-  name        = "${var.project}-documentdb-subnet_group"
+  name        = "${var.project}-documentdb-subnet-group"
   description = "Allowed subnets for DB cluster instances"
   subnet_ids  = var.private_subnet_ids
   tags = merge(
