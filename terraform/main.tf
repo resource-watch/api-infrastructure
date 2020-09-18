@@ -32,7 +32,7 @@ module "vpc" {
     "kubernetes.io/cluster/${lower(replace(local.project, " ", "-"))}-k8s-cluster-${var.environment}" : "shared"
     "kubernetes.io/role/elb" : 1
   }
-  security_group_ids = [aws_security_group.default.id]
+  security_group_ids = [aws_security_group.default.id, module.documentdb.security_group_id]
 }
 
 # Create a k8s cluster using AWS EKS
@@ -197,6 +197,22 @@ module "gfw-pro-node-group" {
   labels = {
     type : "gfw-pro"
   }
+}
+
+module "documentdb" {
+  source                          = "./modules/document_db"
+  log_retention_period            = var.log_retention_period
+  private_subnet_ids              = [module.vpc.private_subnets[0].id, module.vpc.private_subnets[1].id, module.vpc.private_subnets[3].id]
+  project                         = local.project
+  backup_retention_period         = var.backup_retention_period
+  instance_class                  = var.db_instance_class
+  cluster_size                    = var.db_instance_count
+  master_password                 = var.db_password
+  master_username                 = "wri" # superuser, create app specific users at project level
+  tags                            = local.tags
+  vpc_id                          = module.vpc.id
+  engine_version                  = "3.6.0"
+  enabled_cloudwatch_logs_exports = var.db_logs_exports
 }
 
 module "jenkins" {
