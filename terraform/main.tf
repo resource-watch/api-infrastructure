@@ -223,7 +223,6 @@ module "postgresql" {
 
 module "documentdb" {
   source                          = "./modules/document_db"
-  availability_zone_names         = [module.vpc.private_subnets[0].availability_zone, module.vpc.private_subnets[1].availability_zone, module.vpc.private_subnets[3].availability_zone]
   log_retention_period            = var.log_retention_period
   private_subnet_ids              = [module.vpc.private_subnets[0].id, module.vpc.private_subnets[1].id, module.vpc.private_subnets[3].id]
   project                         = local.project
