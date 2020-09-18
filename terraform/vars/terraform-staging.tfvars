@@ -1,4 +1,9 @@
-environment              = "staging"
-ingress_allow_cidr_block = "0.0.0.0/0"
-dns_prefix               = "aws-staging"
-backups_bucket           = "wri-api-staging-backups"
+environment                 = "staging"
+ingress_allow_cidr_block    = "0.0.0.0/0"
+dns_prefix                  = "aws-staging"
+backups_bucket              = "wri-api-staging-backups"
+log_retention_period        = 7
+backup_retention_period     = 1
+db_instance_class           = "db.r5.large"
+db_instance_count           = 1
+db_logs_exports             = ["audit", "profiler"]

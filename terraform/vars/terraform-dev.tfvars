@@ -1,4 +1,9 @@
-environment              = "dev"
-ingress_allow_cidr_block = "0.0.0.0/0"
-dns_prefix               = "aws-dev"
-backups_bucket           = "wri-api-dev-backups"
+environment                 = "dev"
+ingress_allow_cidr_block    = "0.0.0.0/0"
+dns_prefix                  = "aws-dev"
+backups_bucket              = "wri-api-dev-backups"
+log_retention_period        = 7
+backup_retention_period     = 1
+db_instance_class           = "db.t3.medium"
+db_instance_count           = 1
+db_logs_exports             = ["audit", "profiler"]
