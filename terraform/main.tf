@@ -32,7 +32,7 @@ module "vpc" {
     "kubernetes.io/cluster/${lower(replace(local.project, " ", "-"))}-k8s-cluster-${var.environment}" : "shared"
     "kubernetes.io/role/elb" : 1
   }
-  security_group_ids = [aws_security_group.default.id, module.postgresql.security_group_id]
+  security_group_ids = [aws_security_group.default.id, module.postgresql.security_group_id, module.documentdb.security_group_id]
 }
 
 # Create a k8s cluster using AWS EKS
