@@ -42,7 +42,7 @@ module "eks" {
   vpc_id             = module.vpc.id
   environment        = var.environment
   backups_bucket     = var.backups_bucket
-  security_group_ids = [module.postgresql.security_group_id]
+  security_group_ids = [module.postgresql.security_group_id, module.documentdb.security_group_id]
   subnet_ids = [
     module.vpc.private_subnets[0].id,
     module.vpc.private_subnets[1].id,
@@ -220,6 +220,24 @@ module "postgresql" {
   //  rds_user_name_ro            = "wri_read_only"
 }
 
+
+module "documentdb" {
+  source                          = "./modules/document_db"
+  availability_zone_names         = [module.vpc.private_subnets[0].availability_zone, module.vpc.private_subnets[1].availability_zone, module.vpc.private_subnets[3].availability_zone]
+  log_retention_period            = var.log_retention_period
+  private_subnet_ids              = [module.vpc.private_subnets[0].id, module.vpc.private_subnets[1].id, module.vpc.private_subnets[3].id]
+  project                         = local.project
+  backup_retention_period         = var.rds_backup_retention_period
+  db_name                         = "default" # default database, create app specific database at project level
+  instance_class                  = var.db_instance_class
+  cluster_size                    = var.db_instance_count
+  master_password                 = var.db_password
+  master_username                 = "wri" # superuser, create app specific users at project level
+  tags                            = local.tags
+  vpc_id                          = module.vpc.id
+  engine_version                  = "3.6.0"
+  enabled_cloudwatch_logs_exports = var.db_logs_exports
+}
 
 module "jenkins" {
   source                    = "./modules/jenkins"
