@@ -178,9 +178,14 @@ variable "core_node_group_desired_size" {
   default = 2
 }
 
-variable "rds_backup_retention_period" {
+variable "backup_retention_period" {
   type        = number
   description = "Number of days to keep Aurora PostgreSQL backups"
+}
+
+variable "log_retention_period" {
+  type        = number
+  description = "Time in days to keep log files in cloud watch"
 }
 
 variable "rds_instance_class" {
@@ -196,9 +201,4 @@ variable "rds_instance_count" {
 variable "rds_password" {
   type        = string
   description = "Password of Aurora PostgreSQL superuser"
-}
-
-variable "log_retention_period" {
-  type        = number
-  description = "Time in days to keep log files in cloud watch"
 }

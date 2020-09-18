@@ -207,7 +207,7 @@ module "postgresql" {
   log_retention_period        = var.log_retention_period
   private_subnet_ids          = [module.vpc.private_subnets[0].id, module.vpc.private_subnets[1].id, module.vpc.private_subnets[3].id]
   project                     = local.project
-  rds_backup_retention_period = var.rds_backup_retention_period
+  rds_backup_retention_period = var.backup_retention_period
   rds_db_name                 = "default" # default database, create app specific database at project level
   rds_instance_class          = var.rds_instance_class
   rds_instance_count          = var.rds_instance_count
