@@ -15,7 +15,7 @@ resource "aws_rds_cluster" "aurora_cluster" {
   preferred_backup_window         = "14:00-15:00"
   preferred_maintenance_window    = "sat:16:00-sat:17:00"
   db_subnet_group_name            = aws_db_subnet_group.default.name
-  final_snapshot_identifier       = "${var.project}-aurora-cluster"
+  final_snapshot_identifier       = lower("${var.project}-aurora-cluster")
   vpc_security_group_ids          = [aws_security_group.postgresql.id]
   availability_zones              = var.availability_zone_names
   copy_tags_to_snapshot           = true
@@ -166,6 +166,7 @@ resource "aws_cloudwatch_log_group" "postgresql" {
 
 resource "aws_security_group" "postgresql" {
   vpc_id                 = var.vpc_id
+  description            = "Security Group for PostgreSQL cluster"
   name                   = "${var.project}-sgPostgreSQL"
   revoke_rules_on_delete = true
   tags = merge(
