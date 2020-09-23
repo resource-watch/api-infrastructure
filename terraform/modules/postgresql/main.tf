@@ -68,8 +68,7 @@ resource "aws_rds_cluster_instance" "aurora_cluster_instance" {
 
 resource "random_password" "postgresql_superuser" {
   length           = 16
-  special          = true
-  override_special = "_%@"
+  special          = false
 }
 
 
