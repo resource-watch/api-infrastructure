@@ -18,9 +18,8 @@ jobs:
         AWS_REGION: ${{ secrets.aws_region_production }}
         CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
         CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
-        RDS_PASSWORD: ${{ secrets.rds_password_production }}
       run: |
-        ./scripts/infra plan -var "rds_password=${RDS_PASSWORD}"
+        ./scripts/infra plan
         ./scripts/infra apply
     - name: Deploy staging
       if: contains(github.ref, 'staging')
@@ -31,9 +30,8 @@ jobs:
         AWS_REGION: ${{ secrets.aws_region_staging }}
         CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
         CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
-        RDS_PASSWORD: ${{ secrets.rds_password_staging }}
       run: |
-        ./scripts/infra plan -var "rds_password=${RDS_PASSWORD}"
+        ./scripts/infra plan
         ./scripts/infra apply
     - name: Deploy dev
       if: contains(github.ref, 'dev')
@@ -44,7 +42,6 @@ jobs:
         AWS_REGION: ${{ secrets.aws_region_dev }}
         CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
         CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
-        RDS_PASSWORD: ${{ secrets.rds_password_dev }}
       run: |
-        ./scripts/infra plan -var "rds_password=${RDS_PASSWORD}"
+        ./scripts/infra plan
         ./scripts/infra apply

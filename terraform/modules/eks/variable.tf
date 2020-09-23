@@ -19,8 +19,3 @@ variable "backups_bucket" {
   type        = string
   description = "S3 bucket to which backups will be performed"
 }
-
-variable "security_group_ids" {
-  type        = list(string)
-  description = "Security group ids to add to cluster"
-}

@@ -197,8 +197,3 @@ variable "rds_instance_count" {
   type        = number
   description = "Number of Aurora PostgreSQL instances before autoscaling"
 }
-
-variable "rds_password" {
-  type        = string
-  description = "Password of Aurora PostgreSQL superuser"
-}

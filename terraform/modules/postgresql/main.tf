@@ -10,7 +10,7 @@ resource "aws_rds_cluster" "aurora_cluster" {
   engine_version                  = "11.7"
   database_name                   = var.rds_db_name
   master_username                 = var.rds_user_name
-  master_password                 = var.rds_password
+  master_password                 = random_password.postgresql_superuser.result
   backup_retention_period         = var.rds_backup_retention_period
   preferred_backup_window         = "14:00-15:00"
   preferred_maintenance_window    = "sat:16:00-sat:17:00"
@@ -65,6 +65,13 @@ resource "aws_rds_cluster_instance" "aurora_cluster_instance" {
   }
 
 }
+
+resource "random_password" "postgresql_superuser" {
+  length           = 16
+  special          = true
+  override_special = "_%@"
+}
+
 
 #####################
 # RDS Monitoring Role
@@ -183,16 +190,7 @@ resource "aws_security_group_rule" "postgresql_ingress" {
   from_port         = var.rds_port
   to_port           = var.rds_port
   protocol          = "tcp"
-  self              = true
-  security_group_id = aws_security_group.postgresql.id
-}
-
-resource "aws_security_group_rule" "postgresql_egress" {
-  type              = "egress"
-  from_port         = var.rds_port
-  to_port           = var.rds_port
-  protocol          = "tcp"
-  self              = true
+  cidr_blocks       = [var.vpc_cidr_block]
   security_group_id = aws_security_group.postgresql.id
 }
 
@@ -214,7 +212,7 @@ resource "aws_secretsmanager_secret_version" "postgresql-writer" {
     "engine"               = "postgresql",
     "dbname"               = var.rds_db_name,
     "host"                 = aws_rds_cluster.aurora_cluster.endpoint,
-    "password"             = var.rds_password,
+    "password"             = random_password.postgresql_superuser.result,
     "port"                 = var.rds_port,
     "dbInstanceIdentifier" = aws_rds_cluster.aurora_cluster.cluster_identifier
   })
@@ -231,39 +229,3 @@ resource "aws_iam_policy" "secrets_postgresql-writer" {
   name   = "${var.project}-secrets_postgresql-writer"
   policy = data.template_file.secrets_postgresql-writer.rendered
 }
-
-
-# TODO: Uncomment this once apps are ready for multiDB support
-
-//resource "aws_secretsmanager_secret" "postgresql-reader" {
-//  description = "Connection string for Aurora PostgreSQL cluster"
-//  name        = "${var.project}-postgresql-reader-secret"
-//  tags        = var.tags
-//}
-//
-//resource "aws_secretsmanager_secret_version" "postgresql-reader" {
-//
-//  secret_id = aws_secretsmanager_secret.postgresql-reader.id
-//  secret_string = jsonencode({
-//    "username"             = var.rds_user_name_ro,
-//    "engine"               = "postgresql",
-//    "dbname"               = var.rds_db_name,
-//    "host"                 = aws_rds_cluster.aurora_cluster.reader_endpoint,
-//    "password"             = var.rds_password_ro,
-//    "port"                 = var.rds_port,
-//    "dbInstanceIdentifier" = aws_rds_cluster.aurora_cluster.cluster_identifier
-//  })
-//
-//}
-//
-//data "template_file" "secrets_postgresql-reader" {
-//  template = file("${path.root}/policies/iam_policy_secrets_read.json.tpl")
-//  vars = {
-//    secret_arn = aws_secretsmanager_secret.postgresql-reader.arn
-//  }
-//}
-//
-//resource "aws_iam_policy" "secrets_postgresql-reader" {
-//  name   = "${var.project}-secrets_postgresql-reader"
-//  policy = data.template_file.secrets_postgresql-reader.rendered
-//}
