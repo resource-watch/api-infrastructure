@@ -9,7 +9,7 @@ resource "aws_eks_cluster" "eks_cluster" {
   vpc_config {
     subnet_ids = var.subnet_ids
     # At the time of this writing, AWS wasn't accepting EKS on us-east-1e
-    security_group_ids      = concat([aws_security_group.eks_cluster_security_group.id], var.security_group_ids)
+    security_group_ids      = [aws_security_group.eks_cluster_security_group.id]
     endpoint_private_access = true
     endpoint_public_access  = false
   }

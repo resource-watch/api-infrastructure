@@ -28,23 +28,6 @@ variable "rds_user_name" {
   description = "RDS master user name"
 }
 
-variable "rds_password" {
-  type        = string
-  description = "RDS master password"
-}
-
-# TODO: Uncomment this once apps are ready for multiDB support
-//variable "rds_user_name_ro" {
-//  type        = string
-//  description = "RDS read_only user name"
-//}
-
-# TODO: Uncomment this once apps are ready for multiDB support
-//variable "rds_password_ro" {
-//  type        = string
-//  description = "RDS read_only password"
-//}
-
 variable "rds_backup_retention_period" {
   type        = number
   description = "Retention period for backup files"
@@ -78,4 +61,9 @@ variable "rds_instance_class" {
 variable "rds_port" {
   type        = string
   description = "Port to access RDS database"
+}
+
+variable "vpc_cidr_block" {
+  type        = string
+  description = "CIDR block of VPC"
 }
