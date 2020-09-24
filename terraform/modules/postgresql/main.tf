@@ -59,11 +59,6 @@ resource "aws_rds_cluster_instance" "aurora_cluster_instance" {
     var.tags
   )
 
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
 }
 
 resource "random_password" "postgresql_superuser" {
