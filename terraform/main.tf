@@ -208,7 +208,7 @@ module "postgresql" {
   project                     = local.project
   rds_backup_retention_period = var.backup_retention_period
   rds_db_name                 = "wri" # default database, create app specific database at project level
-  rds_user_name               = "wri" # superuser, create app specific users at project level
+  rds_user_name               = "postgres" # superuser, create app specific users at project level
   rds_instance_class          = var.rds_instance_class
   rds_instance_count          = var.rds_instance_count
   tags                        = local.tags
