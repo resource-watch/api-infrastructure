@@ -80,7 +80,7 @@ resource "aws_iam_role_policy_attachment" "amazon_es_snapshot_role_policy_attach
 
 resource "aws_elasticsearch_domain" "rw-api-elasticsearch" {
   domain_name           = "rw-api-elasticsearch"
-  elasticsearch_version = "6.8"
+  elasticsearch_version = "7.7"
 
   advanced_security_options {
     enabled                        = true
@@ -145,9 +145,7 @@ resource "aws_elasticsearch_domain" "rw-api-elasticsearch" {
 
   lifecycle {
     ignore_changes = [
-      vpc_options["subnet_ids"],
-      ebs_options,
-      elasticsearch_version,
+      vpc_options
     ]
   }
 }
