@@ -62,12 +62,13 @@ resource "aws_iam_role" "amazon_es_snapshot_role" {
 
   assume_role_policy = jsonencode({
     Version : "2012-10-17",
-    Statement : [{
-      Effect : "Allow",
-      Principal : {
-        "Service" : "es.amazonaws.com"
-      },
-      Action : "sts:AssumeRole"
+    Statement : [
+      {
+        Effect : "Allow",
+        Principal : {
+          "Service" : "es.amazonaws.com"
+        },
+        Action : "sts:AssumeRole"
       }
     ]
   })
@@ -76,6 +77,37 @@ resource "aws_iam_role" "amazon_es_snapshot_role" {
 resource "aws_iam_role_policy_attachment" "amazon_es_snapshot_role_policy_attachment" {
   role       = aws_iam_role.amazon_es_snapshot_role.name
   policy_arn = aws_iam_policy.amazon_es_snapshot_policy.arn
+}
+
+resource "aws_cloudwatch_log_group" "es_index_log_group" {
+  name = "/aws/aes/domains/rw-api-elasticsearch/index-logs"
+}
+resource "aws_cloudwatch_log_group" "es_application_log_group" {
+  name = "/aws/aes/domains/rw-api-elasticsearch/application-logs"
+}
+
+resource "aws_cloudwatch_log_resource_policy" "es_logs_resource_policy" {
+  policy_name = "es_logs_resource_policy"
+
+  policy_document = <<CONFIG
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "es.amazonaws.com"
+      },
+      "Action": [
+        "logs:PutLogEvents",
+        "logs:PutLogEventsBatch",
+        "logs:CreateLogStream"
+      ],
+      "Resource": "arn:aws:logs:*"
+    }
+  ]
+}
+CONFIG
 }
 
 resource "aws_elasticsearch_domain" "rw-api-elasticsearch" {
@@ -142,6 +174,20 @@ resource "aws_elasticsearch_domain" "rw-api-elasticsearch" {
   snapshot_options {
     automated_snapshot_start_hour = 23
   }
+
+
+  log_publishing_options {
+    cloudwatch_log_group_arn = aws_cloudwatch_log_group.es_application_log_group.arn
+    enabled                  = true
+    log_type                 = "ES_APPLICATION_LOGS"
+  }
+
+  log_publishing_options {
+    cloudwatch_log_group_arn = aws_cloudwatch_log_group.es_index_log_group.arn
+    enabled                  = true
+    log_type                 = "INDEX_SLOW_LOGS"
+  }
+
 
   lifecycle {
     ignore_changes = [
