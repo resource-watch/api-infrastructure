@@ -1,6 +1,4 @@
-# Require TF version to be same as or greater than 0.12.13
 terraform {
-  required_version = ">=0.12.13"
   backend "s3" {
     region         = "us-east-1"
     key            = "k8s-infrastructure.tfstate"
@@ -9,10 +7,6 @@ terraform {
   }
 }
 
-provider "aws" {
-  region  = "us-east-1"
-  version = "~> 3.0.0"
-}
 
 data "aws_eks_cluster" "rw_api" {
   name = "${replace(local.project, " ", "-")}-k8s-cluster-${var.environment}"
