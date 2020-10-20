@@ -1,6 +1,4 @@
-# Require TF version to be same as or greater than 0.12.13
 terraform {
-  required_version = ">=0.12.13"
   backend "s3" {
     region         = "us-east-1"
     key            = "core.tfstate"
@@ -9,15 +7,6 @@ terraform {
   }
 }
 
-provider "aws" {
-  region  = "us-east-1"
-  version = "~> 3.0.0"
-}
-
-# Cloudflare provider, so we can manage DNS
-provider "cloudflare" {
-  version = "~> 2.0"
-}
 
 # Call the seed_module to build our ADO seed info
 module "bootstrap" {
