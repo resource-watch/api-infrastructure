@@ -207,7 +207,7 @@ module "postgresql" {
   private_subnet_ids          = [module.vpc.private_subnets[0].id, module.vpc.private_subnets[1].id, module.vpc.private_subnets[3].id]
   project                     = local.project
   rds_backup_retention_period = var.backup_retention_period
-  rds_db_name                 = "wri" # default database, create app specific database at project level
+  rds_db_name                 = "wri"      # default database, create app specific database at project level
   rds_user_name               = "postgres" # superuser, create app specific users at project level
   rds_instance_class          = var.rds_instance_class
   rds_instance_count          = var.rds_instance_count
@@ -227,6 +227,10 @@ module "jenkins" {
   security_group_ids        = [aws_security_group.default.id]
   user_data                 = data.template_file.jenkins_config_on_ubuntu.rendered
   iam_instance_profile_role = module.vpc.eks_manager_role
+}
+
+module "lambda" {
+  source = "./modules/lambda"
 }
 
 data "cloudflare_zones" "resourcewatch" {
