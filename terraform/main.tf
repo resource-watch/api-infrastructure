@@ -230,7 +230,16 @@ module "jenkins" {
 }
 
 module "lambda" {
-  source = "./modules/lambda"
+  source                            = "./modules/lambda"
+  eks_cluster_name                  = module.eks.cluster_name
+  apps_node_group_min_size          = var.apps_node_group_min_size
+  apps_node_group_max_size          = var.apps_node_group_max_size
+  apps_node_group_desired_size      = var.apps_node_group_max_size
+  apps_node_group_min_size_upscaled = var.apps_node_group_min_size_upscaled
+  gfw_node_group_min_size           = var.gfw_node_group_min_size
+  gfw_node_group_max_size           = var.gfw_node_group_max_size
+  gfw_node_group_desired_size       = var.gfw_node_group_max_size
+  gfw_node_group_min_size_upscaled  = var.gfw_node_group_min_size_upscaled
 }
 
 data "cloudflare_zones" "resourcewatch" {

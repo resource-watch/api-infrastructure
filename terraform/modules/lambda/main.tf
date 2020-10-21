@@ -14,16 +14,65 @@ resource "aws_lambda_function" "eks_scaling" {
   filename         = data.archive_file.lambda_eks_scaling.output_path
 }
 
-# Create the Cloudwatch event rule (just the "schedule")
-resource "aws_cloudwatch_event_rule" "every_thirty_minutes" {
+# Create the Cloudwatch event rule for upscaling.
+# Every upscaled config variable (e.g. apps_node_group_min_size_upscaled)
+# has a default value of -1 as a sentinel. If a value for that variable is
+# not provided, it will just take the corresponding downscaled value.
+resource "aws_cloudwatch_event_rule" "upscale_eks_cluster" {
   name                = "every-thirty-minutes"
   description         = "Fires every thirty minutes"
-  schedule_expression = "rate(30 minutes)"
+  schedule_expression = var.cw_upscale_crontab
+  input               = <<EOF
+{
+  "eks_cluster_name": "${var.eks_cluster_name}",
+  "scaling_config": {
+    "apps-node-group": {
+      "minSize": ${var.apps_node_group_min_size_upscaled != -1 ? var.apps_node_group_min_size_upscaled : var.apps_node_group_min_size},
+      "maxSize": ${var.apps_node_group_max_size_upscaled != -1 ? var.apps_node_group_max_size_upscaled : var.apps_node_group_max_size},
+      "desiredSize": ${var.apps_node_group_desired_size_upscaled != -1 ? var.apps_node_group_desired_size_upscaled : var.apps_node_group_desired_size}
+    },
+    "gfw-node-group": {
+      "minSize": ${var.gfw_node_group_min_size_upscaled != -1 ? var.gfw_node_group_min_size_upscaled : var.gfw_node_group_min_size},
+      "maxSize": ${var.gfw_node_group_max_size_upscaled != -1 ? var.gfw_node_group_max_size_upscaled : var.gfw_node_group_max_size},
+      "desiredSize": ${var.gfw_node_group_desired_size_upscaled != -1 ? var.gfw_node_group_desired_size_upscaled : var.gfw_node_group_desired_size}
+    }
+  }
+}
+EOF
 }
 
-# Associate the event rule with the Lambda function
-resource "aws_cloudwatch_event_target" "check_cluster_scaling_every_thirty_minutes" {
-  rule      = aws_cloudwatch_event_rule.every_thirty_minutes.name
+# Create the Cloudwatch event rule for downscaling
+resource "aws_cloudwatch_event_rule" "downscale_eks_cluster" {
+  name                = "every-thirty-minutes"
+  description         = "Fires every thirty minutes"
+  schedule_expression = var.cw_downscale_crontab
+  input               = <<EOF
+{
+  "eks_cluster_name": "${var.eks_cluster_name}",
+  "scaling_config": {
+    "apps-node-group": {
+      "minSize": ${var.apps_node_group_min_size},
+      "maxSize": ${var.apps_node_group_max_size},
+      "desiredSize": ${var.apps_node_group_desired_size}
+    },
+    "gfw-node-group": {
+      "minSize": ${var.gfw_node_group_min_size},
+      "maxSize": ${var.gfw_node_group_max_size},
+      "desiredSize": ${var.gfw_node_group_desired_size}
+    }
+  }
+}
+EOF
+}
+
+# Associate the event rules with the Lambda function
+resource "aws_cloudwatch_event_target" "upscale_eks_cluster" {
+  rule      = aws_cloudwatch_event_rule.upscale_eks_cluster.name
+  target_id = "lambda"
+  arn       = aws_lambda_function.eks_scaling.arn
+}
+resource "aws_cloudwatch_event_target" "downscale_eks_cluster" {
+  rule      = aws_cloudwatch_event_rule.downscale_eks_cluster.name
   target_id = "lambda"
   arn       = aws_lambda_function.eks_scaling.arn
 }
