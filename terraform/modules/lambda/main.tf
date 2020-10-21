@@ -84,7 +84,14 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_eks_scaling" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.eks_scaling.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.every_thirty_minutes.arn
+  source_arn    = aws_cloudwatch_event_rule.upscale_eks_cluster.arn
+}
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_eks_scaling" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.eks_scaling.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.downscale_eks_cluster.arn
 }
 
 # Create an IAM role for the Lambda function
