@@ -19,10 +19,24 @@ resource "aws_lambda_function" "eks_scaling" {
 # has a default value of -1 as a sentinel. If a value for that variable is
 # not provided, it will just take the corresponding downscaled value.
 resource "aws_cloudwatch_event_rule" "upscale_eks_cluster" {
-  name                = "every-thirty-minutes"
-  description         = "Fires every thirty minutes"
+  name                = "upscale-eks-cluster"
+  description         = "Upscale EKS cluster at 10pm"
   schedule_expression = var.cw_upscale_crontab
-  input               = <<EOF
+}
+
+# Create the Cloudwatch event rule for downscaling
+resource "aws_cloudwatch_event_rule" "downscale_eks_cluster" {
+  name                = "downscale-eks-cluster"
+  description         = "Downscale EKS cluster at midnight"
+  schedule_expression = var.cw_downscale_crontab
+}
+
+# Associate the event rules with the Lambda function
+resource "aws_cloudwatch_event_target" "upscale_eks_cluster" {
+  rule      = aws_cloudwatch_event_rule.upscale_eks_cluster.name
+  target_id = "lambda"
+  arn       = aws_lambda_function.eks_scaling.arn
+  input     = <<EOF
 {
   "eks_cluster_name": "${var.eks_cluster_name}",
   "scaling_config": {
@@ -41,12 +55,11 @@ resource "aws_cloudwatch_event_rule" "upscale_eks_cluster" {
 EOF
 }
 
-# Create the Cloudwatch event rule for downscaling
-resource "aws_cloudwatch_event_rule" "downscale_eks_cluster" {
-  name                = "every-thirty-minutes"
-  description         = "Fires every thirty minutes"
-  schedule_expression = var.cw_downscale_crontab
-  input               = <<EOF
+resource "aws_cloudwatch_event_target" "downscale_eks_cluster" {
+  rule      = aws_cloudwatch_event_rule.downscale_eks_cluster.name
+  target_id = "lambda"
+  arn       = aws_lambda_function.eks_scaling.arn
+  input     = <<EOF
 {
   "eks_cluster_name": "${var.eks_cluster_name}",
   "scaling_config": {
@@ -63,18 +76,6 @@ resource "aws_cloudwatch_event_rule" "downscale_eks_cluster" {
   }
 }
 EOF
-}
-
-# Associate the event rules with the Lambda function
-resource "aws_cloudwatch_event_target" "upscale_eks_cluster" {
-  rule      = aws_cloudwatch_event_rule.upscale_eks_cluster.name
-  target_id = "lambda"
-  arn       = aws_lambda_function.eks_scaling.arn
-}
-resource "aws_cloudwatch_event_target" "downscale_eks_cluster" {
-  rule      = aws_cloudwatch_event_rule.downscale_eks_cluster.name
-  target_id = "lambda"
-  arn       = aws_lambda_function.eks_scaling.arn
 }
 
 # Give Cloudwatch permission to run the function
