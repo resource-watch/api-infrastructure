@@ -12,7 +12,7 @@ variable "cw_upscale_crontab" {
   type = string
   # TEMP: Do every 10 minutes just for testing
   # Actually should be "cron(*/15 22,23 * * *)"
-  default = "cron(5-59/10 * * * *)"
+  default = "cron(15-59/30 * * * *)"
 
 }
 
@@ -22,7 +22,7 @@ variable "cw_downscale_crontab" {
   type = string
   # TEMP: Do every 10 minutes just for testing
   # Actually should be "cron(0,15 0 * * *)"
-  default = "cron(*/10 * * * *)"
+  default = "cron(*/30 * * * *)"
 }
 
 # Scaling config variables for apps-node-group
