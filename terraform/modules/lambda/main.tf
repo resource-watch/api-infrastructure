@@ -79,14 +79,14 @@ EOF
 }
 
 # Give Cloudwatch permission to run the function
-resource "aws_lambda_permission" "allow_cloudwatch_to_call_eks_scaling" {
+resource "aws_lambda_permission" "allow_cloudwatch_upscale_to_call_eks_scaling" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.eks_scaling.function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.upscale_eks_cluster.arn
 }
-resource "aws_lambda_permission" "allow_cloudwatch_to_call_eks_scaling" {
+resource "aws_lambda_permission" "allow_cloudwatch_downscale_to_call_eks_scaling" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.eks_scaling.function_name
