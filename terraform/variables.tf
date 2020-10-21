@@ -197,7 +197,3 @@ variable "rds_instance_count" {
   type        = number
   description = "Number of Aurora PostgreSQL instances before autoscaling"
 }
-
-variable "lambda_python_runtime" {
-  default = "python3.7"
-}

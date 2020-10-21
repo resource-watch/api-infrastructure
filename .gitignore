@@ -41,6 +41,3 @@ override.tf.json
 # example: *tfplan*
 
 venv/*
-
-# VSCode config
-.vscode
