@@ -11,8 +11,8 @@ variable "eks_cluster_name" {
 variable "cw_upscale_crontab" {
   type = string
   # TEMP: Do every 10 minutes just for testing
-  # Actually should be "*/15 22,23 * * *"
-  default = "5-59/10 * * * *"
+  # Actually should be "cron(*/15 22,23 * * *)"
+  default = "cron(5-59/10 * * * *)"
 
 }
 
@@ -21,8 +21,8 @@ variable "cw_upscale_crontab" {
 variable "cw_downscale_crontab" {
   type = string
   # TEMP: Do every 10 minutes just for testing
-  # Actually should be "0,15 0 * * *"
-  default = "*/10 * * * *"
+  # Actually should be "cron(0,15 0 * * *)"
+  default = "cron(*/10 * * * *)"
 }
 
 # Scaling config variables for apps-node-group
