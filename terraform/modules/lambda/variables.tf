@@ -10,7 +10,7 @@ variable "eks_cluster_name" {
 # check every 15 minutes just to be safe
 variable "cw_upscale_crontab" {
   type = string
-  # TEMP: Do every 10 minutes just for testing
+  # TEMP: Do every 30 minutes just for testing
   # Actually should be "cron(*/15 22,23 * * *)"
   default = "cron(15-59/30 * * * *)"
 
@@ -20,7 +20,7 @@ variable "cw_upscale_crontab" {
 # check again at 12:15am just to safe
 variable "cw_downscale_crontab" {
   type = string
-  # TEMP: Do every 10 minutes just for testing
+  # TEMP: Do every 30 minutes just for testing
   # Actually should be "cron(0,15 0 * * *)"
   default = "cron(*/30 * * * *)"
 }
