@@ -6,6 +6,12 @@ variable "eks_cluster_name" {
   type = string
 }
 
+# Keep Lambda execution logs for 7 days
+variable "log_retention" {
+  type    = number
+  default = 7
+}
+
 # Starting at 10pm, upscale the cluster and
 # check every 15 minutes just to be safe
 variable "cw_upscale_crontab" {
