@@ -14,6 +14,12 @@ resource "aws_lambda_function" "eks_scaling" {
   filename         = data.archive_file.lambda_eks_scaling.output_path
 }
 
+# Create a log group for the Lambda function
+resource "aws_cloudwatch_log_group" "eks_scaling_log_group" {
+  name              = "/aws/lambda/eks_scaling"
+  retention_in_days = var.log_retention
+}
+
 # Create the Cloudwatch event rule for upscaling.
 # Every upscaled config variable (e.g. apps_node_group_min_size_upscaled)
 # has a default value of -1 as a sentinel. If a value for that variable is
@@ -39,18 +45,24 @@ resource "aws_cloudwatch_event_target" "upscale_eks_cluster" {
   input     = <<EOF
 {
   "eks_cluster_name": "${var.eks_cluster_name}",
-  "scaling_config": {
-    "apps-node-group": {
-      "minSize": ${var.apps_node_group_min_size_upscaled != -1 ? var.apps_node_group_min_size_upscaled : var.apps_node_group_min_size},
-      "maxSize": ${var.apps_node_group_max_size_upscaled != -1 ? var.apps_node_group_max_size_upscaled : var.apps_node_group_max_size},
-      "desiredSize": ${var.apps_node_group_desired_size_upscaled != -1 ? var.apps_node_group_desired_size_upscaled : var.apps_node_group_desired_size}
+  "nodegroup_config": [
+    {
+      "nodegroup_name": "apps-node-group",
+      "scaling_config": {
+        "minSize": ${var.apps_node_group_min_size_upscaled != -1 ? var.apps_node_group_min_size_upscaled : var.apps_node_group_min_size},
+        "maxSize": ${var.apps_node_group_max_size_upscaled != -1 ? var.apps_node_group_max_size_upscaled : var.apps_node_group_max_size},
+        "desiredSize": ${var.apps_node_group_desired_size_upscaled != -1 ? var.apps_node_group_desired_size_upscaled : var.apps_node_group_desired_size}
+      }
     },
-    "gfw-node-group": {
-      "minSize": ${var.gfw_node_group_min_size_upscaled != -1 ? var.gfw_node_group_min_size_upscaled : var.gfw_node_group_min_size},
-      "maxSize": ${var.gfw_node_group_max_size_upscaled != -1 ? var.gfw_node_group_max_size_upscaled : var.gfw_node_group_max_size},
-      "desiredSize": ${var.gfw_node_group_desired_size_upscaled != -1 ? var.gfw_node_group_desired_size_upscaled : var.gfw_node_group_desired_size}
+    {
+      "nodegroup_name": "gfw-node-group",
+      "scaling_config": {
+        "minSize": ${var.gfw_node_group_min_size_upscaled != -1 ? var.gfw_node_group_min_size_upscaled : var.gfw_node_group_min_size},
+        "maxSize": ${var.gfw_node_group_max_size_upscaled != -1 ? var.gfw_node_group_max_size_upscaled : var.gfw_node_group_max_size},
+        "desiredSize": ${var.gfw_node_group_desired_size_upscaled != -1 ? var.gfw_node_group_desired_size_upscaled : var.gfw_node_group_desired_size}
+      }
     }
-  }
+  ]
 }
 EOF
 }

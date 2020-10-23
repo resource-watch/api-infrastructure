@@ -23,10 +23,11 @@ def should_update_scaling_config(client, cluster_name, nodegroup_name, desired_s
     print("Proceeding with update for nodegroup {}.".format(nodegroup_name))
     return True
 
-def scale_nodegroups(cluster_name, scaling_config):
+def scale_nodegroups(cluster_name, nodegroup_config):
     eks_client = boto3.client('eks')
-    for nodegroup_name in scaling_config:
-        ng_scaling_config = scaling_config[nodegroup_name]['scaling_config']
+    for nodegroup in nodegroup_config:
+        nodegroup_name = nodegroup["nodegroup_name"]
+        ng_scaling_config = nodegroup['scaling_config']
         if should_update_scaling_config(eks_client, cluster_name, nodegroup_name, ng_scaling_config):
             # Update the nodegroup with the desired config
             response = eks_client.update_nodegroup_config(
@@ -45,26 +46,25 @@ def lambda_handler(event, context):
     # event is JSON that looks like this:
     # {
     #   "eks_cluster_name": "cluster-name",
-    #   "scaling_config": {
-    #     "apps-node-group": {
-    #       "minSize": 123,
-    #       "maxSize": 123,
-    #       "desiredSize": 123
-    #     },
-    #     "gfw-node-group": {
-    #       "minSize": 123,
-    #       "maxSize": 123,
-    #       "desiredSize": 123
+    #   "nodegroup_config": [
+    #     {
+    #       "nodegroup_name": "nodegroup-name",
+    #       "scaling_config": {
+    #         "minSize": 123,
+    #         "maxSize": 123,
+    #         "desiredSize": 123
+    #       }
     #     }
-    #   }
+    #     // ...
+    #   ]
     # }
     print("Incoming event:", json.dumps(event, default=str))
     cluster_name = event["eks_cluster_name"]
-    scaling_config = event["scaling_config"]
+    nodegroup_config = event["nodegroup_config"]
 
     # Return responses from the update requests so we can
     # look up update_ids later if necessary for debugging
-    body = [r for r in scale_nodegroups(cluster_name, scaling_config)]
+    body = [r for r in scale_nodegroups(cluster_name, nodegroup_config)]
     return {
         "statusCode": 200,
         "body": json.dumps(body, default=str),

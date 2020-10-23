@@ -229,8 +229,8 @@ module "jenkins" {
   iam_instance_profile_role = module.vpc.eks_manager_role
 }
 
-module "lambda" {
-  source                            = "./modules/lambda"
+module "eks_scaling" {
+  source                            = "./modules/eks_scaling"
   eks_cluster_name                  = module.eks.cluster_name
   apps_node_group_min_size          = var.apps_node_group_min_size
   apps_node_group_max_size          = var.apps_node_group_max_size
