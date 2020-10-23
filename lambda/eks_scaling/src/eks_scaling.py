@@ -3,27 +3,9 @@ import json
 
 import boto3
 
-CLUSTER_NAME = 'core-k8s-cluster-dev'
-NODEGROUPS_TO_SCALE = {
-    'apps-node-group': {
-        'scaling_config': {
-            'minSize': 1,
-            'maxSize': 16,
-            'desiredSize': 3
-        }
-    },
-    'gfw-node-group': {
-        'scaling_config': {
-            'minSize': 1,
-            'maxSize': 4,
-            'desiredSize': 1
-        }
-    }
-}
-
-def should_update_scaling_config(client, nodegroup_name, desired_scaling_config):
+def should_update_scaling_config(client, cluster_name, nodegroup_name, desired_scaling_config):
     response = client.describe_nodegroup(
-        clusterName=CLUSTER_NAME,
+        clusterName=cluster_name,
         nodegroupName=nodegroup_name
     )
     nodegroup = response['nodegroup']
@@ -41,28 +23,48 @@ def should_update_scaling_config(client, nodegroup_name, desired_scaling_config)
     print("Proceeding with update for nodegroup {}.".format(nodegroup_name))
     return True
 
-def scale_nodegroups():
+def scale_nodegroups(cluster_name, nodegroup_config):
     eks_client = boto3.client('eks')
-    for nodegroup_name in NODEGROUPS_TO_SCALE:
-        scaling_config = NODEGROUPS_TO_SCALE[nodegroup_name]['scaling_config']
-        if should_update_scaling_config(eks_client, nodegroup_name, scaling_config):
+    for nodegroup in nodegroup_config:
+        nodegroup_name = nodegroup["nodegroup_name"]
+        ng_scaling_config = nodegroup['scaling_config']
+        if should_update_scaling_config(eks_client, cluster_name, nodegroup_name, ng_scaling_config):
             # Update the nodegroup with the desired config
             response = eks_client.update_nodegroup_config(
-                clusterName=CLUSTER_NAME,
+                clusterName=cluster_name,
                 nodegroupName=nodegroup_name,
-                scalingConfig=scaling_config
+                scalingConfig=ng_scaling_config
             )
             # Yield info about the update for tracking purposes
             yield {
-                "cluster": CLUSTER_NAME,
+                "cluster": cluster_name,
                 "nodegroup": nodegroup_name,
                 "update_response": response
             }
 
 def lambda_handler(event, context):
+    # event is JSON that looks like this:
+    # {
+    #   "eks_cluster_name": "cluster-name",
+    #   "nodegroup_config": [
+    #     {
+    #       "nodegroup_name": "nodegroup-name",
+    #       "scaling_config": {
+    #         "minSize": 123,
+    #         "maxSize": 123,
+    #         "desiredSize": 123
+    #       }
+    #     }
+    #     // ...
+    #   ]
+    # }
+    print("Incoming event:", json.dumps(event, default=str))
+    cluster_name = event["eks_cluster_name"]
+    nodegroup_config = event["nodegroup_config"]
+
     # Return responses from the update requests so we can
     # look up update_ids later if necessary for debugging
-    body = [r for r in scale_nodegroups()]
+    body = [r for r in scale_nodegroups(cluster_name, nodegroup_config)]
     return {
         "statusCode": 200,
         "body": json.dumps(body, default=str),
