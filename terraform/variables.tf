@@ -95,7 +95,7 @@ variable "mongodb_apps_node_group_desired_size" {
 
 variable "apps_node_group_instance_types" {
   type    = string
-  default = "m5a.xlarge"
+  default = "r5a.large"
 }
 variable "apps_node_group_min_size" {
   type    = number
@@ -116,7 +116,7 @@ variable "apps_node_group_min_size_upscaled" {
 
 variable "webapps_node_group_instance_types" {
   type    = string
-  default = "m5a.xlarge"
+  default = "r5a.large"
 }
 variable "webapps_node_group_min_size" {
   type    = number
@@ -133,7 +133,7 @@ variable "webapps_node_group_desired_size" {
 
 variable "gfw_node_group_instance_types" {
   type    = string
-  default = "m5a.xlarge"
+  default = "r5a.large"
 }
 variable "gfw_node_group_min_size" {
   type    = number
@@ -171,7 +171,7 @@ variable "gfw_pro_node_group_desired_size" {
 
 variable "core_node_group_instance_types" {
   type    = string
-  default = "m5a.xlarge"
+  default = "r5a.large"
 }
 variable "core_node_group_min_size" {
   type    = number
