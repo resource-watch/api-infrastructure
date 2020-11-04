@@ -71,7 +71,7 @@ resource "aws_security_group" "document_db" {
 }
 
 
-resource "aws_security_group_rule" "default_http_egress" {
+resource "aws_security_group_rule" "port_forward_documentdb" {
   type                     = "egress"
   from_port                = module.documentdb.port
   to_port                  = module.documentdb.port
