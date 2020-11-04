@@ -25,6 +25,11 @@ spec:
                     secretKeyRef:
                       name: backups
                       key: POSTGRES_PASSWORD
+                - name: POSTGRES_URI
+                  valueFrom:
+                    secretKeyRef:
+                      name: backups
+                      key: POSTGRES_URI
               args:
                 - postgres
           restartPolicy: OnFailure
