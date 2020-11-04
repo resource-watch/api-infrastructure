@@ -140,7 +140,7 @@ resource "aws_cloudwatch_log_group" "default" {
 
 resource "aws_secretsmanager_secret" "documentdb" {
   description = "Connection string for DocumentDB cluster"
-  name        = "${var.project}-docuementdb-secret"
+  name        = "${var.project}-documentdb-secret"
   tags        = var.tags
 }
 
