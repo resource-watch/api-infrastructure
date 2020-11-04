@@ -42,7 +42,6 @@ module "eks" {
   vpc_id             = module.vpc.id
   environment        = var.environment
   backups_bucket     = var.backups_bucket
-  security_group_ids = [module.documentdb.security_group_id]
   subnet_ids = [
     module.vpc.private_subnets[0].id,
     module.vpc.private_subnets[1].id,
@@ -212,6 +211,7 @@ module "documentdb" {
   master_username                 = "wri" # superuser, create app specific users at project level
   tags                            = local.tags
   vpc_id                          = module.vpc.id
+  vpc_cidr_block                  = module.vpc.cidr_block
   engine_version                  = "3.6.0"
   enabled_cloudwatch_logs_exports = var.db_logs_exports
 }

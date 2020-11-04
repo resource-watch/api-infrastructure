@@ -18,6 +18,10 @@ output "reader_endpoint" {
   description = "A read-only endpoint of the DocumentDB cluster, automatically load-balanced across replicas"
 }
 
+output "port" {
+  value = aws_docdb_cluster.default.port
+  description = "Port of Document DB cluster"
+}
 
 output "security_group_id" {
   description = "ID of the DocumentDB cluster Security Group"

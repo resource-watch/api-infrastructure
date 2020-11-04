@@ -18,6 +18,11 @@ variable "vpc_id" {
   description = "VPC ID to create the cluster in (e.g. `vpc-a22222ee`)"
 }
 
+variable "vpc_cidr_block" {
+  type        = string
+  description = "CIDR block of VPC"
+}
+
 variable "private_subnet_ids" {
   type        = list(string)
   description = "List of VPC subnet IDs to place DocumentDB instances in"
