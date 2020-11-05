@@ -1,12 +1,13 @@
+#!/usr/bin/env python
 import os
 from datetime import datetime
+from typing import Any, Dict, Optional
 
 import boto3
 import click
 import requests
 from requests.model import Response
 from requests_aws4auth import AWS4Auth
-from typing import Any, Dict, Optional
 
 
 @click.command()
