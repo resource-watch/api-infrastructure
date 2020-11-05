@@ -12,7 +12,7 @@ spec:
         spec:
           containers:
             - name: kubecron
-              image: vizzuality/kubecron:2.0.0
+              image: vizzuality/kubecron:2.1.3
               imagePullPolicy: Always
               env:
                 - name: AWS_BACKUPS_BUCKET_URI
@@ -25,6 +25,11 @@ spec:
                     secretKeyRef:
                       name: backups
                       key: POSTGRES_PASSWORD
+                - name: POSTGRES_URI
+                  valueFrom:
+                    secretKeyRef:
+                      name: backups
+                      key: POSTGRES_URI
               args:
                 - postgres
           restartPolicy: OnFailure
