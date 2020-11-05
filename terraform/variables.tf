@@ -209,10 +209,6 @@ variable "db_instance_count" {
   description = "Number of DocumentDB instances"
 }
 
-variable "db_password" {
-  type        = string
-  description = "Password of DocumentDB superuser"
-}
 
 variable "db_logs_exports" {
   type        = list(string)

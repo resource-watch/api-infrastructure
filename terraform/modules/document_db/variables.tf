@@ -58,11 +58,6 @@ variable "master_username" {
   description = "Username for the master DB user"
 }
 
-variable "master_password" {
-  type        = string
-  description = "Password for the master DB user. Note that this may show up in logs, and it will be stored in the state file. Please refer to the DocumentDB Naming Constraints"
-}
-
 variable "backup_retention_period" {
   type        = number
   description = "Number of days to retain backups for"

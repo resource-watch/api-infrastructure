@@ -207,7 +207,6 @@ module "documentdb" {
   backup_retention_period         = var.backup_retention_period
   instance_class                  = var.db_instance_class
   cluster_size                    = var.db_instance_count
-  master_password                 = var.db_password
   master_username                 = "wri" # superuser, create app specific users at project level
   tags                            = local.tags
   vpc_id                          = module.vpc.id
