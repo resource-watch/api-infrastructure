@@ -180,7 +180,7 @@ variable "core_node_group_desired_size" {
 
 variable "backup_retention_period" {
   type        = number
-  description = "Number of days to keep Aurora PostgreSQL backups"
+  description = "Time in days to keep db backups"
 }
 
 variable "log_retention_period" {
@@ -196,4 +196,21 @@ variable "rds_instance_class" {
 variable "rds_instance_count" {
   type        = number
   description = "Number of Aurora PostgreSQL instances before autoscaling"
+}
+
+
+variable "db_instance_class" {
+  type        = string
+  description = "Instance type of DocumentDB server"
+}
+
+variable "db_instance_count" {
+  type        = number
+  description = "Number of DocumentDB instances"
+}
+
+
+variable "db_logs_exports" {
+  type        = list(string)
+  description = "List of log types to export to cloudwatch. The following log types are supported: `audit`, `error`, `general`, `slowquery`"
 }

@@ -29,40 +29,96 @@
 # (Detailed instructions below variables)
 #=====================================================================
 
-# Database name to specify a specific database only e.g. myawesomeapp
-# Unnecessary if backup all databases
-DBNAME="doc-orchestrator"
-
-# Collections name list to include e.g. system.profile users
-# DBNAME is required
-# Unecessary if backup all collections
-# COLLECTIONS=""
-
-# Collections to exclude e.g. system.profile users
-# DBNAME is required
-# Unecessary if backup all collections
-#EXCLUDE_COLLECTIONS=""
-
-# Username to access the mongo server e.g. dbuser
-# Unnecessary if authentication is off
-#DBUSERNAME="vizzuality-super"
-
-# Password to access the mongo server e.g. password
-# Unnecessary if authentication is off
-#DBPASSWORD="notset"
-
-# Database for authentication to the mongo server e.g. admin
-# Unnecessary if authentication is off
-#DBAUTHDB="admin"
-
-# Host name (or IP address) of mongo server e.g localhost
-DBHOST="mongodb-apps-mongodb-replicaset-0.mongodb-apps-mongodb-replicaset.core.svc.cluster.local:27017"
-
-# Port that mongo is listening on
+# Default values
+POSITIONAL=()
 DBPORT="27017"
 
-# Backup directory location e.g /backups
-BACKUPDIR="/cronjobs/backups/mongo"
+# extracting cmd line arguments
+while [[ $# -gt 0 ]]
+do
+  key="$1"
+
+  case $key in
+
+      # Database name to specify a specific database only e.g. myawesomeapp
+      # Unnecessary if backup all databases
+      --dbname)
+      DBNAME="$2"
+      shift # past argument
+      shift # past value
+      ;;
+
+      # Collections name list to include e.g. system.profile users
+      # DBNAME is required
+      # Unnecessary if backup all collections
+      --collection)
+      COLLECTIONS="$2"
+      shift # past argument
+      shift # past value
+      ;;
+
+      # Collections to exclude e.g. system.profile users
+      # DBNAME is required
+      # Unnecessary if backup all collections
+      --exclude_collection)
+      EXCLUDE_COLLECTIONS="$2"
+      shift # past argument
+      shift # past value
+      ;;
+
+      # Username to access the mongo server e.g. dbuser
+      # Unnecessary if authentication is off
+      --dbusername)
+      DBUSERNAME="$2"
+      shift # past argument
+      shift # past value
+      ;;
+
+      # Password to access the mongo server e.g. password
+      # Unnecessary if authentication is off
+      --dbpassword)
+      DBPASSWORD="$2"
+      shift # past argument
+      shift # past value
+      ;;
+
+      # Database for authentication to the mongo server e.g. admin
+      # Unnecessary if authentication is off
+      --dbauthdb)
+      DBAUTHDB="$2"
+      shift # past argument
+      shift # past value
+      ;;
+
+      # Host name (or IP address) of mongo server e.g localhost
+      --dbhost)
+      DBHOST="$2"
+      shift # past argument
+      shift # past value
+      ;;
+
+      # Port that mongo is listening on
+      --dbport)
+      DBPORT="$2"
+      shift # past argument
+      shift # past value
+      ;;
+
+      # Backup directory location e.g /backups
+      --backupdir)
+      BACKUPDIR="$2"
+      shift # past argument
+      shift # past value
+      ;;
+
+      *)    # unknown option
+      POSITIONAL+=("$1") # save it in an array for later
+      shift # past argument
+      ;;
+  esac
+done
+set -- "${POSITIONAL[@]}" # restore positional parameters
+
 
 # Mail setup
 # What would you like to be mailed to you?
