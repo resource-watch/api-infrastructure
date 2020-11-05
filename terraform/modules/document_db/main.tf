@@ -5,7 +5,7 @@
 resource "aws_docdb_cluster" "default" {
   cluster_identifier              = "${var.project}-documentdb-cluster"
   master_username                 = var.master_username
-  master_password                 = var.master_password
+  master_password                 = random_password.documentdb_superuser.result
   backup_retention_period         = var.backup_retention_period
   preferred_backup_window         = var.preferred_backup_window
   final_snapshot_identifier       = lower("${var.project}-documentdb-cluster")
@@ -138,6 +138,11 @@ resource "aws_cloudwatch_log_group" "default" {
 # Secret Manager
 ####################
 
+resource "random_password" "documentdb_superuser" {
+  length           = 16
+  special          = false
+}
+
 resource "aws_secretsmanager_secret" "documentdb" {
   description = "Connection string for DocumentDB cluster"
   name        = "${var.project}-documentdb-secret"
@@ -148,8 +153,8 @@ resource "aws_secretsmanager_secret_version" "documentdb" {
 
   secret_id = aws_secretsmanager_secret.documentdb.id
   secret_string = jsonencode({
-    "username"             = var.master_password,
-    "password"             = var.master_password,
+    "username"             = var.master_username,
+    "password"             = random_password.documentdb_superuser.result,
     "engine"               = var.engine,
     "endpoint"             = aws_docdb_cluster.default.endpoint,
     "reader_endpoint"      = aws_docdb_cluster.default.reader_endpoint,
