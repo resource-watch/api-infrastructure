@@ -20,7 +20,12 @@ case "$1" in
         ;;
     elasticsearch)
         echo "Starting auto elastic backup"
-        /cronjobs/autoelasticbackup.sh || true
+        /cronjobs/autoelasticbackup.py --host "$ES_URI" \
+                                       --snapshot wri-api-backups-es7 \
+                                       --role_arn "$ES_BACKUP_IAM_ROLE" \
+                                       --bucket "$AWS_BACKUPS_BUCKET_NAME" \
+                                       --base_path elasticsearch-7 \
+                                       || true
         ;;
     mongo)
         echo "Starting auto mongo backup"
