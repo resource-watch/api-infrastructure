@@ -72,7 +72,7 @@ resource "aws_security_group" "postgresql" {
 }
 
 
-resource "aws_security_group_rule" "postgres_port_forward_egress" {
+resource "aws_security_group_rule" "port_forward_postgres" {
   type                     = "egress"
   from_port                = module.postgresql.port
   to_port                  = module.postgresql.port
