@@ -33,6 +33,7 @@ module "vpc" {
     "kubernetes.io/role/elb" : 1
   }
   security_group_ids = [aws_security_group.default.id, aws_security_group.document_db.id, aws_security_group.postgresql.id]
+
 }
 
 # Create a k8s cluster using AWS EKS
