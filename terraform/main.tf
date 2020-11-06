@@ -1,8 +1,8 @@
 # Require TF version to be same as or greater than 0.12.13
 terraform {
   backend "s3" {
-    region = "us-east-1"
-    key = "core.tfstate"
+    region         = "us-east-1"
+    key            = "core.tfstate"
     dynamodb_table = "aws-locks"
     encrypt        = true
   }
@@ -37,11 +37,11 @@ module "vpc" {
 
 # Create a k8s cluster using AWS EKS
 module "eks" {
-  source             = "./modules/eks"
-  project            = local.project
-  vpc_id             = module.vpc.id
-  environment        = var.environment
-  backups_bucket     = var.backups_bucket
+  source         = "./modules/eks"
+  project        = local.project
+  vpc_id         = module.vpc.id
+  environment    = var.environment
+  backups_bucket = var.backups_bucket
   subnet_ids = [
     module.vpc.private_subnets[0].id,
     module.vpc.private_subnets[1].id,
@@ -216,9 +216,9 @@ module "documentdb" {
   cluster_parameters = [
     {
       apply_method = "immediate"
-      name = "tls"
-      value = "disabled"
-    }]
+      name         = "tls"
+      value        = "disabled"
+  }]
 }
 
 
@@ -229,7 +229,7 @@ module "postgresql" {
   private_subnet_ids          = [module.vpc.private_subnets[0].id, module.vpc.private_subnets[1].id, module.vpc.private_subnets[3].id]
   project                     = local.project
   rds_backup_retention_period = var.backup_retention_period
-  rds_db_name                 = "wri" # default database, create app specific database at project level
+  rds_db_name                 = "wri"      # default database, create app specific database at project level
   rds_user_name               = "postgres" # superuser, create app specific users at project level
   rds_instance_class          = var.rds_instance_class
   rds_instance_count          = var.rds_instance_count

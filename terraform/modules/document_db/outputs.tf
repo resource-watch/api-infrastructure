@@ -19,7 +19,7 @@ output "reader_endpoint" {
 }
 
 output "port" {
-  value = aws_docdb_cluster.default.port
+  value       = aws_docdb_cluster.default.port
   description = "Port of Document DB cluster"
 }
 
