@@ -223,7 +223,7 @@ module "documentdb" {
     {
       apply_method = "immediate"
       name = "tls"
-      value = "enabled"
+      value = "disabled"
     }]
 }
 
