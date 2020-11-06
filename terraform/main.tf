@@ -216,9 +216,8 @@ module "documentdb" {
   enabled_cloudwatch_logs_exports = var.db_logs_exports
   cluster_parameters = [
     {
-      apply_method = "immediate"
-      name         = "tls"
-      value        = "disabled"
+      name  = "tls"
+      value = "disabled"
   }]
 }
 
