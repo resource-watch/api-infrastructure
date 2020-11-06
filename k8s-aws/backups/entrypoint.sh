@@ -3,7 +3,7 @@ set -e
 
 case "$1" in
     postgres)
-        echo postgresql.core.svc.cluster.local:5432:*:postgres:$POSTGRES_PASSWORD > $HOME/.pgpass
+        echo $POSTGRES_URI:5432:*:postgres:$POSTGRES_PASSWORD > $HOME/.pgpass
         chmod 0600 /root/.pgpass
         echo "Starting auto postgres backup"
         /cronjobs/autopostgresbackup.sh
