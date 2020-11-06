@@ -7,5 +7,5 @@ backup_retention_period  = 1
 rds_instance_class       = "db.t3.medium"
 rds_instance_count       = 1
 db_instance_class        = "db.r5.large"
-db_instance_count        = 1
+db_instance_count        = 2
 db_logs_exports          = ["audit", "profiler"]
