@@ -139,8 +139,8 @@ resource "aws_cloudwatch_log_group" "default" {
 ####################
 
 resource "random_password" "documentdb_superuser" {
-  length           = 16
-  special          = false
+  length  = 16
+  special = false
 }
 
 resource "aws_secretsmanager_secret" "documentdb" {
