@@ -39,7 +39,6 @@ case "$1" in
                          "metadata"
                          "story"
                          "subscription"
-                         "task-async"
                          "teams"
                          "user"
                          "vocabulary"
