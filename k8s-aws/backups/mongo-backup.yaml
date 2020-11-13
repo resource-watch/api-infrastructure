@@ -25,6 +25,16 @@ spec:
                     secretKeyRef:
                       name: backups
                       key: MONGODB_URI
+                - name: MONGODB_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: backups
+                      key: MONGODB_USER
+                - name: MONGODB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: backups
+                      key: MONGODB_PASSWORD
               args:
                 - mongo
           restartPolicy: OnFailure

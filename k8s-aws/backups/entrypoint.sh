@@ -47,6 +47,8 @@ case "$1" in
         for db in "${default_backups[@]}"; do
           /cronjobs/automongobackup.sh --dbhost "$MONGODB_URI" \
                                        --dbname "$db" \
+                                       --dbusername "$MONGODB_USER" \
+                                       --dbpassword "$MONGODB_PASSWORD" \
                                        --backup_dir "$BACKUP_DIR" || true
           echo "Syncing areas backup to $AWS_BACKUPS_BUCKET_URI/mongo"
           aws s3 sync "$BACKUP_DIR" "$AWS_BACKUPS_BUCKET_URI/mongo"
@@ -55,6 +57,8 @@ case "$1" in
         # Databases with custom backup strategy
         /cronjobs/automongobackup.sh --dbhost "$MONGODB_URI" \
                                      --dbname control-tower \
+                                     --dbusername "$MONGODB_USER" \
+                                     --dbpassword "$MONGODB_PASSWORD" \
                                      --exclude_collection statistics \
                                      --backup_dir "$BACKUP_DIR" || true
         echo "Syncing areas backup to $AWS_BACKUPS_BUCKET_URI/mongo"
