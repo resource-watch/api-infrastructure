@@ -114,3 +114,15 @@ output "aurora_port" {
 output "aurora_dbname" {
   value = module.postgresql.dbname
 }
+
+output "vpc_id" {
+  value = module.vpc.id
+}
+
+output "public_subnet_ids" {
+  value = module.vpc.public_subnet_ids
+}
+
+output "private_subnet_ids" {
+  value = module.vpc.private_subnet_ids
+}
