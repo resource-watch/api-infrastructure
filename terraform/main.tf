@@ -32,7 +32,8 @@ module "vpc" {
     "kubernetes.io/cluster/${lower(replace(local.project, " ", "-"))}-k8s-cluster-${var.environment}" : "shared"
     "kubernetes.io/role/elb" : 1
   }
-  security_group_ids = [aws_security_group.default.id]
+  security_group_ids = [aws_security_group.default.id, aws_security_group.document_db.id, aws_security_group.postgresql.id]
+
 }
 
 # Create a k8s cluster using AWS EKS
@@ -199,6 +200,28 @@ module "gfw-pro-node-group" {
   }
 }
 
+module "documentdb" {
+  source                          = "./modules/document_db"
+  log_retention_period            = var.log_retention_period
+  private_subnet_ids              = [module.vpc.private_subnets[0].id, module.vpc.private_subnets[1].id, module.vpc.private_subnets[3].id]
+  project                         = local.project
+  backup_retention_period         = var.backup_retention_period
+  instance_class                  = var.db_instance_class
+  cluster_size                    = var.db_instance_count
+  master_username                 = "wri" # superuser, create app specific users at project level
+  tags                            = local.tags
+  vpc_id                          = module.vpc.id
+  vpc_cidr_block                  = module.vpc.cidr_block
+  engine_version                  = "3.6.0"
+  enabled_cloudwatch_logs_exports = var.db_logs_exports
+  cluster_parameters = [
+    {
+      apply_method = "pending-reboot"
+      name         = "tls"
+      value        = "disabled"
+  }]
+}
+
 
 module "postgresql" {
   source                      = "./modules/postgresql"
@@ -207,7 +230,7 @@ module "postgresql" {
   private_subnet_ids          = [module.vpc.private_subnets[0].id, module.vpc.private_subnets[1].id, module.vpc.private_subnets[3].id]
   project                     = local.project
   rds_backup_retention_period = var.backup_retention_period
-  rds_db_name                 = "wri" # default database, create app specific database at project level
+  rds_db_name                 = "wri"      # default database, create app specific database at project level
   rds_user_name               = "postgres" # superuser, create app specific users at project level
   rds_instance_class          = var.rds_instance_class
   rds_instance_count          = var.rds_instance_count
