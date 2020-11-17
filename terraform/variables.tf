@@ -141,7 +141,7 @@ variable "gfw_node_group_min_size" {
 }
 variable "gfw_node_group_max_size" {
   type    = number
-  default = 4
+  default = 5
 }
 variable "gfw_node_group_desired_size" {
   type    = number
