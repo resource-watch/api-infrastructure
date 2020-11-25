@@ -1,13 +1,12 @@
 ## Global Docker image parameters
-## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
 global:
-  #   imageRegistry: myRegistryName
-  #   imagePullSecrets:
-  #     - myRegistryKeySecretName
-  #   storageClass: myStorageClass
+  # imageRegistry: dockerhub
+  imagePullSecrets:
+    - regcred
+#   storageClass: myStorageClass
   redis: {}
 
 ## Bitnami Redis image version
@@ -291,7 +290,15 @@ master:
   # tolerations: []
   ## Redis Master pod/node affinity/anti-affinity
   ##
-  affinity: {}
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: type
+                operator: In
+                values:
+                  - core
 
   ## Redis Master Service properties
   service:
@@ -395,7 +402,15 @@ slave:
 
   ## Redis Slave pod/node affinity/anti-affinity
   ##
-  affinity: {}
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: type
+                operator: In
+                values:
+                  - core
 
   ## Configure extra options for Redis Slave liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
