@@ -2,10 +2,10 @@
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
+global:
+# imageRegistry: dockerhub
+ imagePullSecrets:
+   - regcred
 #   storageClass: myStorageClass
 
 ## Bitnami RabbitMQ image version
@@ -316,7 +316,15 @@ updateStrategy:
 nodeSelector: {}
 
 tolerations: []
-affinity: {}
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: type
+              operator: In
+              values:
+                - core
 
 ## affinity: |
 ##   podAntiAffinity:
