@@ -141,7 +141,7 @@ resource "aws_elasticsearch_domain" "rw-api-elasticsearch" {
     instance_type  = "m5.xlarge.elasticsearch"
     instance_count = 3
 
-    dedicated_master_enabled = false
+    dedicated_master_enabled = var.elasticsearch_use_dedicated_master_nodes
     dedicated_master_count   = 3
     dedicated_master_type    = "m5.large.elasticsearch"
 
