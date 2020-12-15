@@ -29,4 +29,3 @@ resource "aws_eks_node_group" "eks-node-group" {
     create_before_destroy = true
   }
 }
-
