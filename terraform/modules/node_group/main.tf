@@ -1,6 +1,6 @@
 resource "aws_eks_node_group" "eks-node-group" {
   cluster_name    = var.cluster_name
-  node_group_name = "${var.node_group_name}-${var.instance_types}"
+  node_group_name = replace("${var.node_group_name}-${var.instance_types}", ".", "_")
   node_role_arn   = var.node_role_arn
   subnet_ids      = var.subnet_ids
 
@@ -24,4 +24,3 @@ resource "aws_eks_node_group" "eks-node-group" {
     create_before_destroy = true
   }
 }
-
