@@ -6,7 +6,7 @@ data "kubernetes_secret" "rabbitmq_core" {
 }
 resource "helm_release" "rabbitmq" {
   name      = "rabbitmq"
-  chart     = "stable/rabbitmq"
+  chart     = "bitnami/rabbitmq"
   namespace = "core"
 
   values = [

@@ -1,6 +1,6 @@
 resource "helm_release" "redis" {
   name      = "redis"
-  chart     = "stable/redis"
+  chart     = "bitnami/redis"
   namespace = "core"
 
   values = [
