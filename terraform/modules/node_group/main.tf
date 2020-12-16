@@ -1,6 +1,16 @@
+resource "random_string" "random" {
+  length = 8
+  special = false
+  keepers = [
+    aws_eks_node_group.eks-node-group.status,
+    aws_eks_node_group.eks-node-group.node_group_name,
+    aws_eks_node_group.eks-node-group.instace_types,
+  ]
+}
+
 resource "aws_eks_node_group" "eks-node-group" {
   cluster_name    = var.cluster_name
-  node_group_name = var.node_group_name
+  node_group_name = "${var.node_group_name}-${random_string.random.result}"
   node_role_arn   = var.node_role_arn
   subnet_ids      = var.subnet_ids
 
@@ -20,7 +30,7 @@ resource "aws_eks_node_group" "eks-node-group" {
   ]
 
   lifecycle {
-    ignore_changes = [scaling_config[0].desired_size]
+    ignore_changes        = [scaling_config[0].desired_size]
+    create_before_destroy = true
   }
 }
-
