@@ -1,6 +1,11 @@
 resource "random_string" "random" {
   length = 8
   special = false
+  keepers = [
+    aws_eks_node_group.eks-node-group.status,
+    aws_eks_node_group.eks-node-group.node_group_name,
+    aws_eks_node_group.eks-node-group.instace_types,
+  ]
 }
 
 resource "aws_eks_node_group" "eks-node-group" {
