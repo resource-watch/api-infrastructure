@@ -6,7 +6,7 @@ data "kubernetes_secret" "postgresql_core" {
 }
 resource "helm_release" "postgresql" {
   name      = "postgresql"
-  chart     = "stable/postgresql"
+  chart     = "bitnami/postgresql"
   namespace = "core"
 
   values = [
