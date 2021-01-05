@@ -26,15 +26,15 @@ module "k8s_infrastructure" {
 }
 
 module "k8s_data_layer" {
-  source                     = "./modules/k8s_data_layer"
-  cluster_endpoint           = "${data.aws_eks_cluster.rw_api.endpoint}:4433"
-  cluster_ca                 = data.aws_eks_cluster.rw_api.certificate_authority.0.data
-  cluster_name               = data.aws_eks_cluster.rw_api.name
-  aws_region                 = var.aws_region
-  vpc                        = data.aws_vpc.eks_vpc
-  elasticsearch_disk_size    = var.elasticsearch_disk_size
-  elasticsearch_disk_size_gb = var.elasticsearch_disk_size_gb
-  backups_bucket             = var.backups_bucket
+  source                                   = "./modules/k8s_data_layer"
+  cluster_endpoint                         = "${data.aws_eks_cluster.rw_api.endpoint}:4433"
+  cluster_ca                               = data.aws_eks_cluster.rw_api.certificate_authority.0.data
+  cluster_name                             = data.aws_eks_cluster.rw_api.name
+  aws_region                               = var.aws_region
+  vpc                                      = data.aws_vpc.eks_vpc
+  elasticsearch_disk_size_gb               = var.elasticsearch_disk_size_gb
+  elasticsearch_use_dedicated_master_nodes = var.elasticsearch_use_dedicated_master_nodes
+  backups_bucket                           = var.backups_bucket
 }
 
 module "k8s_namespaces" {

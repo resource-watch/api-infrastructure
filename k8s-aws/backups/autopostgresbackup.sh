@@ -29,8 +29,10 @@
 # (Detailed instructions below variables)
 #=====================================================================
 
+CONNECTION=$(<"$HOME"/.pgpass)
+
 # Username to access the PostgreSQL server e.g. dbuser
-USERNAME='postgres'
+USERNAME=$(awk -F: '{print $4}' <<< "$CONNECTION")
 
 # Password
 # create a file $HOME/.pgpass containing a line like this
@@ -39,7 +41,7 @@ USERNAME='postgres'
 # the value of USERNAME
 
 # Host name (or IP address) of PostgreSQL server e.g localhost
-DBHOST="postgresql.core.svc.cluster.local"
+DBHOST=$(awk -F: '{print $1}' <<< "$CONNECTION")
 
 # List of DBNAMES for Daily/Weekly Backup e.g. "DB1 DB2 DB3"
 DBNAMES="all"

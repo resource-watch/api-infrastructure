@@ -54,3 +54,53 @@ resource "aws_security_group_rule" "default_https_egress" {
 
   security_group_id = aws_security_group.default.id
 }
+
+
+
+// PostgreSQL Access Security Group
+// Allow to forward request to document DB
+
+resource "aws_security_group" "postgresql" {
+  vpc_id = module.vpc.id
+
+  tags = merge(
+    {
+      Name = "${var.project}-sgBastionPostgreSQL"
+    },
+    local.tags
+  )
+}
+
+
+resource "aws_security_group_rule" "port_forward_postgres" {
+  type                     = "egress"
+  from_port                = module.postgresql.port
+  to_port                  = module.postgresql.port
+  protocol                 = "-1"
+  source_security_group_id = module.postgresql.security_group_id
+  security_group_id        = aws_security_group.postgresql.id
+}
+
+// DocumentDB Access Security Group
+// Allow to forward request to document DB
+
+resource "aws_security_group" "document_db" {
+  vpc_id = module.vpc.id
+
+  tags = merge(
+    {
+      Name = "${var.project}-sgBastionDocumentDB"
+    },
+    local.tags
+  )
+}
+
+
+resource "aws_security_group_rule" "port_forward_documentdb" {
+  type                     = "egress"
+  from_port                = module.documentdb.port
+  to_port                  = module.documentdb.port
+  protocol                 = "-1"
+  source_security_group_id = module.documentdb.security_group_id
+  security_group_id        = aws_security_group.document_db.id
+}
