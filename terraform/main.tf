@@ -252,6 +252,19 @@ module "jenkins" {
   iam_instance_profile_role = module.vpc.eks_manager_role
 }
 
+# module "eks_scaling" {
+#   source                            = "./modules/eks_scaling"
+#   eks_cluster_name                  = module.eks.cluster_name
+#   apps_node_group_min_size          = var.apps_node_group_min_size
+#   apps_node_group_max_size          = var.apps_node_group_max_size
+#   apps_node_group_desired_size      = var.apps_node_group_max_size
+#   apps_node_group_min_size_upscaled = var.apps_node_group_min_size_upscaled
+#   gfw_node_group_min_size           = var.gfw_node_group_min_size
+#   gfw_node_group_max_size           = var.gfw_node_group_max_size
+#   gfw_node_group_desired_size       = var.gfw_node_group_max_size
+#   gfw_node_group_min_size_upscaled  = var.gfw_node_group_min_size_upscaled
+# }
+
 data "cloudflare_zones" "resourcewatch" {
   filter {
     name   = "resourcewatch.org"

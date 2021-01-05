@@ -9,3 +9,12 @@ rds_instance_count       = 1
 db_instance_class        = "db.t3.medium"
 db_instance_count        = 1
 db_logs_exports          = ["audit", "profiler"]
+# apps_node_group_min_size          = 1
+# apps_node_group_max_size          = 16
+# apps_node_group_desired_size      = 3
+# apps_node_group_min_size_upscaled = 2
+# gfw_node_group_min_size           = 1
+# gfw_node_group_max_size           = 4
+# gfw_node_group_desired_size       = 4
+# gfw_node_group_min_size_upscaled  = 2
+
