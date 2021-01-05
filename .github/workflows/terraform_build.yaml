@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Deploy production
-      if: contains(github.ref, 'production')
+      if: github.ref == 'refs/heads/production'
       env:
         ENV: production
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_production }}
@@ -22,7 +22,7 @@ jobs:
         ./scripts/infra plan
         ./scripts/infra apply
     - name: Deploy staging
-      if: contains(github.ref, 'staging')
+      if: github.ref == 'refs/heads/staging'
       env:
         ENV: staging
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_staging }}
@@ -34,7 +34,7 @@ jobs:
         ./scripts/infra plan
         ./scripts/infra apply
     - name: Deploy dev
-      if: contains(github.ref, 'dev')
+      if: github.ref == 'refs/heads/dev'
       env:
         ENV: dev
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_dev }}
