@@ -9,7 +9,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Test Name
     - name: Deploy production
       if: github.ref == 'refs/heads/production'
       env:
