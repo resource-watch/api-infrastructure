@@ -8,6 +8,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - name: Test Name
+      run: |
+        echo ${{github.ref}}
+        echo ${{github.base_ref}}
     - name: Plan production
       if: github.base_ref == 'refs/heads/production'
       env:
