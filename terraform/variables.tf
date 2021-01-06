@@ -172,7 +172,7 @@ variable "gfw_pro_node_group_desired_size" {
 
 variable "core_node_group_instance_types" {
   type    = string
-  default = "c5a.xlarge"
+  default = "c5.xlarge" # core node group has to run in a specific AZ due to its persistent storage. The AZ we initially chose does not have c5a instances.
 }
 variable "core_node_group_min_size" {
   type    = number
