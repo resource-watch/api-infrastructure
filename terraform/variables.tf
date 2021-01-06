@@ -172,7 +172,7 @@ variable "gfw_pro_node_group_desired_size" {
 
 variable "core_node_group_instance_types" {
   type    = string
-  default = "c5a.xlarge"
+  default = "c5.xlarge"
 }
 variable "core_node_group_min_size" {
   type    = number
