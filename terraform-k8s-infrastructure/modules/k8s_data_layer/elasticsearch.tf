@@ -139,7 +139,7 @@ resource "aws_elasticsearch_domain" "rw-api-elasticsearch" {
 
   cluster_config {
     instance_type  = "m5.xlarge.elasticsearch"
-    instance_count = 3
+    instance_count = var.elasticsearch_data_nodes_count
 
     dedicated_master_enabled = var.elasticsearch_use_dedicated_master_nodes
     dedicated_master_count   = 3
