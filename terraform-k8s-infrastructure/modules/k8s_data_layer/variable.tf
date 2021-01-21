@@ -38,6 +38,12 @@ variable "elasticsearch_use_dedicated_master_nodes" {
   description = "If the cluster should use dedicated master nodes"
 }
 
+variable "elasticsearch_data_nodes_count" {
+  type        = number
+  default = 3
+  description = "Number of data nodes to use on the ES cluster"
+}
+
 variable "backups_bucket" {
   type        = string
   description = "Name of the S3 bucket containing ES backup snapshots"
