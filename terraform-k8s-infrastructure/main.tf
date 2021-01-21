@@ -34,6 +34,7 @@ module "k8s_data_layer" {
   vpc                                      = data.aws_vpc.eks_vpc
   elasticsearch_disk_size_gb               = var.elasticsearch_disk_size_gb
   elasticsearch_use_dedicated_master_nodes = var.elasticsearch_use_dedicated_master_nodes
+  elasticsearch_data_nodes_count           = var.elasticsearch_data_nodes_count
   backups_bucket                           = var.backups_bucket
 }
 
