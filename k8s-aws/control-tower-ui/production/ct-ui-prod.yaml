@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -6,6 +6,17 @@ metadata:
   name: ct-ui
   namespace: gateway
 spec:
+  progressDeadlineSeconds: 2147483647
+  replicas: 1
+  revisionHistoryLimit: 2147483647
+  selector:
+    matchLabels:
+      name: ct-ui
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -21,23 +32,33 @@ spec:
                     values:
                       - gateway
       containers:
-        - name: ct-ui
-          image: vizzuality/ct-ui-wri:0.0.6-prod
+        - image: gfwdockerhub/ct-ui-wri:0.0.6-prod
           imagePullPolicy: Always
-          resources:
-            requests:
-              memory: "128Mi"
-            limits:
-              memory: "1Gi"
+          name: ct-ui
           ports:
             - containerPort: 80
+              protocol: TCP
           readinessProbe:
+            failureThreshold: 3
             httpGet:
-              scheme: HTTP
               path: /index.html
               port: 80
+              scheme: HTTP
             initialDelaySeconds: 15
-            timeoutSeconds: 1
             periodSeconds: 15
-
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              memory: 1Gi
+            requests:
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: regcred
       restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: { }
+      terminationGracePeriodSeconds: 30
