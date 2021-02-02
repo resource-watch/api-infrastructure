@@ -13,8 +13,12 @@ variable "cluster_name" {
   description = "The k8s cluster name"
 }
 
-variable "namespaces" {
-  description = "Namespace list"
-  type        = list(string)
-  default     = ["gateway", "core", "aqueduct", "rw", "gfw", "fw", "prep", "climate-watch"]
+variable "environment" {
+  type        = string
+  description = "Environment name"
+}
+
+variable "dns_prefix" {
+  type        = string
+  description = "DNS prefix"
 }

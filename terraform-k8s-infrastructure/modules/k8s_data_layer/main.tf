@@ -3,7 +3,13 @@ data "aws_eks_cluster_auth" "cluster" {
 }
 
 provider "kubernetes" {
-  version = "~> 1.12.0"
+  host                   = var.cluster_endpoint
+  cluster_ca_certificate = base64decode(var.cluster_ca)
+  exec {
+    api_version = "client.authentication.k8s.io/v1alpha1"
+    args        = ["eks", "get-token", "--cluster-name", var.cluster_name]
+    command     = "aws"
+  }
 }
 
 provider "kubectl" {
@@ -14,11 +20,19 @@ provider "kubectl" {
 }
 
 provider "helm" {
-  version = "~> 1.2"
+  version = "~> 2.0.2"
 
   kubernetes {
-    host = var.cluster_endpoint
-
+    host                   = var.cluster_endpoint
     cluster_ca_certificate = base64decode(var.cluster_ca)
+    exec {
+      api_version = "client.authentication.k8s.io/v1alpha1"
+      args = [
+        "eks",
+        "get-token",
+        "--cluster-name",
+      var.cluster_name]
+      command = "aws"
+    }
   }
 }

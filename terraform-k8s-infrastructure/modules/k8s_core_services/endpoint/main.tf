@@ -3,6 +3,7 @@ resource "aws_api_gateway_method" "endpoint_method" {
   resource_id   = var.api_resource.id
   http_method   = var.method
   authorization = "NONE"
+  request_parameters            = {"method.request.path.proxy" = true}
 }
 
 resource "aws_api_gateway_integration" "endpoint_integration" {
@@ -16,4 +17,8 @@ resource "aws_api_gateway_integration" "endpoint_integration" {
 
   connection_type = "VPC_LINK"
   connection_id   = var.vpc_link.id
+
+  request_parameters = {
+    "integration.request.path.proxy" = "method.request.path.proxy"
+  }
 }

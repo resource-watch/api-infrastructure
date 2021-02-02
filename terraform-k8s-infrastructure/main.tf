@@ -39,11 +39,17 @@ module "k8s_data_layer" {
 }
 
 module "k8s_core_services" {
-  source      = "./modules/k8s_core_services"
-  environment = var.environment
-  dns_prefix  = var.dns_prefix
+  source           = "./modules/k8s_core_services"
+  environment      = var.environment
+  dns_prefix       = var.dns_prefix
+  cluster_endpoint = "${data.aws_eks_cluster.rw_api.endpoint}:4433"
+  cluster_ca       = data.aws_eks_cluster.rw_api.certificate_authority.0.data
+  cluster_name     = data.aws_eks_cluster.rw_api.name
 }
 
 module "k8s_namespaces" {
-  source = "./modules/k8s_namespaces"
+  source           = "./modules/k8s_namespaces"
+  cluster_endpoint = "${data.aws_eks_cluster.rw_api.endpoint}:4433"
+  cluster_ca       = data.aws_eks_cluster.rw_api.certificate_authority.0.data
+  cluster_name     = data.aws_eks_cluster.rw_api.name
 }

@@ -13,8 +13,17 @@ variable "cluster_name" {
   description = "The k8s cluster name"
 }
 
-variable "namespaces" {
-  description = "Namespace list"
-  type        = list(string)
-  default     = ["gateway", "core", "aqueduct", "rw", "gfw", "fw", "prep", "climate-watch"]
+variable "api_gateway" {
+  type = object({
+    id               = string
+    root_resource_id = string
+  })
+  description = "Instance of aws_api_gateway_rest_api"
+}
+
+variable "resource_root" {
+  type = object({
+    id = string
+  })
+  description = "Instance of aws_api_gateway_resource"
 }
