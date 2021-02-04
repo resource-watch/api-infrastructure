@@ -20,7 +20,7 @@ resource "kubernetes_service" "widget_service" {
   }
   spec {
     selector = {
-      name      = "widget"
+      name = "widget"
     }
     port {
       port        = 80
@@ -33,6 +33,10 @@ resource "kubernetes_service" "widget_service" {
 
 data "aws_lb" "widget_lb" {
   name = split("-", kubernetes_service.widget_service.status.0.load_balancer.0.ingress.0.hostname).0
+
+  depends_on = [
+    kubernetes_service.widget_service
+  ]
 }
 
 resource "aws_api_gateway_vpc_link" "widget_lb_vpc_link" {
@@ -47,7 +51,7 @@ resource "aws_api_gateway_vpc_link" "widget_lb_vpc_link" {
 
 resource "aws_api_gateway_resource" "widget_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root.id
+  parent_id   = var.resource_root_id
   path_part   = "widget"
 }
 

@@ -56,9 +56,9 @@ resource "aws_api_gateway_method_settings" "rw_api_gateway_general_settings" {
 
   settings {
     # Enable CloudWatch logging and metrics
-    metrics_enabled        = true
-    data_trace_enabled     = true
-    logging_level          = "INFO"
+    metrics_enabled    = true
+    data_trace_enabled = true
+    logging_level      = "INFO"
 
     # Limit the rate of calls to prevent abuse and unwanted charges
     throttling_rate_limit  = 100
@@ -84,6 +84,7 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.dataset.endpoints),
       jsonencode(module.widget.endpoints),
       jsonencode(module.ct.endpoints),
+      jsonencode(module.auth.endpoints),
     )))
   }
 
@@ -113,7 +114,7 @@ resource "aws_api_gateway_resource" "v3_resource" {
 module "dataset" {
   source           = "./dataset"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root    = aws_api_gateway_resource.v1_resource
+  resource_root_id = aws_api_gateway_resource.v1_resource.id
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
@@ -122,7 +123,16 @@ module "dataset" {
 module "widget" {
   source           = "./widget"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root    = aws_api_gateway_resource.v1_resource
+  resource_root_id = aws_api_gateway_resource.v1_resource.id
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+}
+
+module "auth" {
+  source           = "./authorization"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  resource_root_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
@@ -131,9 +141,7 @@ module "widget" {
 module "ct" {
   source           = "./ct"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  v1_resource_root    = aws_api_gateway_resource.v1_resource
-  v2_resource_root    = aws_api_gateway_resource.v2_resource
-  v3_resource_root    = aws_api_gateway_resource.v3_resource
+  resource_root_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name

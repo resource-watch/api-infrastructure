@@ -23,5 +23,5 @@ variable "api_gateway" {
 
 variable "resource_root_id" {
   type        = string
-  description = "Id of the root aws_api_gateway_resource"
+  description = "Instance of aws_api_gateway_resource"
 }

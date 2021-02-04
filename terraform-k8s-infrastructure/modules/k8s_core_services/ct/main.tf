@@ -20,7 +20,7 @@ resource "kubernetes_service" "control_tower_service" {
   }
   spec {
     selector = {
-      name      = "control-tower"
+      name = "control-tower"
     }
     port {
       port        = 80
@@ -33,6 +33,10 @@ resource "kubernetes_service" "control_tower_service" {
 
 data "aws_lb" "control_tower_lb" {
   name = split("-", kubernetes_service.control_tower_service.status.0.load_balancer.0.ingress.0.hostname).0
+
+  depends_on = [
+    kubernetes_service.control_tower_service
+  ]
 }
 
 resource "aws_api_gateway_vpc_link" "control_tower_lb_vpc_link" {
@@ -45,47 +49,18 @@ resource "aws_api_gateway_vpc_link" "control_tower_lb_vpc_link" {
   }
 }
 
-resource "aws_api_gateway_resource" "control_tower_proxy_v1_resource" {
+resource "aws_api_gateway_resource" "control_tower_proxy_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.v1_resource_root.id
+  parent_id   = var.resource_root_id
   path_part   = "{proxy+}"
 }
 
-resource "aws_api_gateway_resource" "control_tower_proxy_v2_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = var.v2_resource_root.id
-  path_part   = "{proxy+}"
-}
 
-resource "aws_api_gateway_resource" "control_tower_proxy_v3_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = var.v3_resource_root.id
-  path_part   = "{proxy+}"
-}
-
-module "control_tower_v1_any" {
+module "control_tower_any" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.control_tower_proxy_v1_resource
+  api_resource = aws_api_gateway_resource.control_tower_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org/v1/{proxy}"
-  vpc_link     = aws_api_gateway_vpc_link.control_tower_lb_vpc_link
-}
-
-module "control_tower_v2_any" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.control_tower_proxy_v2_resource
-  method       = "ANY"
-  uri          = "http://api.resourcewatch.org/v1/{proxy}"
-  vpc_link     = aws_api_gateway_vpc_link.control_tower_lb_vpc_link
-}
-
-module "control_tower_v3_any" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.control_tower_proxy_v3_resource
-  method       = "ANY"
-  uri          = "http://api.resourcewatch.org/v1/{proxy}"
+  uri          = "http://api.resourcewatch.org/{proxy}"
   vpc_link     = aws_api_gateway_vpc_link.control_tower_lb_vpc_link
 }

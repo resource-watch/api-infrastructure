@@ -1,9 +1,9 @@
 resource "aws_api_gateway_method" "endpoint_method" {
-  rest_api_id   = var.api_gateway.id
-  resource_id   = var.api_resource.id
-  http_method   = var.method
-  authorization = "NONE"
-  request_parameters            = {"method.request.path.proxy" = true}
+  rest_api_id        = var.api_gateway.id
+  resource_id        = var.api_resource.id
+  http_method        = var.method
+  authorization      = "NONE"
+  request_parameters = { "method.request.path.proxy" = true }
 }
 
 resource "aws_api_gateway_integration" "endpoint_integration" {
