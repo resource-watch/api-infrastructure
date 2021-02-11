@@ -188,71 +188,149 @@ resource "aws_api_gateway_resource" "viirs_fires_wdpa_by_id_v1_resource" {
   path_part   = "{id}"
 }
 
-
-
-module "dataset_flush" {
+# Modules
+module "viirs_fires_v2_get_by_iso" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_flush_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{id}/flush"
-  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
-}
-
-module "dataset_recover" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_recover_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{id}/recover"
-  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
-}
-
-module "dataset_last_updated" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_last_updated_resource
+  api_resource = aws_api_gateway_resource.viirs_fires_by_iso_v1_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{id}/lastUpdated"
+  uri          = "/api/v2/viirs-active-fires/admin/{iso}"
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 
-module "dataset_post" {
+module "viirs_fires_v2_get_by_id1" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset"
+  api_resource = aws_api_gateway_resource.viirs_fires_by_id1_v2_resource
+  method       = "GET"
+  uri          = "/api/v2/viirs-active-fires/admin/{iso}/{id1}"
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 
-module "dataset_post_find_by_ids" {
+module "viirs_fires_v2_get_by_id2" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_find_by_ids_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/find-by-ids"
+  api_resource = aws_api_gateway_resource.viirs_fires_by_id2_v2_resource
+  method       = "GET"
+  uri          = "/api/v2/viirs-active-fires/admin/{iso}/{id1}/{id2}"
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 
-module "dataset_post_upload" {
+module "viirs_fires_v2_get_by_area" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_upload_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/upload"
+  api_resource = aws_api_gateway_resource.viirs_fires_use_by_id_v2_resource
+  method       = "GET"
+  uri          = "/api/v2/viirs-active-fires/use/{name}/{id}"
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 
-
-
-
-module "active_fires_by_iso" {
-// "/v2/viirs-active-fires/admin/:iso",
+module "viirs_fires_v2_get_wdpa" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_upload_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/upload"
+  api_resource = aws_api_gateway_resource.viirs_fires_wdpa_by_id_v2_resource
+  method       = "GET"
+  uri          = "/api/v2/viirs-active-fires/wdpa/{id}"
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
+
+module "viirs_fires_v2_get_active_fires" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.viirs_fires_v2_resource
+  method       = "GET"
+  uri          = "/api/v2/viirs-active-fires"
+  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+}
+
+module "viirs_fires_v2_set_active_fires" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.viirs_fires_v2_resource
+  method       = "POST"
+  uri          = "/api/v2/viirs-active-fires"
+  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+}
+
+module "viirs_fires_v2_get_latest_fires" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.viirs_latest_v2_resource
+  method       = "GET"
+  uri          = "/api/v2/viirs-active-fires/latest"
+  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+}
+
+# v1 modules
+module "viirs_fires_v1_get_by_iso" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.viirs_fires_by_iso_v1_resource
+  method       = "GET"
+  uri          = "/api/v2/viirs-active-fires/admin/{iso}"
+  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+}
+
+module "viirs_fires_v1_get_by_id1" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.viirs_fires_by_id1_v1_resource
+  method       = "GET"
+  uri          = "/api/v2/viirs-active-fires/admin/{iso}/{id1}"
+  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+}
+
+module "viirs_fires_v1_get_by_id2" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.viirs_fires_by_id2_v1_resource
+  method       = "GET"
+  uri          = "/api/v2/viirs-active-fires/admin/{iso}/{id1}/{id2}"
+  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+}
+
+module "viirs_fires_v1_get_by_area" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.viirs_fires_use_by_id_v1_resource
+  method       = "GET"
+  uri          = "/api/v2/viirs-active-fires/use/{name}/{id}"
+  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+}
+
+module "viirs_fires_v1_get_wdpa" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.viirs_fires_wdpa_by_id_v1_resource
+  method       = "GET"
+  uri          = "/api/v2/viirs-active-fires/wdpa/{id}"
+  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+}
+
+module "viirs_fires_v1_get_active_fires" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.viirs_fires_v1_resource
+  method       = "GET"
+  uri          = "/api/v2/viirs-active-fires"
+  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+}
+
+module "viirs_fires_v1_set_active_fires" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.viirs_fires_v1_resource
+  method       = "POST"
+  uri          = "/api/v2/viirs-active-fires"
+  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+}
+
+module "viirs_fires_v1_get_latest_fires" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.viirs_latest_v1_resource
+  method       = "GET"
+  uri          = "/api/v2/viirs-active-fires/latest"
+  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+}
+
