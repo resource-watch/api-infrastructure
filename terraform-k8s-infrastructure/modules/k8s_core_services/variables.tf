@@ -22,3 +22,15 @@ variable "dns_prefix" {
   type        = string
   description = "DNS prefix"
 }
+
+variable "aws_region" {
+  default     = "us-east-1"
+  type        = string
+  description = "A valid AWS region to configure the underlying AWS SDK."
+}
+
+variable "project" {
+  default     = "WRI API"
+  type        = string
+  description = "A project namespace for the infrastructure."
+}

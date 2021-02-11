@@ -85,6 +85,7 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.widget.endpoints),
       jsonencode(module.ct.endpoints),
       jsonencode(module.auth.endpoints),
+      jsonencode(module.query.endpoints),
     )))
   }
 
@@ -121,7 +122,17 @@ module "dataset" {
 }
 
 module "widget" {
-  source           = "./widget"
+  source              = "./widget"
+  api_gateway         = aws_api_gateway_rest_api.rw_api_gateway
+  resource_root_id    = aws_api_gateway_resource.v1_resource.id
+  dataset_id_resource = module.dataset.dataset_id_resource
+  cluster_ca          = var.cluster_ca
+  cluster_endpoint    = var.cluster_endpoint
+  cluster_name        = var.cluster_name
+}
+
+module "query" {
+  source           = "./query"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   resource_root_id = aws_api_gateway_resource.v1_resource.id
   cluster_ca       = var.cluster_ca

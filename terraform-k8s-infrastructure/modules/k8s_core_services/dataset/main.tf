@@ -61,10 +61,10 @@ resource "aws_api_gateway_resource" "dataset_id_resource" {
   path_part   = "{id}"
 }
 
-resource "aws_api_gateway_resource" "dataset_find_by_id_resource" {
+resource "aws_api_gateway_resource" "dataset_find_by_ids_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.dataset_resource.id
-  path_part   = "find-by-id"
+  path_part   = "find-by-ids"
 }
 
 resource "aws_api_gateway_resource" "dataset_upload_resource" {
@@ -160,12 +160,12 @@ module "dataset_post" {
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 
-module "dataset_post_find_by_id" {
+module "dataset_post_find_by_ids" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_find_by_id_resource
+  api_resource = aws_api_gateway_resource.dataset_find_by_ids_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/find-by-id"
+  uri          = "http://api.resourcewatch.org/api/v1/dataset/find-by-ids"
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 

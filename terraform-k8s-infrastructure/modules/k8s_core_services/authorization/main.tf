@@ -41,7 +41,7 @@ data "aws_lb" "authorization_lb" {
 }
 
 resource "aws_api_gateway_vpc_link" "authorization_lb_vpc_link" {
-  name        = "authorization LB VPC link"
+  name        = "Authorization LB VPC link"
   description = "VPC link to the authorization service load balancer"
   target_arns = [data.aws_lb.authorization_lb.arn]
 

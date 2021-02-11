@@ -8,7 +8,8 @@ variable "api_gateway" {
 
 variable "api_resource" {
   type = object({
-    id = string
+    id        = string
+    path_part = string
   })
   description = "Instance of aws_api_gateway_resource"
 }
@@ -28,4 +29,10 @@ variable "uri" {
 variable "method" {
   type        = string
   description = "Endpoint method"
+}
+
+variable "backend_method" {
+  type        = string
+  description = "Backend endpoint method"
+  default     = ""
 }

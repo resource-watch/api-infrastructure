@@ -25,7 +25,3 @@ variable "resource_root_id" {
   type        = string
   description = "Id of the root aws_api_gateway_resource"
 }
-
-variable "dataset_id_resource" {
-  description = "Resource fot the the /dataset/{id} path"
-}
