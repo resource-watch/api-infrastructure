@@ -195,7 +195,7 @@ resource "aws_api_gateway_resource" "authorization_user_from_token_resource" {
 resource "aws_api_gateway_resource" "authorization_user_id_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_user_resource.id
-  path_part   = "{id}"
+  path_part   = "{userId}"
 }
 
 resource "aws_api_gateway_resource" "authorization_user_find_by_ids_resource" {
@@ -522,7 +522,7 @@ module "authorization_patch_user_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_user_id_resource
   method       = "PATCH"
-  uri          = "http://api.resourcewatch.org/auth/user/{id}"
+  uri          = "http://api.resourcewatch.org/auth/user/{userId}"
   vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
 }
 
@@ -531,6 +531,6 @@ module "authorization_delete_user_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_user_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/auth/user/{id}"
+  uri          = "http://api.resourcewatch.org/auth/user/{userId}"
   vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
 }

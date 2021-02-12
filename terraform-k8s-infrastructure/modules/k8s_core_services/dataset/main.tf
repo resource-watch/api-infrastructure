@@ -58,7 +58,7 @@ resource "aws_api_gateway_resource" "dataset_resource" {
 resource "aws_api_gateway_resource" "dataset_id_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.dataset_resource.id
-  path_part   = "{id}"
+  path_part   = "{{datasetId}}"
 }
 
 resource "aws_api_gateway_resource" "dataset_find_by_ids_resource" {
@@ -111,7 +111,7 @@ module "dataset_get_by_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{id}"
+  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}"
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 
@@ -120,7 +120,7 @@ module "dataset_clone" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_clone_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{id}/clone"
+  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/clone"
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 
@@ -129,7 +129,7 @@ module "dataset_flush" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_flush_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{id}/flush"
+  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/flush"
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 
@@ -138,7 +138,7 @@ module "dataset_recover" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_recover_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{id}/recover"
+  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/recover"
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 
@@ -147,7 +147,7 @@ module "dataset_last_updated" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_last_updated_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{id}/lastUpdated"
+  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/lastUpdated"
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 
