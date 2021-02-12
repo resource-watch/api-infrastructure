@@ -8,14 +8,14 @@ provider "kubernetes" {
   }
 }
 
-resource "kubernetes_service" "dataset_service" {{
+resource "kubernetes_service" "viirs_fires_service" {
   metadata {
     name      = "viirs-fires"
     namespace = "gfw"
     annotations = {
       "service.beta.kubernetes.io/aws-load-balancer-type"                     = "nlb"
       "service.beta.kubernetes.io/aws-load-balancer-internal"                 = "true"
-      "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags" = "service=dataset"
+      "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags" = "service=viirs-fires"
     }
   }
   spec {
@@ -32,17 +32,17 @@ resource "kubernetes_service" "dataset_service" {{
 }
 
 data "aws_lb" "viirs_fires_lb" {
-  name = split("-", kubernetes_service.dataset_service.status.0.load_balancer.0.ingress.0.hostname).0
+  name = split("-", kubernetes_service.viirs_fires_service.status.0.load_balancer.0.ingress.0.hostname).0
 
   depends_on = [
-    kubernetes_service.dataset_service
+    kubernetes_service.viirs_fires_service
   ]
 }
 
 resource "aws_api_gateway_vpc_link" "viirs_fires_lb_vpc_link" {
-  name        = "Dataset LB VPC link"
+  name        = "Viirs Fires LB VPC link"
   description = "VPC link to the viirs fires service load balancer"
-  target_arns = [data.aws_lb.dataset_lb.arn]
+  target_arns = [data.aws_lb.viirs_fires_lb.arn]
 
   lifecycle {
     create_before_destroy = true
@@ -195,7 +195,7 @@ module "viirs_fires_v2_get_by_iso" {
   api_resource = aws_api_gateway_resource.viirs_fires_by_iso_v1_resource
   method       = "GET"
   uri          = "/api/v2/viirs-active-fires/admin/{iso}"
-  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
 }
 
 module "viirs_fires_v2_get_by_id1" {
@@ -204,7 +204,7 @@ module "viirs_fires_v2_get_by_id1" {
   api_resource = aws_api_gateway_resource.viirs_fires_by_id1_v2_resource
   method       = "GET"
   uri          = "/api/v2/viirs-active-fires/admin/{iso}/{id1}"
-  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
 }
 
 module "viirs_fires_v2_get_by_id2" {
@@ -213,7 +213,7 @@ module "viirs_fires_v2_get_by_id2" {
   api_resource = aws_api_gateway_resource.viirs_fires_by_id2_v2_resource
   method       = "GET"
   uri          = "/api/v2/viirs-active-fires/admin/{iso}/{id1}/{id2}"
-  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
 }
 
 module "viirs_fires_v2_get_by_area" {
@@ -222,7 +222,7 @@ module "viirs_fires_v2_get_by_area" {
   api_resource = aws_api_gateway_resource.viirs_fires_use_by_id_v2_resource
   method       = "GET"
   uri          = "/api/v2/viirs-active-fires/use/{name}/{id}"
-  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
 }
 
 module "viirs_fires_v2_get_wdpa" {
@@ -231,7 +231,7 @@ module "viirs_fires_v2_get_wdpa" {
   api_resource = aws_api_gateway_resource.viirs_fires_wdpa_by_id_v2_resource
   method       = "GET"
   uri          = "/api/v2/viirs-active-fires/wdpa/{id}"
-  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
 }
 
 module "viirs_fires_v2_get_active_fires" {
@@ -240,7 +240,7 @@ module "viirs_fires_v2_get_active_fires" {
   api_resource = aws_api_gateway_resource.viirs_fires_v2_resource
   method       = "GET"
   uri          = "/api/v2/viirs-active-fires"
-  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
 }
 
 module "viirs_fires_v2_set_active_fires" {
@@ -249,7 +249,7 @@ module "viirs_fires_v2_set_active_fires" {
   api_resource = aws_api_gateway_resource.viirs_fires_v2_resource
   method       = "POST"
   uri          = "/api/v2/viirs-active-fires"
-  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
 }
 
 module "viirs_fires_v2_get_latest_fires" {
@@ -258,7 +258,7 @@ module "viirs_fires_v2_get_latest_fires" {
   api_resource = aws_api_gateway_resource.viirs_latest_v2_resource
   method       = "GET"
   uri          = "/api/v2/viirs-active-fires/latest"
-  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
 }
 
 # v1 modules
@@ -268,7 +268,7 @@ module "viirs_fires_v1_get_by_iso" {
   api_resource = aws_api_gateway_resource.viirs_fires_by_iso_v1_resource
   method       = "GET"
   uri          = "/api/v2/viirs-active-fires/admin/{iso}"
-  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
 }
 
 module "viirs_fires_v1_get_by_id1" {
@@ -277,7 +277,7 @@ module "viirs_fires_v1_get_by_id1" {
   api_resource = aws_api_gateway_resource.viirs_fires_by_id1_v1_resource
   method       = "GET"
   uri          = "/api/v2/viirs-active-fires/admin/{iso}/{id1}"
-  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
 }
 
 module "viirs_fires_v1_get_by_id2" {
@@ -286,7 +286,7 @@ module "viirs_fires_v1_get_by_id2" {
   api_resource = aws_api_gateway_resource.viirs_fires_by_id2_v1_resource
   method       = "GET"
   uri          = "/api/v2/viirs-active-fires/admin/{iso}/{id1}/{id2}"
-  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
 }
 
 module "viirs_fires_v1_get_by_area" {
@@ -295,7 +295,7 @@ module "viirs_fires_v1_get_by_area" {
   api_resource = aws_api_gateway_resource.viirs_fires_use_by_id_v1_resource
   method       = "GET"
   uri          = "/api/v2/viirs-active-fires/use/{name}/{id}"
-  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
 }
 
 module "viirs_fires_v1_get_wdpa" {
@@ -304,7 +304,7 @@ module "viirs_fires_v1_get_wdpa" {
   api_resource = aws_api_gateway_resource.viirs_fires_wdpa_by_id_v1_resource
   method       = "GET"
   uri          = "/api/v2/viirs-active-fires/wdpa/{id}"
-  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
 }
 
 module "viirs_fires_v1_get_active_fires" {
@@ -313,7 +313,7 @@ module "viirs_fires_v1_get_active_fires" {
   api_resource = aws_api_gateway_resource.viirs_fires_v1_resource
   method       = "GET"
   uri          = "/api/v2/viirs-active-fires"
-  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
 }
 
 module "viirs_fires_v1_set_active_fires" {
@@ -322,7 +322,7 @@ module "viirs_fires_v1_set_active_fires" {
   api_resource = aws_api_gateway_resource.viirs_fires_v1_resource
   method       = "POST"
   uri          = "/api/v2/viirs-active-fires"
-  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
 }
 
 module "viirs_fires_v1_get_latest_fires" {
@@ -331,6 +331,6 @@ module "viirs_fires_v1_get_latest_fires" {
   api_resource = aws_api_gateway_resource.viirs_latest_v1_resource
   method       = "GET"
   uri          = "/api/v2/viirs-active-fires/latest"
-  vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
+  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
 }
 

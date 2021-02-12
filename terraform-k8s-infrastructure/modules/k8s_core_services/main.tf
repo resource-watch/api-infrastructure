@@ -158,14 +158,14 @@ module "ct" {
   cluster_name     = var.cluster_name
 }
 
-module "viirs" {
-  source           = "./viirs-fires"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+module "viirs_fires" {
+  source              = "./viirs-fires"
+  api_gateway         = aws_api_gateway_rest_api.rw_api_gateway
   resource_root_v1_id = aws_api_gateway_resource.v1_resource.id
   resource_root_v2_id = aws_api_gateway_resource.v2_resource.id
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
+  cluster_ca          = var.cluster_ca
+  cluster_endpoint    = var.cluster_endpoint
+  cluster_name        = var.cluster_name
 }
 
 # DNS Management
