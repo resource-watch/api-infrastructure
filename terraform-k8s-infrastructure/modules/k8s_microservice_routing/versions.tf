@@ -4,20 +4,14 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 3.0"
     }
-
-    kubectl = {
-      source  = "gavinbunney/kubectl"
-      version = "~> 1.9.4"
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 2.17"
     }
-
     kubernetes = {
       source  = "hashicorp/kubernetes"
       version = "~> 2.0"
     }
   }
   required_version = "0.13.3"
-}
-
-provider "aws" {
-  region = var.aws_region
 }
