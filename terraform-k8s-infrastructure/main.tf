@@ -38,8 +38,8 @@ module "k8s_data_layer" {
   backups_bucket                           = var.backups_bucket
 }
 
-module "k8s_core_services" {
-  source           = "./modules/k8s_core_services"
+module "k8s_microservice_routing" {
+  source           = "./modules/k8s_microservice_routing"
   environment      = var.environment
   dns_prefix       = var.dns_prefix
   cluster_endpoint = "${data.aws_eks_cluster.rw_api.endpoint}:4433"
