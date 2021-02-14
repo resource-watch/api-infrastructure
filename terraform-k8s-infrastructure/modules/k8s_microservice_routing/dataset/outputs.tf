@@ -13,7 +13,3 @@ output "endpoints" {
     module.dataset_update_by_id.endpoint_gateway_integration
   ]
 }
-
-output "dataset_id_resource" {
-  value = aws_api_gateway_resource.dataset_id_resource
-}
