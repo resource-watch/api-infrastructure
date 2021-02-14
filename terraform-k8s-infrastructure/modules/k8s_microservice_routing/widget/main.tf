@@ -49,60 +49,75 @@ resource "aws_api_gateway_vpc_link" "widget_lb_vpc_link" {
   }
 }
 
+data "aws_api_gateway_resource" "dataset_id_resource" {
+  rest_api_id = var.api_gateway.id
+  path        = "/v1/dataset/{datasetId}"
+}
+
+// /api/v1/widget
 resource "aws_api_gateway_resource" "widget_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = var.resource_root_id
   path_part   = "widget"
 }
 
+// /api/v1/widget/find-by-ids
 resource "aws_api_gateway_resource" "widget_find_by_ids_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.widget_resource.id
   path_part   = "find-by-ids"
 }
 
+// /api/v1/widget/change-environment
 resource "aws_api_gateway_resource" "widget_change_environment_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.widget_resource.id
   path_part   = "change-environment"
 }
 
+// /api/v1/widget/{widgetId}
 resource "aws_api_gateway_resource" "widget_id_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.widget_resource.id
   path_part   = "{widgetId}"
 }
 
-resource "aws_api_gateway_resource" "widget_dataset_id_resource" {
+// /api/v1/widget/change-environment/{datasetId}
+resource "aws_api_gateway_resource" "widget_change_environment_dataset_id_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.widget_change_environment_resource.id
   path_part   = "{datasetId}"
 }
 
+// /api/v1/widget/change-environment/{datasetId}/{env}
 resource "aws_api_gateway_resource" "widget_env_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.widget_dataset_id_resource.id
+  parent_id   = aws_api_gateway_resource.widget_change_environment_dataset_id_resource.id
   path_part   = "{env}"
 }
 
+// /api/v1/dataset/{datasetId}/widget
 resource "aws_api_gateway_resource" "dataset_id_widget_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.dataset_id_resource.id
+  parent_id   = data.aws_api_gateway_resource.dataset_id_resource.id
   path_part   = "widget"
 }
 
+// /api/v1/dataset/{datasetId}/widget/{widgetId}
 resource "aws_api_gateway_resource" "dataset_id_widget_id_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.dataset_id_widget_resource.id
   path_part   = "{widgetId}"
 }
 
+// /api/v1/widget/{widgetId}/clone
 resource "aws_api_gateway_resource" "widget_clone_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.widget_id_resource.id
   path_part   = "clone"
 }
 
+// /api/v1/dataset/{datasetId}/widget/{widgetId}/clone
 resource "aws_api_gateway_resource" "dataset_id_widget_id_clone_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.dataset_id_widget_id_resource.id

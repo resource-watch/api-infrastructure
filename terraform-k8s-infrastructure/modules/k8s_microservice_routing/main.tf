@@ -71,7 +71,8 @@ resource "aws_api_gateway_rest_api" "rw_api_gateway" {
   description = "API Gateway for the RW API ${var.environment} cluster"
 
   endpoint_configuration {
-    types = ["REGIONAL"]
+    types = [
+    "REGIONAL"]
   }
 }
 
@@ -81,11 +82,13 @@ resource "aws_api_gateway_deployment" "prod" {
 
   triggers = {
     redeployment = sha1(join(",", list(
-      jsonencode(module.dataset.endpoints),
-      jsonencode(module.widget.endpoints),
       jsonencode(module.ct.endpoints),
       jsonencode(module.auth.endpoints),
+      jsonencode(module.dataset.endpoints),
       jsonencode(module.query.endpoints),
+      jsonencode(module.query.endpoints),
+      jsonencode(module.widget.endpoints),
+      jsonencode(module.layer.endpoints),
     )))
   }
 
@@ -112,29 +115,10 @@ resource "aws_api_gateway_resource" "v3_resource" {
   path_part   = "v3"
 }
 
-module "dataset" {
-  source           = "./dataset"
+module "ct" {
+  source           = "./ct"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id = aws_api_gateway_resource.v1_resource.id
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-}
-
-module "widget" {
-  source              = "./widget"
-  api_gateway         = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id    = aws_api_gateway_resource.v1_resource.id
-  dataset_id_resource = module.dataset.dataset_id_resource
-  cluster_ca          = var.cluster_ca
-  cluster_endpoint    = var.cluster_endpoint
-  cluster_name        = var.cluster_name
-}
-
-module "query" {
-  source           = "./query"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id = aws_api_gateway_resource.v1_resource.id
+  resource_root_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
@@ -149,10 +133,46 @@ module "auth" {
   cluster_name     = var.cluster_name
 }
 
-module "ct" {
-  source           = "./ct"
+module "dataset" {
+  source           = "./dataset"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
+  resource_root_id = aws_api_gateway_resource.v1_resource.id
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+}
+
+module "widget" {
+  source              = "./widget"
+  api_gateway         = aws_api_gateway_rest_api.rw_api_gateway
+  resource_root_id    = aws_api_gateway_resource.v1_resource.id
+  cluster_ca          = var.cluster_ca
+  cluster_endpoint    = var.cluster_endpoint
+  cluster_name        = var.cluster_name
+}
+
+module "layer" {
+  source              = "./layer"
+  api_gateway         = aws_api_gateway_rest_api.rw_api_gateway
+  resource_root_id    = aws_api_gateway_resource.v1_resource.id
+  cluster_ca          = var.cluster_ca
+  cluster_endpoint    = var.cluster_endpoint
+  cluster_name        = var.cluster_name
+}
+
+module "metadata" {
+  source              = "./metadata"
+  api_gateway         = aws_api_gateway_rest_api.rw_api_gateway
+  resource_root_id    = aws_api_gateway_resource.v1_resource.id
+  cluster_ca          = var.cluster_ca
+  cluster_endpoint    = var.cluster_endpoint
+  cluster_name        = var.cluster_name
+}
+
+module "query" {
+  source           = "./query"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  resource_root_id = aws_api_gateway_resource.v1_resource.id
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
@@ -214,7 +234,8 @@ resource "aws_api_gateway_domain_name" "api_gateway_domain_name" {
   certificate_arn = aws_acm_certificate_validation.api_domain_cert_validation.certificate_arn
   domain_name     = "${var.dns_prefix}.${data.cloudflare_zones.resourcewatch.zones[0].name}"
 
-  depends_on = [aws_acm_certificate_validation.api_domain_cert_validation]
+  depends_on = [
+  aws_acm_certificate_validation.api_domain_cert_validation]
 }
 
 resource "aws_api_gateway_base_path_mapping" "aws_api_gateway_base_path_mapping" {
