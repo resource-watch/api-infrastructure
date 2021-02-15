@@ -17,5 +17,6 @@ output "endpoints" {
     module.metadata_post_for_dataset_layer.endpoint_gateway_integration,
     module.metadata_post_for_dataset_widget.endpoint_gateway_integration,
     module.metadata_widget_post_find_by_ids.endpoint_gateway_integration,
+    module.metadata_dataset_post_find_by_ids.endpoint_gateway_integration
   ]
 }

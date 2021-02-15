@@ -290,9 +290,9 @@ module "metadata_patch_for_dataset_layer" {
 module "metadata_dataset_post_find_by_ids" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.metadata_dataset_metadata_resource
+  api_resource = aws_api_gateway_resource.metadata_dataset_metadata_find_by_ids_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/dataset/metadata/find-by-ids"
+  uri          = "http://api.resourcewatch.org/api/v1/dataset/metadata/find-by-ids"
   vpc_link     = aws_api_gateway_vpc_link.metadata_lb_vpc_link
 }
 

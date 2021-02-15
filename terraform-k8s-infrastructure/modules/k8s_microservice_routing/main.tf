@@ -89,6 +89,7 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.query.endpoints),
       jsonencode(module.query.endpoints),
       jsonencode(module.widget.endpoints),
+      jsonencode(module.metadata.endpoints),
       jsonencode(module.webshot.endpoints),
     )))
   }
