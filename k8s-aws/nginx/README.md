@@ -1,4 +1,12 @@
-# Deploying nginx reverse proxy 
+# NGINX Reverse Proxy
+
+## !!Deprecated!!
+
+The nginx reverse proxy has been deprecated in favor of AWS API Gateway.
+
+# Deploying nginx reverse proxy
+
+
 
 Start by deploying the nginx configuration `configmaps`
 
