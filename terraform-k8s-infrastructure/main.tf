@@ -52,4 +52,5 @@ module "k8s_namespaces" {
   cluster_endpoint = "${data.aws_eks_cluster.rw_api.endpoint}:4433"
   cluster_ca       = data.aws_eks_cluster.rw_api.certificate_authority.0.data
   cluster_name     = data.aws_eks_cluster.rw_api.name
+  kubectl_context  = "aws-rw-${var.environment}"
 }

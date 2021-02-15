@@ -86,6 +86,8 @@ resource "aws_api_gateway_deployment" "prod" {
   triggers = {
     redeployment = sha1(join(",", list(
     jsonencode(aws_api_gateway_integration.get_v1_endpoint_integration),
+    jsonencode(module.gfw_metadata.endpoints),
+    jsonencode(module.doc_swagger.endpoints),
     jsonencode(module.auth.endpoints),
     jsonencode(module.ct.endpoints),
     jsonencode(module.dataset.endpoints),
@@ -168,6 +170,26 @@ resource "aws_api_gateway_integration_response" "get_v1_endpoint_integration_res
 { }
 EOF
   }
+}
+
+
+// Nginx reverse proxy config, remapped
+
+// /v1/gfw-metadata proxies to external server
+module "gfw_metadata" {
+  source           = "./gfw-metadata"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  resource_root_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
+}
+
+// /documentation uses doc-swagger MS (no CT)
+module "doc_swagger" {
+  source           = "./doc-swagger"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  resource_root_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
 }
 
 
@@ -362,16 +384,16 @@ resource "aws_api_gateway_base_path_mapping" "env_api_resourcewatch_org_base_pat
 }
 
 // TODO: if we don't move the globalforestwatch.org DNS into TF, this will have to stay a manual thing
-//// {env}-api.globalforestwatch.org
-//resource "aws_acm_certificate" "env_api_globalforestwatch_org_domain_cert" {
-//  domain_name       = "${var.dns_prefix}-api.globalforestwatch.org"
-//  validation_method = "DNS"
-//
-//  lifecycle {
-//    create_before_destroy = true
-//  }
-//}
-//
+// {env}-api.globalforestwatch.org
+resource "aws_acm_certificate" "env_api_globalforestwatch_org_domain_cert" {
+  domain_name       = "${var.dns_prefix}-api.globalforestwatch.org"
+  validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 //resource "aws_acm_certificate_validation" "env_api_globalforestwatch_org_domain_cert_validation" {
 //  certificate_arn = aws_acm_certificate.env_api_globalforestwatch_org_domain_cert.arn
 //}
