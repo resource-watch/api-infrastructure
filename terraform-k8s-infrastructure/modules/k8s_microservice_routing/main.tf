@@ -82,13 +82,14 @@ resource "aws_api_gateway_deployment" "prod" {
 
   triggers = {
     redeployment = sha1(join(",", list(
-      jsonencode(module.ct.endpoints),
       jsonencode(module.auth.endpoints),
+      jsonencode(module.ct.endpoints),
       jsonencode(module.dataset.endpoints),
+      jsonencode(module.layer.endpoints),
       jsonencode(module.query.endpoints),
       jsonencode(module.query.endpoints),
       jsonencode(module.widget.endpoints),
-      jsonencode(module.layer.endpoints),
+      jsonencode(module.webshot.endpoints),
     )))
   }
 
@@ -143,34 +144,43 @@ module "dataset" {
 }
 
 module "widget" {
-  source              = "./widget"
-  api_gateway         = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id    = aws_api_gateway_resource.v1_resource.id
-  cluster_ca          = var.cluster_ca
-  cluster_endpoint    = var.cluster_endpoint
-  cluster_name        = var.cluster_name
+  source           = "./widget"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  resource_root_id = aws_api_gateway_resource.v1_resource.id
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
 }
 
 module "layer" {
-  source              = "./layer"
-  api_gateway         = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id    = aws_api_gateway_resource.v1_resource.id
-  cluster_ca          = var.cluster_ca
-  cluster_endpoint    = var.cluster_endpoint
-  cluster_name        = var.cluster_name
+  source           = "./layer"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  resource_root_id = aws_api_gateway_resource.v1_resource.id
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
 }
 
 module "metadata" {
-  source              = "./metadata"
-  api_gateway         = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id    = aws_api_gateway_resource.v1_resource.id
-  cluster_ca          = var.cluster_ca
-  cluster_endpoint    = var.cluster_endpoint
-  cluster_name        = var.cluster_name
+  source           = "./metadata"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  resource_root_id = aws_api_gateway_resource.v1_resource.id
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
 }
 
 module "query" {
   source           = "./query"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  resource_root_id = aws_api_gateway_resource.v1_resource.id
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+}
+
+module "webshot" {
+  source           = "./webshot"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   resource_root_id = aws_api_gateway_resource.v1_resource.id
   cluster_ca       = var.cluster_ca
