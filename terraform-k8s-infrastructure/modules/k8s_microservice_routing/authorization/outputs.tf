@@ -24,6 +24,7 @@ output "endpoints" {
     module.authorization_post_user.endpoint_gateway_integration,
     module.authorization_patch_user_me.endpoint_gateway_integration,
     module.authorization_patch_user_id.endpoint_gateway_integration,
-    module.authorization_delete_user_id.endpoint_gateway_integration
+    module.authorization_delete_user_id.endpoint_gateway_integration,
+    module.authorization_auth_code_callback.endpoint_gateway_integration
   ]
 }

@@ -227,6 +227,20 @@ resource "aws_api_gateway_resource" "authorization_user_me_resource" {
   path_part   = "me"
 }
 
+// Authorization code resource
+resource "aws_api_gateway_resource" "authorization_code_resource" {
+  rest_api_id = var.api_gateway.id
+  parent_id   = aws_api_gateway_resource.authorization_resource.id
+  path_part   = "authorization-code"
+}
+
+// Authorization code callback resource
+resource "aws_api_gateway_resource" "authorization_code_callback_resource" {
+  rest_api_id = var.api_gateway.id
+  parent_id   = aws_api_gateway_resource.authorization_code_resource.id
+  path_part   = "callback"
+}
+
 
 // Apple endpoints
 module "authorization_get_apple" {
@@ -537,5 +551,14 @@ module "authorization_delete_user_id" {
   api_resource = aws_api_gateway_resource.authorization_user_id_resource
   method       = "DELETE"
   uri          = "http://api.resourcewatch.org/auth/user/{userId}"
+  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+}
+
+module "authorization_auth_code_callback" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.authorization_code_callback_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org/auth/authorization-code/callback"
   vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
 }
