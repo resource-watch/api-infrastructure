@@ -14,7 +14,6 @@ spec:
     - hosts:
         - dev-api.globalforestwatch.org
         - dev-api.resourcewatch.org
-        - ui-dev.resourcewatch.org
       secretName: api-certificate
   rules:
     - host: dev-api.globalforestwatch.org
@@ -30,11 +29,4 @@ spec:
           - path: /*
             backend:
               serviceName: nginx
-              servicePort: 80
-    - host: ui-dev.resourcewatch.org
-      http:
-        paths:
-          - path: /*
-            backend:
-              serviceName: ct-ui
               servicePort: 80

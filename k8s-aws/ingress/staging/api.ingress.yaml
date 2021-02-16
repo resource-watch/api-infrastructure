@@ -14,7 +14,6 @@ spec:
     - hosts:
         - staging-api.globalforestwatch.org
         - staging-api.resourcewatch.org
-        - ui-staging.resourcewatch.org
       secretName: api-certificate
   rules:
     - host: staging-api.globalforestwatch.org
@@ -30,11 +29,4 @@ spec:
           - path: /*
             backend:
               serviceName: nginx
-              servicePort: 80
-    - host: ui-staging.resourcewatch.org
-      http:
-        paths:
-          - path: /*
-            backend:
-              serviceName: ct-ui
               servicePort: 80

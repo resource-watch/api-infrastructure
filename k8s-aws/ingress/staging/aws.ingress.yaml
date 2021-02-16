@@ -13,7 +13,6 @@ spec:
   tls:
     - hosts:
         - aws-staging.resourcewatch.org
-        - ui.aws-staging.resourcewatch.org
       secretName: aws-certificate
   rules:
     - host: aws-staging.resourcewatch.org
@@ -22,11 +21,4 @@ spec:
           - path: /*
             backend:
               serviceName: nginx
-              servicePort: 80
-    - host: ui.aws-staging.resourcewatch.org
-      http:
-        paths:
-          - path: /*
-            backend:
-              serviceName: ct-ui
               servicePort: 80
