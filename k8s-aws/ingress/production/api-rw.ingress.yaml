@@ -12,17 +12,9 @@ metadata:
 spec:
   tls:
     - hosts:
-        - ui.resourcewatch.org
         - api.resourcewatch.org
       secretName: api-rw-certificate
   rules:
-    - host: ui.resourcewatch.org
-      http:
-        paths:
-        - path: /*
-          backend:
-            serviceName: ct-ui
-            servicePort: 80
     - host: api.resourcewatch.org
       http:
         paths:
