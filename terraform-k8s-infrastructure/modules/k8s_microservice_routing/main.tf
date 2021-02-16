@@ -94,6 +94,7 @@ resource "aws_api_gateway_deployment" "prod" {
     jsonencode(module.layer.endpoints),
     jsonencode(module.query.endpoints),
     jsonencode(module.query.endpoints),
+    jsonencode(module.task_executor.endpoints),
     jsonencode(module.widget.endpoints),
     jsonencode(module.metadata.endpoints),
     jsonencode(module.vocabulary.endpoints),
@@ -251,6 +252,15 @@ module "metadata" {
 
 module "query" {
   source           = "./query"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  resource_root_id = aws_api_gateway_resource.v1_resource.id
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+}
+
+module "task_executor" {
+  source           = "./task-executor"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   resource_root_id = aws_api_gateway_resource.v1_resource.id
   cluster_ca       = var.cluster_ca
