@@ -50,6 +50,7 @@ resource "aws_api_gateway_vpc_link" "authorization_lb_vpc_link" {
   }
 }
 
+// /auth
 resource "aws_api_gateway_resource" "authorization_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = var.resource_root_id
@@ -57,18 +58,22 @@ resource "aws_api_gateway_resource" "authorization_resource" {
 }
 
 // Apple resources
+
+// /auth/apple
 resource "aws_api_gateway_resource" "authorization_apple_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_resource.id
   path_part   = "apple"
 }
 
+// /auth/apple/callback
 resource "aws_api_gateway_resource" "authorization_apple_callback_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_apple_resource.id
   path_part   = "callback"
 }
 
+// /auth/apple/token
 resource "aws_api_gateway_resource" "authorization_apple_token_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_apple_resource.id
