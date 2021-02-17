@@ -48,32 +48,32 @@ resource "aws_api_gateway_vpc_link" "rw_lp_lb_vpc_link" {
     create_before_destroy = true
   }
 }
-
-data "aws_api_gateway_resource" "v1_resource" {
+// /
+data "aws_api_gateway_resource" "root_resource" {
   rest_api_id = var.api_gateway.id
-  path        = "/v1"
+  path        = "/"
 }
 
-// /v1/rw-lp
+// /rw-lp
 resource "aws_api_gateway_resource" "rw_lp_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_id
+  parent_id   = data.aws_api_gateway_resource.root_resource.id
   path_part   = "rw-lp"
 }
 
-// /v1/rw-lp/{proxy+}
+// /rw-lp/{proxy+}
 resource "aws_api_gateway_resource" "rw_lp_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.rw_lp_resource.id
   path_part   = "{proxy+}"
 }
 
-module "rw_lp_get" {
+module "rw_lp_get_home" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = data.aws_api_gateway_resource.v1_resource
+  api_resource = data.aws_api_gateway_resource.root_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1"
+  uri          = "http://api.resourcewatch.org/"
   vpc_link     = aws_api_gateway_vpc_link.rw_lp_lb_vpc_link
 }
 
@@ -82,7 +82,7 @@ module "rw_lp_get_rw_lp_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.rw_lp_proxy_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/rw-lp/{proxy+}"
+  uri          = "http://api.resourcewatch.org/rw-lp/{proxy}"
   vpc_link     = aws_api_gateway_vpc_link.rw_lp_lb_vpc_link
 }
 
