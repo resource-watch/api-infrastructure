@@ -85,20 +85,21 @@ resource "aws_api_gateway_deployment" "prod" {
 
   triggers = {
     redeployment = sha1(join(",", list(
-    jsonencode(aws_api_gateway_integration.get_v1_endpoint_integration),
-    jsonencode(module.gfw_metadata.endpoints),
-    jsonencode(module.doc_swagger.endpoints),
-    jsonencode(module.auth.endpoints),
-    jsonencode(module.ct.endpoints),
-    jsonencode(module.dataset.endpoints),
-    jsonencode(module.layer.endpoints),
-    jsonencode(module.query.endpoints),
-    jsonencode(module.query.endpoints),
-    jsonencode(module.task_executor.endpoints),
-    jsonencode(module.widget.endpoints),
-    jsonencode(module.metadata.endpoints),
-    jsonencode(module.vocabulary.endpoints),
-    jsonencode(module.webshot.endpoints),
+      jsonencode(module.gfw_metadata.endpoints),
+      jsonencode(module.doc_swagger.endpoints),
+      jsonencode(module.auth.endpoints),
+      jsonencode(module.ct.endpoints),
+      jsonencode(module.dataset.endpoints),
+      jsonencode(module.graph-client.endpoints),
+      jsonencode(module.layer.endpoints),
+      jsonencode(module.query.endpoints),
+      jsonencode(module.query.endpoints),
+      jsonencode(module.task_executor.endpoints),
+      jsonencode(module.widget.endpoints),
+      jsonencode(module.metadata.endpoints),
+      jsonencode(module.vocabulary.endpoints),
+      jsonencode(module.webshot.endpoints),
+      jsonencode(module.rw-lp),
     )))
   }
 
@@ -128,50 +129,6 @@ resource "aws_api_gateway_resource" "v3_resource" {
   rest_api_id = aws_api_gateway_rest_api.rw_api_gateway.id
   parent_id   = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
   path_part   = "v3"
-}
-
-
-// /v1 200 response, needed by FW
-resource "aws_api_gateway_method" "get_v1_endpoint_method" {
-  rest_api_id        = aws_api_gateway_rest_api.rw_api_gateway.id
-  resource_id        = aws_api_gateway_resource.v1_resource.id
-  http_method        = "GET"
-  authorization      = "NONE"
-}
-
-resource "aws_api_gateway_integration" "get_v1_endpoint_integration" {
-  rest_api_id = aws_api_gateway_rest_api.rw_api_gateway.id
-  resource_id = aws_api_gateway_resource.v1_resource.id
-  http_method = aws_api_gateway_method.get_v1_endpoint_method.http_method
-  type        = "MOCK"
-
-  request_templates = {
-    "application/json": "{\"statusCode\": 200}"
-  }
-  depends_on = [
-    aws_api_gateway_method.get_v1_endpoint_method]
-}
-
-resource "aws_api_gateway_method_response" "get_v1_endpoint_method_response" {
-  rest_api_id = aws_api_gateway_rest_api.rw_api_gateway.id
-  resource_id = aws_api_gateway_resource.v1_resource.id
-  http_method = aws_api_gateway_method.get_v1_endpoint_method.http_method
-  status_code = 200
-}
-
-resource "aws_api_gateway_integration_response" "get_v1_endpoint_integration_response" {
-  rest_api_id = aws_api_gateway_rest_api.rw_api_gateway.id
-  resource_id = aws_api_gateway_resource.v1_resource.id
-  http_method = aws_api_gateway_method.get_v1_endpoint_method.http_method
-  status_code = aws_api_gateway_method_response.get_v1_endpoint_method_response.status_code
-
-  # Transforms the backend JSON response to XML
-  response_templates = {
-    "application/json" = <<EOF
-#set($inputRoot = $input.path('$'))
-{ }
-EOF
-  }
 }
 
 
@@ -250,8 +207,26 @@ module "metadata" {
   cluster_name     = var.cluster_name
 }
 
+module "graph-client" {
+  source           = "./graph-client"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  resource_root_id = aws_api_gateway_resource.v1_resource.id
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+}
+
 module "query" {
   source           = "./query"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  resource_root_id = aws_api_gateway_resource.v1_resource.id
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+}
+
+module "rw-lp" {
+  source           = "./rw-lp"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   resource_root_id = aws_api_gateway_resource.v1_resource.id
   cluster_ca       = var.cluster_ca

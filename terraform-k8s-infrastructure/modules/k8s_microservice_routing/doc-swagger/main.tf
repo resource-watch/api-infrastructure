@@ -10,7 +10,7 @@ provider "kubernetes" {
 
 resource "kubernetes_service" "doc_swagger_service" {
   metadata {
-    name      = "doc-swagger"
+    name = "doc-swagger"
     annotations = {
       "service.beta.kubernetes.io/aws-load-balancer-type"                     = "nlb"
       "service.beta.kubernetes.io/aws-load-balancer-internal"                 = "true"
