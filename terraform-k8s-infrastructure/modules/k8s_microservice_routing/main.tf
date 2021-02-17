@@ -88,6 +88,8 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.gfw_metadata.endpoints),
       jsonencode(module.doc_swagger.endpoints),
       jsonencode(module.auth.endpoints),
+      jsonencode(module.biomass.endpoints),
+      jsonencode(module.geostore.endpoints),
       jsonencode(module.ct.endpoints),
       jsonencode(module.dataset.endpoints),
       jsonencode(module.graph-client.endpoints),
@@ -133,10 +135,10 @@ resource "aws_api_gateway_resource" "v3_resource" {
 
 // /v1 200 response, needed by FW
 resource "aws_api_gateway_method" "get_v1_endpoint_method" {
-  rest_api_id        = aws_api_gateway_rest_api.rw_api_gateway.id
-  resource_id        = aws_api_gateway_resource.v1_resource.id
-  http_method        = "GET"
-  authorization      = "NONE"
+  rest_api_id   = aws_api_gateway_rest_api.rw_api_gateway.id
+  resource_id   = aws_api_gateway_resource.v1_resource.id
+  http_method   = "GET"
+  authorization = "NONE"
 }
 
 resource "aws_api_gateway_integration" "get_v1_endpoint_integration" {
@@ -146,10 +148,10 @@ resource "aws_api_gateway_integration" "get_v1_endpoint_integration" {
   type        = "MOCK"
 
   request_templates = {
-    "application/json": "{\"statusCode\": 200}"
+    "application/json" : "{\"statusCode\": 200}"
   }
   depends_on = [
-    aws_api_gateway_method.get_v1_endpoint_method]
+  aws_api_gateway_method.get_v1_endpoint_method]
 }
 
 resource "aws_api_gateway_method_response" "get_v1_endpoint_method_response" {
@@ -248,6 +250,25 @@ module "metadata" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
+}
+
+module "biomass" {
+  source           = "./biomass"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  resource_root_id = aws_api_gateway_resource.v1_resource.id
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+}
+
+module "geostore" {
+  source              = "./geostore"
+  api_gateway         = aws_api_gateway_rest_api.rw_api_gateway
+  resource_root_v1_id = aws_api_gateway_resource.v1_resource.id
+  resource_root_v2_id = aws_api_gateway_resource.v2_resource.id
+  cluster_ca          = var.cluster_ca
+  cluster_endpoint    = var.cluster_endpoint
+  cluster_name        = var.cluster_name
 }
 
 module "graph-client" {
