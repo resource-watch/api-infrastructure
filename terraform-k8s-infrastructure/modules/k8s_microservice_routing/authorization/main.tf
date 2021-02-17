@@ -227,17 +227,17 @@ resource "aws_api_gateway_resource" "authorization_user_me_resource" {
   path_part   = "me"
 }
 
-// Authorization code resource
-resource "aws_api_gateway_resource" "authorization_code_resource" {
+// /auth/authorization-code
+resource "aws_api_gateway_resource" "authorization_authorization_code_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_resource.id
   path_part   = "authorization-code"
 }
 
-// Authorization code callback resource
-resource "aws_api_gateway_resource" "authorization_code_callback_resource" {
+// /auth/authorization-code/callback
+resource "aws_api_gateway_resource" "authorization_authorization_code_callback_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.authorization_code_resource.id
+  parent_id   = aws_api_gateway_resource.authorization_authorization_code_resource.id
   path_part   = "callback"
 }
 
@@ -554,10 +554,10 @@ module "authorization_delete_user_id" {
   vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
 }
 
-module "authorization_auth_code_callback" {
+module "authorization_get_authorization_authorization_code_callback" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.authorization_code_callback_resource
+  api_resource = aws_api_gateway_resource.authorization_authorization_code_callback_resource
   method       = "GET"
   uri          = "http://api.resourcewatch.org/auth/authorization-code/callback"
   vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
