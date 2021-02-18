@@ -49,9 +49,16 @@ resource "aws_api_gateway_vpc_link" "control_tower_lb_vpc_link" {
   }
 }
 
+// /
+data "aws_api_gateway_resource" "root_resource" {
+  rest_api_id = var.api_gateway.id
+  path        = "/"
+}
+
+// /{proxy+}
 resource "aws_api_gateway_resource" "control_tower_proxy_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_id
+  parent_id   = data.aws_api_gateway_resource.root_resource.id
   path_part   = "{proxy+}"
 }
 

@@ -49,82 +49,89 @@ resource "aws_api_gateway_vpc_link" "widget_lb_vpc_link" {
   }
 }
 
+// /v1
+data "aws_api_gateway_resource" "v1_resource" {
+  rest_api_id = var.api_gateway.id
+  path        = "/"
+}
+
+// /v1/dataset/{datasetId}
 data "aws_api_gateway_resource" "dataset_id_resource" {
   rest_api_id = var.api_gateway.id
   path        = "/v1/dataset/{datasetId}"
 }
 
-// /api/v1/widget
+// /v1/widget
 resource "aws_api_gateway_resource" "widget_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_id
+  parent_id   = data.aws_api_gateway_resource.v1_resource.id
   path_part   = "widget"
 }
 
-// /api/v1/widget/find-by-ids
+// /v1/widget/find-by-ids
 resource "aws_api_gateway_resource" "widget_find_by_ids_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.widget_resource.id
   path_part   = "find-by-ids"
 }
 
-// /api/v1/widget/change-environment
+// /v1/widget/change-environment
 resource "aws_api_gateway_resource" "widget_change_environment_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.widget_resource.id
   path_part   = "change-environment"
 }
 
-// /api/v1/widget/{widgetId}
+// /v1/widget/{widgetId}
 resource "aws_api_gateway_resource" "widget_id_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.widget_resource.id
   path_part   = "{widgetId}"
 }
 
-// /api/v1/widget/change-environment/{datasetId}
+// /v1/widget/change-environment/{datasetId}
 resource "aws_api_gateway_resource" "widget_change_environment_dataset_id_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.widget_change_environment_resource.id
   path_part   = "{datasetId}"
 }
 
-// /api/v1/widget/change-environment/{datasetId}/{env}
+// /v1/widget/change-environment/{datasetId}/{env}
 resource "aws_api_gateway_resource" "widget_env_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.widget_change_environment_dataset_id_resource.id
   path_part   = "{env}"
 }
 
-// /api/v1/dataset/{datasetId}/widget
+// /v1/dataset/{datasetId}/widget
 resource "aws_api_gateway_resource" "dataset_id_widget_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = data.aws_api_gateway_resource.dataset_id_resource.id
   path_part   = "widget"
 }
 
-// /api/v1/dataset/{datasetId}/widget/{widgetId}
+// /v1/dataset/{datasetId}/widget/{widgetId}
 resource "aws_api_gateway_resource" "dataset_id_widget_id_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.dataset_id_widget_resource.id
   path_part   = "{widgetId}"
 }
 
-// /api/v1/widget/{widgetId}/clone
+// /v1/widget/{widgetId}/clone
 resource "aws_api_gateway_resource" "widget_clone_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.widget_id_resource.id
   path_part   = "clone"
 }
 
-// /api/v1/dataset/{datasetId}/widget/{widgetId}/clone
+// /v1/dataset/{datasetId}/widget/{widgetId}/clone
 resource "aws_api_gateway_resource" "dataset_id_widget_id_clone_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.dataset_id_widget_id_resource.id
   path_part   = "clone"
 }
 
-module "widget_get" {
+module "widget_get_widget" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.widget_resource
@@ -133,7 +140,7 @@ module "widget_get" {
   vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
 }
 
-module "widget_get_for_dataset" {
+module "widget_get_dataset_id_widget" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_resource
@@ -142,7 +149,7 @@ module "widget_get_for_dataset" {
   vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
 }
 
-module "widget_get_for_dataset_by_id" {
+module "widget_get_dataset_id_widget_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_id_resource
@@ -151,7 +158,7 @@ module "widget_get_for_dataset_by_id" {
   vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
 }
 
-module "widget_get_by_id" {
+module "widget_get_widget_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.widget_id_resource
@@ -160,7 +167,7 @@ module "widget_get_by_id" {
   vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
 }
 
-module "widget_post_for_dataset" {
+module "widget_post_dataset_id_widget" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_resource
@@ -169,7 +176,7 @@ module "widget_post_for_dataset" {
   vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
 }
 
-module "widget_post" {
+module "widget_post_widget" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.widget_resource
@@ -178,7 +185,7 @@ module "widget_post" {
   vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
 }
 
-module "widget_patch_by_id" {
+module "widget_patch_widget_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.widget_id_resource
@@ -196,7 +203,7 @@ module "widget_delete_by_id" {
   vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
 }
 
-module "widget_delete_for_dataset" {
+module "widget_delete_dataset_id_widget" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_resource
@@ -205,7 +212,7 @@ module "widget_delete_for_dataset" {
   vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
 }
 
-module "widget_patch_for_dataset_by_id" {
+module "widget_patch_dataset_id_widget_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_id_resource
@@ -214,7 +221,7 @@ module "widget_patch_for_dataset_by_id" {
   vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
 }
 
-module "widget_change_environment_for_dataset_by_id" {
+module "widget_patch_widget_change_environment_dataset_id_env" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.widget_env_resource
@@ -223,7 +230,7 @@ module "widget_change_environment_for_dataset_by_id" {
   vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
 }
 
-module "widget_delete_for_dataset_by_id" {
+module "widget_delete_dataset_id_widget_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_id_resource
@@ -232,7 +239,7 @@ module "widget_delete_for_dataset_by_id" {
   vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
 }
 
-module "widget_post_find_by_ids" {
+module "widget_post_widget_find_by_ids" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.widget_find_by_ids_resource
@@ -241,7 +248,7 @@ module "widget_post_find_by_ids" {
   vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
 }
 
-module "widget_clone" {
+module "widget_post_dataset_id_clone" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.widget_clone_resource
@@ -250,7 +257,7 @@ module "widget_clone" {
   vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
 }
 
-module "widget_clone_for_dataset_id" {
+module "widget_post_dataset_id_widget_id_clone" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_id_clone_resource

@@ -3,14 +3,18 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(var.cluster_ca)
   exec {
     api_version = "client.authentication.k8s.io/v1alpha1"
-    args        = ["eks", "get-token", "--cluster-name", var.cluster_name]
-    command     = "aws"
+    args = [
+      "eks",
+      "get-token",
+      "--cluster-name",
+    var.cluster_name]
+    command = "aws"
   }
 }
 
 resource "kubernetes_service" "geostore_service" {
   metadata {
-    name      = "geostore"
+    name = "geostore"
     annotations = {
       "service.beta.kubernetes.io/aws-load-balancer-type"                     = "nlb"
       "service.beta.kubernetes.io/aws-load-balancer-internal"                 = "true"
@@ -41,7 +45,8 @@ data "aws_lb" "geostore_lb" {
 resource "aws_api_gateway_vpc_link" "geostore_lb_vpc_link" {
   name        = "Geostore LB VPC link"
   description = "VPC link to the geostore service load balancer"
-  target_arns = [data.aws_lb.geostore_lb.arn]
+  target_arns = [
+  data.aws_lb.geostore_lb.arn]
 
   lifecycle {
     create_before_destroy = true
@@ -52,10 +57,22 @@ resource "aws_api_gateway_vpc_link" "geostore_lb_vpc_link" {
 # V1 Geostore
 #
 
+// /v1
+data "aws_api_gateway_resource" "v1_resource" {
+  rest_api_id = var.api_gateway.id
+  path        = "/v1"
+}
+
+// /v2
+data "aws_api_gateway_resource" "v2_resource" {
+  rest_api_id = var.api_gateway.id
+  path        = "/v2"
+}
+
 // /v1/geostore
 resource "aws_api_gateway_resource" "v1_geostore_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_v1_id
+  parent_id   = data.aws_api_gateway_resource.v1_resource.id
   path_part   = "geostore"
 }
 
@@ -263,7 +280,7 @@ module "geostore_get_v1_geostore_wdpa_id" {
 // /v1/coverage
 resource "aws_api_gateway_resource" "v1_coverage_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_v1_id
+  parent_id   = data.aws_api_gateway_resource.v1_resource.id
   path_part   = "coverage"
 }
 
@@ -382,7 +399,7 @@ module "geostore_get_v1_coverage_intersect" {
 // /v2/geostore
 resource "aws_api_gateway_resource" "v2_geostore_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_v2_id
+  parent_id   = data.aws_api_gateway_resource.v2_resource.id
   path_part   = "geostore"
 }
 
@@ -581,7 +598,7 @@ module "geostore_get_v2_geostore_wdpa_id" {
 // /v2/coverage
 resource "aws_api_gateway_resource" "v2_coverage_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_v2_id
+  parent_id   = data.aws_api_gateway_resource.v2_resource.id
   path_part   = "coverage"
 }
 

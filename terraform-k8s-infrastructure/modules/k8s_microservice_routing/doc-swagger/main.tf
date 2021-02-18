@@ -48,13 +48,20 @@ resource "aws_api_gateway_vpc_link" "doc_swagger_lb_vpc_link" {
   }
 }
 
-//  /documentation
+// /
+data "aws_api_gateway_resource" "root_resource" {
+  rest_api_id = var.api_gateway.id
+  path        = "/"
+}
+
+// /documentation
 resource "aws_api_gateway_resource" "documentation_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_id
+  parent_id   = data.aws_api_gateway_resource.root_resource.id
   path_part   = "documentation"
 }
 
+// /documentation
 resource "aws_api_gateway_resource" "documentation_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.documentation_resource.id

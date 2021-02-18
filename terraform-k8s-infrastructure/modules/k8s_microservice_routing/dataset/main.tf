@@ -49,55 +49,69 @@ resource "aws_api_gateway_vpc_link" "dataset_lb_vpc_link" {
   }
 }
 
+// /v1
+data "aws_api_gateway_resource" "v1_resource" {
+  rest_api_id = var.api_gateway.id
+  path        = "/v1"
+}
+
+// /v1/dataset
 resource "aws_api_gateway_resource" "dataset_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_id
+  parent_id   = data.aws_api_gateway_resource.v1_resource.id
   path_part   = "dataset"
 }
 
+// /v1/dataset/{datasetId}
 resource "aws_api_gateway_resource" "dataset_id_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.dataset_resource.id
   path_part   = "{datasetId}"
 }
 
+// /v1/dataset/find-by-ids
 resource "aws_api_gateway_resource" "dataset_find_by_ids_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.dataset_resource.id
   path_part   = "find-by-ids"
 }
 
+// /v1/dataset/upload
 resource "aws_api_gateway_resource" "dataset_upload_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.dataset_resource.id
   path_part   = "upload"
 }
 
+// /v1/dataset/{datasetId}/clone
 resource "aws_api_gateway_resource" "dataset_clone_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.dataset_id_resource.id
   path_part   = "clone"
 }
 
+// /v1/dataset/{datasetId}/flush
 resource "aws_api_gateway_resource" "dataset_flush_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.dataset_id_resource.id
   path_part   = "flush"
 }
 
+// /v1/dataset/{datasetId}/recover
 resource "aws_api_gateway_resource" "dataset_recover_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.dataset_id_resource.id
   path_part   = "recover"
 }
 
+// /v1/dataset/{datasetId}/lastUpdated
 resource "aws_api_gateway_resource" "dataset_last_updated_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.dataset_id_resource.id
   path_part   = "lastUpdated"
 }
 
-module "dataset_get" {
+module "dataset_get_dataset" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_resource
@@ -106,7 +120,7 @@ module "dataset_get" {
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 
-module "dataset_get_by_id" {
+module "dataset_get_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_resource
@@ -115,7 +129,7 @@ module "dataset_get_by_id" {
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 
-module "dataset_update_by_id" {
+module "dataset_update_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_resource
@@ -124,7 +138,7 @@ module "dataset_update_by_id" {
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 
-module "dataset_delete_by_id" {
+module "dataset_delete_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_resource
@@ -133,7 +147,7 @@ module "dataset_delete_by_id" {
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 
-module "dataset_create" {
+module "dataset_post_dataset" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_resource
@@ -142,7 +156,7 @@ module "dataset_create" {
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 
-module "dataset_clone" {
+module "dataset_post_dataset_id_clone" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_clone_resource
@@ -151,7 +165,7 @@ module "dataset_clone" {
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 
-module "dataset_flush" {
+module "dataset_post_dataset_id_flush" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_flush_resource
@@ -160,7 +174,7 @@ module "dataset_flush" {
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 
-module "dataset_recover" {
+module "dataset_post_dataset_id_recover" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_recover_resource
@@ -169,7 +183,7 @@ module "dataset_recover" {
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 
-module "dataset_last_updated" {
+module "dataset_get_dataset_id_last_updated" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_last_updated_resource
@@ -178,7 +192,7 @@ module "dataset_last_updated" {
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 
-module "dataset_post_find_by_ids" {
+module "dataset_post_dataset_find_by_ids" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_find_by_ids_resource
@@ -187,7 +201,7 @@ module "dataset_post_find_by_ids" {
   vpc_link     = aws_api_gateway_vpc_link.dataset_lb_vpc_link
 }
 
-module "dataset_post_upload" {
+module "dataset_post_dataset_upload" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_upload_resource

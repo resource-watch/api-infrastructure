@@ -49,9 +49,22 @@ resource "aws_api_gateway_vpc_link" "viirs_fires_lb_vpc_link" {
   }
 }
 
+
+// /v1
+data "aws_api_gateway_resource" "v1_resource" {
+  rest_api_id = var.api_gateway.id
+  path        = "/v1"
+}
+
+// /v2
+data "aws_api_gateway_resource" "v2_resource" {
+  rest_api_id = var.api_gateway.id
+  path        = "/v2"
+}
+
 resource "aws_api_gateway_resource" "viirs_fires_v2_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_v2_id
+  parent_id   = data.aws_api_gateway_resource.v2_resource.id
   path_part   = "viirs-active-fires"
 }
 
@@ -121,7 +134,7 @@ resource "aws_api_gateway_resource" "viirs_fires_wdpa_by_id_v2_resource" {
 # v1 resources
 resource "aws_api_gateway_resource" "viirs_fires_v1_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_v1_id
+  parent_id   = data.aws_api_gateway_resource.v1_resource.id
   path_part   = "viirs-active-fires"
 }
 

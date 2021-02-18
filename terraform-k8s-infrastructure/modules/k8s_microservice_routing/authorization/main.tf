@@ -50,14 +50,22 @@ resource "aws_api_gateway_vpc_link" "authorization_lb_vpc_link" {
   }
 }
 
+// /
+data "aws_api_gateway_resource" "root_resource" {
+  rest_api_id = var.api_gateway.id
+  path        = "/"
+}
+
 // /auth
 resource "aws_api_gateway_resource" "authorization_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_id
+  parent_id   = data.aws_api_gateway_resource.root_resource.id
   path_part   = "auth"
 }
 
-// Apple resources
+#
+# Apple resources
+#
 
 // /auth/apple
 resource "aws_api_gateway_resource" "authorization_apple_resource" {
@@ -80,147 +88,179 @@ resource "aws_api_gateway_resource" "authorization_apple_token_resource" {
   path_part   = "token"
 }
 
-// Google resources
+#
+# Google resources
+#
+
+// /auth/google
 resource "aws_api_gateway_resource" "authorization_google_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_resource.id
   path_part   = "google"
 }
 
+// /auth/google/callback
 resource "aws_api_gateway_resource" "authorization_google_callback_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_google_resource.id
   path_part   = "callback"
 }
 
+// /auth/google/token
 resource "aws_api_gateway_resource" "authorization_google_token_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_google_resource.id
   path_part   = "token"
 }
 
-// Facebook resources
+#
+# Facebook resources
+#
+// /auth/facebook
 resource "aws_api_gateway_resource" "authorization_facebook_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_resource.id
   path_part   = "facebook"
 }
 
+// /auth/facebook/callback
 resource "aws_api_gateway_resource" "authorization_facebook_callback_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_facebook_resource.id
   path_part   = "callback"
 }
 
+// /auth/facebook/token
 resource "aws_api_gateway_resource" "authorization_facebook_token_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_facebook_resource.id
   path_part   = "token"
 }
 
-// User management resources
+#
+# User management resources
+#
+
+// /auth/login
 resource "aws_api_gateway_resource" "authorization_login_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_resource.id
   path_part   = "login"
 }
 
+// /auth/fail
 resource "aws_api_gateway_resource" "authorization_fail_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_resource.id
   path_part   = "fail"
 }
 
+// /auth/check-logged
 resource "aws_api_gateway_resource" "authorization_check_logged_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_resource.id
   path_part   = "check-logged"
 }
 
+// /auth/success
 resource "aws_api_gateway_resource" "authorization_success_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_resource.id
   path_part   = "success"
 }
 
+// /auth/logout
 resource "aws_api_gateway_resource" "authorization_logout_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_resource.id
   path_part   = "logout"
 }
 
+// /auth/sign-up
 resource "aws_api_gateway_resource" "authorization_sign_up_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_resource.id
   path_part   = "sign-up"
 }
 
+// /auth/confirm
 resource "aws_api_gateway_resource" "authorization_confirm_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_resource.id
   path_part   = "confirm"
 }
 
+// /auth/confirm/{token}
 resource "aws_api_gateway_resource" "authorization_confirm_token_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_confirm_resource.id
   path_part   = "{token}"
 }
 
+// /auth/reset-password
 resource "aws_api_gateway_resource" "authorization_reset_password_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_resource.id
   path_part   = "reset-password"
 }
 
+// /auth/reset-password/{token}
 resource "aws_api_gateway_resource" "authorization_reset_password_token_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_reset_password_resource.id
   path_part   = "{token}"
 }
 
+// /auth/generate-token
 resource "aws_api_gateway_resource" "authorization_generate_token_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_resource.id
   path_part   = "generate-token"
 }
 
+// /auth/user
 resource "aws_api_gateway_resource" "authorization_user_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_resource.id
   path_part   = "user"
 }
 
+// /auth/user/from-token
 resource "aws_api_gateway_resource" "authorization_user_from_token_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_user_resource.id
   path_part   = "from-token"
 }
 
+// /auth/user/{userId}
 resource "aws_api_gateway_resource" "authorization_user_id_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_user_resource.id
   path_part   = "{userId}"
 }
 
+// /auth/user/find-by-ids
 resource "aws_api_gateway_resource" "authorization_user_find_by_ids_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_user_resource.id
   path_part   = "find-by-ids"
 }
 
+// /auth/user/ids
 resource "aws_api_gateway_resource" "authorization_user_ids_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_user_resource.id
   path_part   = "ids"
 }
 
+// /auth/user/ids/{role}
 resource "aws_api_gateway_resource" "authorization_user_ids_role_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_user_ids_resource.id
   path_part   = "{role}"
 }
 
+// /auth/user/me
 resource "aws_api_gateway_resource" "authorization_user_me_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.authorization_user_resource.id
@@ -242,7 +282,9 @@ resource "aws_api_gateway_resource" "authorization_authorization_code_callback_r
 }
 
 
-// Apple endpoints
+#
+# Apple endpoints
+#
 module "authorization_get_apple" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
@@ -270,7 +312,9 @@ module "authorization_get_apple_token" {
   vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
 }
 
-// Google endpoints
+#
+# Google endpoints
+#
 module "authorization_get_google" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
@@ -294,11 +338,13 @@ module "authorization_get_google_token" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_google_token_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/google/callback"
+  uri          = "http://api.resourcewatch.org/auth/google/token"
   vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
 }
 
-// Facebook endpoints
+#
+# Facebook endpoints
+#
 module "authorization_get_facebook" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
@@ -322,13 +368,13 @@ module "authorization_get_facebook_token" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_facebook_token_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/facebook/callback"
+  uri          = "http://api.resourcewatch.org/auth/facebook/token"
   vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
 }
 
-// User management resources
-
-
+#
+# User management resources
+#
 module "authorization_get" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
@@ -496,7 +542,7 @@ module "authorization_get_user_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_user_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/user/:id"
+  uri          = "http://api.resourcewatch.org/auth/user/{userId}"
   vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
 }
 
@@ -513,7 +559,7 @@ module "authorization_get_user_ids_role" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_user_ids_role_resource
-  method       = "POST"
+  method       = "GET"
   uri          = "http://api.resourcewatch.org/auth/user/ids/{role}"
   vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
 }

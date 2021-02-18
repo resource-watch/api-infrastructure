@@ -49,27 +49,33 @@ resource "aws_api_gateway_vpc_link" "query_lb_vpc_link" {
   }
 }
 
+// /v1
+data "aws_api_gateway_resource" "v1_resource" {
+  rest_api_id = var.api_gateway.id
+  path        = "/v1"
+}
+
 resource "aws_api_gateway_resource" "query_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_id
+  parent_id   = data.aws_api_gateway_resource.v1_resource.id
   path_part   = "query"
 }
 
 resource "aws_api_gateway_resource" "download_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_id
+  parent_id   = data.aws_api_gateway_resource.v1_resource.id
   path_part   = "download"
 }
 
 resource "aws_api_gateway_resource" "jiminy_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_id
+  parent_id   = data.aws_api_gateway_resource.v1_resource.id
   path_part   = "jiminy"
 }
 
 resource "aws_api_gateway_resource" "fields_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_id
+  parent_id   = data.aws_api_gateway_resource.v1_resource.id
   path_part   = "fields"
 }
 

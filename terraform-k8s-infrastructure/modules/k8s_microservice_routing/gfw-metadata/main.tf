@@ -1,10 +1,21 @@
-//  /v1/gfw-metadata/(.*)$ proxies to http://gis-gfw.wri.org/metadata/$1
+#
+# /v1/gfw-metadata/(.*)$ proxies to http://gis-gfw.wri.org/metadata/$1
+#
+
+// /
+data "aws_api_gateway_resource" "root_resource" {
+  rest_api_id = var.api_gateway.id
+  path        = "/"
+}
+
+// /gfw-metadata
 resource "aws_api_gateway_resource" "v1_gfw_metadata_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_id
+  parent_id   = data.aws_api_gateway_resource.root_resource.id
   path_part   = "gfw-metadata"
 }
 
+// /gfw-metadata/{proxy+}
 resource "aws_api_gateway_resource" "v1_gfw_metadata_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.v1_gfw_metadata_resource.id

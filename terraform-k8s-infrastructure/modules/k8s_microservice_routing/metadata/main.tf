@@ -50,6 +50,11 @@ resource "aws_api_gateway_vpc_link" "metadata_lb_vpc_link" {
 }
 
 
+data "aws_api_gateway_resource" "v1_resource" {
+  rest_api_id = var.api_gateway.id
+  path        = "/v1"
+}
+
 data "aws_api_gateway_resource" "dataset_resource" {
   rest_api_id = var.api_gateway.id
   path        = "/v1/dataset"
@@ -80,77 +85,77 @@ data "aws_api_gateway_resource" "metadata_dataset_id_layer_id_resource" {
   path        = "/v1/dataset/{datasetId}/layer/{layerId}"
 }
 
-// /api/v1/metadata
+// /v1/metadata
 resource "aws_api_gateway_resource" "metadata_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_id
+  parent_id   = data.aws_api_gateway_resource.v1_resource.id
   path_part   = "metadata"
 }
 
-// /api/v1/dataset/metadata
+// /v1/dataset/metadata
 resource "aws_api_gateway_resource" "metadata_dataset_metadata_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = data.aws_api_gateway_resource.dataset_resource.id
   path_part   = "metadata"
 }
 
-// /api/v1/dataset/metadata/find-by-ids
+// /v1/dataset/metadata/find-by-ids
 resource "aws_api_gateway_resource" "metadata_dataset_metadata_find_by_ids_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.metadata_dataset_metadata_resource.id
   path_part   = "find-by-ids"
 }
 
-// /api/v1/dataset/{datasetId}/metadata
+// /v1/dataset/{datasetId}/metadata
 resource "aws_api_gateway_resource" "metadata_dataset_id_metadata_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = data.aws_api_gateway_resource.dataset_id_resource.id
   path_part   = "metadata"
 }
 
-// /api/v1/dataset/{datasetId}/metadata/clone
+// /v1/dataset/{datasetId}/metadata/clone
 resource "aws_api_gateway_resource" "metadata_dataset_metadata_clone_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.metadata_dataset_id_metadata_resource.id
   path_part   = "clone"
 }
 
-// /api/v1/dataset/{datasetId}/widget/metadata
+// /v1/dataset/{datasetId}/widget/metadata
 resource "aws_api_gateway_resource" "metadata_dataset_id_widget_metadata_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = data.aws_api_gateway_resource.metadata_dataset_id_widget_resource.id
   path_part   = "metadata"
 }
 
-// /api/v1/dataset/{datasetId}/widget/metadata/find-by-ids
+// /v1/dataset/{datasetId}/widget/metadata/find-by-ids
 resource "aws_api_gateway_resource" "metadata_dataset_id_widget_metadata_find_by_ids_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.metadata_dataset_id_widget_metadata_resource.id
   path_part   = "find-by-ids"
 }
 
-// /api/v1/dataset/{datasetId}/widget/{widgetId}/metadata
+// /v1/dataset/{datasetId}/widget/{widgetId}/metadata
 resource "aws_api_gateway_resource" "metadata_dataset_id_widget_id_metadata_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = data.aws_api_gateway_resource.metadata_dataset_id_widget_id_resource.id
   path_part   = "metadata"
 }
 
-// /api/v1/dataset/{datasetId}/layer/metadata
+// /v1/dataset/{datasetId}/layer/metadata
 resource "aws_api_gateway_resource" "metadata_dataset_id_layer_metadata_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = data.aws_api_gateway_resource.metadata_dataset_id_layer_resource.id
   path_part   = "metadata"
 }
 
-// /api/v1/dataset/{datasetId}/layer/metadata/find-by-ids
+// /v1/dataset/{datasetId}/layer/metadata/find-by-ids
 resource "aws_api_gateway_resource" "metadata_dataset_id_layer_metadata_find_by_ids_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.metadata_dataset_id_layer_metadata_resource.id
   path_part   = "find-by-ids"
 }
 
-// /api/v1/dataset/{datasetId}/layer/{layerId}/metadata
+// /v1/dataset/{datasetId}/layer/{layerId}/metadata
 resource "aws_api_gateway_resource" "metadata_dataset_id_layer_id_metadata_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = data.aws_api_gateway_resource.metadata_dataset_id_layer_id_resource.id

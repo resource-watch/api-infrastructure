@@ -100,6 +100,7 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.widget.endpoints),
       jsonencode(module.metadata.endpoints),
       jsonencode(module.vocabulary.endpoints),
+      jsonencode(module.gee-tiles.endpoints),
       jsonencode(module.webshot.endpoints),
       jsonencode(module.rw-lp),
     )))
@@ -181,16 +182,14 @@ EOF
 
 // /v1/gfw-metadata proxies to external server
 module "gfw_metadata" {
-  source           = "./gfw-metadata"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
+  source      = "./gfw-metadata"
+  api_gateway = aws_api_gateway_rest_api.rw_api_gateway
 }
 
 // /documentation uses doc-swagger MS (no CT)
 module "doc_swagger" {
   source           = "./doc-swagger"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
@@ -201,7 +200,6 @@ module "doc_swagger" {
 module "ct" {
   source           = "./ct"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
@@ -210,7 +208,6 @@ module "ct" {
 module "auth" {
   source           = "./authorization"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
@@ -219,7 +216,6 @@ module "auth" {
 module "dataset" {
   source           = "./dataset"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id = aws_api_gateway_resource.v1_resource.id
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
@@ -228,7 +224,6 @@ module "dataset" {
 module "widget" {
   source           = "./widget"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id = aws_api_gateway_resource.v1_resource.id
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
@@ -237,7 +232,6 @@ module "widget" {
 module "layer" {
   source           = "./layer"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id = aws_api_gateway_resource.v1_resource.id
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
@@ -246,7 +240,6 @@ module "layer" {
 module "metadata" {
   source           = "./metadata"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id = aws_api_gateway_resource.v1_resource.id
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
@@ -255,26 +248,30 @@ module "metadata" {
 module "biomass" {
   source           = "./biomass"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id = aws_api_gateway_resource.v1_resource.id
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
 }
 
 module "geostore" {
-  source              = "./geostore"
-  api_gateway         = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_v1_id = aws_api_gateway_resource.v1_resource.id
-  resource_root_v2_id = aws_api_gateway_resource.v2_resource.id
-  cluster_ca          = var.cluster_ca
-  cluster_endpoint    = var.cluster_endpoint
-  cluster_name        = var.cluster_name
+  source           = "./geostore"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+}
+
+module "gee-tiles" {
+  source           = "./gee-tiles"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
 }
 
 module "graph-client" {
   source           = "./graph-client"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id = aws_api_gateway_resource.v1_resource.id
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
@@ -283,7 +280,6 @@ module "graph-client" {
 module "query" {
   source           = "./query"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id = aws_api_gateway_resource.v1_resource.id
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
@@ -292,7 +288,6 @@ module "query" {
 module "rw-lp" {
   source           = "./rw-lp"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id = aws_api_gateway_resource.v1_resource.id
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
@@ -301,7 +296,6 @@ module "rw-lp" {
 module "task_executor" {
   source           = "./task-executor"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id = aws_api_gateway_resource.v1_resource.id
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
@@ -318,20 +312,17 @@ module "vocabulary" {
 module "webshot" {
   source           = "./webshot"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id = aws_api_gateway_resource.v1_resource.id
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
 }
 
 module "viirs_fires" {
-  source              = "./viirs-fires"
-  api_gateway         = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_v1_id = aws_api_gateway_resource.v1_resource.id
-  resource_root_v2_id = aws_api_gateway_resource.v2_resource.id
-  cluster_ca          = var.cluster_ca
-  cluster_endpoint    = var.cluster_endpoint
-  cluster_name        = var.cluster_name
+  source           = "./viirs-fires"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
 }
 
 #

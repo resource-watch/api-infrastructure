@@ -49,35 +49,41 @@ resource "aws_api_gateway_vpc_link" "webshot_lb_vpc_link" {
   }
 }
 
-// /api/v1/webshot
+// /v1
+data "aws_api_gateway_resource" "v1_resource" {
+  rest_api_id = var.api_gateway.id
+  path        = "/v1"
+}
+
+// /v1/webshot
 resource "aws_api_gateway_resource" "webshot_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_id
+  parent_id   = data.aws_api_gateway_resource.v1_resource.id
   path_part   = "webshot"
 }
 
-// /api/v1/webshot/pdf
+// /v1/webshot/pdf
 resource "aws_api_gateway_resource" "webshot_pdf_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.webshot_resource.id
   path_part   = "pdf"
 }
 
-// /api/v1/webshot/widget
+// /v1/webshot/widget
 resource "aws_api_gateway_resource" "webshot_widget_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.webshot_resource.id
   path_part   = "widget"
 }
 
-// /api/v1/webshot/{widgetId}
+// /v1/webshot/{widgetId}
 resource "aws_api_gateway_resource" "webshot_widget_id_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.webshot_widget_resource.id
   path_part   = "{widgetId}"
 }
 
-// /api/v1/webshot/{widgetId}/thumbnail
+// /v1/webshot/{widgetId}/thumbnail
 resource "aws_api_gateway_resource" "webshot_widget_id_thumbnail_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.webshot_widget_id_resource.id
