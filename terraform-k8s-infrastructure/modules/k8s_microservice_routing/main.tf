@@ -87,6 +87,7 @@ resource "aws_api_gateway_deployment" "prod" {
     redeployment = sha1(join(",", list(
       jsonencode(module.gfw_metadata.endpoints),
       jsonencode(module.doc_swagger.endpoints),
+      jsonencode(module.area.endpoints),
       jsonencode(module.auth.endpoints),
       jsonencode(module.biomass.endpoints),
       jsonencode(module.geostore.endpoints),
@@ -208,8 +209,6 @@ module "ct" {
 module "area" {
   source           = "./area"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_v1_id = aws_api_gateway_resource.v1_resource.id
-  resource_root_v2_id = aws_api_gateway_resource.v2_resource.id
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name

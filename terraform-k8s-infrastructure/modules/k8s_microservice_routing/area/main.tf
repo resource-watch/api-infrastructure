@@ -11,7 +11,7 @@ provider "kubernetes" {
 resource "kubernetes_service" "area_service" {
   metadata {
     name      = "area"
-    namespace = "default"
+    namespace = "gfw"
     annotations = {
       "service.beta.kubernetes.io/aws-load-balancer-type"                     = "nlb"
       "service.beta.kubernetes.io/aws-load-balancer-internal"                 = "true"
@@ -49,129 +49,141 @@ resource "aws_api_gateway_vpc_link" "area_lb_vpc_link" {
   }
 }
 
-// /api/v2/area
-resource "aws_api_gateway_resource" "area_v2_resource" {
+// /v1
+data "aws_api_gateway_resource" "v1_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_v2_id
+  path        = "/v1"
+}
+
+// /v2
+data "aws_api_gateway_resource" "v2_resource" {
+  rest_api_id = var.api_gateway.id
+  path        = "/v2"
+}
+
+// /v2/area
+resource "aws_api_gateway_resource" "v2_area_resource" {
+  rest_api_id = var.api_gateway.id
+  parent_id   = data.aws_api_gateway_resource.v2_resource.id
   path_part   = "area"
 }
 
-// /api/v2/area/{areaId}
-resource "aws_api_gateway_resource" "area_v2_id_resource" {
+// /v2/area/{areaId}
+resource "aws_api_gateway_resource" "v2_area_id_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.area_v2_resource.id
+  parent_id   = aws_api_gateway_resource.v2_area_resource.id
   path_part   = "{areaId}"
 }
 
-// /api/v2/area/sync
-resource "aws_api_gateway_resource" "area_v2_sync_resource" {
+// /v2/area/sync
+resource "aws_api_gateway_resource" "v2_area_sync_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.area_v2_resource.id
+  parent_id   = aws_api_gateway_resource.v2_area_resource.id
   path_part   = "sync"
 }
 
-// /api/v2/area/update
-resource "aws_api_gateway_resource" "area_v2_update_resource" {
+// /v2/area/update
+resource "aws_api_gateway_resource" "v2_area_update_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.area_v2_resource.id
+  parent_id   = aws_api_gateway_resource.v2_area_resource.id
   path_part   = "update"
 }
 
-// /api/v2/download-tiles
-resource "aws_api_gateway_resource" "area_v2_download_tiles_resource" {
+// /v2/download-tiles
+resource "aws_api_gateway_resource" "v2_area_download_tiles_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.area_v2_resource.id
+  parent_id   = aws_api_gateway_resource.v2_area_resource.id
   path_part   = "download-tiles"
 }
 
-// /api/v2/download-tiles/{geostoreId}
-resource "aws_api_gateway_resource" "area_v2_download_tiles_geostoreid_resource" {
+// /v2/download-tiles/{geostoreId}
+resource "aws_api_gateway_resource" "v2_area_download_tiles_geostore_id_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.area_v2_download_tiles_resource.id
+  parent_id   = aws_api_gateway_resource.v2_area_download_tiles_resource.id
   path_part   = "{geostoreId}"
 }
 
-// /api/v2/download-tiles/{geostoreId}/{minZoom}
-resource "aws_api_gateway_resource" "area_v2_download_tiles_geostoreid_minzoom_resource" {
+// /v2/download-tiles/{geostoreId}/{minZoom}
+resource "aws_api_gateway_resource" "v2_area_download_tiles_geostore_id_min_zoom_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.area_v2_download_tiles_geostoreid_resource.id
+  parent_id   = aws_api_gateway_resource.v2_area_download_tiles_geostore_id_resource.id
   path_part   = "{minZoom}"
 }
 
-// /api/v2/download-tiles/{geostoreId}/{minZoom}/{maxZoom}
-resource "aws_api_gateway_resource" "area_v2_download_tiles_geostoreid_minzoom_maxzoom_resource" {
+// /v2/download-tiles/{geostoreId}/{minZoom}/{maxZoom}
+resource "aws_api_gateway_resource" "v2_area_download_tiles_geostore_id_min_zoom_max_zoom_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.area_v2_download_tiles_geostoreid_minzoom_resource.id
+  parent_id   = aws_api_gateway_resource.v2_area_download_tiles_geostore_id_min_zoom_resource.id
   path_part   = "{maxZoom}"
 }
 
-// /api/v1/area
+// /v1/area
 resource "aws_api_gateway_resource" "area_v1_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_v1_id
+  parent_id   = data.aws_api_gateway_resource.v1_resource.id
   path_part   = "area"
 }
 
-// /api/v1/area/fw
+// /v1/area/fw
 resource "aws_api_gateway_resource" "area_v1_fw_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.area_v1_resource
+  parent_id   = aws_api_gateway_resource.area_v1_resource.id
   path_part   = "area"
 }
 
-// /api/v1/area/fw/{userId}
+// /v1/area/fw/{userId}
 resource "aws_api_gateway_resource" "area_v1_fw_id_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.area_v1_fw_resource.id
+  parent_id   = aws_api_gateway_resource.area_v1_fw_resource.id
   path_part   = "{userId}"
 }
 
-// /api/v1/area/{areaId}
+// /v1/area/{areaId}
 resource "aws_api_gateway_resource" "area_v1_id_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.area_v1_resource.id
+  parent_id   = aws_api_gateway_resource.area_v1_resource.id
   path_part   = "{areaId}"
 }
 
-// /api/v1/area/{areaId}/alerts
+// /v1/area/{areaId}/alerts
 resource "aws_api_gateway_resource" "area_v1_id_alerts_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.area_v1_id_resource.id
+  parent_id   = aws_api_gateway_resource.area_v1_id_resource.id
   path_part   = "alerts"
 }
 
-// /api/v1/download-tiles
+// /v1/download-tiles
 resource "aws_api_gateway_resource" "area_v1_download_tiles_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.area_v1_resource.id
   path_part   = "download-tiles"
 }
 
-// /api/v1/download-tiles/{geostoreId}
-resource "aws_api_gateway_resource" "area_v1_download_tiles_geostoreid_resource" {
+// /v1/download-tiles/{geostoreId}
+resource "aws_api_gateway_resource" "area_v1_download_tiles_geostore_id_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.area_v1_download_tiles_resource.id
   path_part   = "{geostoreId}"
 }
 
-// /api/v1/download-tiles/{geostoreId}/{minZoom}
-resource "aws_api_gateway_resource" "area_v1_download_tiles_geostoreid_minzoom_resource" {
+// /v1/download-tiles/{geostoreId}/{minZoom}
+resource "aws_api_gateway_resource" "area_v1_download_tiles_geostore_id_min_zoom_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.area_v1_download_tiles_geostoreid_resource.id
+  parent_id   = aws_api_gateway_resource.area_v1_download_tiles_geostore_id_resource.id
   path_part   = "{minZoom}"
 }
 
-// /api/v1/download-tiles/{geostoreId}/{minZoom}/{maxZoom}
-resource "aws_api_gateway_resource" "area_v1_download_tiles_geostoreid_minzoom_maxzoom_resource" {
+// /v1/download-tiles/{geostoreId}/{minZoom}/{maxZoom}
+resource "aws_api_gateway_resource" "area_v1_download_tiles_geostore_id_min_zoom_max_zoom_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.area_v1_download_tiles_geostoreid_minzoom_resource.id
+  parent_id   = aws_api_gateway_resource.area_v1_download_tiles_geostore_id_min_zoom_resource.id
   path_part   = "{maxZoom}"
 }
 
 module "area_get_area_v2" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.area_v2_resource
+  api_resource = aws_api_gateway_resource.v2_area_resource
   method       = "GET"
   uri          = "http://api.resourcewatch.org/api/v2/area"
   vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
@@ -180,7 +192,7 @@ module "area_get_area_v2" {
 module "area_get_area_v2_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.area_v2_id_resource
+  api_resource = aws_api_gateway_resource.v2_area_id_resource
   method       = "GET"
   uri          = "http://api.resourcewatch.org/api/v2/area/{areaId}"
   vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
@@ -189,7 +201,7 @@ module "area_get_area_v2_id" {
 module "area_post_area_v2_sync" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.area_v2_sync_resource
+  api_resource = aws_api_gateway_resource.v2_area_sync_resource
   method       = "POST"
   uri          = "http://api.resourcewatch.org/api/v2/area/sync"
   vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
@@ -198,7 +210,7 @@ module "area_post_area_v2_sync" {
 module "area_post_area_v2" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.area_v2_resource
+  api_resource = aws_api_gateway_resource.v2_area_resource
   method       = "POST"
   uri          = "http://api.resourcewatch.org/api/v2/area"
   vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
@@ -207,7 +219,7 @@ module "area_post_area_v2" {
 module "area_patch_area_v2_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.area_v2_id_resource
+  api_resource = aws_api_gateway_resource.v2_area_id_resource
   method       = "PATCH"
   uri          = "http://api.resourcewatch.org/api/v2/area/{areaId}"
   vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
@@ -216,7 +228,7 @@ module "area_patch_area_v2_id" {
 module "area_post_area_v2_update" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.area_v2_update_resource
+  api_resource = aws_api_gateway_resource.v2_area_update_resource
   method       = "POST"
   uri          = "http://api.resourcewatch.org/api/v2/area/update"
   vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
@@ -225,16 +237,16 @@ module "area_post_area_v2_update" {
 module "area_delete_area_v2_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.area_v2_id_resource
+  api_resource = aws_api_gateway_resource.v2_area_id_resource
   method       = "DELETE"
   uri          = "http://api.resourcewatch.org/api/v2/area/{areaId}"
   vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
 }
 
-module "area_get_area_v2_download_tiles_geostoreid_minzoom_maxzoom" {
+module "area_get_area_v2_download_tiles_geostore_id_min_zoom_max_zoom" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.area_v2_download_tiles_geostoreid_minzoom_maxzoom_resource
+  api_resource = aws_api_gateway_resource.v2_area_download_tiles_geostore_id_min_zoom_max_zoom_resource
   method       = "GET"
   uri          = "http://api.resourcewatch.org/api/v2/area/download-tiles/{geostoreId}/{minZoom}/{maxZoom}"
   vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
@@ -321,10 +333,10 @@ module "area_get_area_v1_id_alerts" {
   vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
 }
 
-module "area_get_area_v1_download_tiles_geostoreid_minzoom_maxzoom" {
+module "area_get_area_v1_download_tiles_geostore_id_min_zoom_max_zoom" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.area_v1_download_tiles_geostoreid_minzoom_maxzoom_resource
+  api_resource = aws_api_gateway_resource.area_v1_download_tiles_geostore_id_min_zoom_max_zoom_resource
   method       = "GET"
   uri          = "http://api.resourcewatch.org/api/v1/area/download-tiles/{geostoreId}/{minZoom}/{maxZoom}"
   vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
