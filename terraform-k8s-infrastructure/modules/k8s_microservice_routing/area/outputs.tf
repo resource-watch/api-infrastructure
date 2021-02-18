@@ -1,15 +1,22 @@
 output "endpoints" {
   value = [
-    module.dataset_clone.endpoint_gateway_integration,
-    module.dataset_flush.endpoint_gateway_integration,
-    module.dataset_get.endpoint_gateway_integration,
-    module.dataset_get_by_id.endpoint_gateway_integration,
-    module.dataset_last_updated.endpoint_gateway_integration,
-    module.dataset_create.endpoint_gateway_integration,
-    module.dataset_post_find_by_ids.endpoint_gateway_integration,
-    module.dataset_post_upload.endpoint_gateway_integration,
-    module.dataset_recover.endpoint_gateway_integration,
-    module.dataset_delete_by_id.endpoint_gateway_integration,
-    module.dataset_update_by_id.endpoint_gateway_integration
+    module.area_get_area_v2.endpoint_gateway_integration,
+    module.area_get_area_v2_id.endpoint_gateway_integration,
+    module.area_post_area_v2_sync.endpoint_gateway_integration,
+    module.area_post_area_v2.endpoint_gateway_integration,
+    module.area_patch_area_v2_id.endpoint_gateway_integration,
+    module.area_post_area_v2_update.endpoint_gateway_integration,
+    module.area_delete_area_v2_id.endpoint_gateway_integration,
+    module.area_get_area_v2_download_tiles_geostoreid_minzoom_maxzoom.endpoint_gateway_integration,
+    module.area_get_area_v1.endpoint_gateway_integration,
+    module.area_get_area_v1_fw.endpoint_gateway_integration,
+    module.area_get_area_v1_fw_id.endpoint_gateway_integration,
+    module.area_get_area_v1_id.endpoint_gateway_integration,
+    module.area_post_area_v1.endpoint_gateway_integration,
+    module.area_post_area_v1_fw_id.endpoint_gateway_integration,
+    module.area_patch_area_v1_id.endpoint_gateway_integration,
+    module.area_delete_area_v1_id.endpoint_gateway_integration,
+    module.area_get_area_v1_id_alerts.endpoint_gateway_integration,
+    module.area_get_area_v1_download_tiles_geostoreid_minzoom_maxzoom.endpoint_gateway_integration
   ]
 }
