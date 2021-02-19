@@ -137,6 +137,7 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.gfw_metadata.endpoints),
       jsonencode(module.doc_swagger.endpoints),
       jsonencode(module.area.endpoints),
+      jsonencode(module.arcgis.endpoints),
       jsonencode(module.auth.endpoints),
       jsonencode(module.biomass.endpoints),
       jsonencode(module.geostore.endpoints),
@@ -278,6 +279,14 @@ module "area" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
   eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+}
+
+module "arcgis" {
+  source           = "./arcgis"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
 }
 
 module "auth" {
