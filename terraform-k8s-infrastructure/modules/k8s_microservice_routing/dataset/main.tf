@@ -1,12 +1,3 @@
-provider "kubernetes" {
-  host                   = var.cluster_endpoint
-  cluster_ca_certificate = base64decode(var.cluster_ca)
-  exec {
-    api_version = "client.authentication.k8s.io/v1alpha1"
-    args        = ["eks", "get-token", "--cluster-name", var.cluster_name]
-    command     = "aws"
-  }
-}
 
 resource "kubernetes_service" "dataset_service" {
   metadata {
@@ -60,6 +51,13 @@ resource "aws_api_gateway_resource" "dataset_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = data.aws_api_gateway_resource.v1_resource.id
   path_part   = "dataset"
+}
+
+// /v1/rest-datasets
+resource "aws_api_gateway_resource" "rest_datasets_resource" {
+  rest_api_id = var.api_gateway.id
+  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  path_part   = "rest-datasets"
 }
 
 // /v1/dataset/{datasetId}

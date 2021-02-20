@@ -1,12 +1,3 @@
-provider "kubernetes" {
-  host                   = var.cluster_endpoint
-  cluster_ca_certificate = base64decode(var.cluster_ca)
-  exec {
-    api_version = "client.authentication.k8s.io/v1alpha1"
-    args        = ["eks", "get-token", "--cluster-name", var.cluster_name]
-    command     = "aws"
-  }
-}
 
 resource "kubernetes_service" "webshot_service" {
   metadata {
@@ -40,7 +31,7 @@ data "aws_lb" "webshot_lb" {
 }
 
 resource "aws_api_gateway_vpc_link" "webshot_lb_vpc_link" {
-  name        = "webshot LB VPC link"
+  name        = "Webshot LB VPC link"
   description = "VPC link to the webshot service load balancer"
   target_arns = [data.aws_lb.webshot_lb.arn]
 

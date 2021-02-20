@@ -1,12 +1,3 @@
-provider "kubernetes" {
-  host                   = var.cluster_endpoint
-  cluster_ca_certificate = base64decode(var.cluster_ca)
-  exec {
-    api_version = "client.authentication.k8s.io/v1alpha1"
-    args        = ["eks", "get-token", "--cluster-name", var.cluster_name]
-    command     = "aws"
-  }
-}
 
 resource "kubernetes_service" "query_service" {
   metadata {
@@ -55,42 +46,49 @@ data "aws_api_gateway_resource" "v1_resource" {
   path        = "/v1"
 }
 
+// /v1/query
 resource "aws_api_gateway_resource" "query_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = data.aws_api_gateway_resource.v1_resource.id
   path_part   = "query"
 }
 
+// /v1/download
 resource "aws_api_gateway_resource" "download_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = data.aws_api_gateway_resource.v1_resource.id
   path_part   = "download"
 }
 
+// /v1/jiminy
 resource "aws_api_gateway_resource" "jiminy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = data.aws_api_gateway_resource.v1_resource.id
   path_part   = "jiminy"
 }
 
+// /v1/fields
 resource "aws_api_gateway_resource" "fields_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = data.aws_api_gateway_resource.v1_resource.id
   path_part   = "fields"
 }
 
+// /v1/query/{datasetId}
 resource "aws_api_gateway_resource" "query_dataset_id_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.query_resource.id
   path_part   = "{datasetId}"
 }
 
+// /v1/download/{datasetId}
 resource "aws_api_gateway_resource" "download_dataset_id_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.download_resource.id
   path_part   = "{datasetId}"
 }
 
+// /v1/fields/{datasetId}
 resource "aws_api_gateway_resource" "fields_dataset_id_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.fields_resource.id

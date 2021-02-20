@@ -1,3 +1,13 @@
+provider "kubernetes" {
+  host                   = var.cluster_endpoint
+  cluster_ca_certificate = base64decode(var.cluster_ca)
+  exec {
+    api_version = "client.authentication.k8s.io/v1alpha1"
+    args        = ["eks", "get-token", "--cluster-name", var.cluster_name]
+    command     = "aws"
+  }
+}
+
 #
 # Base API Gateway setup
 #
@@ -92,8 +102,13 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.biomass.endpoints),
       jsonencode(module.geostore.endpoints),
       jsonencode(module.ct.endpoints),
+      jsonencode(module.converter.endpoints),
       jsonencode(module.dataset.endpoints),
+      jsonencode(module.doc-orchestrator.endpoints),
+      jsonencode(module.document-adapter.endpoints),
       jsonencode(module.graph-client.endpoints),
+      jsonencode(module.gee.endpoints),
+      jsonencode(module.fires-summary-stats.endpoints),
       jsonencode(module.layer.endpoints),
       jsonencode(module.query.endpoints),
       jsonencode(module.query.endpoints),
@@ -236,6 +251,10 @@ module "widget" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
+
+  depends_on = [
+    module.dataset,
+  ]
 }
 
 module "layer" {
@@ -244,6 +263,10 @@ module "layer" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
+
+  depends_on = [
+    module.dataset,
+  ]
 }
 
 module "metadata" {
@@ -252,6 +275,10 @@ module "metadata" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
+
+  depends_on = [
+    module.dataset,
+  ]
 }
 
 module "biomass" {
@@ -264,6 +291,55 @@ module "biomass" {
 
 module "geostore" {
   source           = "./geostore"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+}
+
+module "gee" {
+  source           = "./gee"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+
+  depends_on = [
+    module.dataset
+  ]
+}
+
+module "fires-summary-stats" {
+  source           = "./fires-summary-stats"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+}
+
+module "doc-orchestrator" {
+  source           = "./doc-orchestrator"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+}
+
+module "document-adapter" {
+  source           = "./document-adapter"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+
+  depends_on = [
+    module.dataset,
+    module.query,
+  ]
+}
+
+module "converter" {
+  source           = "./converter"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -316,6 +392,12 @@ module "vocabulary" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
+
+  depends_on = [
+    module.dataset,
+    module.widget,
+    module.layer,
+  ]
 }
 
 module "webshot" {
