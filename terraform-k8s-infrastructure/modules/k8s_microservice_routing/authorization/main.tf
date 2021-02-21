@@ -1,44 +1,53 @@
-
 resource "kubernetes_service" "authorization_service" {
   metadata {
     name      = "authorization"
     namespace = "core"
-    annotations = {
-      "service.beta.kubernetes.io/aws-load-balancer-type"                     = "nlb"
-      "service.beta.kubernetes.io/aws-load-balancer-internal"                 = "true"
-      "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags" = "service=authorization"
-    }
+
   }
   spec {
     selector = {
       name = "authorization"
     }
     port {
-      port        = 80
+      port        = 30505
+      node_port   = 30505
       target_port = 9000
     }
 
-    type = "LoadBalancer"
+    type = "NodePort"
   }
 
 }
 
-data "aws_lb" "authorization_lb" {
-  name = split("-", kubernetes_service.authorization_service.status.0.load_balancer.0.ingress.0.hostname).0
+resource "aws_lb_listener" "authorization_nlb_listener" {
+  load_balancer_arn = var.load_balancer.arn
+  port              = 30505
+  protocol          = "TCP"
 
-  depends_on = [
-    kubernetes_service.authorization_service
-  ]
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.authorization_lb_target_group.arn
+  }
 }
 
-resource "aws_api_gateway_vpc_link" "authorization_lb_vpc_link" {
-  name        = "Authorization LB VPC link"
-  description = "VPC link to the authorization service load balancer"
-  target_arns = [data.aws_lb.authorization_lb.arn]
+resource "aws_lb_target_group" "authorization_lb_target_group" {
+  name        = "authorization-lb-tg"
+  port        = 30505
+  protocol    = "TCP"
+  target_type = "instance"
+  vpc_id      = var.vpc.id
 
-  lifecycle {
-    create_before_destroy = true
+  health_check {
+    enabled  = true
+    protocol = "TCP"
   }
+}
+
+resource "aws_autoscaling_attachment" "asg_attachment_authorization" {
+  count = length(var.eks_asg_names)
+
+  autoscaling_group_name = var.eks_asg_names[count.index]
+  alb_target_group_arn   = aws_lb_target_group.authorization_lb_target_group.arn
 }
 
 // /
@@ -281,8 +290,8 @@ module "authorization_get_apple" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_apple_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/apple"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/apple"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_post_apple_callback" {
@@ -290,8 +299,8 @@ module "authorization_post_apple_callback" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_apple_callback_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/auth/apple/callback"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/apple/callback"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_apple_token" {
@@ -299,8 +308,8 @@ module "authorization_get_apple_token" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_apple_token_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/apple/callback"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/apple/callback"
+  vpc_link     = var.vpc_link
 }
 
 #
@@ -311,8 +320,8 @@ module "authorization_get_google" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_google_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/google"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/google"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_google_callback" {
@@ -320,8 +329,8 @@ module "authorization_get_google_callback" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_google_callback_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/google/callback"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/google/callback"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_google_token" {
@@ -329,8 +338,8 @@ module "authorization_get_google_token" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_google_token_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/google/token"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/google/token"
+  vpc_link     = var.vpc_link
 }
 
 #
@@ -341,8 +350,8 @@ module "authorization_get_facebook" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_facebook_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/facebook"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/facebook"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_facebook_callback" {
@@ -350,8 +359,8 @@ module "authorization_get_facebook_callback" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_facebook_callback_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/facebook/callback"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/facebook/callback"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_facebook_token" {
@@ -359,8 +368,8 @@ module "authorization_get_facebook_token" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_facebook_token_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/facebook/token"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/facebook/token"
+  vpc_link     = var.vpc_link
 }
 
 #
@@ -371,8 +380,8 @@ module "authorization_get" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_login" {
@@ -380,8 +389,8 @@ module "authorization_get_login" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_login_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/login"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/login"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_post_login" {
@@ -389,8 +398,8 @@ module "authorization_post_login" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_login_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/auth/login"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/login"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_fail" {
@@ -398,8 +407,8 @@ module "authorization_get_fail" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_fail_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/fail"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/fail"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_check_logged" {
@@ -407,8 +416,8 @@ module "authorization_get_check_logged" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_check_logged_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/check-logged"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/check-logged"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_success" {
@@ -416,8 +425,8 @@ module "authorization_get_success" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_success_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/success"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/success"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_logout" {
@@ -425,8 +434,8 @@ module "authorization_get_logout" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_logout_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/logout"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/logout"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_sign_up" {
@@ -434,8 +443,8 @@ module "authorization_get_sign_up" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_sign_up_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/sign-up"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/sign-up"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_post_sign_up" {
@@ -443,8 +452,8 @@ module "authorization_post_sign_up" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_sign_up_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/auth/sign-up"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/sign-up"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_confirm_token" {
@@ -452,8 +461,8 @@ module "authorization_get_confirm_token" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_confirm_token_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/confirm/{token}"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/confirm/{token}"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_reset_password" {
@@ -461,8 +470,8 @@ module "authorization_get_reset_password" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_reset_password_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/reset-password"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/reset-password"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_post_reset_password" {
@@ -470,8 +479,8 @@ module "authorization_post_reset_password" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_reset_password_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/auth/reset-password"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/reset-password"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_reset_password_token" {
@@ -479,8 +488,8 @@ module "authorization_get_reset_password_token" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_reset_password_token_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/reset-password/{token}"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/reset-password/{token}"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_post_reset_password_token" {
@@ -488,8 +497,8 @@ module "authorization_post_reset_password_token" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_reset_password_token_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/auth/reset-password/{token}"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/reset-password/{token}"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_generate_token" {
@@ -497,8 +506,8 @@ module "authorization_get_generate_token" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_generate_token_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/generate-token"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/generate-token"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_user" {
@@ -506,8 +515,8 @@ module "authorization_get_user" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_user_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/user"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/user"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_user_me" {
@@ -515,8 +524,8 @@ module "authorization_get_user_me" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_user_me_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/user/me"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/user/me"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_user_from_token" {
@@ -524,8 +533,8 @@ module "authorization_get_user_from_token" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_user_from_token_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/user/from-token"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/user/from-token"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_user_id" {
@@ -533,8 +542,8 @@ module "authorization_get_user_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_user_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/user/{userId}"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/user/{userId}"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_post_user_find_by_ids" {
@@ -542,8 +551,8 @@ module "authorization_post_user_find_by_ids" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_user_find_by_ids_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/auth/user/find-by-ids"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/user/find-by-ids"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_user_ids_role" {
@@ -551,8 +560,8 @@ module "authorization_get_user_ids_role" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_user_ids_role_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/user/ids/{role}"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/user/ids/{role}"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_post_user" {
@@ -560,8 +569,8 @@ module "authorization_post_user" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_user_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/auth/user"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/user"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_patch_user_me" {
@@ -569,8 +578,8 @@ module "authorization_patch_user_me" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_user_me_resource
   method       = "PATCH"
-  uri          = "http://api.resourcewatch.org/auth/user/me"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/user/me"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_patch_user_id" {
@@ -578,8 +587,8 @@ module "authorization_patch_user_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_user_id_resource
   method       = "PATCH"
-  uri          = "http://api.resourcewatch.org/auth/user/{userId}"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/user/{userId}"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_delete_user_id" {
@@ -587,8 +596,8 @@ module "authorization_delete_user_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_user_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/auth/user/{userId}"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/user/{userId}"
+  vpc_link     = var.vpc_link
 }
 
 module "authorization_get_authorization_authorization_code_callback" {
@@ -596,6 +605,6 @@ module "authorization_get_authorization_authorization_code_callback" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_authorization_code_callback_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/auth/authorization-code/callback"
-  vpc_link     = aws_api_gateway_vpc_link.authorization_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30505/auth/authorization-code/callback"
+  vpc_link     = var.vpc_link
 }

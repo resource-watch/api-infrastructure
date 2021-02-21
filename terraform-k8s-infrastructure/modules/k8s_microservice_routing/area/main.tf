@@ -1,43 +1,52 @@
-
 resource "kubernetes_service" "area_service" {
   metadata {
     name      = "area"
     namespace = "gfw"
-    annotations = {
-      "service.beta.kubernetes.io/aws-load-balancer-type"                     = "nlb"
-      "service.beta.kubernetes.io/aws-load-balancer-internal"                 = "true"
-      "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags" = "service=area"
-    }
+
   }
   spec {
     selector = {
       name = "area"
     }
     port {
-      port        = 80
+      port        = 30504
+      node_port   = 30504
       target_port = 4100
     }
 
-    type = "LoadBalancer"
+    type = "NodePort"
   }
 }
 
-data "aws_lb" "area_lb" {
-  name = split("-", kubernetes_service.area_service.status.0.load_balancer.0.ingress.0.hostname).0
+resource "aws_lb_listener" "area_nlb_listener" {
+  load_balancer_arn = var.load_balancer.arn
+  port              = 30504
+  protocol          = "TCP"
 
-  depends_on = [
-    kubernetes_service.area_service
-  ]
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.area_lb_target_group.arn
+  }
 }
 
-resource "aws_api_gateway_vpc_link" "area_lb_vpc_link" {
-  name        = "Area LB VPC link"
-  description = "VPC link to the area service load balancer"
-  target_arns = [data.aws_lb.area_lb.arn]
+resource "aws_lb_target_group" "area_lb_target_group" {
+  name        = "area-lb-tg"
+  port        = 30504
+  protocol    = "TCP"
+  target_type = "instance"
+  vpc_id      = var.vpc.id
 
-  lifecycle {
-    create_before_destroy = true
+  health_check {
+    enabled  = true
+    protocol = "TCP"
   }
+}
+
+resource "aws_autoscaling_attachment" "asg_attachment_area" {
+  count = length(var.eks_asg_names)
+
+  autoscaling_group_name = var.eks_asg_names[count.index]
+  alb_target_group_arn   = aws_lb_target_group.area_lb_target_group.arn
 }
 
 // /v1
@@ -176,8 +185,8 @@ module "area_get_area_v2" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_area_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/area"
-  vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30504/api/v2/area"
+  vpc_link     = var.vpc_link
 }
 
 module "area_get_area_v2_id" {
@@ -185,8 +194,8 @@ module "area_get_area_v2_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_area_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/area/{areaId}"
-  vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30504/api/v2/area/{areaId}"
+  vpc_link     = var.vpc_link
 }
 
 module "area_post_area_v2_sync" {
@@ -194,8 +203,8 @@ module "area_post_area_v2_sync" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_area_sync_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v2/area/sync"
-  vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30504/api/v2/area/sync"
+  vpc_link     = var.vpc_link
 }
 
 module "area_post_area_v2" {
@@ -203,8 +212,8 @@ module "area_post_area_v2" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_area_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v2/area"
-  vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30504/api/v2/area"
+  vpc_link     = var.vpc_link
 }
 
 module "area_patch_area_v2_id" {
@@ -212,8 +221,8 @@ module "area_patch_area_v2_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_area_id_resource
   method       = "PATCH"
-  uri          = "http://api.resourcewatch.org/api/v2/area/{areaId}"
-  vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30504/api/v2/area/{areaId}"
+  vpc_link     = var.vpc_link
 }
 
 module "area_post_area_v2_update" {
@@ -221,8 +230,8 @@ module "area_post_area_v2_update" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_area_update_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v2/area/update"
-  vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30504/api/v2/area/update"
+  vpc_link     = var.vpc_link
 }
 
 module "area_delete_area_v2_id" {
@@ -230,8 +239,8 @@ module "area_delete_area_v2_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_area_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v2/area/{areaId}"
-  vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30504/api/v2/area/{areaId}"
+  vpc_link     = var.vpc_link
 }
 
 module "area_get_area_v2_download_tiles_geostore_id_min_zoom_max_zoom" {
@@ -239,8 +248,8 @@ module "area_get_area_v2_download_tiles_geostore_id_min_zoom_max_zoom" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_area_download_tiles_geostore_id_min_zoom_max_zoom_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/area/download-tiles/{geostoreId}/{minZoom}/{maxZoom}"
-  vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30504/api/v2/area/download-tiles/{geostoreId}/{minZoom}/{maxZoom}"
+  vpc_link     = var.vpc_link
 }
 
 module "area_get_area_v1" {
@@ -248,8 +257,8 @@ module "area_get_area_v1" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.area_v1_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/area"
-  vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30504/api/v1/area"
+  vpc_link     = var.vpc_link
 }
 
 module "area_get_area_v1_fw" {
@@ -257,8 +266,8 @@ module "area_get_area_v1_fw" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.area_v1_fw_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/area/fw"
-  vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30504/api/v1/area/fw"
+  vpc_link     = var.vpc_link
 }
 
 module "area_get_area_v1_fw_id" {
@@ -266,8 +275,8 @@ module "area_get_area_v1_fw_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.area_v1_fw_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/area/fw/{userId}"
-  vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30504/api/v1/area/fw/{userId}"
+  vpc_link     = var.vpc_link
 }
 
 module "area_get_area_v1_id" {
@@ -275,8 +284,8 @@ module "area_get_area_v1_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.area_v1_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/area/{areaId}"
-  vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30504/api/v1/area/{areaId}"
+  vpc_link     = var.vpc_link
 }
 
 module "area_post_area_v1" {
@@ -284,8 +293,8 @@ module "area_post_area_v1" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.area_v1_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/area"
-  vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30504/api/v1/area"
+  vpc_link     = var.vpc_link
 }
 
 module "area_post_area_v1_fw_id" {
@@ -293,8 +302,8 @@ module "area_post_area_v1_fw_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.area_v1_fw_id_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/area/fw/{userId}"
-  vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30504/api/v1/area/fw/{userId}"
+  vpc_link     = var.vpc_link
 }
 
 module "area_patch_area_v1_id" {
@@ -302,8 +311,8 @@ module "area_patch_area_v1_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.area_v1_id_resource
   method       = "PATCH"
-  uri          = "http://api.resourcewatch.org/api/v1/area/{areaId}"
-  vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30504/api/v1/area/{areaId}"
+  vpc_link     = var.vpc_link
 }
 
 module "area_delete_area_v1_id" {
@@ -311,8 +320,8 @@ module "area_delete_area_v1_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.area_v1_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/area/{areaId}"
-  vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30504/api/v1/area/{areaId}"
+  vpc_link     = var.vpc_link
 }
 
 module "area_get_area_v1_id_alerts" {
@@ -320,8 +329,8 @@ module "area_get_area_v1_id_alerts" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.area_v1_id_alerts_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/area/{areaId}/alerts"
-  vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30504/api/v1/area/{areaId}/alerts"
+  vpc_link     = var.vpc_link
 }
 
 module "area_get_area_v1_download_tiles_geostore_id_min_zoom_max_zoom" {
@@ -329,6 +338,6 @@ module "area_get_area_v1_download_tiles_geostore_id_min_zoom_max_zoom" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.area_v1_download_tiles_geostore_id_min_zoom_max_zoom_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/area/download-tiles/{geostoreId}/{minZoom}/{maxZoom}"
-  vpc_link     = aws_api_gateway_vpc_link.area_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30504/api/v1/area/download-tiles/{geostoreId}/{minZoom}/{maxZoom}"
+  vpc_link     = var.vpc_link
 }

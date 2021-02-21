@@ -1,41 +1,51 @@
 resource "kubernetes_service" "converter_service" {
   metadata {
     name = "converter"
-    annotations = {
-      "service.beta.kubernetes.io/aws-load-balancer-type"                     = "nlb"
-      "service.beta.kubernetes.io/aws-load-balancer-internal"                 = "true"
-      "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags" = "service=converter"
-    }
+
   }
   spec {
     selector = {
       name = "converter"
     }
     port {
-      port        = 80
+      port        = 30514
+      node_port   = 30514
       target_port = 4100
     }
 
-    type = "LoadBalancer"
+    type = "NodePort"
   }
 }
 
-data "aws_lb" "converter_lb" {
-  name = split("-", kubernetes_service.converter_service.status.0.load_balancer.0.ingress.0.hostname).0
+resource "aws_lb_listener" "convert_nlb_listener" {
+  load_balancer_arn = var.load_balancer.arn
+  port              = 30514
+  protocol          = "TCP"
 
-  depends_on = [
-    kubernetes_service.converter_service
-  ]
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.convert_lb_target_group.arn
+  }
 }
 
-resource "aws_api_gateway_vpc_link" "converter_lb_vpc_link" {
-  name        = "Converter LB VPC link"
-  description = "VPC link to the converter service load balancer"
-  target_arns = [data.aws_lb.converter_lb.arn]
+resource "aws_lb_target_group" "convert_lb_target_group" {
+  name        = "convert-lb-tg"
+  port        = 30514
+  protocol    = "TCP"
+  target_type = "instance"
+  vpc_id      = var.vpc.id
 
-  lifecycle {
-    create_before_destroy = true
+  health_check {
+    enabled  = true
+    protocol = "TCP"
   }
+}
+
+resource "aws_autoscaling_attachment" "asg_attachment_convert" {
+  count = length(var.eks_asg_names)
+
+  autoscaling_group_name = var.eks_asg_names[count.index]
+  alb_target_group_arn   = aws_lb_target_group.convert_lb_target_group.arn
 }
 
 // /v1
@@ -87,73 +97,73 @@ resource "aws_api_gateway_resource" "converter_json2sql_resource" {
 }
 
 module "converter_get_converter_fs2sql" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.converter_fs2sql_resource
-  method         = "GET"
-  uri            = "http://api.resourcewatch.org/api/v1/convert/fs2SQL"
-  vpc_link       = aws_api_gateway_vpc_link.converter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.converter_fs2sql_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org:30514/api/v1/convert/fs2SQL"
+  vpc_link     = var.vpc_link
 }
 
 module "converter_post_converter_fs2sql" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.converter_fs2sql_resource
-  method         = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/convert/fs2SQL"
-  vpc_link       = aws_api_gateway_vpc_link.converter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.converter_fs2sql_resource
+  method       = "POST"
+  uri          = "http://api.resourcewatch.org:30514/api/v1/convert/fs2SQL"
+  vpc_link     = var.vpc_link
 }
 
 module "converter_get_converter_sql2fs" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.converter_sql2fs_resource
-  method         = "GET"
-  uri            = "http://api.resourcewatch.org/api/v1/convert/sql2FS"
-  vpc_link       = aws_api_gateway_vpc_link.converter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.converter_sql2fs_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org:30514/api/v1/convert/sql2FS"
+  vpc_link     = var.vpc_link
 }
 
 module "converter_post_converter_sql2fs" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.converter_sql2fs_resource
-  method         = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/convert/sql2FS"
-  vpc_link       = aws_api_gateway_vpc_link.converter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.converter_sql2fs_resource
+  method       = "POST"
+  uri          = "http://api.resourcewatch.org:30514/api/v1/convert/sql2FS"
+  vpc_link     = var.vpc_link
 }
 
 module "converter_get_converter_check_sql" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.converter_check_sql_resource
-  method         = "GET"
-  uri            = "http://api.resourcewatch.org/api/v1/convert/checkSQL"
-  vpc_link       = aws_api_gateway_vpc_link.converter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.converter_check_sql_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org:30514/api/v1/convert/checkSQL"
+  vpc_link     = var.vpc_link
 }
 
 module "converter_get_converter_sql2sql" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.converter_sql2sql_resource
-  method         = "GET"
-  uri            = "http://api.resourcewatch.org/api/v1/convert/sql2SQL"
-  vpc_link       = aws_api_gateway_vpc_link.converter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.converter_sql2sql_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org:30514/api/v1/convert/sql2SQL"
+  vpc_link     = var.vpc_link
 }
 
 module "converter_post_converter_sql2sql" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.converter_sql2sql_resource
-  method         = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/convert/sql2SQL"
-  vpc_link       = aws_api_gateway_vpc_link.converter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.converter_sql2sql_resource
+  method       = "POST"
+  uri          = "http://api.resourcewatch.org:30514/api/v1/convert/sql2SQL"
+  vpc_link     = var.vpc_link
 }
 
 module "converter_post_converter_json2sql" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.converter_json2sql_resource
-  method         = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/convert/json2SQL"
-  vpc_link       = aws_api_gateway_vpc_link.converter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.converter_json2sql_resource
+  method       = "POST"
+  uri          = "http://api.resourcewatch.org:30514/api/v1/convert/json2SQL"
+  vpc_link     = var.vpc_link
 }

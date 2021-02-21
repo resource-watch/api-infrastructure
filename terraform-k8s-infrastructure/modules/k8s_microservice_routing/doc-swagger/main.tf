@@ -1,42 +1,52 @@
-
 resource "kubernetes_service" "doc_swagger_service" {
   metadata {
     name = "doc-swagger"
-    annotations = {
-      "service.beta.kubernetes.io/aws-load-balancer-type"                     = "nlb"
-      "service.beta.kubernetes.io/aws-load-balancer-internal"                 = "true"
-      "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags" = "service=doc-swagger"
-    }
+
   }
   spec {
     selector = {
       name = "doc-swagger"
     }
     port {
-      port        = 80
+      port        = 30519
+      node_port   = 30519
       target_port = 3500
     }
 
-    type = "LoadBalancer"
+    type = "NodePort"
   }
 }
 
-data "aws_lb" "doc_swagger_lb" {
-  name = split("-", kubernetes_service.doc_swagger_service.status.0.load_balancer.0.ingress.0.hostname).0
 
-  depends_on = [
-    kubernetes_service.doc_swagger_service
-  ]
+resource "aws_lb_listener" "doc_swagger_nlb_listener" {
+  load_balancer_arn = var.load_balancer.arn
+  port              = 30519
+  protocol          = "TCP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.doc_swagger_lb_target_group.arn
+  }
 }
 
-resource "aws_api_gateway_vpc_link" "doc_swagger_lb_vpc_link" {
-  name        = "Doc swagger LB VPC link"
-  description = "VPC link to the doc-swagger service load balancer"
-  target_arns = [data.aws_lb.doc_swagger_lb.arn]
+resource "aws_lb_target_group" "doc_swagger_lb_target_group" {
+  name        = "doc-swagger-lb-tg"
+  port        = 30519
+  protocol    = "TCP"
+  target_type = "instance"
+  vpc_id      = var.vpc.id
 
-  lifecycle {
-    create_before_destroy = true
+  health_check {
+    enabled  = true
+    protocol = "TCP"
   }
+}
+
+resource "aws_autoscaling_attachment" "asg_attachment_doc_swagger" {
+  count = length(var.eks_asg_names)
+
+  autoscaling_group_name = var.eks_asg_names[count.index]
+  alb_target_group_arn   = aws_lb_target_group.doc_swagger_lb_target_group.arn
 }
 
 // /
@@ -64,8 +74,8 @@ module "doc_swagger_any" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.documentation_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org/documentation"
-  vpc_link     = aws_api_gateway_vpc_link.doc_swagger_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30519/documentation"
+  vpc_link     = var.vpc_link
 }
 
 module "doc_swagger_proxy_any" {
@@ -73,6 +83,6 @@ module "doc_swagger_proxy_any" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.documentation_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org/documentation/{proxy}"
-  vpc_link     = aws_api_gateway_vpc_link.doc_swagger_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30519/documentation/{proxy}"
+  vpc_link     = var.vpc_link
 }

@@ -1,46 +1,55 @@
-
 resource "kubernetes_service" "graph_client_service" {
   metadata {
     name      = "graph-client"
     namespace = "default"
-    annotations = {
-      "service.beta.kubernetes.io/aws-load-balancer-type"                     = "nlb"
-      "service.beta.kubernetes.io/aws-load-balancer-internal"                 = "true"
-      "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags" = "service=graph-client"
-    }
+
   }
   spec {
     selector = {
       name = "graph-client"
     }
     port {
-      port        = 80
+      port        = 30542
+      node_port   = 30542
       target_port = 4500
     }
 
-    type = "LoadBalancer"
+    type = "NodePort"
   }
 }
 
-data "aws_lb" "graph_client_lb" {
-  name = split("-", kubernetes_service.graph_client_service.status.0.load_balancer.0.ingress.0.hostname).0
+resource "aws_lb_listener" "graph_client_nlb_listener" {
+  load_balancer_arn = var.load_balancer.arn
+  port              = 30542
+  protocol          = "TCP"
 
-  depends_on = [
-    kubernetes_service.graph_client_service
-  ]
-}
-
-resource "aws_api_gateway_vpc_link" "graph_client_lb_vpc_link" {
-  name        = "Graph client LB VPC link"
-  description = "VPC link to the graph_client service load balancer"
-  target_arns = [data.aws_lb.graph_client_lb.arn]
-
-  lifecycle {
-    create_before_destroy = true
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.graph_client_lb_target_group.arn
   }
 }
 
-// /
+resource "aws_lb_target_group" "graph_client_lb_target_group" {
+  name        = "graph-client-lb-tg"
+  port        = 30542
+  protocol    = "TCP"
+  target_type = "instance"
+  vpc_id      = var.vpc.id
+
+  health_check {
+    enabled  = true
+    protocol = "TCP"
+  }
+}
+
+resource "aws_autoscaling_attachment" "asg_attachment_graph_client" {
+  count = length(var.eks_asg_names)
+
+  autoscaling_group_name = var.eks_asg_names[count.index]
+  alb_target_group_arn   = aws_lb_target_group.graph_client_lb_target_group.arn
+}
+
+// /v1
 data "aws_api_gateway_resource" "v1_resource" {
   rest_api_id = var.api_gateway.id
   path        = "/v1"
@@ -310,8 +319,8 @@ module "graph_client_get_graph_query" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_query_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/query"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/query"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_post_graph_dataset_id" {
@@ -319,8 +328,8 @@ module "graph_client_post_graph_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_dataset_id_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/dataset/{datasetId}"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/dataset/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_post_graph_dataset_id_visited" {
@@ -328,8 +337,8 @@ module "graph_client_post_graph_dataset_id_visited" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_dataset_id_visited_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/dataset/{datasetId}/visited"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/dataset/{datasetId}/visited"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_post_graph_widget_dataset_id_widget_id" {
@@ -337,8 +346,8 @@ module "graph_client_post_graph_widget_dataset_id_widget_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_widget_dataset_id_widget_id_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/widget/{datasetId}/{widgetId}"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/widget/{datasetId}/{widgetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_post_graph_layer_dataset_id_layer_id" {
@@ -346,8 +355,8 @@ module "graph_client_post_graph_layer_dataset_id_layer_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_layer_dataset_id_layer_id_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/layer/{datasetId}/{layerId}"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/layer/{datasetId}/{layerId}"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_post_graph_metadata_resource_type_or_metadata_id_resource_id_metadata_id" {
@@ -355,8 +364,8 @@ module "graph_client_post_graph_metadata_resource_type_or_metadata_id_resource_i
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_metadata_resource_type_or_metadata_id_resource_id_metadata_id_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/metadata/{resourceTypeOrMetadataId}/{resourceId}/{metadataId}"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/metadata/{resourceTypeOrMetadataId}/{resourceId}/{metadataId}"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_post_graph_favourite_resource_type_resource_id_user_id" {
@@ -364,8 +373,8 @@ module "graph_client_post_graph_favourite_resource_type_resource_id_user_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_favourite_resource_type_resource_id_user_id_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/favourite/{resourceType}/{resourceId}/{userId}"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/favourite/{resourceType}/{resourceId}/{userId}"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_post_graph_resource_type_resource_id_associate" {
@@ -373,8 +382,8 @@ module "graph_client_post_graph_resource_type_resource_id_associate" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_resource_type_resource_id_associate_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/{resourceType}/{resourceId}/associate"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/{resourceType}/{resourceId}/associate"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_put_graph_resource_type_resource_id_associate" {
@@ -382,8 +391,8 @@ module "graph_client_put_graph_resource_type_resource_id_associate" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_resource_type_resource_id_associate_resource
   method       = "PUT"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/{resourceType}/{resourceId}/associate"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/{resourceType}/{resourceId}/associate"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_delete_graph_resource_type_resource_id_associate" {
@@ -391,8 +400,8 @@ module "graph_client_delete_graph_resource_type_resource_id_associate" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_resource_type_resource_id_associate_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/{resourceType}/{resourceId}/associate"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/{resourceType}/{resourceId}/associate"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_delete_graph_dataset_id" {
@@ -400,8 +409,8 @@ module "graph_client_delete_graph_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_dataset_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/dataset/{datasetId}"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/dataset/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_delete_graph_widget_id" {
@@ -409,8 +418,8 @@ module "graph_client_delete_graph_widget_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_widget_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/widget/{widgetId}"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/widget/{widgetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_delete_graph_layer_id" {
@@ -418,8 +427,8 @@ module "graph_client_delete_graph_layer_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_layer_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/layer/{layerId}"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/layer/{layerId}"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_delete_graph_metadata_resource_type_or_metadata_id" {
@@ -427,8 +436,8 @@ module "graph_client_delete_graph_metadata_resource_type_or_metadata_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_metadata_resource_type_or_metadata_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/metadata/{resourceTypeOrMetadataId}"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/metadata/{resourceTypeOrMetadataId}"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_delete_graph_favourite_resource_type_resource_id_user_id" {
@@ -436,8 +445,8 @@ module "graph_client_delete_graph_favourite_resource_type_resource_id_user_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_favourite_resource_type_resource_id_user_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/favourite/{resourceType}/{resourceId}/{userId}"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/favourite/{resourceType}/{resourceId}/{userId}"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_get_graph_query_similar_dataset" {
@@ -445,8 +454,8 @@ module "graph_client_get_graph_query_similar_dataset" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_query_similar_dataset_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/query/similar-dataset"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/query/similar-dataset"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_get_graph_query_similar_dataset_dataset_id" {
@@ -454,8 +463,8 @@ module "graph_client_get_graph_query_similar_dataset_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_query_similar_dataset_dataset_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/query/similar-dataset/{datasetId}"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/query/similar-dataset/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_get_graph_query_list_concepts" {
@@ -463,8 +472,8 @@ module "graph_client_get_graph_query_list_concepts" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_query_list_concepts_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/query/list-concepts"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/query/list-concepts"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_get_graph_query_concepts_inferred" {
@@ -472,8 +481,8 @@ module "graph_client_get_graph_query_concepts_inferred" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_query_concepts_inferred_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/query/concepts-inferred"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/query/concepts-inferred"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_post_graph_query_concepts_inferred" {
@@ -481,8 +490,8 @@ module "graph_client_post_graph_query_concepts_inferred" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_query_concepts_inferred_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/query/concepts-inferred"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/query/concepts-inferred"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_get_graph_query_concepts_ancestors" {
@@ -490,8 +499,8 @@ module "graph_client_get_graph_query_concepts_ancestors" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_query_concepts_ancestors_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/query/concepts-ancestors"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/query/concepts-ancestors"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_post_graph_query_concepts_ancestors" {
@@ -499,8 +508,8 @@ module "graph_client_post_graph_query_concepts_ancestors" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_query_concepts_ancestors_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/query/concepts-ancestors"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/query/concepts-ancestors"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_get_graph_query_similar_dataset_including_descendent" {
@@ -508,8 +517,8 @@ module "graph_client_get_graph_query_similar_dataset_including_descendent" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_query_similar_dataset_including_descendent_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/query/similar-dataset-including-descendent"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/query/similar-dataset-including-descendent"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_get_graph_query_similar_dataset_including_descendent_dataset_id" {
@@ -517,8 +526,8 @@ module "graph_client_get_graph_query_similar_dataset_including_descendent_datase
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_query_similar_dataset_including_descendent_dataset_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/query/similar-dataset-including-descendent/{datasetId}"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/query/similar-dataset-including-descendent/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_get_graph_graph_query_search_datasets" {
@@ -526,8 +535,8 @@ module "graph_client_get_graph_graph_query_search_datasets" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_query_search_datasets_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/query/search-datasets"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/query/search-datasets"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_get_graph_graph_query_search_datasets_ids" {
@@ -535,8 +544,8 @@ module "graph_client_get_graph_graph_query_search_datasets_ids" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_query_search_datasets_ids_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/query/search-datasets-ids"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/query/search-datasets-ids"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_get_graph_graph_query_most_liked_datasets" {
@@ -544,8 +553,8 @@ module "graph_client_get_graph_graph_query_most_liked_datasets" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_query_most_liked_datasets_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/query/most-liked-datasets"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/query/most-liked-datasets"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_post_graph_query_search_datasets" {
@@ -553,8 +562,8 @@ module "graph_client_post_graph_query_search_datasets" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_query_search_datasets_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/query/search-datasets"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/query/search-datasets"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_get_graph_query_most_viewed" {
@@ -562,8 +571,8 @@ module "graph_client_get_graph_query_most_viewed" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_query_most_viewed_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/query/most-viewed"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/query/most-viewed"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_get_graph_query_most_viewed_by_user" {
@@ -571,8 +580,8 @@ module "graph_client_get_graph_query_most_viewed_by_user" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_query_most_viewed_by_user_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/query/most-viewed-by-user"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/query/most-viewed-by-user"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_get_graph_query_search_by_label_synonyms" {
@@ -580,8 +589,8 @@ module "graph_client_get_graph_query_search_by_label_synonyms" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_query_search_by_label_synonyms_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/query/search-by-label-synonyms"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/query/search-by-label-synonyms"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_get_graph_query_list_concepts_dataset_id" {
@@ -589,8 +598,8 @@ module "graph_client_get_graph_query_list_concepts_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_query_list_concepts_dataset_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/query/list-concepts/{datasetId}"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/query/list-concepts/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "graph_client_post_graph_find_by_ids" {
@@ -598,6 +607,6 @@ module "graph_client_post_graph_find_by_ids" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_find_by_ids_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/graph/query/list-concepts/find-by-ids"
-  vpc_link     = aws_api_gateway_vpc_link.graph_client_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/query/list-concepts/find-by-ids"
+  vpc_link     = var.vpc_link
 }

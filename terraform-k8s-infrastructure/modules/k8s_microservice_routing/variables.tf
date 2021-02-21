@@ -13,6 +13,14 @@ variable "cluster_name" {
   description = "The k8s cluster name"
 }
 
+variable "vpc" {
+  type = object({
+    id         = string
+    cidr_block = string
+  })
+  description = "The id of the VPC"
+}
+
 variable "environment" {
   type        = string
   description = "Environment name"

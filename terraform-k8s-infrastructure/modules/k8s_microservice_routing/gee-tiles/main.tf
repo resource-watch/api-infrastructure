@@ -1,42 +1,51 @@
-
 resource "kubernetes_service" "gee_tiles_service" {
   metadata {
     name = "gee-tiles"
-    annotations = {
-      "service.beta.kubernetes.io/aws-load-balancer-type"                     = "nlb"
-      "service.beta.kubernetes.io/aws-load-balancer-internal"                 = "true"
-      "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags" = "service=gee-tiles"
-    }
+
   }
   spec {
     selector = {
       name = "gee-tiles"
     }
     port {
-      port        = 80
+      port        = 30531
+      node_port   = 30531
       target_port = 5700
     }
 
-    type = "LoadBalancer"
+    type = "NodePort"
   }
 }
 
-data "aws_lb" "gee_tiles_lb" {
-  name = split("-", kubernetes_service.gee_tiles_service.status.0.load_balancer.0.ingress.0.hostname).0
+resource "aws_lb_listener" "gee_tiles_nlb_listener" {
+  load_balancer_arn = var.load_balancer.arn
+  port              = 30531
+  protocol          = "TCP"
 
-  depends_on = [
-    kubernetes_service.gee_tiles_service
-  ]
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.gee_tiles_lb_target_group.arn
+  }
 }
 
-resource "aws_api_gateway_vpc_link" "gee_tiles_lb_vpc_link" {
-  name        = "GEE Tiles LB VPC link"
-  description = "VPC link to the gee_tiles service load balancer"
-  target_arns = [data.aws_lb.gee_tiles_lb.arn]
+resource "aws_lb_target_group" "gee_tiles_lb_target_group" {
+  name        = "gee-tiles-lb-tg"
+  port        = 30531
+  protocol    = "TCP"
+  target_type = "instance"
+  vpc_id      = var.vpc.id
 
-  lifecycle {
-    create_before_destroy = true
+  health_check {
+    enabled  = true
+    protocol = "TCP"
   }
+}
+
+resource "aws_autoscaling_attachment" "asg_attachment_gee_tiles" {
+  count = length(var.eks_asg_names)
+
+  autoscaling_group_name = var.eks_asg_names[count.index]
+  alb_target_group_arn   = aws_lb_target_group.gee_tiles_lb_target_group.arn
 }
 
 // /v1/layer
@@ -112,8 +121,8 @@ module "gee_tiles_get_layer_id_tile_gee_z_x_y" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.gee_tiles_layer_id_tile_gee_z_x_y_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/layer/{layerId}/tile/gee/{z}/{x}/{y}"
-  vpc_link     = aws_api_gateway_vpc_link.gee_tiles_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30531/api/v1/layer/{layerId}/tile/gee/{z}/{x}/{y}"
+  vpc_link     = var.vpc_link
 }
 
 module "gee_tiles_delete_gee_layer_gee_id_expire_cache" {
@@ -122,6 +131,6 @@ module "gee_tiles_delete_gee_layer_gee_id_expire_cache" {
   api_resource   = aws_api_gateway_resource.gee_layer_gee_id_expire_cache_resource
   method         = "DELETE"
   backend_method = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/layer/gee/{layerId}/expire-cache"
-  vpc_link       = aws_api_gateway_vpc_link.gee_tiles_lb_vpc_link
+  uri            = "http://api.resourcewatch.org:30531/api/v1/layer/gee/{layerId}/expire-cache"
+  vpc_link       = var.vpc_link
 }

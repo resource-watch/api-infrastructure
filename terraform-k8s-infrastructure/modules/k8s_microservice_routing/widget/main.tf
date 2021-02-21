@@ -1,49 +1,58 @@
-
 resource "kubernetes_service" "widget_service" {
   metadata {
     name      = "widget"
     namespace = "default"
-    annotations = {
-      "service.beta.kubernetes.io/aws-load-balancer-type"                     = "nlb"
-      "service.beta.kubernetes.io/aws-load-balancer-internal"                 = "true"
-      "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags" = "service=widget"
-    }
+
   }
   spec {
     selector = {
       name = "widget"
     }
     port {
-      port        = 80
+      port        = 30567
+      node_port   = 30567
       target_port = 3050
     }
 
-    type = "LoadBalancer"
+    type = "NodePort"
   }
 }
 
-data "aws_lb" "widget_lb" {
-  name = split("-", kubernetes_service.widget_service.status.0.load_balancer.0.ingress.0.hostname).0
+resource "aws_lb_listener" "widget_nlb_listener" {
+  load_balancer_arn = var.load_balancer.arn
+  port              = 30567
+  protocol          = "TCP"
 
-  depends_on = [
-    kubernetes_service.widget_service
-  ]
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.widget_lb_target_group.arn
+  }
 }
 
-resource "aws_api_gateway_vpc_link" "widget_lb_vpc_link" {
-  name        = "Widget LB VPC link"
-  description = "VPC link to the widget service load balancer"
-  target_arns = [data.aws_lb.widget_lb.arn]
+resource "aws_lb_target_group" "widget_lb_target_group" {
+  name        = "widget-lb-tg"
+  port        = 30567
+  protocol    = "TCP"
+  target_type = "instance"
+  vpc_id      = var.vpc.id
 
-  lifecycle {
-    create_before_destroy = true
+  health_check {
+    enabled  = true
+    protocol = "TCP"
   }
+}
+
+resource "aws_autoscaling_attachment" "asg_attachment_widget" {
+  count = length(var.eks_asg_names)
+
+  autoscaling_group_name = var.eks_asg_names[count.index]
+  alb_target_group_arn   = aws_lb_target_group.widget_lb_target_group.arn
 }
 
 // /v1
 data "aws_api_gateway_resource" "v1_resource" {
   rest_api_id = var.api_gateway.id
-  path        = "/"
+  path        = "/v1"
 }
 
 // /v1/dataset/{datasetId}
@@ -127,8 +136,8 @@ module "widget_get_widget" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.widget_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/widget"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30567/api/v1/widget"
+  vpc_link     = var.vpc_link
 }
 
 module "widget_get_dataset_id_widget" {
@@ -136,8 +145,8 @@ module "widget_get_dataset_id_widget" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget"
+  vpc_link     = var.vpc_link
 }
 
 module "widget_get_dataset_id_widget_id" {
@@ -145,8 +154,8 @@ module "widget_get_dataset_id_widget_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget/{widgetId}"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget/{widgetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "widget_get_widget_id" {
@@ -154,8 +163,8 @@ module "widget_get_widget_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.widget_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/widget/{widgetId}"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30567/api/v1/widget/{widgetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "widget_post_dataset_id_widget" {
@@ -163,8 +172,8 @@ module "widget_post_dataset_id_widget" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget"
+  vpc_link     = var.vpc_link
 }
 
 module "widget_post_widget" {
@@ -172,8 +181,8 @@ module "widget_post_widget" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.widget_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/widget"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30567/api/v1/widget"
+  vpc_link     = var.vpc_link
 }
 
 module "widget_patch_widget_id" {
@@ -181,8 +190,8 @@ module "widget_patch_widget_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.widget_id_resource
   method       = "PATCH"
-  uri          = "http://api.resourcewatch.org/api/v1/widget/{widgetId}"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30567/api/v1/widget/{widgetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "widget_delete_by_id" {
@@ -190,8 +199,8 @@ module "widget_delete_by_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.widget_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/widget/{widgetId}"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30567/api/v1/widget/{widgetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "widget_delete_dataset_id_widget" {
@@ -199,8 +208,8 @@ module "widget_delete_dataset_id_widget" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget"
+  vpc_link     = var.vpc_link
 }
 
 module "widget_patch_dataset_id_widget_id" {
@@ -208,8 +217,8 @@ module "widget_patch_dataset_id_widget_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_id_resource
   method       = "PATCH"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget/{widgetId}"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget/{widgetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "widget_patch_widget_change_environment_dataset_id_env" {
@@ -217,8 +226,8 @@ module "widget_patch_widget_change_environment_dataset_id_env" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.widget_env_resource
   method       = "PATCH"
-  uri          = "http://api.resourcewatch.org/api/v1/widget/change-environment/{datasetId}/{env}"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30567/api/v1/widget/change-environment/{datasetId}/{env}"
+  vpc_link     = var.vpc_link
 }
 
 module "widget_delete_dataset_id_widget_id" {
@@ -226,8 +235,8 @@ module "widget_delete_dataset_id_widget_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget/{widgetId}"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget/{widgetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "widget_post_widget_find_by_ids" {
@@ -235,8 +244,8 @@ module "widget_post_widget_find_by_ids" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.widget_find_by_ids_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/widget/find-by-ids"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30567/api/v1/widget/find-by-ids"
+  vpc_link     = var.vpc_link
 }
 
 module "widget_post_dataset_id_clone" {
@@ -244,8 +253,8 @@ module "widget_post_dataset_id_clone" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.widget_clone_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/clone"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/clone"
+  vpc_link     = var.vpc_link
 }
 
 module "widget_post_dataset_id_widget_id_clone" {
@@ -253,6 +262,6 @@ module "widget_post_dataset_id_widget_id_clone" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_id_clone_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget/{widgetId}/clone"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget/{widgetId}/clone"
+  vpc_link     = var.vpc_link
 }

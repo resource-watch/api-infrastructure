@@ -1,43 +1,52 @@
-
 resource "kubernetes_service" "vocabulary_service" {
   metadata {
     name      = "vocabulary"
     namespace = "default"
-    annotations = {
-      "service.beta.kubernetes.io/aws-load-balancer-type"                     = "nlb"
-      "service.beta.kubernetes.io/aws-load-balancer-internal"                 = "true"
-      "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags" = "service=vocabulary"
-    }
+
   }
   spec {
     selector = {
       name = "vocabulary"
     }
     port {
-      port        = 80
+      port        = 30565
+      node_port   = 30565
       target_port = 4100
     }
 
-    type = "LoadBalancer"
+    type = "NodePort"
   }
 }
 
-data "aws_lb" "vocabulary_lb" {
-  name = split("-", kubernetes_service.vocabulary_service.status.0.load_balancer.0.ingress.0.hostname).0
+resource "aws_lb_listener" "vocabulary_nlb_listener" {
+  load_balancer_arn = var.load_balancer.arn
+  port              = 30565
+  protocol          = "TCP"
 
-  depends_on = [
-    kubernetes_service.vocabulary_service
-  ]
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.vocabulary_lb_target_group.arn
+  }
 }
 
-resource "aws_api_gateway_vpc_link" "vocabulary_lb_vpc_link" {
-  name        = "Vocabulary LB VPC link"
-  description = "VPC link to the vocabulary service load balancer"
-  target_arns = [data.aws_lb.vocabulary_lb.arn]
+resource "aws_lb_target_group" "vocabulary_lb_target_group" {
+  name        = "vocabulary-lb-tg"
+  port        = 30565
+  protocol    = "TCP"
+  target_type = "instance"
+  vpc_id      = var.vpc.id
 
-  lifecycle {
-    create_before_destroy = true
+  health_check {
+    enabled  = true
+    protocol = "TCP"
   }
+}
+
+resource "aws_autoscaling_attachment" "asg_attachment_vocabulary" {
+  count = length(var.eks_asg_names)
+
+  autoscaling_group_name = var.eks_asg_names[count.index]
+  alb_target_group_arn   = aws_lb_target_group.vocabulary_lb_target_group.arn
 }
 
 #
@@ -88,8 +97,8 @@ module "vocabulary_get_vocabulary" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.vocabulary_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/vocabulary"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/vocabulary"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_post_vocabulary" {
@@ -97,8 +106,8 @@ module "vocabulary_post_vocabulary" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.vocabulary_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/vocabulary"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/vocabulary"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_get_vocabulary_id" {
@@ -106,8 +115,8 @@ module "vocabulary_get_vocabulary_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.vocabulary_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/vocabulary/{vocabularyId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/vocabulary/{vocabularyId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_patch_vocabulary_id" {
@@ -115,8 +124,8 @@ module "vocabulary_patch_vocabulary_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.vocabulary_id_resource
   method       = "PATCH"
-  uri          = "http://api.resourcewatch.org/api/v1/vocabulary/{vocabularyId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/vocabulary/{vocabularyId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_delete_vocabulary_id" {
@@ -124,8 +133,8 @@ module "vocabulary_delete_vocabulary_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.vocabulary_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/vocabulary/{vocabularyId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/vocabulary/{vocabularyId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_get_vocabulary_id_tags" {
@@ -133,8 +142,8 @@ module "vocabulary_get_vocabulary_id_tags" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.vocabulary_id_tags_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/vocabulary/{vocabularyId}/tags"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/vocabulary/{vocabularyId}/tags"
+  vpc_link     = var.vpc_link
 }
 
 
@@ -203,8 +212,8 @@ module "vocabulary_get_dataset_id_vocabulary" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_vocabulary_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/vocabulary"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_post_dataset_id_vocabulary" {
@@ -212,8 +221,8 @@ module "vocabulary_post_dataset_id_vocabulary" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_vocabulary_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/vocabulary"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_put_dataset_id_vocabulary" {
@@ -221,8 +230,8 @@ module "vocabulary_put_dataset_id_vocabulary" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_vocabulary_resource
   method       = "PUT"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/vocabulary"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_post_dataset_id_vocabulary_id_concat" {
@@ -230,8 +239,8 @@ module "vocabulary_post_dataset_id_vocabulary_id_concat" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_vocabulary_id_concat_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/vocabulary/{vocabularyId}/concat"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary/{vocabularyId}/concat"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_post_dataset_id_vocabulary_clone_dataset" {
@@ -239,8 +248,8 @@ module "vocabulary_post_dataset_id_vocabulary_clone_dataset" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_vocabulary_clone_dataset_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/vocabulary/clone/dataset"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary/clone/dataset"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_delete_dataset_id_vocabulary" {
@@ -248,8 +257,8 @@ module "vocabulary_delete_dataset_id_vocabulary" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_vocabulary_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/vocabulary"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_get_dataset_id_vocabulary_id" {
@@ -257,8 +266,8 @@ module "vocabulary_get_dataset_id_vocabulary_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_vocabulary_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/vocabulary/{vocabularyId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary/{vocabularyId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_post_dataset_id_vocabulary_id" {
@@ -266,8 +275,8 @@ module "vocabulary_post_dataset_id_vocabulary_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_vocabulary_id_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/vocabulary/{vocabularyId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary/{vocabularyId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_get_dataset_vocabulary_find" {
@@ -275,8 +284,8 @@ module "vocabulary_get_dataset_vocabulary_find" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_vocabulary_find_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/vocabulary/find"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/vocabulary/find"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_patch_dataset_by_id" {
@@ -284,8 +293,8 @@ module "vocabulary_patch_dataset_by_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_vocabulary_id_resource
   method       = "PATCH"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/vocabulary/{vocabularyId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary/{vocabularyId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_delete_dataset_by_id" {
@@ -293,8 +302,8 @@ module "vocabulary_delete_dataset_by_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_vocabulary_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/vocabulary/{vocabularyId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary/{vocabularyId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_post_dataset_vocabulary_find_by_ids" {
@@ -302,8 +311,8 @@ module "vocabulary_post_dataset_vocabulary_find_by_ids" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_vocabulary_find_by_ids_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/vocabulary/find-by-ids"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/vocabulary/find-by-ids"
+  vpc_link     = var.vpc_link
 }
 
 
@@ -362,8 +371,8 @@ module "vocabulary_get_dataset_id_widget_id_vocabulary" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_get_dataset_id_widget_id_vocabulary_id" {
@@ -371,8 +380,8 @@ module "vocabulary_get_dataset_id_widget_id_vocabulary_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_post_dataset_id_widget_id_vocabulary" {
@@ -380,8 +389,8 @@ module "vocabulary_post_dataset_id_widget_id_vocabulary" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_post_dataset_id_widget_id_vocabulary_id" {
@@ -389,8 +398,8 @@ module "vocabulary_post_dataset_id_widget_id_vocabulary_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_id_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_patch_dataset_id_widget_id_vocabulary_id" {
@@ -398,8 +407,8 @@ module "vocabulary_patch_dataset_id_widget_id_vocabulary_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_id_resource
   method       = "PATCH"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_delete_dataset_id_widget_id_vocabulary" {
@@ -407,8 +416,8 @@ module "vocabulary_delete_dataset_id_widget_id_vocabulary" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_delete_dataset_id_widget_id_vocabulary_id" {
@@ -416,8 +425,8 @@ module "vocabulary_delete_dataset_id_widget_id_vocabulary_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_get_dataset_id_widget_vocabulary_find" {
@@ -425,8 +434,8 @@ module "vocabulary_get_dataset_id_widget_vocabulary_find" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_vocabulary_find_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget/vocabulary/find"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/vocabulary/find"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_post_dataset_id_widget_vocabulary_find_by_ids" {
@@ -434,8 +443,8 @@ module "vocabulary_post_dataset_id_widget_vocabulary_find_by_ids" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_widget_vocabulary_find_by_ids_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget/vocabulary/find-by-ids"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/vocabulary/find-by-ids"
+  vpc_link     = var.vpc_link
 }
 
 
@@ -494,8 +503,8 @@ module "vocabulary_get_dataset_id_layer_id_vocabulary" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_get_dataset_id_layer_id_vocabulary_id" {
@@ -503,8 +512,8 @@ module "vocabulary_get_dataset_id_layer_id_vocabulary_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_post_dataset_id_layer_id_vocabulary" {
@@ -512,8 +521,8 @@ module "vocabulary_post_dataset_id_layer_id_vocabulary" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_post_dataset_id_layer_id_vocabulary_id" {
@@ -521,8 +530,8 @@ module "vocabulary_post_dataset_id_layer_id_vocabulary_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_id_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_patch_dataset_id_layer_id_vocabulary_id" {
@@ -530,8 +539,8 @@ module "vocabulary_patch_dataset_id_layer_id_vocabulary_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_id_resource
   method       = "PATCH"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_delete_dataset_id_layer_id_vocabulary" {
@@ -539,8 +548,8 @@ module "vocabulary_delete_dataset_id_layer_id_vocabulary" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_delete_dataset_id_layer_id_vocabulary_id" {
@@ -548,8 +557,8 @@ module "vocabulary_delete_dataset_id_layer_id_vocabulary_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_get_dataset_id_layer_vocabulary_find" {
@@ -557,8 +566,8 @@ module "vocabulary_get_dataset_id_layer_vocabulary_find" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_layer_vocabulary_find_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/layer/vocabulary/find"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/vocabulary/find"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_post_dataset_id_layer_vocabulary_find_by_ids" {
@@ -566,8 +575,8 @@ module "vocabulary_post_dataset_id_layer_vocabulary_find_by_ids" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_layer_vocabulary_find_by_ids_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/layer/vocabulary/find-by-ids"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/vocabulary/find-by-ids"
+  vpc_link     = var.vpc_link
 }
 
 
@@ -601,8 +610,8 @@ module "vocabulary_get_favourite" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.favourite_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/favourite"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/favourite"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_post_favourite" {
@@ -610,8 +619,8 @@ module "vocabulary_post_favourite" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.favourite_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/favourite"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/favourite"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_get_favourite_id" {
@@ -619,8 +628,8 @@ module "vocabulary_get_favourite_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.favourite_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/favourite/{favouriteId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/favourite/{favouriteId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_delete_favourite_id" {
@@ -628,8 +637,8 @@ module "vocabulary_delete_favourite_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.favourite_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/favourite/{favouriteId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/favourite/{favouriteId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_post_favourite_find_by_user" {
@@ -637,8 +646,8 @@ module "vocabulary_post_favourite_find_by_user" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.favourite_find_by_user_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/favourite/find-by-user"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/favourite/find-by-user"
+  vpc_link     = var.vpc_link
 }
 
 
@@ -693,8 +702,8 @@ module "vocabulary_get_collection" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.collection_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/collection"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/collection"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_get_collection_id" {
@@ -702,8 +711,8 @@ module "vocabulary_get_collection_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.collection_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/collection/{collectionId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/collection/{collectionId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_post_collection" {
@@ -711,8 +720,8 @@ module "vocabulary_post_collection" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.collection_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/collection"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/collection"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_patch_collection_id" {
@@ -720,8 +729,8 @@ module "vocabulary_patch_collection_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.collection_id_resource
   method       = "PATCH"
-  uri          = "http://api.resourcewatch.org/api/v1/collection/{collectionId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/collection/{collectionId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_delete_collection_id" {
@@ -729,8 +738,8 @@ module "vocabulary_delete_collection_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.collection_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/collection/{collectionId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/collection/{collectionId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_post_collection_id_resource" {
@@ -738,8 +747,8 @@ module "vocabulary_post_collection_id_resource" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.collection_id_resource_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/collection/{collectionId}/resource"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/collection/{collectionId}/resource"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_delete_collection_id_resource_type_id" {
@@ -747,8 +756,8 @@ module "vocabulary_delete_collection_id_resource_type_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.collection_id_resource_type_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/collection/{collectionId}/resource/{resourceType}/{resourceId}"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/collection/{collectionId}/resource/{resourceType}/{resourceId}"
+  vpc_link     = var.vpc_link
 }
 
 module "vocabulary_post_collection_find_by_ids" {
@@ -756,6 +765,6 @@ module "vocabulary_post_collection_find_by_ids" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.collection_find_by_ids_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/collection/find-by-ids"
-  vpc_link     = aws_api_gateway_vpc_link.vocabulary_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30565/api/v1/collection/find-by-ids"
+  vpc_link     = var.vpc_link
 }

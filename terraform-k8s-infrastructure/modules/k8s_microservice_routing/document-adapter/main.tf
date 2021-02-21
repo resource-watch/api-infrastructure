@@ -1,41 +1,52 @@
 resource "kubernetes_service" "document_adapter_service" {
   metadata {
     name = "document-adapter"
-    annotations = {
-      "service.beta.kubernetes.io/aws-load-balancer-type"                     = "nlb"
-      "service.beta.kubernetes.io/aws-load-balancer-internal"                 = "true"
-      "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags" = "service=document-adapter"
-    }
+
   }
   spec {
     selector = {
       name = "document-adapter"
     }
     port {
-      port        = 80
+      port        = 30521
+      node_port   = 30521
       target_port = 5000
     }
 
-    type = "LoadBalancer"
+    type = "NodePort"
   }
 }
 
-data "aws_lb" "document_adapter_lb" {
-  name = split("-", kubernetes_service.document_adapter_service.status.0.load_balancer.0.ingress.0.hostname).0
 
-  depends_on = [
-    kubernetes_service.document_adapter_service
-  ]
+resource "aws_lb_listener" "document_adapter_nlb_listener" {
+  load_balancer_arn = var.load_balancer.arn
+  port              = 30521
+  protocol          = "TCP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.document_adapter_lb_target_group.arn
+  }
 }
 
-resource "aws_api_gateway_vpc_link" "document_adapter_lb_vpc_link" {
-  name        = "Document Adapter LB VPC link"
-  description = "VPC link to the document_adapter service load balancer"
-  target_arns = [data.aws_lb.document_adapter_lb.arn]
+resource "aws_lb_target_group" "document_adapter_lb_target_group" {
+  name        = "document-adapter-lb-tg"
+  port        = 30521
+  protocol    = "TCP"
+  target_type = "instance"
+  vpc_id      = var.vpc.id
 
-  lifecycle {
-    create_before_destroy = true
+  health_check {
+    enabled  = true
+    protocol = "TCP"
   }
+}
+
+resource "aws_autoscaling_attachment" "asg_attachment_document_adapter" {
+  count = length(var.eks_asg_names)
+
+  autoscaling_group_name = var.eks_asg_names[count.index]
+  alb_target_group_arn   = aws_lb_target_group.document_adapter_lb_target_group.arn
 }
 
 // /v1/query
@@ -291,17 +302,17 @@ module "document_adapter_get_query_csv_dataset_id" {
   api_resource   = aws_api_gateway_resource.query_csv_dataset_id_resource
   method         = "GET"
   backend_method = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/query/csv/{datasetId}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  uri            = "http://api.resourcewatch.org:30521/api/v1/document/query/csv/{datasetId}"
+  vpc_link       = var.vpc_link
 }
 
 module "document_adapter_post_query_csv_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.query_csv_dataset_id_resource
-  method         = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/query/csv/{datasetId}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.query_csv_dataset_id_resource
+  method       = "POST"
+  uri          = "http://api.resourcewatch.org:30521/api/v1/document/query/csv/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "document_adapter_get_query_json_dataset_id" {
@@ -310,17 +321,17 @@ module "document_adapter_get_query_json_dataset_id" {
   api_resource   = aws_api_gateway_resource.query_json_dataset_id_resource
   method         = "GET"
   backend_method = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/query/json/{datasetId}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  uri            = "http://api.resourcewatch.org:30521/api/v1/document/query/json/{datasetId}"
+  vpc_link       = var.vpc_link
 }
 
 module "document_adapter_post_query_json_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.query_json_dataset_id_resource
-  method         = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/query/json/{datasetId}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.query_json_dataset_id_resource
+  method       = "POST"
+  uri          = "http://api.resourcewatch.org:30521/api/v1/document/query/json/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "document_adapter_get_query_tsv_dataset_id" {
@@ -329,17 +340,17 @@ module "document_adapter_get_query_tsv_dataset_id" {
   api_resource   = aws_api_gateway_resource.query_tsv_dataset_id_resource
   method         = "GET"
   backend_method = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/query/tsv/{datasetId}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  uri            = "http://api.resourcewatch.org:30521/api/v1/document/query/tsv/{datasetId}"
+  vpc_link       = var.vpc_link
 }
 
 module "document_adapter_post_query_tsv_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.query_tsv_dataset_id_resource
-  method         = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/query/tsv/{datasetId}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.query_tsv_dataset_id_resource
+  method       = "POST"
+  uri          = "http://api.resourcewatch.org:30521/api/v1/document/query/tsv/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "document_adapter_get_query_xml_dataset_id" {
@@ -348,17 +359,17 @@ module "document_adapter_get_query_xml_dataset_id" {
   api_resource   = aws_api_gateway_resource.query_xml_dataset_id_resource
   method         = "GET"
   backend_method = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/query/xml/{datasetId}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  uri            = "http://api.resourcewatch.org:30521/api/v1/document/query/xml/{datasetId}"
+  vpc_link       = var.vpc_link
 }
 
 module "document_adapter_post_query_xml_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.query_xml_dataset_id_resource
-  method         = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/query/xml/{datasetId}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.query_xml_dataset_id_resource
+  method       = "POST"
+  uri          = "http://api.resourcewatch.org:30521/api/v1/document/query/xml/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "document_adapter_get_download_csv_dataset_id" {
@@ -367,17 +378,17 @@ module "document_adapter_get_download_csv_dataset_id" {
   api_resource   = aws_api_gateway_resource.download_csv_dataset_id_resource
   method         = "GET"
   backend_method = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/download/csv/{datasetId}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  uri            = "http://api.resourcewatch.org:30521/api/v1/document/download/csv/{datasetId}"
+  vpc_link       = var.vpc_link
 }
 
 module "document_adapter_post_download_csv_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.download_csv_dataset_id_resource
-  method         = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/download/csv/{datasetId}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.download_csv_dataset_id_resource
+  method       = "POST"
+  uri          = "http://api.resourcewatch.org:30521/api/v1/document/download/csv/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "document_adapter_get_download_json_dataset_id" {
@@ -386,17 +397,17 @@ module "document_adapter_get_download_json_dataset_id" {
   api_resource   = aws_api_gateway_resource.download_json_dataset_id_resource
   method         = "GET"
   backend_method = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/download/json/{datasetId}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  uri            = "http://api.resourcewatch.org:30521/api/v1/document/download/json/{datasetId}"
+  vpc_link       = var.vpc_link
 }
 
 module "document_adapter_post_download_json_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.download_json_dataset_id_resource
-  method         = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/download/json/{datasetId}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.download_json_dataset_id_resource
+  method       = "POST"
+  uri          = "http://api.resourcewatch.org:30521/api/v1/document/download/json/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "document_adapter_get_download_tsv_dataset_id" {
@@ -405,17 +416,17 @@ module "document_adapter_get_download_tsv_dataset_id" {
   api_resource   = aws_api_gateway_resource.download_tsv_dataset_id_resource
   method         = "GET"
   backend_method = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/download/tsv/{datasetId}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  uri            = "http://api.resourcewatch.org:30521/api/v1/document/download/tsv/{datasetId}"
+  vpc_link       = var.vpc_link
 }
 
 module "document_adapter_post_download_tsv_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.download_tsv_dataset_id_resource
-  method         = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/download/tsv/{datasetId}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.download_tsv_dataset_id_resource
+  method       = "POST"
+  uri          = "http://api.resourcewatch.org:30521/api/v1/document/download/tsv/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "document_adapter_get_download_xml_dataset_id" {
@@ -424,17 +435,17 @@ module "document_adapter_get_download_xml_dataset_id" {
   api_resource   = aws_api_gateway_resource.download_xml_dataset_id_resource
   method         = "GET"
   backend_method = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/download/xml/{datasetId}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  uri            = "http://api.resourcewatch.org:30521/api/v1/document/download/xml/{datasetId}"
+  vpc_link       = var.vpc_link
 }
 
 module "document_adapter_post_download_xml_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.download_xml_dataset_id_resource
-  method         = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/download/xml/{datasetId}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.download_xml_dataset_id_resource
+  method       = "POST"
+  uri          = "http://api.resourcewatch.org:30521/api/v1/document/download/xml/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "document_adapter_get_fields_csv_dataset_id" {
@@ -443,8 +454,8 @@ module "document_adapter_get_fields_csv_dataset_id" {
   api_resource   = aws_api_gateway_resource.fields_csv_dataset_id_resource
   method         = "GET"
   backend_method = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/fields/csv/{datasetId}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  uri            = "http://api.resourcewatch.org:30521/api/v1/document/fields/csv/{datasetId}"
+  vpc_link       = var.vpc_link
 }
 
 module "document_adapter_get_fields_json_dataset_id" {
@@ -453,8 +464,8 @@ module "document_adapter_get_fields_json_dataset_id" {
   api_resource   = aws_api_gateway_resource.fields_json_dataset_id_resource
   method         = "GET"
   backend_method = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/fields/json/{datasetId}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  uri            = "http://api.resourcewatch.org:30521/api/v1/document/fields/json/{datasetId}"
+  vpc_link       = var.vpc_link
 }
 
 module "document_adapter_get_fields_tsv_dataset_id" {
@@ -463,8 +474,8 @@ module "document_adapter_get_fields_tsv_dataset_id" {
   api_resource   = aws_api_gateway_resource.fields_tsv_dataset_id_resource
   method         = "GET"
   backend_method = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/fields/tsv/{datasetId}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  uri            = "http://api.resourcewatch.org:30521/api/v1/document/fields/tsv/{datasetId}"
+  vpc_link       = var.vpc_link
 }
 
 module "document_adapter_get_fields_xml_dataset_id" {
@@ -473,61 +484,61 @@ module "document_adapter_get_fields_xml_dataset_id" {
   api_resource   = aws_api_gateway_resource.fields_xml_dataset_id_resource
   method         = "GET"
   backend_method = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/fields/xml/{datasetId}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  uri            = "http://api.resourcewatch.org:30521/api/v1/document/fields/xml/{datasetId}"
+  vpc_link       = var.vpc_link
 }
 
 module "document_adapter_post_dataset_id_concat" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.dataset_id_concat_resource
-  method         = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/{datasetId}/concat"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.dataset_id_concat_resource
+  method       = "POST"
+  uri          = "http://api.resourcewatch.org:30521/api/v1/document/{datasetId}/concat"
+  vpc_link     = var.vpc_link
 }
 
 module "document_adapter_post_dataset_id_reindex" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.dataset_id_reindex_resource
-  method         = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/{datasetId}/reindex"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.dataset_id_reindex_resource
+  method       = "POST"
+  uri          = "http://api.resourcewatch.org:30521/api/v1/document/{datasetId}/reindex"
+  vpc_link     = var.vpc_link
 }
 
 module "document_adapter_post_dataset_id_append" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.dataset_id_append_resource
-  method         = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/{datasetId}/append"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.dataset_id_append_resource
+  method       = "POST"
+  uri          = "http://api.resourcewatch.org:30521/api/v1/document/{datasetId}/append"
+  vpc_link     = var.vpc_link
 }
 
 module "document_adapter_post_dataset_id_data_overwrite" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.dataset_id_data_overwrite_resource
-  method         = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/{datasetId}/data-overwrite"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.dataset_id_data_overwrite_resource
+  method       = "POST"
+  uri          = "http://api.resourcewatch.org:30521/api/v1/document/{datasetId}/data-overwrite"
+  vpc_link     = var.vpc_link
 }
 
 module "document_adapter_post_doc_dataset_provider" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.doc_dataset_provider_resource
-  method         = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/{provider}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.doc_dataset_provider_resource
+  method       = "POST"
+  uri          = "http://api.resourcewatch.org:30521/api/v1/document/{provider}"
+  vpc_link     = var.vpc_link
 }
 
 
 module "document_adapter_post_doc_dataset_provider_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.doc_dataset_provider_id_resource
-  method         = "POST"
-  uri            = "http://api.resourcewatch.org/api/v1/document/{provider}/{id}"
-  vpc_link       = aws_api_gateway_vpc_link.document_adapter_lb_vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.doc_dataset_provider_id_resource
+  method       = "POST"
+  uri          = "http://api.resourcewatch.org:30521/api/v1/document/{provider}/{id}"
+  vpc_link     = var.vpc_link
 }

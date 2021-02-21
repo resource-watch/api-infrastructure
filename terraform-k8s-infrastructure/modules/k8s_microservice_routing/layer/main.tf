@@ -1,43 +1,52 @@
-
 resource "kubernetes_service" "layer_service" {
   metadata {
     name      = "layer"
     namespace = "default"
-    annotations = {
-      "service.beta.kubernetes.io/aws-load-balancer-type"                     = "nlb"
-      "service.beta.kubernetes.io/aws-load-balancer-internal"                 = "true"
-      "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags" = "service=layer"
-    }
+
   }
   spec {
     selector = {
       name = "layer"
     }
     port {
-      port        = 80
+      port        = 30546
+      node_port   = 30546
       target_port = 6000
     }
 
-    type = "LoadBalancer"
+    type = "NodePort"
   }
 }
 
-data "aws_lb" "layer_lb" {
-  name = split("-", kubernetes_service.layer_service.status.0.load_balancer.0.ingress.0.hostname).0
+resource "aws_lb_listener" "layer_nlb_listener" {
+  load_balancer_arn = var.load_balancer.arn
+  port              = 30546
+  protocol          = "TCP"
 
-  depends_on = [
-    kubernetes_service.layer_service
-  ]
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.layer_lb_target_group.arn
+  }
 }
 
-resource "aws_api_gateway_vpc_link" "layer_lb_vpc_link" {
-  name        = "Layer LB VPC link"
-  description = "VPC link to the layer service load balancer"
-  target_arns = [data.aws_lb.layer_lb.arn]
+resource "aws_lb_target_group" "layer_lb_target_group" {
+  name        = "layer-lb-tg"
+  port        = 30546
+  protocol    = "TCP"
+  target_type = "instance"
+  vpc_id      = var.vpc.id
 
-  lifecycle {
-    create_before_destroy = true
+  health_check {
+    enabled  = true
+    protocol = "TCP"
   }
+}
+
+resource "aws_autoscaling_attachment" "asg_attachment_layer" {
+  count = length(var.eks_asg_names)
+
+  autoscaling_group_name = var.eks_asg_names[count.index]
+  alb_target_group_arn   = aws_lb_target_group.layer_lb_target_group.arn
 }
 
 // /v1
@@ -120,8 +129,8 @@ module "layer_get" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.layer_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/layer"
-  vpc_link     = aws_api_gateway_vpc_link.layer_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30546/api/v1/layer"
+  vpc_link     = var.vpc_link
 }
 
 module "layer_get_dataset_id_layer" {
@@ -129,8 +138,8 @@ module "layer_get_dataset_id_layer" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_layer_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/layer"
-  vpc_link     = aws_api_gateway_vpc_link.layer_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30546/api/v1/dataset/{datasetId}/layer"
+  vpc_link     = var.vpc_link
 }
 
 module "layer_get_dataset_id" {
@@ -138,8 +147,8 @@ module "layer_get_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_layer_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/layer/{layerId}"
-  vpc_link     = aws_api_gateway_vpc_link.layer_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
+  vpc_link     = var.vpc_link
 }
 
 module "layer_get_layer_id" {
@@ -147,8 +156,8 @@ module "layer_get_layer_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.layer_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/layer/{layerId}"
-  vpc_link     = aws_api_gateway_vpc_link.layer_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30546/api/v1/layer/{layerId}"
+  vpc_link     = var.vpc_link
 }
 
 module "layer_post_dataset_id_layer" {
@@ -156,8 +165,8 @@ module "layer_post_dataset_id_layer" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_layer_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/layer"
-  vpc_link     = aws_api_gateway_vpc_link.layer_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30546/api/v1/dataset/{datasetId}/layer"
+  vpc_link     = var.vpc_link
 }
 
 module "layer_delete_dataset_id_layer" {
@@ -165,8 +174,8 @@ module "layer_delete_dataset_id_layer" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_layer_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/layer"
-  vpc_link     = aws_api_gateway_vpc_link.layer_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30546/api/v1/dataset/{datasetId}/layer"
+  vpc_link     = var.vpc_link
 }
 
 module "layer_patch_dataset_id_layer_id" {
@@ -174,8 +183,8 @@ module "layer_patch_dataset_id_layer_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_layer_id_resource
   method       = "PATCH"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/layer/{layerId}"
-  vpc_link     = aws_api_gateway_vpc_link.layer_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
+  vpc_link     = var.vpc_link
 }
 
 module "layer_patch_layer_change_environment_dataset_id_env" {
@@ -183,8 +192,8 @@ module "layer_patch_layer_change_environment_dataset_id_env" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.layer_change_environment_dataset_id_env_resource
   method       = "PATCH"
-  uri          = "http://api.resourcewatch.org/api/v1/layer/change-environment/{datasetId}/{env}"
-  vpc_link     = aws_api_gateway_vpc_link.layer_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30546/api/v1/layer/change-environment/{datasetId}/{env}"
+  vpc_link     = var.vpc_link
 }
 
 module "layer_delete_dataset_id_layer_id" {
@@ -192,8 +201,8 @@ module "layer_delete_dataset_id_layer_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_layer_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/layer/{layerId}"
-  vpc_link     = aws_api_gateway_vpc_link.layer_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
+  vpc_link     = var.vpc_link
 }
 
 module "layer_post_layer_find_by_ids" {
@@ -201,8 +210,8 @@ module "layer_post_layer_find_by_ids" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.layer_find_by_ids_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/layer/find-by-ids"
-  vpc_link     = aws_api_gateway_vpc_link.layer_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30546/api/v1/layer/find-by-ids"
+  vpc_link     = var.vpc_link
 }
 
 module "layer_delete_layer_id_expire_cache" {
@@ -210,6 +219,6 @@ module "layer_delete_layer_id_expire_cache" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.layer_id_expire_cache_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/layer/{layerId}/expire-cache"
-  vpc_link     = aws_api_gateway_vpc_link.layer_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30546/api/v1/layer/{layerId}/expire-cache"
+  vpc_link     = var.vpc_link
 }

@@ -1,56 +1,51 @@
-provider "kubernetes" {
-  host                   = var.cluster_endpoint
-  cluster_ca_certificate = base64decode(var.cluster_ca)
-  exec {
-    api_version = "client.authentication.k8s.io/v1alpha1"
-    args = [
-      "eks",
-      "get-token",
-      "--cluster-name",
-    var.cluster_name]
-    command = "aws"
-  }
-}
-
 resource "kubernetes_service" "geostore_service" {
   metadata {
     name = "geostore"
-    annotations = {
-      "service.beta.kubernetes.io/aws-load-balancer-type"                     = "nlb"
-      "service.beta.kubernetes.io/aws-load-balancer-internal"                 = "true"
-      "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags" = "service=geostore"
-    }
+
   }
   spec {
     selector = {
       name = "geostore"
     }
     port {
-      port        = 80
+      port        = 30532
+      node_port   = 30532
       target_port = 3100
     }
 
-    type = "LoadBalancer"
+    type = "NodePort"
   }
 }
 
-data "aws_lb" "geostore_lb" {
-  name = split("-", kubernetes_service.geostore_service.status.0.load_balancer.0.ingress.0.hostname).0
+resource "aws_lb_listener" "geostore_nlb_listener" {
+  load_balancer_arn = var.load_balancer.arn
+  port              = 30532
+  protocol          = "TCP"
 
-  depends_on = [
-    kubernetes_service.geostore_service
-  ]
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.geostore_lb_target_group.arn
+  }
 }
 
-resource "aws_api_gateway_vpc_link" "geostore_lb_vpc_link" {
-  name        = "Geostore LB VPC link"
-  description = "VPC link to the geostore service load balancer"
-  target_arns = [
-  data.aws_lb.geostore_lb.arn]
+resource "aws_lb_target_group" "geostore_lb_target_group" {
+  name        = "geostore-lb-tg"
+  port        = 30532
+  protocol    = "TCP"
+  target_type = "instance"
+  vpc_id      = var.vpc.id
 
-  lifecycle {
-    create_before_destroy = true
+  health_check {
+    enabled  = true
+    protocol = "TCP"
   }
+}
+
+resource "aws_autoscaling_attachment" "asg_attachment_geostore" {
+  count = length(var.eks_asg_names)
+
+  autoscaling_group_name = var.eks_asg_names[count.index]
+  alb_target_group_arn   = aws_lb_target_group.geostore_lb_target_group.arn
 }
 
 #
@@ -179,8 +174,8 @@ module "geostore_post_v1_geostore" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_geostore_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/geostore"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v1/geostore"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_post_v1_geostore_find_by_ids" {
@@ -188,8 +183,8 @@ module "geostore_post_v1_geostore_find_by_ids" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_geostore_find_by_ids_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/geostore/find-by-ids"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v1/geostore/find-by-ids"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_post_v1_geostore_area" {
@@ -197,8 +192,8 @@ module "geostore_post_v1_geostore_area" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_geostore_area_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/geostore/area"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v1/geostore/area"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v1_geostore_id" {
@@ -206,8 +201,8 @@ module "geostore_get_v1_geostore_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_geostore_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/geostore/{geostoreId}"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v1/geostore/{geostoreId}"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v1_geostore_id_view" {
@@ -215,8 +210,8 @@ module "geostore_get_v1_geostore_id_view" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_geostore_id_view_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/geostore/{geostoreId}/view"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v1/geostore/{geostoreId}/view"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v1_geostore_admin_iso" {
@@ -224,8 +219,8 @@ module "geostore_get_v1_geostore_admin_iso" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_geostore_admin_iso_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/geostore/admin/{iso}"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v1/geostore/admin/{iso}"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v1_geostore_admin_list" {
@@ -233,8 +228,8 @@ module "geostore_get_v1_geostore_admin_list" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_geostore_admin_list_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/geostore/admin/list"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v1/geostore/admin/list"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v1_geostore_admin_iso_id1" {
@@ -242,8 +237,8 @@ module "geostore_get_v1_geostore_admin_iso_id1" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_geostore_admin_iso_id1_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/geostore/admin/{iso}/{id1}"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v1/geostore/admin/{iso}/{id1}"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v1_geostore_admin_iso_id1_id2" {
@@ -251,8 +246,8 @@ module "geostore_get_v1_geostore_admin_iso_id1_id2" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_geostore_admin_iso_id1_id2_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/geostore/admin/{iso}/{id1}/{id2}"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v1/geostore/admin/{iso}/{id1}/{id2}"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v1_geostore_use_name_id" {
@@ -260,8 +255,8 @@ module "geostore_get_v1_geostore_use_name_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_geostore_use_name_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/geostore/use/{name}/{id}"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v1/geostore/use/{name}/{id}"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v1_geostore_wdpa_id" {
@@ -269,8 +264,8 @@ module "geostore_get_v1_geostore_wdpa_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_geostore_wdpa_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/geostore/wdpa/{id}"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v1/geostore/wdpa/{id}"
+  vpc_link     = var.vpc_link
 }
 
 #
@@ -352,8 +347,8 @@ module "geostore_get_v1_coverage_intersect_use_name_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_coverage_intersect_use_name_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/coverage/intersect/use/{name}/{id}"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v1/coverage/intersect/use/{name}/{id}"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v1_coverage_intersect_admin_iso" {
@@ -361,8 +356,8 @@ module "geostore_get_v1_coverage_intersect_admin_iso" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_coverage_intersect_admin_iso_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/coverage/intersect/admin/{iso}"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v1/coverage/intersect/admin/{iso}"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v1_coverage_intersect_admin_iso_id1" {
@@ -370,8 +365,8 @@ module "geostore_get_v1_coverage_intersect_admin_iso_id1" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_coverage_intersect_admin_iso_id1_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/coverage/intersect/admin/{iso}/{id1}"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v1/coverage/intersect/admin/{iso}/{id1}"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v1_coverage_intersect_wdpa_id" {
@@ -379,8 +374,8 @@ module "geostore_get_v1_coverage_intersect_wdpa_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_coverage_intersect_wdpa_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/coverage/intersect/wdpa/{id}"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v1/coverage/intersect/wdpa/{id}"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v1_coverage_intersect" {
@@ -388,8 +383,8 @@ module "geostore_get_v1_coverage_intersect" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_coverage_intersect_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/coverage/intersect"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v1/coverage/intersect"
+  vpc_link     = var.vpc_link
 }
 
 #
@@ -506,8 +501,8 @@ module "geostore_post_v2_geostore_find_by_ids" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_geostore_find_by_ids_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v2/geostore/find-by-ids"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v2/geostore/find-by-ids"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_post_v2_geostore_area" {
@@ -515,8 +510,8 @@ module "geostore_post_v2_geostore_area" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_geostore_area_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v2/geostore/area"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v2/geostore/area"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v2_geostore_id" {
@@ -524,8 +519,8 @@ module "geostore_get_v2_geostore_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_geostore_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/geostore/{geostoreId}"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v2/geostore/{geostoreId}"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v2_geostore_id_view" {
@@ -533,8 +528,8 @@ module "geostore_get_v2_geostore_id_view" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_geostore_id_view_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/geostore/{geostoreId}/view"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v2/geostore/{geostoreId}/view"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v2_geostore_admin_iso" {
@@ -542,8 +537,8 @@ module "geostore_get_v2_geostore_admin_iso" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_geostore_admin_iso_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/geostore/admin/{iso}"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v2/geostore/admin/{iso}"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v2_geostore_admin_list" {
@@ -551,8 +546,8 @@ module "geostore_get_v2_geostore_admin_list" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_geostore_admin_list_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/geostore/admin/list"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v2/geostore/admin/list"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v2_geostore_admin_iso_id1" {
@@ -560,8 +555,8 @@ module "geostore_get_v2_geostore_admin_iso_id1" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_geostore_admin_iso_id1_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/geostore/admin/{iso}/{id1}"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v2/geostore/admin/{iso}/{id1}"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v2_geostore_admin_iso_id1_id2" {
@@ -569,8 +564,8 @@ module "geostore_get_v2_geostore_admin_iso_id1_id2" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_geostore_admin_iso_id1_id2_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/geostore/admin/{iso}/{id1}/{id2}"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v2/geostore/admin/{iso}/{id1}/{id2}"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v2_geostore_use_name_id" {
@@ -578,8 +573,8 @@ module "geostore_get_v2_geostore_use_name_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_geostore_use_name_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/geostore/use/{name}/{id}"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v2/geostore/use/{name}/{id}"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v2_geostore_wdpa_id" {
@@ -587,8 +582,8 @@ module "geostore_get_v2_geostore_wdpa_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_geostore_wdpa_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/geostore/wdpa/{id}"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v2/geostore/wdpa/{id}"
+  vpc_link     = var.vpc_link
 }
 
 #
@@ -670,8 +665,8 @@ module "geostore_get_v2_coverage_intersect_use_name_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_coverage_intersect_use_name_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/coverage/intersect/use/{name}/{id}"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v2/coverage/intersect/use/{name}/{id}"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v2_coverage_intersect_admin_iso" {
@@ -679,8 +674,8 @@ module "geostore_get_v2_coverage_intersect_admin_iso" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_coverage_intersect_admin_iso_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/coverage/intersect/admin/{iso}"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v2/coverage/intersect/admin/{iso}"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v2_coverage_intersect_admin_iso_id1" {
@@ -688,8 +683,8 @@ module "geostore_get_v2_coverage_intersect_admin_iso_id1" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_coverage_intersect_admin_iso_id1_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/coverage/intersect/admin/{iso}/{id1}"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v2/coverage/intersect/admin/{iso}/{id1}"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v2_coverage_intersect_wdpa_id" {
@@ -697,8 +692,8 @@ module "geostore_get_v2_coverage_intersect_wdpa_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_coverage_intersect_wdpa_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/coverage/intersect/wdpa/{id}"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v2/coverage/intersect/wdpa/{id}"
+  vpc_link     = var.vpc_link
 }
 
 module "geostore_get_v2_coverage_intersect" {
@@ -706,6 +701,6 @@ module "geostore_get_v2_coverage_intersect" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_coverage_intersect_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/coverage/intersect"
-  vpc_link     = aws_api_gateway_vpc_link.geostore_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30532/api/v2/coverage/intersect"
+  vpc_link     = var.vpc_link
 }
