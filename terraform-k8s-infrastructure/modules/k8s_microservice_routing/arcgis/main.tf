@@ -1,52 +1,51 @@
-provider "kubernetes" {
-  host                   = var.cluster_endpoint
-  cluster_ca_certificate = base64decode(var.cluster_ca)
-  exec {
-    api_version = "client.authentication.k8s.io/v1alpha1"
-    args        = ["eks", "get-token", "--cluster-name", var.cluster_name]
-    command     = "aws"
-  }
-}
-
 resource "kubernetes_service" "arcgis_service" {
   metadata {
     name      = "arcgis"
-    namespace = "default"
-    annotations = {
-      "service.beta.kubernetes.io/aws-load-balancer-type"                     = "nlb"
-      "service.beta.kubernetes.io/aws-load-balancer-internal"                 = "true"
-      "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags" = "service=arcgis"
-    }
+
   }
   spec {
     selector = {
       name = "arcgis"
     }
     port {
-      port        = 80
-      target_port = 4100
+      port        = 30502
+      node_port   = 30502
+      target_port = 3055
     }
 
-    type = "LoadBalancer"
+    type = "NodePort"
   }
 }
 
-data "aws_lb" "arcgis_lb" {
-  name = split("-", kubernetes_service.arcgis_service.status.0.load_balancer.0.ingress.0.hostname).0
+resource "aws_lb_listener" "arcgis_nlb_listener" {
+  load_balancer_arn = var.load_balancer.arn
+  port              = 30502
+  protocol          = "TCP"
 
-  depends_on = [
-    kubernetes_service.arcgis_service
-  ]
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.arcgis_lb_target_group.arn
+  }
 }
 
-resource "aws_api_gateway_vpc_link" "arcgis_lb_vpc_link" {
-  name        = "Arcgis LB VPC link"
-  description = "VPC link to the arcgis service load balancer"
-  target_arns = [data.aws_lb.arcgis_lb.arn]
+resource "aws_lb_target_group" "arcgis_lb_target_group" {
+  name        = "arcgis-lb-tg"
+  port        = 30502
+  protocol    = "TCP"
+  target_type = "instance"
+  vpc_id      = var.vpc.id
 
-  lifecycle {
-    create_before_destroy = true
+  health_check {
+    enabled  = true
+    protocol = "TCP"
   }
+}
+
+resource "aws_autoscaling_attachment" "asg_attachment_arcgis" {
+  count = length(var.eks_asg_names)
+
+  autoscaling_group_name = var.eks_asg_names[count.index]
+  alb_target_group_arn   = aws_lb_target_group.arcgis_lb_target_group.arn
 }
 
 // /v1
@@ -56,10 +55,27 @@ data "aws_api_gateway_resource" "v1_resource" {
 }
 
 // /v1/query
-resource "aws_api_gateway_resource" "v1_query_resource" {
+data "aws_api_gateway_resource" "v1_query_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
-  path_part   = "query"
+  path        = "/v1/query"
+}
+
+// /v1/download
+data "aws_api_gateway_resource" "v1_download_resource" {
+  rest_api_id = var.api_gateway.id
+  path        = "/v1/download"
+}
+
+// /v1/fields
+data "aws_api_gateway_resource" "v1_fields_resource" {
+  rest_api_id = var.api_gateway.id
+  path        = "/v1/fields"
+}
+
+// /v1/rest-datasets
+data "aws_api_gateway_resource" "v1_rest_datasets_resource" {
+  rest_api_id = var.api_gateway.id
+  path        = "/v1/rest-datasets"
 }
 
 // /v1/query/featureservice
@@ -72,15 +88,8 @@ resource "aws_api_gateway_resource" "v1_query_featureservice_resource" {
 // /v1/query/featureservice/{datasetId}
 resource "aws_api_gateway_resource" "v1_query_featureservice_dataset_id_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_query_featureservice_resource.id
+  parent_id   = aws_api_gateway_resource.v1_query_featureservice_resource.id
   path_part   = "{datasetId}"
-}
-
-// /v1/download
-resource "aws_api_gateway_resource" "v1_download_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
-  path_part   = "download"
 }
 
 // /v1/download/featureservice
@@ -93,15 +102,8 @@ resource "aws_api_gateway_resource" "v1_download_featureservice_resource" {
 // /v1/download/featureservice/{datasetId}
 resource "aws_api_gateway_resource" "v1_download_featureservice_dataset_id_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_download_featureservice_resource.id
+  parent_id   = aws_api_gateway_resource.v1_download_featureservice_resource.id
   path_part   = "{datasetId}"
-}
-
-// /v1/fields
-resource "aws_api_gateway_resource" "v1_fields_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
-  path_part   = "fields"
 }
 
 // /v1/fields/featureservice
@@ -114,15 +116,8 @@ resource "aws_api_gateway_resource" "v1_fields_featureservice_resource" {
 // /v1/fields/featureservice/{datasetId}
 resource "aws_api_gateway_resource" "v1_fields_featureservice_dataset_id_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_fields_featureservice_resource.id
+  parent_id   = aws_api_gateway_resource.v1_fields_featureservice_resource.id
   path_part   = "{datasetId}"
-}
-
-// /v1/rest-datasets
-resource "aws_api_gateway_resource" "v1_rest_datasets_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
-  path_part   = "rest-datasets"
 }
 
 // /v1/rest-datasets/featureservice
@@ -133,9 +128,9 @@ resource "aws_api_gateway_resource" "v1_rest_datasets_featureservice_resource" {
 }
 
 // /v1/rest-datasets/featureservice/{datasetId}
-resource "aws_api_gateway_resource" "v1_rest-datasets_featureservice_dataset_id_resource" {
+resource "aws_api_gateway_resource" "v1_rest_datasets_featureservice_dataset_id_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_rest_datasets_featureservice_resource.id
+  parent_id   = aws_api_gateway_resource.v1_rest_datasets_featureservice_resource.id
   path_part   = "{datasetId}"
 }
 
@@ -144,8 +139,9 @@ module "arcgis_get_v1_query_featureservice_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_query_featureservice_dataset_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/query/featureservice/{datasetId}"
-  vpc_link     = aws_api_gateway_vpc_link.arcgis_lb_vpc_link
+  backend_method = "POST"
+  uri          = "http://api.resourcewatch.org:30502/api/v1/query/featureservice/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "arcgis_post_v1_query_featureservice_dataset_id" {
@@ -153,8 +149,8 @@ module "arcgis_post_v1_query_featureservice_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_query_featureservice_dataset_id_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/query/featureservice/{datasetId}"
-  vpc_link     = aws_api_gateway_vpc_link.arcgis_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30502/api/v1/query/featureservice/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "arcgis_get_v1_download_featureservice_dataset_id" {
@@ -162,8 +158,9 @@ module "arcgis_get_v1_download_featureservice_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_download_featureservice_dataset_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/download/featureservice/{datasetId}"
-  vpc_link     = aws_api_gateway_vpc_link.arcgis_lb_vpc_link
+  backend_method = "POST"
+  uri          = "http://api.resourcewatch.org:30502/api/v1/download/featureservice/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "arcgis_post_v1_download_featureservice_dataset_id" {
@@ -171,17 +168,18 @@ module "arcgis_post_v1_download_featureservice_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_download_featureservice_dataset_id_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/download/featureservice/{datasetId}"
-  vpc_link     = aws_api_gateway_vpc_link.arcgis_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30502/api/v1/download/featureservice/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
-module "arcgis_post_v1_fields_featureservice_dataset_id" {
+module "arcgis_get_v1_fields_featureservice_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_fields_featureservice_dataset_id_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/fields/featureservice/{datasetId}"
-  vpc_link     = aws_api_gateway_vpc_link.arcgis_lb_vpc_link
+  method       = "GET"
+  backend_method = "POST"
+  uri          = "http://api.resourcewatch.org:30502/api/v1/fields/featureservice/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "arcgis_post_v1_rest_datasets_featureservice" {
@@ -189,8 +187,8 @@ module "arcgis_post_v1_rest_datasets_featureservice" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_rest_datasets_featureservice_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/rest-datasets/featureservice"
-  vpc_link     = aws_api_gateway_vpc_link.arcgis_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30502/api/v1/rest-datasets/featureservice"
+  vpc_link     = var.vpc_link
 }
 
 module "arcgis_delete_v1_rest_datasets_featureservice_dataset_id" {
@@ -198,6 +196,6 @@ module "arcgis_delete_v1_rest_datasets_featureservice_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_rest_datasets_featureservice_dataset_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/rest-datasets/featureservice/{datasetId}"
-  vpc_link     = aws_api_gateway_vpc_link.arcgis_lb_vpc_link
+  uri          = "http://api.resourcewatch.org:30502/api/v1/rest-datasets/featureservice/{datasetId}"
+  vpc_link     = var.vpc_link
 }
