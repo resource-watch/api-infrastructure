@@ -1,6 +1,6 @@
 resource "kubernetes_service" "arcgis_service" {
   metadata {
-    name      = "arcgis"
+    name = "arcgis"
 
   }
   spec {
@@ -46,12 +46,6 @@ resource "aws_autoscaling_attachment" "asg_attachment_arcgis" {
 
   autoscaling_group_name = var.eks_asg_names[count.index]
   alb_target_group_arn   = aws_lb_target_group.arcgis_lb_target_group.arn
-}
-
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
 }
 
 // /v1/query
@@ -135,13 +129,13 @@ resource "aws_api_gateway_resource" "v1_rest_datasets_featureservice_dataset_id_
 }
 
 module "arcgis_get_v1_query_featureservice_dataset_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_query_featureservice_dataset_id_resource
-  method       = "GET"
+  source         = "../endpoint"
+  api_gateway    = var.api_gateway
+  api_resource   = aws_api_gateway_resource.v1_query_featureservice_dataset_id_resource
+  method         = "GET"
   backend_method = "POST"
-  uri          = "http://api.resourcewatch.org:30502/api/v1/query/featureservice/{datasetId}"
-  vpc_link     = var.vpc_link
+  uri            = "http://api.resourcewatch.org:30502/api/v1/arcgis/query/{datasetId}"
+  vpc_link       = var.vpc_link
 }
 
 module "arcgis_post_v1_query_featureservice_dataset_id" {
@@ -149,18 +143,18 @@ module "arcgis_post_v1_query_featureservice_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_query_featureservice_dataset_id_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30502/api/v1/query/featureservice/{datasetId}"
+  uri          = "http://api.resourcewatch.org:30502/api/v1/arcgis/query/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
 module "arcgis_get_v1_download_featureservice_dataset_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_download_featureservice_dataset_id_resource
-  method       = "GET"
+  source         = "../endpoint"
+  api_gateway    = var.api_gateway
+  api_resource   = aws_api_gateway_resource.v1_download_featureservice_dataset_id_resource
+  method         = "GET"
   backend_method = "POST"
-  uri          = "http://api.resourcewatch.org:30502/api/v1/download/featureservice/{datasetId}"
-  vpc_link     = var.vpc_link
+  uri            = "http://api.resourcewatch.org:30502/api/v1/arcgis/download/{datasetId}"
+  vpc_link       = var.vpc_link
 }
 
 module "arcgis_post_v1_download_featureservice_dataset_id" {
@@ -168,18 +162,18 @@ module "arcgis_post_v1_download_featureservice_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_download_featureservice_dataset_id_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30502/api/v1/download/featureservice/{datasetId}"
+  uri          = "http://api.resourcewatch.org:30502/api/v1/arcgis/download/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
 module "arcgis_get_v1_fields_featureservice_dataset_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_fields_featureservice_dataset_id_resource
-  method       = "GET"
+  source         = "../endpoint"
+  api_gateway    = var.api_gateway
+  api_resource   = aws_api_gateway_resource.v1_fields_featureservice_dataset_id_resource
+  method         = "GET"
   backend_method = "POST"
-  uri          = "http://api.resourcewatch.org:30502/api/v1/fields/featureservice/{datasetId}"
-  vpc_link     = var.vpc_link
+  uri            = "http://api.resourcewatch.org:30502/api/v1/arcgis/fields/{datasetId}"
+  vpc_link       = var.vpc_link
 }
 
 module "arcgis_post_v1_rest_datasets_featureservice" {
@@ -187,7 +181,7 @@ module "arcgis_post_v1_rest_datasets_featureservice" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_rest_datasets_featureservice_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30502/api/v1/rest-datasets/featureservice"
+  uri          = "http://api.resourcewatch.org:30502/api/v1/arcgis/rest-datasets/featureservice"
   vpc_link     = var.vpc_link
 }
 
@@ -196,6 +190,6 @@ module "arcgis_delete_v1_rest_datasets_featureservice_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_rest_datasets_featureservice_dataset_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org:30502/api/v1/rest-datasets/featureservice/{datasetId}"
+  uri          = "http://api.resourcewatch.org:30502/api/v1/arcgis/rest-datasets/featureservice/{datasetId}"
   vpc_link     = var.vpc_link
 }

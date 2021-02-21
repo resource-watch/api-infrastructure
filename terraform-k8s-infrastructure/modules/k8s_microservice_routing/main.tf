@@ -139,9 +139,11 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.area.endpoints),
       jsonencode(module.arcgis.endpoints),
       jsonencode(module.auth.endpoints),
-      jsonencode(module.biomass.endpoints),
-      jsonencode(module.geostore.endpoints),
-      jsonencode(module.ct.endpoints),
+      jsonencode(module.bigquery.endpoints),
+    jsonencode(module.biomass.endpoints),
+    jsonencode(module.geostore.endpoints),
+    jsonencode(module.carto.endpoints),
+    jsonencode(module.ct.endpoints),
       jsonencode(module.converter.endpoints),
       jsonencode(module.dataset.endpoints),
       jsonencode(module.doc-orchestrator.endpoints),
@@ -308,6 +310,40 @@ module "auth" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
   eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+}
+
+module "bigquery" {
+  source           = "./bigquery"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
+  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+
+  depends_on = [
+    module.dataset,
+    module.query,
+  ]
+}
+
+module "carto" {
+  source           = "./carto"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
+  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+
+  depends_on = [
+    module.dataset,
+    module.query,
+  ]
 }
 
 module "dataset" {
