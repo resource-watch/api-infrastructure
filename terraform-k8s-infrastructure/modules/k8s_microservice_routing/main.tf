@@ -137,13 +137,14 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.gfw_metadata.endpoints),
       jsonencode(module.doc_swagger.endpoints),
       jsonencode(module.area.endpoints),
+      jsonencode(module.aqueduct-analysis.endpoints),
       jsonencode(module.arcgis.endpoints),
       jsonencode(module.auth.endpoints),
       jsonencode(module.bigquery.endpoints),
-    jsonencode(module.biomass.endpoints),
-    jsonencode(module.geostore.endpoints),
-    jsonencode(module.carto.endpoints),
-    jsonencode(module.ct.endpoints),
+      jsonencode(module.biomass.endpoints),
+      jsonencode(module.geostore.endpoints),
+      jsonencode(module.carto.endpoints),
+      jsonencode(module.ct.endpoints),
       jsonencode(module.converter.endpoints),
       jsonencode(module.dataset.endpoints),
       jsonencode(module.doc-orchestrator.endpoints),
@@ -293,11 +294,6 @@ module "aqueduct-analysis" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
   eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
-
-  depends_on = [
-    module.dataset,
-    module.query,
-  ]
 }
 
 module "arcgis" {
