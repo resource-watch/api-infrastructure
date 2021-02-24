@@ -120,7 +120,7 @@ variable "webapps_node_group_min_size" {
 }
 variable "webapps_node_group_max_size" {
   type    = number
-  default = 4
+  default = 6
 }
 variable "webapps_node_group_desired_size" {
   type    = number
