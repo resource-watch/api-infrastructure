@@ -16,7 +16,7 @@ variable "subnet_id" {
 variable "jenkins_instance_type" {
   default     = "m5a.large"
   type        = string
-  description = "An instance type for the bastion."
+  description = "An instance type for Jenkins EC2 instance."
 }
 
 variable "tags" {
