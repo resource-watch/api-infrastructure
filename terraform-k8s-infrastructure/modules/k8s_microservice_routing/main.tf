@@ -154,6 +154,7 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.forest-change.endpoints),
       jsonencode(module.graph-client.endpoints),
       jsonencode(module.gee.endpoints),
+      jsonencode(module.gfw-forma.endpoints),
       jsonencode(module.fires-summary-stats.endpoints),
       jsonencode(module.layer.endpoints),
       jsonencode(module.query.endpoints),
@@ -287,30 +288,6 @@ module "analysis-gee" {
   eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
 }
 
-module "arcgis-proxy" {
-  source           = "./arcgis-proxy"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
-  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
-}
-
-module "area" {
-  source           = "./area"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
-  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
-}
-
 module "aqueduct-analysis" {
   source           = "./aqueduct-analysis"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
@@ -338,6 +315,30 @@ module "arcgis" {
     module.dataset,
     module.query,
   ]
+}
+
+module "arcgis-proxy" {
+  source           = "./arcgis-proxy"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
+  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+}
+
+module "area" {
+  source           = "./area"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
+  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
 }
 
 module "auth" {
@@ -369,6 +370,18 @@ module "bigquery" {
   ]
 }
 
+module "biomass" {
+  source           = "./biomass"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
+  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+}
+
 module "carto" {
   source           = "./carto"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
@@ -386,110 +399,20 @@ module "carto" {
   ]
 }
 
+module "converter" {
+  source           = "./converter"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
+  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+}
+
 module "dataset" {
   source           = "./dataset"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
-  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
-}
-
-module "widget" {
-  source           = "./widget"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
-  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
-
-  depends_on = [
-    module.dataset,
-  ]
-}
-
-module "layer" {
-  source           = "./layer"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
-  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
-
-  depends_on = [
-    module.dataset,
-  ]
-}
-
-module "metadata" {
-  source           = "./metadata"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
-  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
-
-  depends_on = [
-    module.dataset,
-    module.layer,
-    module.widget,
-  ]
-}
-
-module "biomass" {
-  source           = "./biomass"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
-  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
-}
-
-module "geostore" {
-  source           = "./geostore"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
-  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
-}
-
-module "gee" {
-  source           = "./gee"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
-  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
-
-  depends_on = [
-    module.dataset
-  ]
-}
-
-module "fires-summary-stats" {
-  source           = "./fires-summary-stats"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -529,8 +452,8 @@ module "document-adapter" {
   ]
 }
 
-module "converter" {
-  source           = "./converter"
+module "fires-summary-stats" {
+  source           = "./fires-summary-stats"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -553,8 +476,48 @@ module "forest-change" {
   eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
 }
 
+module "gee" {
+  source           = "./gee"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
+  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+
+  depends_on = [
+    module.dataset
+  ]
+}
+
 module "gee-tiles" {
   source           = "./gee-tiles"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
+  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+}
+
+module "geostore" {
+  source           = "./geostore"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
+  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+}
+
+module "gfw-forma" {
+  source           = "./gfw-forma"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -575,6 +538,40 @@ module "graph-client" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
   eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+}
+
+module "layer" {
+  source           = "./layer"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
+  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+
+  depends_on = [
+    module.dataset,
+  ]
+}
+
+module "metadata" {
+  source           = "./metadata"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
+  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+
+  depends_on = [
+    module.dataset,
+    module.layer,
+    module.widget,
+  ]
 }
 
 module "query" {
@@ -603,6 +600,18 @@ module "rw-lp" {
 
 module "task_executor" {
   source           = "./task-executor"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
+  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+}
+
+module "viirs_fires" {
+  source           = "./viirs-fires"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -643,8 +652,8 @@ module "webshot" {
   eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
 }
 
-module "viirs_fires" {
-  source           = "./viirs-fires"
+module "widget" {
+  source           = "./widget"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -653,6 +662,10 @@ module "viirs_fires" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
   eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+
+  depends_on = [
+    module.dataset,
+  ]
 }
 
 #
