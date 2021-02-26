@@ -136,6 +136,7 @@ resource "aws_api_gateway_deployment" "prod" {
     redeployment = sha1(join(",", list(
       jsonencode(module.gfw_metadata.endpoints),
       jsonencode(module.doc_swagger.endpoints),
+      jsonencode(module.analysis-gee.endpoints),
       jsonencode(module.area.endpoints),
       jsonencode(module.aqueduct-analysis.endpoints),
       jsonencode(module.arcgis.endpoints),
@@ -262,6 +263,18 @@ module "doc_swagger" {
 // Import routes per MS, one by one
 module "ct" {
   source           = "./ct"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
+  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+}
+
+module "analysis-gee" {
+  source           = "./analysis-gee"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
