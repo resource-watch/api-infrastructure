@@ -134,6 +134,7 @@ resource "aws_api_gateway_deployment" "prod" {
 
   triggers = {
     redeployment = sha1(join(",", list(
+      jsonencode(module.arcgis-proxy.endpoints),
       jsonencode(module.gfw_metadata.endpoints),
       jsonencode(module.doc_swagger.endpoints),
       jsonencode(module.analysis-gee.endpoints),
@@ -275,6 +276,18 @@ module "ct" {
 
 module "analysis-gee" {
   source           = "./analysis-gee"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
+  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+}
+
+module "arcgis-proxy" {
+  source           = "./arcgis-proxy"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
