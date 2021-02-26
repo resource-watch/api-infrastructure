@@ -272,7 +272,7 @@ module "ct" {
   eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
 }
 
-module "area" {
+module "analysis-gee" {
   source           = "./analysis-gee"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
