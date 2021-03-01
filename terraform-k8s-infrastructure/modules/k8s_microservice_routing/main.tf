@@ -163,6 +163,7 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.query.endpoints),
       jsonencode(module.query.endpoints),
       jsonencode(module.rw-lp),
+      jsonencode(module.resource-watch-manager),
       jsonencode(module.task_executor.endpoints),
       jsonencode(module.vocabulary.endpoints),
       jsonencode(module.webshot.endpoints),
@@ -601,6 +602,18 @@ module "query" {
 
 module "rw-lp" {
   source           = "./rw-lp"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
+  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+}
+
+module "resource-watch-manager" {
+  source           = "./resource-watch-manager"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
