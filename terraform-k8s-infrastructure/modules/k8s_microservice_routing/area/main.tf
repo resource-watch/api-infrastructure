@@ -250,6 +250,7 @@ module "area_get_area_v2_download_tiles_geostore_id_min_zoom_max_zoom" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30504/api/v2/area/download-tiles/{geostoreId}/{minZoom}/{maxZoom}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["geostoreId", "minZoom"]
 }
 
 module "area_get_area_v1" {
@@ -331,6 +332,7 @@ module "area_get_area_v1_id_alerts" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30504/api/v1/area/{areaId}/alerts"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["areaId"]
 }
 
 module "area_get_area_v1_download_tiles_geostore_id_min_zoom_max_zoom" {
@@ -340,4 +342,5 @@ module "area_get_area_v1_download_tiles_geostore_id_min_zoom_max_zoom" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30504/api/v1/area/download-tiles/{geostoreId}/{minZoom}/{maxZoom}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["geostoreId", "minZoom"]
 }

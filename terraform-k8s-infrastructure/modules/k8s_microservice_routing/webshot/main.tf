@@ -106,4 +106,5 @@ module "webshot_widget_id_thumbnail" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30566/api/v1/webshot/widget/{widgetId}/thumbnail"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["widgetId"]
 }

@@ -339,6 +339,7 @@ module "graph_client_post_graph_dataset_id_visited" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30542/api/v1/graph/dataset/{datasetId}/visited"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "graph_client_post_graph_widget_dataset_id_widget_id" {
@@ -348,6 +349,7 @@ module "graph_client_post_graph_widget_dataset_id_widget_id" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30542/api/v1/graph/widget/{datasetId}/{widgetId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "graph_client_post_graph_layer_dataset_id_layer_id" {
@@ -357,6 +359,7 @@ module "graph_client_post_graph_layer_dataset_id_layer_id" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30542/api/v1/graph/layer/{datasetId}/{layerId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "graph_client_post_graph_metadata_resource_type_or_metadata_id_resource_id_metadata_id" {
@@ -366,6 +369,7 @@ module "graph_client_post_graph_metadata_resource_type_or_metadata_id_resource_i
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30542/api/v1/graph/metadata/{resourceTypeOrMetadataId}/{resourceId}/{metadataId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["resourceTypeOrMetadataId", "resourceId"]
 }
 
 module "graph_client_post_graph_favourite_resource_type_resource_id_user_id" {
@@ -375,6 +379,7 @@ module "graph_client_post_graph_favourite_resource_type_resource_id_user_id" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30542/api/v1/graph/favourite/{resourceType}/{resourceId}/{userId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["resourceType", "resourceId"]
 }
 
 module "graph_client_post_graph_resource_type_resource_id_associate" {
@@ -384,6 +389,7 @@ module "graph_client_post_graph_resource_type_resource_id_associate" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30542/api/v1/graph/{resourceType}/{resourceId}/associate"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["resourceType", "resourceId"]
 }
 
 module "graph_client_put_graph_resource_type_resource_id_associate" {
@@ -393,6 +399,7 @@ module "graph_client_put_graph_resource_type_resource_id_associate" {
   method       = "PUT"
   uri          = "http://api.resourcewatch.org:30542/api/v1/graph/{resourceType}/{resourceId}/associate"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["resourceType", "resourceId"]
 }
 
 module "graph_client_delete_graph_resource_type_resource_id_associate" {
@@ -402,6 +409,7 @@ module "graph_client_delete_graph_resource_type_resource_id_associate" {
   method       = "DELETE"
   uri          = "http://api.resourcewatch.org:30542/api/v1/graph/{resourceType}/{resourceId}/associate"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["resourceType", "resourceId"]
 }
 
 module "graph_client_delete_graph_dataset_id" {
@@ -447,6 +455,7 @@ module "graph_client_delete_graph_favourite_resource_type_resource_id_user_id" {
   method       = "DELETE"
   uri          = "http://api.resourcewatch.org:30542/api/v1/graph/favourite/{resourceType}/{resourceId}/{userId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["resourceType", "resourceId"]
 }
 
 module "graph_client_get_graph_query_similar_dataset" {

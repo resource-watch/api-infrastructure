@@ -1,6 +1,6 @@
 resource "kubernetes_service" "gfw_forma_service" {
   metadata {
-    name = "gfw-forma"
+    name      = "gfw-forma"
     namespace = "gfw"
   }
   spec {
@@ -140,6 +140,7 @@ module "gfw_forma_get_v1_terrai_alerts_admin_iso_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30534/api/v1/forma-alerts/admin/{iso}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso"]
 }
 
 module "gfw_forma_get_v1_terrai_alerts_use_name_id" {
@@ -149,6 +150,7 @@ module "gfw_forma_get_v1_terrai_alerts_use_name_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30534/api/v1/forma-alerts/use/{name}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["name"]
 }
 
 module "gfw_forma_get_v1_terrai_alerts_wdpa_id" {

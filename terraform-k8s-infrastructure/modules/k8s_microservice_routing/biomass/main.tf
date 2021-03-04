@@ -100,4 +100,5 @@ module "biomass_v1_get_biomass_loss_admin_iso_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30533/api/v1/biomass-loss/admin/{iso}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso"]
 }

@@ -144,6 +144,7 @@ module "vocabulary_get_vocabulary_id_tags" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30565/api/v1/vocabulary/{vocabularyId}/tags"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["vocabularyId"]
 }
 
 
@@ -214,6 +215,7 @@ module "vocabulary_get_dataset_id_vocabulary" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "vocabulary_post_dataset_id_vocabulary" {
@@ -223,6 +225,7 @@ module "vocabulary_post_dataset_id_vocabulary" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "vocabulary_put_dataset_id_vocabulary" {
@@ -232,6 +235,7 @@ module "vocabulary_put_dataset_id_vocabulary" {
   method       = "PUT"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "vocabulary_post_dataset_id_vocabulary_id_concat" {
@@ -241,6 +245,7 @@ module "vocabulary_post_dataset_id_vocabulary_id_concat" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary/{vocabularyId}/concat"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "vocabularyId"]
 }
 
 module "vocabulary_post_dataset_id_vocabulary_clone_dataset" {
@@ -250,6 +255,7 @@ module "vocabulary_post_dataset_id_vocabulary_clone_dataset" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary/clone/dataset"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "vocabulary_delete_dataset_id_vocabulary" {
@@ -259,6 +265,7 @@ module "vocabulary_delete_dataset_id_vocabulary" {
   method       = "DELETE"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "vocabulary_get_dataset_id_vocabulary_id" {
@@ -268,6 +275,7 @@ module "vocabulary_get_dataset_id_vocabulary_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary/{vocabularyId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "vocabulary_post_dataset_id_vocabulary_id" {
@@ -277,6 +285,7 @@ module "vocabulary_post_dataset_id_vocabulary_id" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary/{vocabularyId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "vocabulary_get_dataset_vocabulary_find" {
@@ -295,6 +304,7 @@ module "vocabulary_patch_dataset_by_id" {
   method       = "PATCH"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary/{vocabularyId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "vocabulary_delete_dataset_by_id" {
@@ -304,6 +314,7 @@ module "vocabulary_delete_dataset_by_id" {
   method       = "DELETE"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary/{vocabularyId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "vocabulary_post_dataset_vocabulary_find_by_ids" {
@@ -373,6 +384,7 @@ module "vocabulary_get_dataset_id_widget_id_vocabulary" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "vocabulary_get_dataset_id_widget_id_vocabulary_id" {
@@ -382,6 +394,7 @@ module "vocabulary_get_dataset_id_widget_id_vocabulary_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "widgetId"]
 }
 
 module "vocabulary_post_dataset_id_widget_id_vocabulary" {
@@ -391,6 +404,7 @@ module "vocabulary_post_dataset_id_widget_id_vocabulary" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "widgetId"]
 }
 
 module "vocabulary_post_dataset_id_widget_id_vocabulary_id" {
@@ -400,6 +414,7 @@ module "vocabulary_post_dataset_id_widget_id_vocabulary_id" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "widgetId"]
 }
 
 module "vocabulary_patch_dataset_id_widget_id_vocabulary_id" {
@@ -409,6 +424,7 @@ module "vocabulary_patch_dataset_id_widget_id_vocabulary_id" {
   method       = "PATCH"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "widgetId"]
 }
 
 module "vocabulary_delete_dataset_id_widget_id_vocabulary" {
@@ -418,6 +434,7 @@ module "vocabulary_delete_dataset_id_widget_id_vocabulary" {
   method       = "DELETE"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "widgetId"]
 }
 
 module "vocabulary_delete_dataset_id_widget_id_vocabulary_id" {
@@ -427,6 +444,7 @@ module "vocabulary_delete_dataset_id_widget_id_vocabulary_id" {
   method       = "DELETE"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "widgetId"]
 }
 
 module "vocabulary_get_dataset_id_widget_vocabulary_find" {
@@ -436,6 +454,7 @@ module "vocabulary_get_dataset_id_widget_vocabulary_find" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/vocabulary/find"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "vocabulary_post_dataset_id_widget_vocabulary_find_by_ids" {
@@ -445,6 +464,7 @@ module "vocabulary_post_dataset_id_widget_vocabulary_find_by_ids" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/vocabulary/find-by-ids"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 
@@ -505,6 +525,7 @@ module "vocabulary_get_dataset_id_layer_id_vocabulary" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 module "vocabulary_get_dataset_id_layer_id_vocabulary_id" {
@@ -514,6 +535,7 @@ module "vocabulary_get_dataset_id_layer_id_vocabulary_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 module "vocabulary_post_dataset_id_layer_id_vocabulary" {
@@ -523,6 +545,7 @@ module "vocabulary_post_dataset_id_layer_id_vocabulary" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 module "vocabulary_post_dataset_id_layer_id_vocabulary_id" {
@@ -532,6 +555,7 @@ module "vocabulary_post_dataset_id_layer_id_vocabulary_id" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 module "vocabulary_patch_dataset_id_layer_id_vocabulary_id" {
@@ -541,6 +565,7 @@ module "vocabulary_patch_dataset_id_layer_id_vocabulary_id" {
   method       = "PATCH"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 module "vocabulary_delete_dataset_id_layer_id_vocabulary" {
@@ -550,6 +575,7 @@ module "vocabulary_delete_dataset_id_layer_id_vocabulary" {
   method       = "DELETE"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 module "vocabulary_delete_dataset_id_layer_id_vocabulary_id" {
@@ -559,6 +585,7 @@ module "vocabulary_delete_dataset_id_layer_id_vocabulary_id" {
   method       = "DELETE"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 module "vocabulary_get_dataset_id_layer_vocabulary_find" {
@@ -568,6 +595,7 @@ module "vocabulary_get_dataset_id_layer_vocabulary_find" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/vocabulary/find"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "vocabulary_post_dataset_id_layer_vocabulary_find_by_ids" {
@@ -577,6 +605,7 @@ module "vocabulary_post_dataset_id_layer_vocabulary_find_by_ids" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/vocabulary/find-by-ids"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 
@@ -749,6 +778,7 @@ module "vocabulary_post_collection_id_resource" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30565/api/v1/collection/{collectionId}/resource"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["collectionId"]
 }
 
 module "vocabulary_delete_collection_id_resource_type_id" {
@@ -758,6 +788,7 @@ module "vocabulary_delete_collection_id_resource_type_id" {
   method       = "DELETE"
   uri          = "http://api.resourcewatch.org:30565/api/v1/collection/{collectionId}/resource/{resourceType}/{resourceId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["collectionId", "resourceType"]
 }
 
 module "vocabulary_post_collection_find_by_ids" {

@@ -100,7 +100,7 @@ data "aws_subnet_ids" "private_subnets" {
 data "aws_autoscaling_groups" "eks_autoscaling_groups" {
   filter {
     name   = "key"
-    values = ["kubernetes.io/cluster/core-k8s-cluster-dev"]
+    values = ["kubernetes.io/cluster/core-k8s-cluster-${var.environment}"]
   }
 
   filter {

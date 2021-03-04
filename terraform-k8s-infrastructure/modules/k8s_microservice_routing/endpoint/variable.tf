@@ -36,3 +36,9 @@ variable "backend_method" {
   description = "Backend endpoint method"
   default     = ""
 }
+
+variable "endpoint_request_parameters" {
+  type        = list(string)
+  description = "Additional request_parameters values to add to the API Gateway endpoint_integration and endpoint_method"
+  default     = []
+}

@@ -1,6 +1,6 @@
 resource "kubernetes_service" "resource_watch_manager_service" {
   metadata {
-    name = "resource-watch-manager"
+    name      = "resource-watch-manager"
     namespace = "rw"
   }
   spec {
@@ -256,6 +256,7 @@ module "resource_watch_manager_post_v1_dashboard_id_clone" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30558/api/dashboards/{dashboardId}/clone"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["dashboardId"]
 }
 
 module "resource_watch_manager_get_v1_partner" {
@@ -382,6 +383,7 @@ module "resource_watch_manager_post_topic_v1_id_clone_page" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30558/api/topics/{topicId}/clone"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["topicId"]
 }
 
 module "resource_watch_manager_post_topic_v1_topic_id_clone_dashboard" {
@@ -391,6 +393,7 @@ module "resource_watch_manager_post_topic_v1_topic_id_clone_dashboard" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30558/api/topics/{topicId}/clone-dashboard"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["topicId"]
 }
 
 module "resource_watch_manager_post_v1_topic" {

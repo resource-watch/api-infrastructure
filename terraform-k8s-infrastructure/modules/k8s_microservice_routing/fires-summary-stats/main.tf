@@ -145,6 +145,7 @@ module "fires_summary_stats_get_fire_alerts_summary_stats_polyname_iso" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30523/api/v1/fire-alerts/summary-stats/{polyname}/{iso}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["polyname"]
 }
 
 module "fires_summary_stats_get_fire_alerts_summary_stats_polyname_iso_adm1_code" {
@@ -154,6 +155,7 @@ module "fires_summary_stats_get_fire_alerts_summary_stats_polyname_iso_adm1_code
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30523/api/v1/fire-alerts/summary-stats/{polyname}/{iso}/{adm1Code}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["polyname", "iso"]
 }
 
 module "fires_summary_stats_get_fire_alerts_summary_stats_polyname_iso_adm1_code_adm2_code" {
@@ -163,6 +165,7 @@ module "fires_summary_stats_get_fire_alerts_summary_stats_polyname_iso_adm1_code
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30523/api/v1/fire-alerts/summary-stats/{polyname}/{iso}/{adm1Code}/{adm2Code}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["polyname", "iso", "adm1Code"]
 }
 
 module "fires_summary_stats_get_glad_alerts_summary_stats_adm_iso" {
@@ -181,6 +184,7 @@ module "fires_summary_stats_get_glad_alerts_summary_stats_adm_iso_adm1_code" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30523/api/v1/glad-alerts/summary-stats/admin/{iso}/{adm1Code}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso"]
 }
 
 module "fires_summary_stats_get_glad_alerts_summary_stats_adm_iso_adm1_code_adm2_code" {
@@ -190,4 +194,5 @@ module "fires_summary_stats_get_glad_alerts_summary_stats_adm_iso_adm1_code_adm2
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30523/api/v1/glad-alerts/summary-stats/admin/{iso}/{adm1Code}/{adm2Code}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso", "adm1Code"]
 }

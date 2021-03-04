@@ -1,6 +1,6 @@
 resource "kubernetes_service" "aqueduct_analysis_service" {
   metadata {
-    name = "aqueduct-analysis"
+    name      = "aqueduct-analysis"
     namespace = "aqueduct"
   }
   spec {

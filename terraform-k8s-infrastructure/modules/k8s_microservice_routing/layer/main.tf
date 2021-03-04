@@ -140,6 +140,7 @@ module "layer_get_dataset_id_layer" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30546/api/v1/dataset/{datasetId}/layer"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "layer_get_dataset_id" {
@@ -149,6 +150,7 @@ module "layer_get_dataset_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "layer_get_layer_id" {
@@ -167,6 +169,7 @@ module "layer_post_dataset_id_layer" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30546/api/v1/dataset/{datasetId}/layer"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "layer_delete_dataset_id_layer" {
@@ -176,6 +179,7 @@ module "layer_delete_dataset_id_layer" {
   method       = "DELETE"
   uri          = "http://api.resourcewatch.org:30546/api/v1/dataset/{datasetId}/layer"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "layer_patch_dataset_id_layer_id" {
@@ -185,6 +189,7 @@ module "layer_patch_dataset_id_layer_id" {
   method       = "PATCH"
   uri          = "http://api.resourcewatch.org:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "layer_patch_layer_change_environment_dataset_id_env" {
@@ -194,6 +199,7 @@ module "layer_patch_layer_change_environment_dataset_id_env" {
   method       = "PATCH"
   uri          = "http://api.resourcewatch.org:30546/api/v1/layer/change-environment/{datasetId}/{env}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "layer_delete_dataset_id_layer_id" {
@@ -203,6 +209,7 @@ module "layer_delete_dataset_id_layer_id" {
   method       = "DELETE"
   uri          = "http://api.resourcewatch.org:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "layer_post_layer_find_by_ids" {
@@ -221,4 +228,5 @@ module "layer_delete_layer_id_expire_cache" {
   method       = "DELETE"
   uri          = "http://api.resourcewatch.org:30546/api/v1/layer/{layerId}/expire-cache"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["layerId"]
 }

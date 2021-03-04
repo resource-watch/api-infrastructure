@@ -212,6 +212,7 @@ module "geostore_get_v1_geostore_id_view" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30532/api/v1/geostore/{geostoreId}/view"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["geostoreId"]
 }
 
 module "geostore_get_v1_geostore_admin_iso" {
@@ -239,6 +240,7 @@ module "geostore_get_v1_geostore_admin_iso_id1" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30532/api/v1/geostore/admin/{iso}/{id1}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso"]
 }
 
 module "geostore_get_v1_geostore_admin_iso_id1_id2" {
@@ -248,6 +250,7 @@ module "geostore_get_v1_geostore_admin_iso_id1_id2" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30532/api/v1/geostore/admin/{iso}/{id1}/{id2}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso", "id1"]
 }
 
 module "geostore_get_v1_geostore_use_name_id" {
@@ -257,6 +260,7 @@ module "geostore_get_v1_geostore_use_name_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30532/api/v1/geostore/use/{name}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["name"]
 }
 
 module "geostore_get_v1_geostore_wdpa_id" {
@@ -349,6 +353,7 @@ module "geostore_get_v1_coverage_intersect_use_name_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30532/api/v1/coverage/intersect/use/{name}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["name"]
 }
 
 module "geostore_get_v1_coverage_intersect_admin_iso" {
@@ -367,6 +372,7 @@ module "geostore_get_v1_coverage_intersect_admin_iso_id1" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30532/api/v1/coverage/intersect/admin/{iso}/{id1}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso"]
 }
 
 module "geostore_get_v1_coverage_intersect_wdpa_id" {
@@ -530,6 +536,7 @@ module "geostore_get_v2_geostore_id_view" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30532/api/v2/geostore/{geostoreId}/view"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["geostoreId"]
 }
 
 module "geostore_get_v2_geostore_admin_iso" {
@@ -557,6 +564,7 @@ module "geostore_get_v2_geostore_admin_iso_id1" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30532/api/v2/geostore/admin/{iso}/{id1}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso"]
 }
 
 module "geostore_get_v2_geostore_admin_iso_id1_id2" {
@@ -566,6 +574,7 @@ module "geostore_get_v2_geostore_admin_iso_id1_id2" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30532/api/v2/geostore/admin/{iso}/{id1}/{id2}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso", "id1"]
 }
 
 module "geostore_get_v2_geostore_use_name_id" {
@@ -575,6 +584,7 @@ module "geostore_get_v2_geostore_use_name_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30532/api/v2/geostore/use/{name}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["name"]
 }
 
 module "geostore_get_v2_geostore_wdpa_id" {
@@ -667,6 +677,7 @@ module "geostore_get_v2_coverage_intersect_use_name_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30532/api/v2/coverage/intersect/use/{name}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["name"]
 }
 
 module "geostore_get_v2_coverage_intersect_admin_iso" {
@@ -685,6 +696,7 @@ module "geostore_get_v2_coverage_intersect_admin_iso_id1" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30532/api/v2/coverage/intersect/admin/{iso}/{id1}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso"]
 }
 
 module "geostore_get_v2_coverage_intersect_wdpa_id" {

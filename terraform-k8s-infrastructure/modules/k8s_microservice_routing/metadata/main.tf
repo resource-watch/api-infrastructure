@@ -179,6 +179,7 @@ module "metadata_get_for_dataset" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/metadata"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "metadata_post_for_dataset" {
@@ -188,6 +189,7 @@ module "metadata_post_for_dataset" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/metadata"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "metadata_delete_for_dataset" {
@@ -197,6 +199,7 @@ module "metadata_delete_for_dataset" {
   method       = "DELETE"
   uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/metadata"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "metadata_post_for_dataset_clone" {
@@ -206,6 +209,7 @@ module "metadata_post_for_dataset_clone" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/metadata/clone"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "metadata_patch_for_dataset" {
@@ -215,6 +219,7 @@ module "metadata_patch_for_dataset" {
   method       = "PATCH"
   uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/metadata"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 // Widget
@@ -225,6 +230,7 @@ module "metadata_get_for_dataset_widget" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/widget/{widgetId}/metadata"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "widgetId"]
 }
 
 module "metadata_post_for_dataset_widget" {
@@ -234,6 +240,7 @@ module "metadata_post_for_dataset_widget" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/widget/{widgetId}/metadata"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "widgetId"]
 }
 
 module "metadata_delete_for_dataset_widget" {
@@ -243,6 +250,7 @@ module "metadata_delete_for_dataset_widget" {
   method       = "DELETE"
   uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/widget/{widgetId}/metadata"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "widgetId"]
 }
 
 module "metadata_patch_for_dataset_widget" {
@@ -252,6 +260,7 @@ module "metadata_patch_for_dataset_widget" {
   method       = "PATCH"
   uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/widget/{widgetId}/metadata"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "widgetId"]
 }
 
 // Layer
@@ -262,6 +271,7 @@ module "metadata_get_for_dataset_layer" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/layer/{layerId}/metadata"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 module "metadata_post_for_dataset_layer" {
@@ -271,6 +281,7 @@ module "metadata_post_for_dataset_layer" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/layer/{layerId}/metadata"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 module "metadata_delete_for_dataset_layer" {
@@ -280,6 +291,7 @@ module "metadata_delete_for_dataset_layer" {
   method       = "DELETE"
   uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/layer/{layerId}/metadata"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 module "metadata_patch_for_dataset_layer" {
@@ -289,6 +301,7 @@ module "metadata_patch_for_dataset_layer" {
   method       = "PATCH"
   uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/layer/{layerId}/metadata"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 // Find by ids
@@ -308,6 +321,7 @@ module "metadata_layer_post_find_by_ids" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/layer/metadata/find-by-ids"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "metadata_widget_post_find_by_ids" {
@@ -317,4 +331,5 @@ module "metadata_widget_post_find_by_ids" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/widget/metadata/find-by-ids"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }

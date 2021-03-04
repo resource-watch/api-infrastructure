@@ -495,6 +495,7 @@ module "document_adapter_post_dataset_id_concat" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30521/api/v1/document/{datasetId}/concat"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "document_adapter_post_dataset_id_reindex" {
@@ -504,6 +505,7 @@ module "document_adapter_post_dataset_id_reindex" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30521/api/v1/document/{datasetId}/reindex"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "document_adapter_post_dataset_id_append" {
@@ -513,6 +515,7 @@ module "document_adapter_post_dataset_id_append" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30521/api/v1/document/{datasetId}/append"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "document_adapter_post_dataset_id_data_overwrite" {
@@ -522,6 +525,7 @@ module "document_adapter_post_dataset_id_data_overwrite" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30521/api/v1/document/{datasetId}/data-overwrite"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "document_adapter_post_doc_dataset_provider" {
@@ -531,6 +535,7 @@ module "document_adapter_post_doc_dataset_provider" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30521/api/v1/document/{provider}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 
@@ -541,4 +546,5 @@ module "document_adapter_post_doc_dataset_provider_id" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30521/api/v1/document/{provider}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }

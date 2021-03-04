@@ -133,5 +133,6 @@ module "task_async_post_task_sync_dataset_by_dataset_id_hook" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30562/api/v1/task/sync-dataset/by-dataset/{datasetId}/hook"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 

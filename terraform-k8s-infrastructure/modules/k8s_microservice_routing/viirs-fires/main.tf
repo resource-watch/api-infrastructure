@@ -217,6 +217,7 @@ module "viirs_fires_v2_get_by_id1" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30564/api/v2/viirs-active-fires/admin/{iso}/{id1}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso"]
 }
 
 module "viirs_fires_v2_get_by_id2" {
@@ -226,6 +227,7 @@ module "viirs_fires_v2_get_by_id2" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30564/api/v2/viirs-active-fires/admin/{iso}/{id1}/{id2}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso", "id1"]
 }
 
 module "viirs_fires_v2_get_by_area" {
@@ -235,6 +237,7 @@ module "viirs_fires_v2_get_by_area" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30564/api/v2/viirs-active-fires/use/{name}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["name"]
 }
 
 module "viirs_fires_v2_get_wdpa" {
@@ -290,6 +293,7 @@ module "viirs_fires_v1_get_by_id1" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30564/api/v2/viirs-active-fires/admin/{iso}/{id1}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso"]
 }
 
 module "viirs_fires_v1_get_by_id2" {
@@ -299,6 +303,7 @@ module "viirs_fires_v1_get_by_id2" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30564/api/v2/viirs-active-fires/admin/{iso}/{id1}/{id2}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso", "id1"]
 }
 
 module "viirs_fires_v1_get_by_area" {
@@ -308,6 +313,7 @@ module "viirs_fires_v1_get_by_area" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30564/api/v2/viirs-active-fires/use/{name}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["name"]
 }
 
 module "viirs_fires_v1_get_wdpa" {

@@ -169,6 +169,7 @@ module "dataset_post_dataset_id_clone" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30516/api/v1/dataset/{datasetId}/clone"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "dataset_post_dataset_id_flush" {
@@ -178,6 +179,7 @@ module "dataset_post_dataset_id_flush" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30516/api/v1/dataset/{datasetId}/flush"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "dataset_post_dataset_id_recover" {
@@ -187,6 +189,7 @@ module "dataset_post_dataset_id_recover" {
   method       = "POST"
   uri          = "http://api.resourcewatch.org:30516/api/v1/dataset/{datasetId}/recover"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "dataset_get_dataset_id_last_updated" {
@@ -196,6 +199,7 @@ module "dataset_get_dataset_id_last_updated" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30516/api/v1/dataset/{datasetId}/lastUpdated"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
 module "dataset_post_dataset_find_by_ids" {

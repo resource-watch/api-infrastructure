@@ -1,6 +1,6 @@
 resource "kubernetes_service" "arcgis_proxy_service" {
   metadata {
-    name = "arcgis-proxy"
+    name      = "arcgis-proxy"
     namespace = "gfw"
   }
   spec {

@@ -123,6 +123,7 @@ module "gee_tiles_get_layer_id_tile_gee_z_x_y" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30531/api/v1/layer/{layerId}/tile/gee/{z}/{x}/{y}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["z", "x"]
 }
 
 module "gee_tiles_delete_gee_layer_gee_id_expire_cache" {
@@ -133,4 +134,5 @@ module "gee_tiles_delete_gee_layer_gee_id_expire_cache" {
   backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30531/api/v1/layer/gee/{layerId}/expire-cache"
   vpc_link       = var.vpc_link
+  endpoint_request_parameters = ["layerId"]
 }

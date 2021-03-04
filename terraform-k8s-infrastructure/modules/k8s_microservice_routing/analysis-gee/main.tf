@@ -1,6 +1,6 @@
 resource "kubernetes_service" "analysis_gee_service" {
   metadata {
-    name = "analysis-gee"
+    name      = "analysis-gee"
     namespace = "gfw"
 
   }
@@ -922,6 +922,7 @@ module "analysis_gee_get_v1_umd_loss_gain_use_name_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v1/umd-loss-gain/use/{name}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["name"]
 }
 
 module "analysis_gee_get_v1_umd_loss_gain_wdpa_id" {
@@ -958,6 +959,7 @@ module "analysis_gee_get_v1_whrc_biomass_use_name_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v1/whrc-biomass/use/{name}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["name"]
 }
 
 module "analysis_gee_get_v1_whrc_biomass_wdpa_id" {
@@ -985,6 +987,7 @@ module "analysis_gee_get_v1_whrc_biomass_admin_iso_admin" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v1/whrc-biomass/admin/{iso}/{admin}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso"]
 }
 
 module "analysis_gee_get_v1_whrc_biomass_admin_iso_admin_admin2" {
@@ -994,6 +997,7 @@ module "analysis_gee_get_v1_whrc_biomass_admin_iso_admin_admin2" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v1/whrc-biomass/admin/{iso}/{admin}/{admin2}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso", "admin"]
 }
 
 module "analysis_gee_post_v1_mangrove_biomass" {
@@ -1021,6 +1025,7 @@ module "analysis_gee_get_v1_mangrove_biomass_use_name_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v1/mangrove-biomass/use/{name}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["name"]
 }
 
 module "analysis_gee_get_v1_mangrove_biomass_wdpa_id" {
@@ -1048,6 +1053,7 @@ module "analysis_gee_get_v1_mangrove_biomass_admin_iso_admin" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v1/mangrove-biomass/admin/{iso}/{admin}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso"]
 }
 
 module "analysis_gee_get_v1_mangrove_biomass_admin_iso_admin_admin2" {
@@ -1057,6 +1063,7 @@ module "analysis_gee_get_v1_mangrove_biomass_admin_iso_admin_admin2" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v1/mangrove-biomass/admin/{iso}/{admin}/{admin2}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso", "admin"]
 }
 
 module "analysis_gee_get_v1_population" {
@@ -1084,6 +1091,7 @@ module "analysis_gee_get_v1_population_use_name_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v1/population/use/{name}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["name"]
 }
 
 module "analysis_gee_get_v1_population_wdpa_id" {
@@ -1111,6 +1119,7 @@ module "analysis_gee_get_v1_population_admin_iso_admin" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v1/population/admin/{iso}/{admin}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso"]
 }
 
 module "analysis_gee_get_v1_population_admin_iso_admin_admin2" {
@@ -1120,6 +1129,7 @@ module "analysis_gee_get_v1_population_admin_iso_admin_admin2" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v1/population/admin/{iso}/{admin}/{admin2}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso", "admin"]
 }
 
 module "analysis_gee_get_v1_soil_carbon" {
@@ -1138,6 +1148,7 @@ module "analysis_gee_get_v1_soil_carbon_use_name_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v1/soil-carbon/use/{name}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["name"]
 }
 
 module "analysis_gee_get_v1_soil_carbon_wdpa_id" {
@@ -1165,6 +1176,7 @@ module "analysis_gee_get_v1_soil_carbon_admin_iso_admin" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v1/soil-carbon/admin/{iso}/{admin}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso"]
 }
 
 module "analysis_gee_get_v1_soil_carbon_admin_iso_admin_admin2" {
@@ -1174,6 +1186,7 @@ module "analysis_gee_get_v1_soil_carbon_admin_iso_admin_admin2" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v1/soil-carbon/admin/{iso}/{admin}/{admin2}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso", "admin"]
 }
 
 module "analysis_gee_post_v1_forma250gfw" {
@@ -1210,6 +1223,7 @@ module "analysis_gee_get_v1_forma250gfw_use_name_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v1/forma250gfw/use/{name}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["name"]
 }
 
 module "analysis_gee_get_v1_forma250gfw_wdpa_id" {
@@ -1237,6 +1251,7 @@ module "analysis_gee_get_v1_forma250gfw_admin_iso_admin" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v1/forma250gfw/admin/{iso}/{admin}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso"]
 }
 
 module "analysis_gee_get_v1_forma250gfw_admin_iso_admin_admin2" {
@@ -1246,6 +1261,7 @@ module "analysis_gee_get_v1_forma250gfw_admin_iso_admin_admin2" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v1/forma250gfw/admin/{iso}/{admin}/{admin2}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso", "admin"]
 }
 
 module "analysis_gee_get_v1_biomass_loss" {
@@ -1273,6 +1289,7 @@ module "analysis_gee_get_v1_biomass_loss_use_name_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v1/biomass-loss/use/{name}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["name"]
 }
 
 module "analysis_gee_get_v1_biomass_loss_wdpa_id" {
@@ -1300,6 +1317,7 @@ module "analysis_gee_get_v1_biomass_loss_admin_iso_admin" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v1/biomass-loss/admin/{iso}/{admin}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso"]
 }
 
 module "analysis_gee_get_v1_biomass_loss_admin_iso_admin_admin2" {
@@ -1309,6 +1327,7 @@ module "analysis_gee_get_v1_biomass_loss_admin_iso_admin_admin2" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v1/biomass-loss/admin/{iso}/{admin}/{admin2}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso", "admin"]
 }
 
 module "analysis_gee_get_v1_loss_by_landcover" {
@@ -1354,6 +1373,7 @@ module "analysis_gee_get_v1_lansat_tiles_year_z_x_y" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v1/landsat-tiles/{year}/{z}/{x}/{y}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["year", "z", "x"]
 }
 
 module "analysis_gee_get_v1_sentinel_tiles" {
@@ -1417,6 +1437,7 @@ module "analysis_gee_get_v2_nlcd_landcover_use_name_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v2/nlcd-landcover/use/{name}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["name"]
 }
 
 module "analysis_gee_get_v2_nlcd_landcover_wdpa_id" {
@@ -1444,6 +1465,7 @@ module "analysis_gee_get_v2_nlcd_landcover_admin_iso_admin" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v2/nlcd-landcover/admin/{iso}/{admin}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso"]
 }
 
 module "analysis_gee_get_v2_nlcd_landcover_admin_iso_admin_admin2" {
@@ -1453,6 +1475,7 @@ module "analysis_gee_get_v2_nlcd_landcover_admin_iso_admin_admin2" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v2/nlcd-landcover/admin/{iso}/{admin}/{admin2}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso", "admin"]
 }
 
 module "analysis_gee_get_v2_biomass_loss" {
@@ -1480,6 +1503,7 @@ module "analysis_gee_get_v2_biomass_loss_use_name_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v2/biomass-loss/use/{name}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["name"]
 }
 
 module "analysis_gee_get_v2_biomass_loss_wdpa_id" {
@@ -1507,6 +1531,7 @@ module "analysis_gee_get_v2_biomass_loss_admin_iso_admin" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v2/biomass-loss/admin/{iso}/{admin}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso"]
 }
 
 module "analysis_gee_get_v2_lansat_tiles_year_z_x_y" {
@@ -1516,6 +1541,7 @@ module "analysis_gee_get_v2_lansat_tiles_year_z_x_y" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v2/landsat-tiles/{year}/{z}/{x}/{y}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["year", "z", "x"]
 }
 
 module "analysis_gee_get_v2_biomass_loss_admin_iso_admin_admin2" {
@@ -1525,4 +1551,5 @@ module "analysis_gee_get_v2_biomass_loss_admin_iso_admin_admin2" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30500/api/v2/biomass-loss/admin/{iso}/{admin}/{admin2}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso", "admin"]
 }

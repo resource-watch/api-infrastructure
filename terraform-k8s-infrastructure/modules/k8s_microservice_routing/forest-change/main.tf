@@ -1,6 +1,6 @@
 resource "kubernetes_service" "forest_change_service" {
   metadata {
-    name = "forest-change"
+    name      = "forest-change"
     namespace = "gfw"
   }
   spec {
@@ -172,6 +172,7 @@ module "forest_change_get_v1_terrai_alerts_admin_iso_code_admin_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30524/api/v2/ms/terrai-alerts/admin/{isoCode}/{adminId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["isoCode"]
 }
 
 module "forest_change_get_v1_terrai_alerts_admin_iso_code_admin_dist_id_id" {
@@ -181,6 +182,7 @@ module "forest_change_get_v1_terrai_alerts_admin_iso_code_admin_dist_id_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30524/api/v2/ms/terrai-alerts/admin/{isoCode}/{adminId}/{distId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["isoCode", "adminId"]
 }
 
 module "forest_change_get_v1_terrai_alerts_use_type_use_id" {
@@ -190,6 +192,7 @@ module "forest_change_get_v1_terrai_alerts_use_type_use_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30524/api/v2/ms/terrai-alerts/use/{useType}/{useId}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["useType"]
 }
 
 module "forest_change_get_v1_terrai_alerts_wdpa_id" {

@@ -1,6 +1,6 @@
 resource "kubernetes_service" "gfw_guira_service" {
   metadata {
-    name = "gfw-guira"
+    name      = "gfw-guira"
     namespace = "gfw"
   }
   spec {
@@ -223,6 +223,7 @@ module "gfw_guira_get_v2_guira_loss_admin_iso_id_1" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30535/api/v2/guira-loss/admin/{iso}/{id1}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso"]
 }
 
 module "gfw_guira_get_v2_guira_loss_admin_iso_id_1_id_2" {
@@ -232,6 +233,7 @@ module "gfw_guira_get_v2_guira_loss_admin_iso_id_1_id_2" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30535/api/v2/guira-loss/admin/{iso}/{id1}/{id2}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso", "id1"]
 }
 
 module "gfw_guira_get_v2_guira_loss_use_name_id" {
@@ -241,6 +243,7 @@ module "gfw_guira_get_v2_guira_loss_use_name_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30535/api/v2/guira-loss/use/{name}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["name"]
 }
 
 module "gfw_guira_get_v2_guira_loss_wdpa_id" {
@@ -295,6 +298,7 @@ module "gfw_guira_get_v1_guira_loss_admin_iso_id_1" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30535/api/v1/guira-loss/admin/{iso}/{id1}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["iso"]
 }
 
 module "gfw_guira_get_v1_guira_loss_use_name_id" {
@@ -304,6 +308,7 @@ module "gfw_guira_get_v1_guira_loss_use_name_id" {
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30535/api/v1/guira-loss/use/{name}/{id}"
   vpc_link     = var.vpc_link
+  endpoint_request_parameters = ["name"]
 }
 
 module "gfw_guira_get_v1_guira_loss_wdpa_id" {
