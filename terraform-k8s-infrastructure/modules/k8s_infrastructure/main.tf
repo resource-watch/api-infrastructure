@@ -44,9 +44,9 @@ resource "kubectl_manifest" "metrics-server" {
 // https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Container-Insights-setup-EKS-quickstart.html
 // Container insights
 // File has changes - see link above for details
-resource "kubectl_manifest" "container_insights" {
-  yaml_body = templatefile("${path.module}/container_insights/container_insights.yaml.tmpl", {
-    aws_region : var.aws_region,
-    cluster_name : var.cluster_name
-  })
-}
+# resource "kubectl_manifest" "container_insights" {
+#   yaml_body = templatefile("${path.module}/container_insights/container_insights.yaml.tmpl", {
+#     aws_region : var.aws_region,
+#     cluster_name : var.cluster_name
+#   })
+# }
