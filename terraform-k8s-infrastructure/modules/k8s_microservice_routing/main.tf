@@ -86,6 +86,16 @@ module "rw_api_misc_api_gateway" {
   environment   = var.environment
 }
 
+module "rw_api_ingress" {
+  source = "./ingress_load_balancer"
+  certificate_arn = aws_acm_certificate_validation.aws_env_resourcewatch_org_domain_cert_validation.certificate_arn
+  core_origin = module.rw_api_core_api_gateway.aws_api_gateway_deployment_base_url
+  misc_origin = module.rw_api_misc_api_gateway.aws_api_gateway_deployment_base_url
+  gfw_origin = module.rw_api_gfw_api_gateway.aws_api_gateway_deployment_base_url
+
+  aliases = ["${var.dns_prefix}-api.globalforestwatch.org", "aws-${var.dns_prefix}.${data.cloudflare_zones.resourcewatch.zones[0].name}"]
+}
+
 #
 # DNS Management
 #
@@ -97,40 +107,40 @@ data "cloudflare_zones" "resourcewatch" {
   }
 }
 
-//// aws-{env}.resourcewatch.org
-//resource "aws_acm_certificate" "aws_env_resourcewatch_org_domain_cert" {
-//  domain_name       = "aws-${var.dns_prefix}.${data.cloudflare_zones.resourcewatch.zones[0].name}"
-//  validation_method = "DNS"
-//
-//  lifecycle {
-//    create_before_destroy = true
-//  }
-//}
-//
-//resource "cloudflare_record" "aws_env_resourcewatch_org_dns_validation" {
-//  zone_id = data.cloudflare_zones.resourcewatch.zones[0].id
-//  name    = tolist(aws_acm_certificate.aws_env_resourcewatch_org_domain_cert.domain_validation_options)[0].resource_record_name
-//  value   = trim(tolist(aws_acm_certificate.aws_env_resourcewatch_org_domain_cert.domain_validation_options)[0].resource_record_value, ".")
-//  type    = "CNAME"
-//  ttl     = 120
-//}
-//
-//resource "cloudflare_record" "aws_env_resourcewatch_org_dns" {
-//  zone_id = data.cloudflare_zones.resourcewatch.zones[0].id
-//  name    = "aws-${var.dns_prefix}.${data.cloudflare_zones.resourcewatch.zones[0].name}"
-//  value   = aws_api_gateway_domain_name.aws_env_resourcewatch_org_gateway_domain_name.cloudfront_domain_name
-//  type    = "CNAME"
-//  ttl     = 120
-//}
-//
-//resource "aws_acm_certificate_validation" "aws_env_resourcewatch_org_domain_cert_validation" {
-//  certificate_arn = aws_acm_certificate.aws_env_resourcewatch_org_domain_cert.arn
-//
-//  depends_on = [
-//    cloudflare_record.aws_env_resourcewatch_org_dns_validation,
-//  ]
-//}
-//
+// aws-{env}.resourcewatch.org
+resource "aws_acm_certificate" "aws_env_resourcewatch_org_domain_cert" {
+  domain_name       = "aws-${var.dns_prefix}.${data.cloudflare_zones.resourcewatch.zones[0].name}"
+  validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "cloudflare_record" "aws_env_resourcewatch_org_dns_validation" {
+  zone_id = data.cloudflare_zones.resourcewatch.zones[0].id
+  name    = tolist(aws_acm_certificate.aws_env_resourcewatch_org_domain_cert.domain_validation_options)[0].resource_record_name
+  value   = trim(tolist(aws_acm_certificate.aws_env_resourcewatch_org_domain_cert.domain_validation_options)[0].resource_record_value, ".")
+  type    = "CNAME"
+  ttl     = 120
+}
+
+resource "cloudflare_record" "aws_env_resourcewatch_org_dns" {
+  zone_id = data.cloudflare_zones.resourcewatch.zones[0].id
+  name    = "aws-${var.dns_prefix}.${data.cloudflare_zones.resourcewatch.zones[0].name}"
+  value   = module.rw_api_ingress.cloudfront_distribution_domain_name
+  type    = "CNAME"
+  ttl     = 120
+}
+
+resource "aws_acm_certificate_validation" "aws_env_resourcewatch_org_domain_cert_validation" {
+  certificate_arn = aws_acm_certificate.aws_env_resourcewatch_org_domain_cert.arn
+
+  depends_on = [
+    cloudflare_record.aws_env_resourcewatch_org_dns_validation,
+  ]
+}
+
 //resource "aws_api_gateway_domain_name" "aws_env_resourcewatch_org_gateway_domain_name" {
 //  certificate_arn = aws_acm_certificate_validation.aws_env_resourcewatch_org_domain_cert_validation.certificate_arn
 //  domain_name     = "aws-${var.dns_prefix}.${data.cloudflare_zones.resourcewatch.zones[0].name}"
