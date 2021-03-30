@@ -282,18 +282,11 @@ resource "aws_api_gateway_resource" "doc_dataset_resource" {
   path_part   = "doc-dataset"
 }
 
-// /v1/doc-dataset/{provider}
-resource "aws_api_gateway_resource" "doc_dataset_provider_resource" {
+// /v1/doc-dataset/{proxy+}
+resource "aws_api_gateway_resource" "doc_dataset_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.doc_dataset_resource.id
-  path_part   = "{provider}"
-}
-
-// /v1/doc-dataset/{provider}/{id}
-resource "aws_api_gateway_resource" "doc_dataset_provider_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.doc_dataset_provider_resource.id
-  path_part   = "{id}"
+  path_part   = "{proxy+}"
 }
 
 module "document_adapter_get_query_csv_dataset_id" {
@@ -528,23 +521,11 @@ module "document_adapter_post_dataset_id_data_overwrite" {
   endpoint_request_parameters = ["datasetId"]
 }
 
-module "document_adapter_post_doc_dataset_provider" {
+module "document_adapter_any_doc_dataset_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.doc_dataset_provider_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30521/api/v1/document/{provider}"
+  api_resource = aws_api_gateway_resource.doc_dataset_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30521/api/v1/document/{proxy}"
   vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["datasetId"]
-}
-
-
-module "document_adapter_post_doc_dataset_provider_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.doc_dataset_provider_id_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30521/api/v1/document/{provider}/{id}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["datasetId"]
 }

@@ -61,109 +61,18 @@ resource "aws_api_gateway_resource" "converter_resource" {
   path_part   = "converter"
 }
 
-// /v1/converter/fs2SQL
-resource "aws_api_gateway_resource" "converter_fs2sql_resource" {
+// /v1/converter/{proxy+}
+resource "aws_api_gateway_resource" "converter_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.converter_resource.id
-  path_part   = "fs2SQL"
+  path_part   = "{proxy+}"
 }
 
-// /v1/converter/sql2FS
-resource "aws_api_gateway_resource" "converter_sql2fs_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.converter_resource.id
-  path_part   = "sql2FS"
-}
-
-// /v1/converter/checkSQL
-resource "aws_api_gateway_resource" "converter_check_sql_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.converter_resource.id
-  path_part   = "checkSQL"
-}
-
-// /v1/converter/sql2SQL
-resource "aws_api_gateway_resource" "converter_sql2sql_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.converter_resource.id
-  path_part   = "sql2SQL"
-}
-
-// /v1/converter/json2SQL
-resource "aws_api_gateway_resource" "converter_json2sql_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.converter_resource.id
-  path_part   = "json2SQL"
-}
-
-module "converter_get_converter_fs2sql" {
+module "converter_any_converter_fs2sql" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.converter_fs2sql_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30514/api/v1/convert/fs2SQL"
-  vpc_link     = var.vpc_link
-}
-
-module "converter_post_converter_fs2sql" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.converter_fs2sql_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30514/api/v1/convert/fs2SQL"
-  vpc_link     = var.vpc_link
-}
-
-module "converter_get_converter_sql2fs" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.converter_sql2fs_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30514/api/v1/convert/sql2FS"
-  vpc_link     = var.vpc_link
-}
-
-module "converter_post_converter_sql2fs" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.converter_sql2fs_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30514/api/v1/convert/sql2FS"
-  vpc_link     = var.vpc_link
-}
-
-module "converter_get_converter_check_sql" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.converter_check_sql_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30514/api/v1/convert/checkSQL"
-  vpc_link     = var.vpc_link
-}
-
-module "converter_get_converter_sql2sql" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.converter_sql2sql_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30514/api/v1/convert/sql2SQL"
-  vpc_link     = var.vpc_link
-}
-
-module "converter_post_converter_sql2sql" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.converter_sql2sql_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30514/api/v1/convert/sql2SQL"
-  vpc_link     = var.vpc_link
-}
-
-module "converter_post_converter_json2sql" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.converter_json2sql_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30514/api/v1/convert/json2SQL"
+  api_resource = aws_api_gateway_resource.converter_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30514/api/v1/convert/{proxy}"
   vpc_link     = var.vpc_link
 }

@@ -55,50 +55,32 @@ data "aws_api_gateway_resource" "v1_resource" {
 }
 
 // /v1/biomass-loss
-resource "aws_api_gateway_resource" "biomass_loss_resource" {
+data "aws_api_gateway_resource" "biomass_loss_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
-  path_part   = "biomass-loss"
+  path        = "/v1/biomass-loss"
 }
 
 // /v1/biomass-loss/admin
 resource "aws_api_gateway_resource" "biomass_loss_admin_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.biomass_loss_resource.id
+  parent_id   = data.aws_api_gateway_resource.biomass_loss_resource.id
   path_part   = "admin"
 }
 
-// /v1/biomass-loss/admin/{iso}
-resource "aws_api_gateway_resource" "biomass_loss_admin_iso_resource" {
+// /v1/biomass-loss/admin/{proxy+}
+resource "aws_api_gateway_resource" "biomass_loss_admin_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.biomass_loss_admin_resource.id
-  path_part   = "{iso}"
-}
-
-// /v1/biomass-loss/admin/{iso}/{id}
-resource "aws_api_gateway_resource" "biomass_loss_admin_iso_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.biomass_loss_admin_iso_resource.id
-  path_part   = "{id}"
+  path_part   = "{proxy+}"
 }
 
 
 # Modules
-module "biomass_v1_get_biomass_loss_admin_iso" {
+module "biomass_v1_any_biomass_loss_admin_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.biomass_loss_admin_iso_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30533/api/v1/biomass-loss/admin/{iso}"
+  api_resource = aws_api_gateway_resource.biomass_loss_admin_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30533/api/v1/biomass-loss/admin/{proxy}"
   vpc_link     = var.vpc_link
-}
-
-module "biomass_v1_get_biomass_loss_admin_iso_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.biomass_loss_admin_iso_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30533/api/v1/biomass-loss/admin/{iso}/{id}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["iso"]
 }

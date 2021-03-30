@@ -24,7 +24,6 @@ output "endpoints" {
     module.document_adapter_post_dataset_id_reindex.endpoint_gateway_integration,
     module.document_adapter_post_dataset_id_append.endpoint_gateway_integration,
     module.document_adapter_post_dataset_id_data_overwrite.endpoint_gateway_integration,
-    module.document_adapter_post_doc_dataset_provider.endpoint_gateway_integration,
-    module.document_adapter_post_doc_dataset_provider_id.endpoint_gateway_integration,
+    module.document_adapter_any_doc_dataset_proxy.endpoint_gateway_integration
   ]
 }

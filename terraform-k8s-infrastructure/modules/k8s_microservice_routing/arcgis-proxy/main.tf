@@ -61,25 +61,18 @@ resource "aws_api_gateway_resource" "v1_arcgis_proxy_resource" {
   path_part   = "arcgis-proxy"
 }
 
-// /v1/arcgis-proxy/ImageServer
-resource "aws_api_gateway_resource" "v1_arcgis_proxy_image_server_resource" {
+// /v1/arcgis-proxy/{proxy+}
+resource "aws_api_gateway_resource" "v1_arcgis_proxy_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.v1_arcgis_proxy_resource.id
-  path_part   = "arcgis-ImageServer"
+  path_part   = "{proxy+}"
 }
 
-// /v1/arcgis-proxy/ImageServer/computeHistograms
-resource "aws_api_gateway_resource" "v1_arcgis_proxy_image_server_compute_histograms_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_arcgis_proxy_image_server_resource.id
-  path_part   = "computeHistograms"
-}
-
-module "arcgis_proxy_get_v1_arcgis_proxy_image_server_compute_histograms" {
+module "arcgis_proxy_any_v1_arcgis_proxy_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_arcgis_proxy_image_server_compute_histograms_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30503/api/v1/arcgis-proxy/ImageServer/computeHistograms"
+  api_resource = aws_api_gateway_resource.v1_arcgis_proxy_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30503/api/v1/arcgis-proxy/{proxy}"
   vpc_link     = var.vpc_link
 }

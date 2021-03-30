@@ -62,7 +62,7 @@ resource "aws_api_gateway_resource" "documentation_resource" {
   path_part   = "documentation"
 }
 
-// /documentation
+// /documentation/{proxy+}
 resource "aws_api_gateway_resource" "documentation_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.documentation_resource.id

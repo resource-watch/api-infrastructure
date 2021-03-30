@@ -382,6 +382,10 @@ module "biomass" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
   eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+
+  depends_on = [
+    module.analysis-gee
+  ]
 }
 
 module "carto" {
@@ -504,6 +508,10 @@ module "gee-tiles" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
   eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+
+  depends_on = [
+    module.layer
+  ]
 }
 
 module "geostore" {

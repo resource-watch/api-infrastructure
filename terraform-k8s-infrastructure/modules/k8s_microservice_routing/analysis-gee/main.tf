@@ -110,39 +110,11 @@ resource "aws_api_gateway_resource" "v1_umd_loss_gain_resource" {
   path_part   = "umd-loss-gain"
 }
 
-// /v1/umd-loss-gain/use
-resource "aws_api_gateway_resource" "v1_umd_loss_gain_use_resource" {
+// /v1/umd-loss-gain/{proxy+}
+resource "aws_api_gateway_resource" "v1_umd_loss_gain_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.v1_umd_loss_gain_resource.id
-  path_part   = "use"
-}
-
-// /v1/umd-loss-gain/use/{name}
-resource "aws_api_gateway_resource" "v1_umd_loss_gain_use_name_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_umd_loss_gain_use_resource.id
-  path_part   = "{name}"
-}
-
-// /v1/umd-loss-gain/use/{name}/{id}
-resource "aws_api_gateway_resource" "v1_umd_loss_gain_use_name_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_umd_loss_gain_use_name_resource.id
-  path_part   = "{id}"
-}
-
-// /v1/umd-loss-gain/wdpa
-resource "aws_api_gateway_resource" "v1_umd_loss_gain_wdpa_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_umd_loss_gain_resource.id
-  path_part   = "use"
-}
-
-// /v1/umd-loss-gain/wdpa/{id}
-resource "aws_api_gateway_resource" "v1_umd_loss_gain_wdpa_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_umd_loss_gain_wdpa_resource.id
-  path_part   = "{id}"
+  path_part   = "{proxy+}"
 }
 
 // /v1/whrc-biomass
@@ -152,67 +124,11 @@ resource "aws_api_gateway_resource" "v1_whrc_biomass_resource" {
   path_part   = "whrc-biomass"
 }
 
-// /v1/whrc-biomass/use
-resource "aws_api_gateway_resource" "v1_whrc_biomass_use_resource" {
+// /v1/whrc-biomass/{proxy+}
+resource "aws_api_gateway_resource" "v1_whrc_biomass_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.v1_whrc_biomass_resource.id
-  path_part   = "use"
-}
-
-// /v1/whrc-biomass/use/{name}
-resource "aws_api_gateway_resource" "v1_whrc_biomass_use_name_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_whrc_biomass_use_resource.id
-  path_part   = "{name}"
-}
-
-// /v1/whrc-biomass/use/{name}/{id}
-resource "aws_api_gateway_resource" "v1_whrc_biomass_use_name_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_whrc_biomass_use_name_resource.id
-  path_part   = "{id}"
-}
-
-// /v1/whrc-biomass/wdpa
-resource "aws_api_gateway_resource" "v1_whrc_biomass_wdpa_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_whrc_biomass_resource.id
-  path_part   = "wdpa"
-}
-
-// /v1/whrc-biomass/wdpa/{id}
-resource "aws_api_gateway_resource" "v1_whrc_biomass_wdpa_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_whrc_biomass_wdpa_resource.id
-  path_part   = "{id}"
-}
-
-// /v1/whrc-biomass/admin
-resource "aws_api_gateway_resource" "v1_whrc_biomass_admin_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_whrc_biomass_resource.id
-  path_part   = "admin"
-}
-
-// /v1/whrc-biomass/admin/{iso}
-resource "aws_api_gateway_resource" "v1_whrc_biomass_admin_iso_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_whrc_biomass_admin_resource.id
-  path_part   = "{iso}"
-}
-
-// /v1/whrc-biomass/admin/{iso}/{admin}
-resource "aws_api_gateway_resource" "v1_whrc_biomass_admin_iso_admin_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_whrc_biomass_admin_iso_resource.id
-  path_part   = "{admin}"
-}
-
-// /v1/whrc-biomass/admin/{iso}/{admin}/{admin2}
-resource "aws_api_gateway_resource" "v1_whrc_biomass_admin_iso_admin_admin2_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_whrc_biomass_admin_iso_admin_resource.id
-  path_part   = "{admin2}"
+  path_part   = "{proxy+}"
 }
 
 // /v1/mangrove-biomass
@@ -222,67 +138,11 @@ resource "aws_api_gateway_resource" "v1_mangrove_biomass_resource" {
   path_part   = "mangrove-biomass"
 }
 
-// /v1/mangrove-biomass/use
-resource "aws_api_gateway_resource" "v1_mangrove_biomass_use_resource" {
+// /v1/mangrove-biomass/{proxy+}
+resource "aws_api_gateway_resource" "v1_mangrove_biomass_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.v1_mangrove_biomass_resource.id
-  path_part   = "use"
-}
-
-// /v1/mangrove-biomass/use/{name}
-resource "aws_api_gateway_resource" "v1_mangrove_biomass_use_name_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_mangrove_biomass_use_resource.id
-  path_part   = "{name}"
-}
-
-// /v1/mangrove-biomass/use/{name}/{id}
-resource "aws_api_gateway_resource" "v1_mangrove_biomass_use_name_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_mangrove_biomass_use_name_resource.id
-  path_part   = "{id}"
-}
-
-// /v1/mangrove-biomass/wdpa
-resource "aws_api_gateway_resource" "v1_mangrove_biomass_wdpa_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_mangrove_biomass_resource.id
-  path_part   = "wdpa"
-}
-
-// /v1/mangrove-biomass/wdpa/{id}
-resource "aws_api_gateway_resource" "v1_mangrove_biomass_wdpa_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_mangrove_biomass_wdpa_resource.id
-  path_part   = "{id}"
-}
-
-// /v1/mangrove-biomass/admin
-resource "aws_api_gateway_resource" "v1_mangrove_biomass_admin_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_mangrove_biomass_resource.id
-  path_part   = "admin"
-}
-
-// /v1/mangrove-biomass/admin/{iso}
-resource "aws_api_gateway_resource" "v1_mangrove_biomass_admin_iso_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_mangrove_biomass_admin_resource.id
-  path_part   = "{iso}"
-}
-
-// /v1/mangrove-biomass/admin/{iso}/{admin}
-resource "aws_api_gateway_resource" "v1_mangrove_biomass_admin_iso_admin_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_mangrove_biomass_admin_iso_resource.id
-  path_part   = "{admin}"
-}
-
-// /v1/mangrove-biomass/admin/{iso}/{admin}/{admin2}
-resource "aws_api_gateway_resource" "v1_mangrove_biomass_admin_iso_admin_admin2_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_mangrove_biomass_admin_iso_admin_resource.id
-  path_part   = "{admin2}"
+  path_part   = "{proxy+}"
 }
 
 // /v1/population
@@ -292,67 +152,11 @@ resource "aws_api_gateway_resource" "v1_population_resource" {
   path_part   = "population"
 }
 
-// /v1/population/use
-resource "aws_api_gateway_resource" "v1_population_use_resource" {
+// /v1/population/{proxy+}
+resource "aws_api_gateway_resource" "v1_population_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.v1_population_resource.id
-  path_part   = "use"
-}
-
-// /v1/population/use/{name}
-resource "aws_api_gateway_resource" "v1_population_use_name_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_population_use_resource.id
-  path_part   = "{name}"
-}
-
-// /v1/population/use/{name}/{id}
-resource "aws_api_gateway_resource" "v1_population_use_name_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_population_use_name_resource.id
-  path_part   = "{id}"
-}
-
-// /v1/population/wdpa
-resource "aws_api_gateway_resource" "v1_population_wdpa_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_population_resource.id
-  path_part   = "wdpa"
-}
-
-// /v1/population/wdpa/{id}
-resource "aws_api_gateway_resource" "v1_population_wdpa_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_population_wdpa_resource.id
-  path_part   = "{id}"
-}
-
-// /v1/population/admin
-resource "aws_api_gateway_resource" "v1_population_admin_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_population_resource.id
-  path_part   = "admin"
-}
-
-// /v1/population/admin/{iso}
-resource "aws_api_gateway_resource" "v1_population_admin_iso_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_population_admin_resource.id
-  path_part   = "{iso}"
-}
-
-// /v1/population/admin/{iso}/{admin}
-resource "aws_api_gateway_resource" "v1_population_admin_iso_admin_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_population_admin_iso_resource.id
-  path_part   = "{admin}"
-}
-
-// /v1/population/admin/{iso}/{admin}/{admin2}
-resource "aws_api_gateway_resource" "v1_population_admin_iso_admin_admin2_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_population_admin_iso_admin_resource.id
-  path_part   = "{admin2}"
+  path_part   = "{proxy+}"
 }
 
 // /v1/soil-carbon
@@ -362,67 +166,11 @@ resource "aws_api_gateway_resource" "v1_soil_carbon_resource" {
   path_part   = "soil-carbon"
 }
 
-// /v1/soil-carbon/use
-resource "aws_api_gateway_resource" "v1_soil_carbon_use_resource" {
+// /v1/soil-carbon/{proxy+}
+resource "aws_api_gateway_resource" "v1_soil_carbon_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.v1_soil_carbon_resource.id
-  path_part   = "use"
-}
-
-// /v1/soil-carbon/use/{name}
-resource "aws_api_gateway_resource" "v1_soil_carbon_use_name_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_soil_carbon_use_resource.id
-  path_part   = "{name}"
-}
-
-// /v1/soil-carbon/use/{name}/{id}
-resource "aws_api_gateway_resource" "v1_soil_carbon_use_name_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_soil_carbon_use_name_resource.id
-  path_part   = "{id}"
-}
-
-// /v1/soil-carbon/wdpa
-resource "aws_api_gateway_resource" "v1_soil_carbon_wdpa_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_soil_carbon_resource.id
-  path_part   = "wdpa"
-}
-
-// /v1/soil-carbon/wdpa/{id}
-resource "aws_api_gateway_resource" "v1_soil_carbon_wdpa_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_soil_carbon_wdpa_resource.id
-  path_part   = "{id}"
-}
-
-// /v1/soil-carbon/admin
-resource "aws_api_gateway_resource" "v1_soil_carbon_admin_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_soil_carbon_resource.id
-  path_part   = "admin"
-}
-
-// /v1/soil-carbon/admin/{iso}
-resource "aws_api_gateway_resource" "v1_soil_carbon_admin_iso_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_soil_carbon_admin_resource.id
-  path_part   = "{iso}"
-}
-
-// /v1/soil-carbon/admin/{iso}/{admin}
-resource "aws_api_gateway_resource" "v1_soil_carbon_admin_iso_admin_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_soil_carbon_admin_iso_resource.id
-  path_part   = "{admin}"
-}
-
-// /v1/soil-carbon/admin/{iso}/{admin}/{admin2}
-resource "aws_api_gateway_resource" "v1_soil_carbon_admin_iso_admin_admin2_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_soil_carbon_admin_iso_admin_resource.id
-  path_part   = "{admin2}"
+  path_part   = "{proxy+}"
 }
 
 // /v1/forma250gfw
@@ -432,74 +180,11 @@ resource "aws_api_gateway_resource" "v1_forma250gfw_resource" {
   path_part   = "forma250gfw"
 }
 
-// /v1/forma250gfw/latest
-resource "aws_api_gateway_resource" "v1_forma250gfw_latest_resource" {
+// /v1/forma250gfw/{proxy+}
+resource "aws_api_gateway_resource" "v1_forma250gfw_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.v1_forma250gfw_resource.id
-  path_part   = "latest"
-}
-
-// /v1/forma250gfw/use
-resource "aws_api_gateway_resource" "v1_forma250gfw_use_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_forma250gfw_resource.id
-  path_part   = "use"
-}
-
-// /v1/forma250gfw/use/{name}
-resource "aws_api_gateway_resource" "v1_forma250gfw_use_name_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_forma250gfw_use_resource.id
-  path_part   = "{name}"
-}
-
-// /v1/forma250gfw/use/{name}/{id}
-resource "aws_api_gateway_resource" "v1_forma250gfw_use_name_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_forma250gfw_use_name_resource.id
-  path_part   = "{id}"
-}
-
-// /v1/forma250gfw/wdpa
-resource "aws_api_gateway_resource" "v1_forma250gfw_wdpa_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_forma250gfw_resource.id
-  path_part   = "wdpa"
-}
-
-// /v1/forma250gfw/wdpa/{id}
-resource "aws_api_gateway_resource" "v1_forma250gfw_wdpa_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_forma250gfw_wdpa_resource.id
-  path_part   = "{id}"
-}
-
-// /v1/forma250gfw/admin
-resource "aws_api_gateway_resource" "v1_forma250gfw_admin_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_forma250gfw_resource.id
-  path_part   = "admin"
-}
-
-// /v1/forma250gfw/admin/{iso}
-resource "aws_api_gateway_resource" "v1_forma250gfw_admin_iso_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_forma250gfw_admin_resource.id
-  path_part   = "{iso}"
-}
-
-// /v1/forma250gfw/admin/{iso}/{admin}
-resource "aws_api_gateway_resource" "v1_forma250gfw_admin_iso_admin_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_forma250gfw_admin_iso_resource.id
-  path_part   = "{admin}"
-}
-
-// /v1/forma250gfw/admin/{iso}/{admin}/{admin2}
-resource "aws_api_gateway_resource" "v1_forma250gfw_admin_iso_admin_admin2_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_forma250gfw_admin_iso_admin_resource.id
-  path_part   = "{admin2}"
+  path_part   = "{proxy+}"
 }
 
 // /v1/biomass-loss
@@ -509,67 +194,11 @@ resource "aws_api_gateway_resource" "v1_biomass_loss_resource" {
   path_part   = "biomass-loss"
 }
 
-// /v1/biomass-loss/use
-resource "aws_api_gateway_resource" "v1_biomass_loss_use_resource" {
+// /v1/biomass-loss/{proxy+}
+resource "aws_api_gateway_resource" "v1_biomass_loss_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.v1_biomass_loss_resource.id
-  path_part   = "use"
-}
-
-// /v1/biomass-loss/use/{name}
-resource "aws_api_gateway_resource" "v1_biomass_loss_use_name_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_biomass_loss_use_resource.id
-  path_part   = "{name}"
-}
-
-// /v1/biomass-loss/use/{name}/{id}
-resource "aws_api_gateway_resource" "v1_biomass_loss_use_name_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_biomass_loss_use_name_resource.id
-  path_part   = "{id}"
-}
-
-// /v1/biomass-loss/wdpa
-resource "aws_api_gateway_resource" "v1_biomass_loss_wdpa_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_biomass_loss_resource.id
-  path_part   = "wdpa"
-}
-
-// /v1/biomass-loss/wdpa/{id}
-resource "aws_api_gateway_resource" "v1_biomass_loss_wdpa_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_biomass_loss_wdpa_resource.id
-  path_part   = "{id}"
-}
-
-// /v1/biomass-loss/admin
-resource "aws_api_gateway_resource" "v1_biomass_loss_admin_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_biomass_loss_resource.id
-  path_part   = "admin"
-}
-
-// /v1/biomass-loss/admin/{iso}
-resource "aws_api_gateway_resource" "v1_biomass_loss_admin_iso_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_biomass_loss_admin_resource.id
-  path_part   = "{iso}"
-}
-
-// /v1/biomass-loss/admin/{iso}/{admin}
-resource "aws_api_gateway_resource" "v1_biomass_loss_admin_iso_admin_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_biomass_loss_admin_iso_resource.id
-  path_part   = "{admin}"
-}
-
-// /v1/biomass-loss/admin/{iso}/{admin}/{admin2}
-resource "aws_api_gateway_resource" "v1_biomass_loss_admin_iso_admin_admin2_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_biomass_loss_admin_iso_admin_resource.id
-  path_part   = "{admin2}"
+  path_part   = "{proxy+}"
 }
 
 // /v1/loss-by-landcover
@@ -593,32 +222,11 @@ resource "aws_api_gateway_resource" "v1_lansat_tiles_resource" {
   path_part   = "lansat-tiles"
 }
 
-// /v1/lansat-tiles/{year}
-resource "aws_api_gateway_resource" "v1_lansat_tiles_year_resource" {
+// /v1/lansat-tiles/{proxy+}
+resource "aws_api_gateway_resource" "v1_lansat_tiles_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.v1_lansat_tiles_resource.id
-  path_part   = "{year}"
-}
-
-// /v1/lansat-tiles/{year}/{z}
-resource "aws_api_gateway_resource" "v1_lansat_tiles_year_z_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_lansat_tiles_year_resource.id
-  path_part   = "{x}"
-}
-
-// /v1/lansat-tiles/{year}/{z}/{x}
-resource "aws_api_gateway_resource" "v1_lansat_tiles_year_z_x_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_lansat_tiles_year_z_resource.id
-  path_part   = "{x}"
-}
-
-// /v1/lansat-tiles/{year}/{z}/{x}/{y}
-resource "aws_api_gateway_resource" "v1_lansat_tiles_year_z_x_y_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_lansat_tiles_year_z_x_resource.id
-  path_part   = "{y}"
+  path_part   = "{proxy+}"
 }
 
 // /v1/sentinel-tiles
@@ -635,18 +243,11 @@ resource "aws_api_gateway_resource" "v1_recent_tiles_resource" {
   path_part   = "recent-tiles"
 }
 
-// /v1/recent-tiles/tiles
-resource "aws_api_gateway_resource" "v1_recent_tiles_tiles_resource" {
+// /v1/recent-tiles/{proxy+}
+resource "aws_api_gateway_resource" "v1_recent_tiles_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.v1_recent_tiles_resource.id
-  path_part   = "tiles"
-}
-
-// /v1/recent-tiles/thumbs
-resource "aws_api_gateway_resource" "v1_recent_tiles_thumbs_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_recent_tiles_resource.id
-  path_part   = "thumbs"
+  path_part   = "{proxy+}"
 }
 
 // v2
@@ -657,67 +258,11 @@ resource "aws_api_gateway_resource" "v2_nlcd_landcover_resource" {
   path_part   = "nlcd-landcover"
 }
 
-// /v2/nlcd-landcover/use
-resource "aws_api_gateway_resource" "v2_nlcd_landcover_use_resource" {
+// /v2/nlcd-landcover/{proxy+}
+resource "aws_api_gateway_resource" "v2_nlcd_landcover_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.v2_nlcd_landcover_resource.id
-  path_part   = "use"
-}
-
-// /v2/nlcd-landcover/use/{name}
-resource "aws_api_gateway_resource" "v2_nlcd_landcover_use_name_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_nlcd_landcover_use_resource.id
-  path_part   = "{name}"
-}
-
-// /v2/nlcd-landcover/use/{name}/{id}
-resource "aws_api_gateway_resource" "v2_nlcd_landcover_use_name_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_nlcd_landcover_use_name_resource.id
-  path_part   = "{id}"
-}
-
-// /v2/nlcd-landcover/wdpa
-resource "aws_api_gateway_resource" "v2_nlcd_landcover_wdpa_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_nlcd_landcover_resource.id
-  path_part   = "wdpa"
-}
-
-// /v2/nlcd-landcover/wdpa/{id}
-resource "aws_api_gateway_resource" "v2_nlcd_landcover_wdpa_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_nlcd_landcover_wdpa_resource.id
-  path_part   = "{id}"
-}
-
-// /v2/nlcd-landcover/admin
-resource "aws_api_gateway_resource" "v2_nlcd_landcover_admin_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_nlcd_landcover_resource.id
-  path_part   = "admin"
-}
-
-// /v2/nlcd-landcover/admin/{iso}
-resource "aws_api_gateway_resource" "v2_nlcd_landcover_admin_iso_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_nlcd_landcover_admin_resource.id
-  path_part   = "{iso}"
-}
-
-// /v2/nlcd-landcover/admin/{iso}/{admin}
-resource "aws_api_gateway_resource" "v2_nlcd_landcover_admin_iso_admin_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_nlcd_landcover_admin_iso_resource.id
-  path_part   = "{admin}"
-}
-
-// /v2/nlcd-landcover/admin/{iso}/{admin}/{admin2}
-resource "aws_api_gateway_resource" "v2_nlcd_landcover_admin_iso_admin_admin2_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_nlcd_landcover_admin_iso_admin_resource.id
-  path_part   = "{admin2}"
+  path_part   = "{proxy+}"
 }
 
 // /v2/biomass-loss
@@ -727,67 +272,11 @@ resource "aws_api_gateway_resource" "v2_biomass_loss_resource" {
   path_part   = "biomass-loss"
 }
 
-// /v2/biomass-loss/use
-resource "aws_api_gateway_resource" "v2_biomass_loss_use_resource" {
+// /v2/biomass-loss/{proxy+}
+resource "aws_api_gateway_resource" "v2_biomass_loss_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.v2_biomass_loss_resource.id
-  path_part   = "use"
-}
-
-// /v2/biomass-loss/use/{name}
-resource "aws_api_gateway_resource" "v2_biomass_loss_use_name_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_biomass_loss_use_resource.id
-  path_part   = "{name}"
-}
-
-// /v2/biomass-loss/use/{name}/{id}
-resource "aws_api_gateway_resource" "v2_biomass_loss_use_name_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_biomass_loss_use_name_resource.id
-  path_part   = "{id}"
-}
-
-// /v2/biomass-loss/wdpa
-resource "aws_api_gateway_resource" "v2_biomass_loss_wdpa_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_biomass_loss_resource.id
-  path_part   = "wdpa"
-}
-
-// /v2/biomass-loss/wdpa/{id}
-resource "aws_api_gateway_resource" "v2_biomass_loss_wdpa_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_biomass_loss_wdpa_resource.id
-  path_part   = "{id}"
-}
-
-// /v2/biomass-loss/admin
-resource "aws_api_gateway_resource" "v2_biomass_loss_admin_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_biomass_loss_resource.id
-  path_part   = "admin"
-}
-
-// /v2/biomass-loss/admin/{iso}
-resource "aws_api_gateway_resource" "v2_biomass_loss_admin_iso_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_biomass_loss_admin_resource.id
-  path_part   = "{iso}"
-}
-
-// /v2/biomass-loss/admin/{iso}/{admin}
-resource "aws_api_gateway_resource" "v2_biomass_loss_admin_iso_admin_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_biomass_loss_admin_iso_resource.id
-  path_part   = "{admin}"
-}
-
-// /v2/biomass-loss/admin/{iso}/{admin}/{admin2}
-resource "aws_api_gateway_resource" "v2_biomass_loss_admin_iso_admin_admin2_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_biomass_loss_admin_iso_admin_resource.id
-  path_part   = "{admin2}"
+  path_part   = "{proxy+}"
 }
 
 // /v2/lansat-tiles
@@ -797,32 +286,11 @@ resource "aws_api_gateway_resource" "v2_lansat_tiles_resource" {
   path_part   = "lansat-tiles"
 }
 
-// /v2/lansat-tiles/{year}
-resource "aws_api_gateway_resource" "v2_lansat_tiles_year_resource" {
+// /v2/lansat-tiles/{proxy+}
+resource "aws_api_gateway_resource" "v2_lansat_tiles_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.v2_lansat_tiles_resource.id
-  path_part   = "{year}"
-}
-
-// /v2/lansat-tiles/{year}/{z}
-resource "aws_api_gateway_resource" "v2_lansat_tiles_year_z_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_lansat_tiles_year_resource.id
-  path_part   = "{x}"
-}
-
-// /v2/lansat-tiles/{year}/{z}/{x}
-resource "aws_api_gateway_resource" "v2_lansat_tiles_year_z_x_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_lansat_tiles_year_z_resource.id
-  path_part   = "{x}"
-}
-
-// /v2/lansat-tiles/{year}/{z}/{x}/{y}
-resource "aws_api_gateway_resource" "v2_lansat_tiles_year_z_x_y_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_lansat_tiles_year_z_x_resource.id
-  path_part   = "{y}"
+  path_part   = "{proxy+}"
 }
 
 module "analysis_gee_get_v1_recent_tiles_classifier" {
@@ -915,22 +383,12 @@ module "analysis_gee_post_v1_umd_loss_gain" {
   vpc_link     = var.vpc_link
 }
 
-module "analysis_gee_get_v1_umd_loss_gain_use_name_id" {
+module "analysis_gee_any_v1_umd_loss_gain_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_umd_loss_gain_use_name_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/umd-loss-gain/use/{name}/{id}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["name"]
-}
-
-module "analysis_gee_get_v1_umd_loss_gain_wdpa_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_umd_loss_gain_wdpa_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/umd-loss-gain/wdpa/{id}"
+  api_resource = aws_api_gateway_resource.v1_umd_loss_gain_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30500/api/v1/umd-loss-gain/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -952,52 +410,13 @@ module "analysis_gee_post_v1_whrc_biomass" {
   vpc_link     = var.vpc_link
 }
 
-module "analysis_gee_get_v1_whrc_biomass_use_name_id" {
+module "analysis_gee_any_v1_whrc_biomass_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_whrc_biomass_use_name_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/whrc-biomass/use/{name}/{id}"
+  api_resource = aws_api_gateway_resource.v1_whrc_biomass_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30500/api/v1/whrc-biomass/{proxy}"
   vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["name"]
-}
-
-module "analysis_gee_get_v1_whrc_biomass_wdpa_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_whrc_biomass_wdpa_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/whrc-biomass/wdpa/{id}"
-  vpc_link     = var.vpc_link
-}
-
-module "analysis_gee_get_v1_whrc_biomass_admin_iso" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_whrc_biomass_admin_iso_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/whrc-biomass/admin/{iso}"
-  vpc_link     = var.vpc_link
-}
-
-module "analysis_gee_get_v1_whrc_biomass_admin_iso_admin" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_whrc_biomass_admin_iso_admin_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/whrc-biomass/admin/{iso}/{admin}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["iso"]
-}
-
-module "analysis_gee_get_v1_whrc_biomass_admin_iso_admin_admin2" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_whrc_biomass_admin_iso_admin_admin2_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/whrc-biomass/admin/{iso}/{admin}/{admin2}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["iso", "admin"]
 }
 
 module "analysis_gee_post_v1_mangrove_biomass" {
@@ -1018,52 +437,13 @@ module "analysis_gee_get_v1_mangrove_biomass" {
   vpc_link     = var.vpc_link
 }
 
-module "analysis_gee_get_v1_mangrove_biomass_use_name_id" {
+module "analysis_gee_any_v1_mangrove_biomass_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_mangrove_biomass_use_name_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/mangrove-biomass/use/{name}/{id}"
+  api_resource = aws_api_gateway_resource.v1_mangrove_biomass_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30500/api/v1/mangrove-biomass/{proxy}"
   vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["name"]
-}
-
-module "analysis_gee_get_v1_mangrove_biomass_wdpa_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_mangrove_biomass_wdpa_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/mangrove-biomass/wdpa/{id}"
-  vpc_link     = var.vpc_link
-}
-
-module "analysis_gee_get_v1_mangrove_biomass_admin_iso" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_mangrove_biomass_admin_iso_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/mangrove-biomass/admin/{iso}"
-  vpc_link     = var.vpc_link
-}
-
-module "analysis_gee_get_v1_mangrove_biomass_admin_iso_admin" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_mangrove_biomass_admin_iso_admin_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/mangrove-biomass/admin/{iso}/{admin}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["iso"]
-}
-
-module "analysis_gee_get_v1_mangrove_biomass_admin_iso_admin_admin2" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_mangrove_biomass_admin_iso_admin_admin2_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/mangrove-biomass/admin/{iso}/{admin}/{admin2}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["iso", "admin"]
 }
 
 module "analysis_gee_get_v1_population" {
@@ -1084,52 +464,13 @@ module "analysis_gee_post_v1_population" {
   vpc_link     = var.vpc_link
 }
 
-module "analysis_gee_get_v1_population_use_name_id" {
+module "analysis_gee_any_v1_population_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_population_use_name_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/population/use/{name}/{id}"
+  api_resource = aws_api_gateway_resource.v1_population_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30500/api/v1/population/{proxy}"
   vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["name"]
-}
-
-module "analysis_gee_get_v1_population_wdpa_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_population_wdpa_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/population/wdpa/{id}"
-  vpc_link     = var.vpc_link
-}
-
-module "analysis_gee_get_v1_population_admin_iso" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_population_admin_iso_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/population/admin/{iso}"
-  vpc_link     = var.vpc_link
-}
-
-module "analysis_gee_get_v1_population_admin_iso_admin" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_population_admin_iso_admin_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/population/admin/{iso}/{admin}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["iso"]
-}
-
-module "analysis_gee_get_v1_population_admin_iso_admin_admin2" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_population_admin_iso_admin_admin2_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/population/admin/{iso}/{admin}/{admin2}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["iso", "admin"]
 }
 
 module "analysis_gee_get_v1_soil_carbon" {
@@ -1141,52 +482,13 @@ module "analysis_gee_get_v1_soil_carbon" {
   vpc_link     = var.vpc_link
 }
 
-module "analysis_gee_get_v1_soil_carbon_use_name_id" {
+module "analysis_gee_any_v1_soil_carbon_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_soil_carbon_use_name_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/soil-carbon/use/{name}/{id}"
+  api_resource = aws_api_gateway_resource.v1_soil_carbon_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30500/api/v1/soil-carbon/{proxy}"
   vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["name"]
-}
-
-module "analysis_gee_get_v1_soil_carbon_wdpa_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_soil_carbon_wdpa_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/soil-carbon/wdpa/{id}"
-  vpc_link     = var.vpc_link
-}
-
-module "analysis_gee_get_v1_soil_carbon_admin_iso" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_soil_carbon_admin_iso_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/soil-carbon/admin/{iso}"
-  vpc_link     = var.vpc_link
-}
-
-module "analysis_gee_get_v1_soil_carbon_admin_iso_admin" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_soil_carbon_admin_iso_admin_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/soil-carbon/admin/{iso}/{admin}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["iso"]
-}
-
-module "analysis_gee_get_v1_soil_carbon_admin_iso_admin_admin2" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_soil_carbon_admin_iso_admin_admin2_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/soil-carbon/admin/{iso}/{admin}/{admin2}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["iso", "admin"]
 }
 
 module "analysis_gee_post_v1_forma250gfw" {
@@ -1207,61 +509,13 @@ module "analysis_gee_get_v1_forma250gfw" {
   vpc_link     = var.vpc_link
 }
 
-module "analysis_gee_get_v1_forma250gfw_latest" {
+module "analysis_gee_any_v1_forma250gfw_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_forma250gfw_latest_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/forma250gfw/latest"
+  api_resource = aws_api_gateway_resource.v1_forma250gfw_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30500/api/v1/forma250gfw/{proxy}"
   vpc_link     = var.vpc_link
-}
-
-module "analysis_gee_get_v1_forma250gfw_use_name_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_forma250gfw_use_name_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/forma250gfw/use/{name}/{id}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["name"]
-}
-
-module "analysis_gee_get_v1_forma250gfw_wdpa_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_forma250gfw_wdpa_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/forma250gfw/wdpa/{id}"
-  vpc_link     = var.vpc_link
-}
-
-module "analysis_gee_get_v1_forma250gfw_admin_iso" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_forma250gfw_admin_iso_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/forma250gfw/admin/{iso}"
-  vpc_link     = var.vpc_link
-}
-
-module "analysis_gee_get_v1_forma250gfw_admin_iso_admin" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_forma250gfw_admin_iso_admin_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/forma250gfw/admin/{iso}/{admin}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["iso"]
-}
-
-module "analysis_gee_get_v1_forma250gfw_admin_iso_admin_admin2" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_forma250gfw_admin_iso_admin_admin2_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/forma250gfw/admin/{iso}/{admin}/{admin2}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["iso", "admin"]
 }
 
 module "analysis_gee_get_v1_biomass_loss" {
@@ -1282,52 +536,13 @@ module "analysis_gee_post_v1_biomass_loss" {
   vpc_link     = var.vpc_link
 }
 
-module "analysis_gee_get_v1_biomass_loss_use_name_id" {
+module "analysis_gee_any_v1_biomass_loss_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_biomass_loss_use_name_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/biomass-loss/use/{name}/{id}"
+  api_resource = aws_api_gateway_resource.v1_biomass_loss_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30500/api/v1/biomass-loss/{proxy}"
   vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["name"]
-}
-
-module "analysis_gee_get_v1_biomass_loss_wdpa_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_biomass_loss_wdpa_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/biomass-loss/wdpa/{id}"
-  vpc_link     = var.vpc_link
-}
-
-module "analysis_gee_get_v1_biomass_loss_admin_iso" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_biomass_loss_admin_iso_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/biomass-loss/admin/{iso}"
-  vpc_link     = var.vpc_link
-}
-
-module "analysis_gee_get_v1_biomass_loss_admin_iso_admin" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_biomass_loss_admin_iso_admin_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/biomass-loss/admin/{iso}/{admin}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["iso"]
-}
-
-module "analysis_gee_get_v1_biomass_loss_admin_iso_admin_admin2" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_biomass_loss_admin_iso_admin_admin2_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/biomass-loss/admin/{iso}/{admin}/{admin2}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["iso", "admin"]
 }
 
 module "analysis_gee_get_v1_loss_by_landcover" {
@@ -1366,14 +581,13 @@ module "analysis_gee_post_v1_landcover" {
   vpc_link     = var.vpc_link
 }
 
-module "analysis_gee_get_v1_lansat_tiles_year_z_x_y" {
+module "analysis_gee_any_v1_lansat_tiles_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_lansat_tiles_year_z_x_y_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/landsat-tiles/{year}/{z}/{x}/{y}"
+  api_resource = aws_api_gateway_resource.v1_lansat_tiles_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30500/api/v1/landsat-tiles/{proxy}"
   vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["year", "z", "x"]
 }
 
 module "analysis_gee_get_v1_sentinel_tiles" {
@@ -1394,21 +608,12 @@ module "analysis_gee_get_v1_recent_tiles" {
   vpc_link     = var.vpc_link
 }
 
-module "analysis_gee_post_v1_recent_tiles_tiles" {
+module "analysis_gee_any_v1_recent_tiles_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_recent_tiles_tiles_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/recent-tiles/tiles"
-  vpc_link     = var.vpc_link
-}
-
-module "analysis_gee_post_v1_recent_tiles_thumbs" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_recent_tiles_tiles_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30500/api/v1/recent-tiles/thumbs"
+  api_resource = aws_api_gateway_resource.v1_recent_tiles_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30500/api/v1/recent-tiles/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -1430,52 +635,13 @@ module "analysis_gee_post_v2_nlcd_landcover" {
   vpc_link     = var.vpc_link
 }
 
-module "analysis_gee_get_v2_nlcd_landcover_use_name_id" {
+module "analysis_gee_any_v2_nlcd_landcover_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_nlcd_landcover_use_name_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v2/nlcd-landcover/use/{name}/{id}"
+  api_resource = aws_api_gateway_resource.v2_nlcd_landcover_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30500/api/v2/nlcd-landcover/{proxy}"
   vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["name"]
-}
-
-module "analysis_gee_get_v2_nlcd_landcover_wdpa_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_nlcd_landcover_wdpa_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v2/nlcd-landcover/wdpa/{id}"
-  vpc_link     = var.vpc_link
-}
-
-module "analysis_gee_get_v2_nlcd_landcover_admin_iso" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_nlcd_landcover_admin_iso_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v2/nlcd-landcover/admin/{iso}"
-  vpc_link     = var.vpc_link
-}
-
-module "analysis_gee_get_v2_nlcd_landcover_admin_iso_admin" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_nlcd_landcover_admin_iso_admin_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v2/nlcd-landcover/admin/{iso}/{admin}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["iso"]
-}
-
-module "analysis_gee_get_v2_nlcd_landcover_admin_iso_admin_admin2" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_nlcd_landcover_admin_iso_admin_admin2_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v2/nlcd-landcover/admin/{iso}/{admin}/{admin2}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["iso", "admin"]
 }
 
 module "analysis_gee_get_v2_biomass_loss" {
@@ -1496,60 +662,11 @@ module "analysis_gee_post_v2_biomass_loss" {
   vpc_link     = var.vpc_link
 }
 
-module "analysis_gee_get_v2_biomass_loss_use_name_id" {
+module "analysis_gee_any_v2_biomass_loss_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_biomass_loss_use_name_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v2/biomass-loss/use/{name}/{id}"
+  api_resource = aws_api_gateway_resource.v2_biomass_loss_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30500/api/v2/biomass-loss/{proxy}"
   vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["name"]
-}
-
-module "analysis_gee_get_v2_biomass_loss_wdpa_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_biomass_loss_wdpa_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v2/biomass-loss/wdpa/{id}"
-  vpc_link     = var.vpc_link
-}
-
-module "analysis_gee_get_v2_biomass_loss_admin_iso" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_biomass_loss_admin_iso_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v2/biomass-loss/admin/{iso}"
-  vpc_link     = var.vpc_link
-}
-
-module "analysis_gee_get_v2_biomass_loss_admin_iso_admin" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_biomass_loss_admin_iso_admin_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v2/biomass-loss/admin/{iso}/{admin}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["iso"]
-}
-
-module "analysis_gee_get_v2_lansat_tiles_year_z_x_y" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_lansat_tiles_year_z_x_y_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v2/landsat-tiles/{year}/{z}/{x}/{y}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["year", "z", "x"]
-}
-
-module "analysis_gee_get_v2_biomass_loss_admin_iso_admin_admin2" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_biomass_loss_admin_iso_admin_admin2_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30500/api/v2/biomass-loss/admin/{iso}/{admin}/{admin2}"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["iso", "admin"]
 }

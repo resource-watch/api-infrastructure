@@ -62,18 +62,11 @@ resource "aws_api_gateway_resource" "v1_dashboard_resource" {
   path_part   = "dashboard"
 }
 
-// /v1/dashboard/{dashboardId}
-resource "aws_api_gateway_resource" "v1_dashboard_id_resource" {
+// /v1/dashboard/{proxy+}
+resource "aws_api_gateway_resource" "v1_dashboard_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.v1_dashboard_resource.id
-  path_part   = "{dashboardId}"
-}
-
-// /v1/dashboard/{dashboardId}/clone
-resource "aws_api_gateway_resource" "v1_dashboard_id_clone_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_dashboard_id_resource.id
-  path_part   = "clone"
+  path_part   = "{proxy+}"
 }
 
 // /v1/partner
@@ -118,18 +111,11 @@ resource "aws_api_gateway_resource" "v1_topic_id_resource" {
   path_part   = "{topicId}"
 }
 
-// /v1/topic/{topicId}/clone
-resource "aws_api_gateway_resource" "v1_topic_id_clone_resource" {
+// /v1/topic/{proxy+}
+resource "aws_api_gateway_resource" "v1_topic_id_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.v1_topic_id_resource.id
-  path_part   = "clone"
-}
-
-// /v1/topic/{topicId}/clone-dashboard
-resource "aws_api_gateway_resource" "v1_topic_id_clone_dashboard_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_topic_id_resource.id
-  path_part   = "clone-dashboard"
+  path_part   = "{proxy+}"
 }
 
 // /v1/tool
@@ -167,18 +153,11 @@ resource "aws_api_gateway_resource" "v1_faq_resource" {
   path_part   = "faq"
 }
 
-// /v1/faq/reorder
-resource "aws_api_gateway_resource" "v1_faq_reorder_resource" {
+// /v1/faq/{proxy+}
+resource "aws_api_gateway_resource" "v1_faq_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.v1_faq_resource.id
-  path_part   = "reorder"
-}
-
-// /v1/faq/{faqId}
-resource "aws_api_gateway_resource" "v1_faq_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_faq_resource.id
-  path_part   = "{faqId}"
+  path_part   = "{proxy+}"
 }
 
 // /v1/temporary_content_image
@@ -213,50 +192,13 @@ module "resource_watch_manager_post_v1_dashboard" {
   vpc_link     = var.vpc_link
 }
 
-module "resource_watch_manager_get_v1_dashboard_id" {
+module "resource_watch_manager_any_v1_dashboard_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_dashboard_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30558/api/dashboards/{dashboardId}"
+  api_resource = aws_api_gateway_resource.v1_dashboard_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30558/api/dashboards/{proxy}"
   vpc_link     = var.vpc_link
-}
-
-module "resource_watch_manager_patch_v1_dashboard_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_dashboard_id_resource
-  method       = "PATCH"
-  uri          = "http://api.resourcewatch.org:30558/api/dashboards/{dashboardId}"
-  vpc_link     = var.vpc_link
-}
-
-module "resource_watch_manager_put_v1_dashboard_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_dashboard_id_resource
-  method       = "PUT"
-  uri          = "http://api.resourcewatch.org:30558/api/dashboards/{dashboardId}"
-  vpc_link     = var.vpc_link
-}
-
-module "resource_watch_manager_delete_v1_dashboard_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_dashboard_id_resource
-  method       = "DELETE"
-  uri          = "http://api.resourcewatch.org:30558/api/dashboards/{dashboardId}"
-  vpc_link     = var.vpc_link
-}
-
-module "resource_watch_manager_post_v1_dashboard_id_clone" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_dashboard_id_clone_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30558/api/dashboards/{dashboardId}/clone"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["dashboardId"]
 }
 
 module "resource_watch_manager_get_v1_partner" {
@@ -376,24 +318,13 @@ module "resource_watch_manager_get_v1_topic_page" {
   vpc_link     = var.vpc_link
 }
 
-module "resource_watch_manager_post_topic_v1_id_clone_page" {
+module "resource_watch_manager_any_v1_topic_id_proxy_page" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_topic_id_clone_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30558/api/topics/{topicId}/clone"
+  api_resource = aws_api_gateway_resource.v1_topic_id_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30558/api/topics/{proxy}"
   vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["topicId"]
-}
-
-module "resource_watch_manager_post_topic_v1_topic_id_clone_dashboard" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_topic_id_clone_dashboard_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30558/api/topics/{topicId}/clone-dashboard"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["topicId"]
 }
 
 module "resource_watch_manager_post_v1_topic" {
@@ -558,48 +489,12 @@ module "resource_watch_manager_post_v1_faq" {
   vpc_link     = var.vpc_link
 }
 
-module "resource_watch_manager_get_v1_faq_id" {
+module "resource_watch_manager_any_v1_faq_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_faq_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30558/api/faqs/{faqId}"
-  vpc_link     = var.vpc_link
-}
-
-module "resource_watch_manager_patch_v1_faq_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_faq_id_resource
-  method       = "PATCH"
-  uri          = "http://api.resourcewatch.org:30558/api/faqs/{faqId}"
-  vpc_link     = var.vpc_link
-}
-
-module "resource_watch_manager_put_v1_faq_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_faq_id_resource
-  method       = "PUT"
-  uri          = "http://api.resourcewatch.org:30558/api/faqs/{faqId}"
-  vpc_link     = var.vpc_link
-}
-
-module "resource_watch_manager_delete_v1_faq_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_faq_id_resource
-  method       = "DELETE"
-  uri          = "http://api.resourcewatch.org:30558/api/faqs/{faqId}"
-  vpc_link     = var.vpc_link
-}
-
-module "resource_watch_manager_post_v1_faq_reorder" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_faq_reorder_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30558/api/faqs/reorder"
+  api_resource = aws_api_gateway_resource.v1_faq_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30558/api/faqs/{proxy}"
   vpc_link     = var.vpc_link
 }
 

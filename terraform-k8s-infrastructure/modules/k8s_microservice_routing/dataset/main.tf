@@ -89,32 +89,11 @@ resource "aws_api_gateway_resource" "dataset_upload_resource" {
   path_part   = "upload"
 }
 
-// /v1/dataset/{datasetId}/clone
-resource "aws_api_gateway_resource" "dataset_clone_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.dataset_id_resource.id
-  path_part   = "clone"
-}
-
-// /v1/dataset/{datasetId}/flush
-resource "aws_api_gateway_resource" "dataset_flush_resource" {
+// /v1/dataset/{datasetId}/{proxy+}
+resource "aws_api_gateway_resource" "dataset_id_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.dataset_id_resource.id
   path_part   = "flush"
-}
-
-// /v1/dataset/{datasetId}/recover
-resource "aws_api_gateway_resource" "dataset_recover_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.dataset_id_resource.id
-  path_part   = "recover"
-}
-
-// /v1/dataset/{datasetId}/lastUpdated
-resource "aws_api_gateway_resource" "dataset_last_updated_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.dataset_id_resource.id
-  path_part   = "lastUpdated"
 }
 
 module "dataset_get_dataset" {
@@ -162,42 +141,12 @@ module "dataset_post_dataset" {
   vpc_link     = var.vpc_link
 }
 
-module "dataset_post_dataset_id_clone" {
+module "dataset_any_dataset_id_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_clone_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30516/api/v1/dataset/{datasetId}/clone"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["datasetId"]
-}
-
-module "dataset_post_dataset_id_flush" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_flush_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30516/api/v1/dataset/{datasetId}/flush"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["datasetId"]
-}
-
-module "dataset_post_dataset_id_recover" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_recover_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30516/api/v1/dataset/{datasetId}/recover"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["datasetId"]
-}
-
-module "dataset_get_dataset_id_last_updated" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_last_updated_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30516/api/v1/dataset/{datasetId}/lastUpdated"
+  api_resource = aws_api_gateway_resource.dataset_id_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30516/api/v1/dataset/{datasetId}/{proxy}"
   vpc_link     = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }

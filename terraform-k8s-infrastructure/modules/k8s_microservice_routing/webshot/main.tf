@@ -62,49 +62,27 @@ resource "aws_api_gateway_resource" "webshot_resource" {
   path_part   = "webshot"
 }
 
-// /v1/webshot/pdf
-resource "aws_api_gateway_resource" "webshot_pdf_resource" {
+// /v1/webshot/{proxy+}
+resource "aws_api_gateway_resource" "webshot_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.webshot_resource.id
-  path_part   = "pdf"
+  path_part   = "{proxy+}"
 }
 
-// /v1/webshot/widget
-resource "aws_api_gateway_resource" "webshot_widget_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.webshot_resource.id
-  path_part   = "widget"
-}
-
-// /v1/webshot/{widgetId}
-resource "aws_api_gateway_resource" "webshot_widget_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.webshot_widget_resource.id
-  path_part   = "{widgetId}"
-}
-
-// /v1/webshot/{widgetId}/thumbnail
-resource "aws_api_gateway_resource" "webshot_widget_id_thumbnail_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.webshot_widget_id_resource.id
-  path_part   = "thumbnail"
-}
-
-module "webshot_pdf" {
+module "webshot_get_v1_webshot" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.webshot_pdf_resource
+  api_resource = aws_api_gateway_resource.webshot_resource
   method       = "GET"
   uri          = "http://api.resourcewatch.org:30566/api/v1/webshot"
   vpc_link     = var.vpc_link
 }
 
-module "webshot_widget_id_thumbnail" {
+module "webshot_any_v1_webshot_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.webshot_widget_id_thumbnail_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30566/api/v1/webshot/widget/{widgetId}/thumbnail"
+  api_resource = aws_api_gateway_resource.webshot_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30566/api/v1/webshot/{proxy}"
   vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["widgetId"]
 }

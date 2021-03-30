@@ -67,32 +67,11 @@ resource "aws_api_gateway_resource" "gee_tiles_layer_id_tile_resource" {
   path_part   = "tile"
 }
 
-// /v1/layer/{layerId}/tile/gee
-resource "aws_api_gateway_resource" "gee_tiles_layer_id_tile_gee_resource" {
+// /v1/layer/{layerId}/tile/{proxy+}
+resource "aws_api_gateway_resource" "gee_tiles_layer_id_tile_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.gee_tiles_layer_id_tile_resource.id
-  path_part   = "gee"
-}
-
-// /v1/layer/{layerId}/tile/gee/{z}
-resource "aws_api_gateway_resource" "gee_tiles_layer_id_tile_gee_z_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.gee_tiles_layer_id_tile_gee_resource.id
-  path_part   = "{z}"
-}
-
-// /v1/layer/{layerId}/tile/gee/{z}/{x}
-resource "aws_api_gateway_resource" "gee_tiles_layer_id_tile_gee_z_x_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.gee_tiles_layer_id_tile_gee_z_resource.id
-  path_part   = "{x}"
-}
-
-// /v1/layer/{layerId}/tile/gee/{z}/{x}/{y}
-resource "aws_api_gateway_resource" "gee_tiles_layer_id_tile_gee_z_x_y_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.gee_tiles_layer_id_tile_gee_z_x_resource.id
-  path_part   = "{y}"
+  path_part   = "{proxy+}"
 }
 
 // /v1/layer/gee
@@ -102,37 +81,28 @@ resource "aws_api_gateway_resource" "gee_layer_gee_resource" {
   path_part   = "gee"
 }
 
-// /v1/layer/gee/{layerId}
-resource "aws_api_gateway_resource" "gee_layer_gee_id_resource" {
+// /v1/layer/gee/{proxy+}
+resource "aws_api_gateway_resource" "gee_layer_gee_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.gee_layer_gee_resource.id
-  path_part   = "{layerId}"
+  path_part   = "{proxy+}"
 }
 
-// /v1/layer/gee/{layerId}/expire-cache
-resource "aws_api_gateway_resource" "gee_layer_gee_id_expire_cache_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.gee_layer_gee_id_resource.id
-  path_part   = "expire-cache"
-}
-
-module "gee_tiles_get_layer_id_tile_gee_z_x_y" {
+module "gee_tiles_any_layer_id_tile_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.gee_tiles_layer_id_tile_gee_z_x_y_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30531/api/v1/layer/{layerId}/tile/gee/{z}/{x}/{y}"
+  api_resource = aws_api_gateway_resource.gee_tiles_layer_id_tile_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30531/api/v1/layer/{layerId}/tile/{proxy}"
   vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["z", "x"]
+  endpoint_request_parameters = ["layerId"]
 }
 
-module "gee_tiles_delete_gee_layer_gee_id_expire_cache" {
+module "gee_tiles_any_gee_layer_gee_proxy" {
   source         = "../endpoint"
   api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.gee_layer_gee_id_expire_cache_resource
-  method         = "DELETE"
-  backend_method = "POST"
-  uri            = "http://api.resourcewatch.org:30531/api/v1/layer/gee/{layerId}/expire-cache"
+  api_resource   = aws_api_gateway_resource.gee_layer_gee_proxy_resource
+  method         = "ANY"
+  uri            = "http://api.resourcewatch.org:30531/api/v1/layer/gee/{proxy}"
   vpc_link       = var.vpc_link
-  endpoint_request_parameters = ["layerId"]
 }

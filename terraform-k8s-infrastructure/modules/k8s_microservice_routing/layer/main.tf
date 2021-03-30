@@ -89,18 +89,11 @@ resource "aws_api_gateway_resource" "layer_change_environment_resource" {
   path_part   = "change-environment"
 }
 
-// /v1/layer/change-environment/{datasetId}
-resource "aws_api_gateway_resource" "layer_change_environment_dataset_id_resource" {
+// /v1/layer/change-environment/{proxy+}
+resource "aws_api_gateway_resource" "layer_change_environment_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.layer_change_environment_resource.id
-  path_part   = "{datasetId}"
-}
-
-// /v1/layer/change-environment/{datasetId}/{env}
-resource "aws_api_gateway_resource" "layer_change_environment_dataset_id_env_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.layer_change_environment_dataset_id_resource.id
-  path_part   = "{env}"
+  path_part   = "{proxy+}"
 }
 
 // /v1/dataset/{datasetId}/layer/
@@ -192,12 +185,12 @@ module "layer_patch_dataset_id_layer_id" {
   endpoint_request_parameters = ["datasetId"]
 }
 
-module "layer_patch_layer_change_environment_dataset_id_env" {
+module "layer_any_layer_change_environment_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.layer_change_environment_dataset_id_env_resource
-  method       = "PATCH"
-  uri          = "http://api.resourcewatch.org:30546/api/v1/layer/change-environment/{datasetId}/{env}"
+  api_resource = aws_api_gateway_resource.layer_change_environment_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30546/api/v1/layer/change-environment/{proxy}"
   vpc_link     = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }

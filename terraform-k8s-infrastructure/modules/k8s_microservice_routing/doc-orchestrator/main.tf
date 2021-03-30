@@ -62,43 +62,18 @@ resource "aws_api_gateway_resource" "doc_importer_resource" {
   path_part   = "doc-importer"
 }
 
-// /v1/doc-importer/task
-resource "aws_api_gateway_resource" "doc_importer_task_resource" {
+// /v1/doc-importer/{proxy+}
+resource "aws_api_gateway_resource" "doc_importer_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.doc_importer_resource.id
   path_part   = "task"
 }
 
-// /v1/doc-importer/task/{taskId}
-resource "aws_api_gateway_resource" "doc_importer_task_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.doc_importer_task_resource.id
-  path_part   = "{taskId}"
-}
-
-module "doc_orchestrator_get_doc_importer_task" {
+module "doc_orchestrator_any_doc_importer_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.doc_importer_task_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30518/api/v1/doc-importer/task"
-  vpc_link     = var.vpc_link
-}
-
-module "doc_orchestrator_get_doc_importer_task_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.doc_importer_task_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30518/api/v1/doc-importer/task/{taskId}"
-  vpc_link     = var.vpc_link
-}
-
-module "doc_orchestrator_delete_doc_importer_task_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.doc_importer_task_id_resource
-  method       = "DELETE"
-  uri          = "http://api.resourcewatch.org:30518/api/v1/doc-importer/task/{taskId}"
+  api_resource = aws_api_gateway_resource.doc_importer_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30518/api/v1/doc-importer/{proxy}"
   vpc_link     = var.vpc_link
 }

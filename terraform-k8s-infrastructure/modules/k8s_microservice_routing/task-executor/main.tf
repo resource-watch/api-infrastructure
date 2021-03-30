@@ -62,32 +62,11 @@ resource "aws_api_gateway_resource" "task_resource" {
   path_part   = "task"
 }
 
-// /v1/task/sync-dataset
-resource "aws_api_gateway_resource" "task_sync_dataset_resource" {
+// /v1/task/{proxy+}
+resource "aws_api_gateway_resource" "task_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.task_resource.id
-  path_part   = "sync-dataset"
-}
-
-// /v1/task/sync-dataset/by-dataset
-resource "aws_api_gateway_resource" "task_sync_dataset_by_dataset_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.task_sync_dataset_resource.id
-  path_part   = "by-dataset"
-}
-
-// /v1/task/sync-dataset/by-dataset/{datasetId}
-resource "aws_api_gateway_resource" "task_sync_dataset_by_dataset_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.task_sync_dataset_by_dataset_resource.id
-  path_part   = "{datasetId}"
-}
-
-// /v1/task/sync-dataset/by-dataset/{datasetId}/hook
-resource "aws_api_gateway_resource" "task_sync_dataset_by_dataset_id_hook_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.task_sync_dataset_by_dataset_id_resource.id
-  path_part   = "hook"
+  path_part   = "{proxy+}"
 }
 
 module "task_async_get_task" {
@@ -99,40 +78,12 @@ module "task_async_get_task" {
   vpc_link     = var.vpc_link
 }
 
-module "task_async_post_task_sync_dataset" {
+module "task_async_any_task_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.task_sync_dataset_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30562/api/v1/task/sync-dataset"
+  api_resource = aws_api_gateway_resource.task_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30562/api/v1/task/{proxy}"
   vpc_link     = var.vpc_link
-}
-
-module "task_async_put_task_sync_dataset_by_dataset" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.task_sync_dataset_by_dataset_resource
-  method       = "PUT"
-  uri          = "http://api.resourcewatch.org:30562/api/v1/task/sync-dataset/by-dataset"
-  vpc_link     = var.vpc_link
-}
-
-module "task_async_delete_task_sync_dataset_by_dataset_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.task_sync_dataset_by_dataset_id_resource
-  method       = "DELETE"
-  uri          = "http://api.resourcewatch.org:30562/api/v1/task/sync-dataset/by-dataset/{datasetId}"
-  vpc_link     = var.vpc_link
-}
-
-module "task_async_post_task_sync_dataset_by_dataset_id_hook" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.task_sync_dataset_by_dataset_id_hook_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30562/api/v1/task/sync-dataset/by-dataset/{datasetId}/hook"
-  vpc_link     = var.vpc_link
-  endpoint_request_parameters = ["datasetId"]
 }
 

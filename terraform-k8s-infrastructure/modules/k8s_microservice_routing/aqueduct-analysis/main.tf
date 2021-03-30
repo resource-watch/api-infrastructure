@@ -61,129 +61,18 @@ resource "aws_api_gateway_resource" "v1_aqueduct_resource" {
   path_part   = "aqueduct"
 }
 
-// /v1/aqueduct/analysis
-resource "aws_api_gateway_resource" "v1_aqueduct_analysis_resource" {
+// /v1/aqueduct/{proxy+}
+resource "aws_api_gateway_resource" "v1_aqueduct_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.v1_aqueduct_resource.id
-  path_part   = "analysis"
+  path_part   = "{proxy+}"
 }
 
-// /v1/aqueduct/analysis/cba
-resource "aws_api_gateway_resource" "v1_aqueduct_analysis_cba_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_aqueduct_analysis_resource.id
-  path_part   = "cba"
-}
-
-// /v1/aqueduct/analysis/cba/default
-resource "aws_api_gateway_resource" "v1_aqueduct_analysis_cba_default_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_aqueduct_analysis_cba_resource.id
-  path_part   = "default"
-}
-
-// /v1/aqueduct/analysis/cba/expire-cache
-resource "aws_api_gateway_resource" "v1_aqueduct_analysis_cba_expire_cache_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_aqueduct_analysis_cba_resource.id
-  path_part   = "expire-cache"
-}
-
-// /v1/aqueduct/analysis/cba/widget
-resource "aws_api_gateway_resource" "v1_aqueduct_analysis_cba_widget_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_aqueduct_analysis_cba_resource.id
-  path_part   = "widget"
-}
-
-// /v1/aqueduct/analysis/cba/widget/{widgetId}
-resource "aws_api_gateway_resource" "v1_aqueduct_analysis_cba_widget_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_aqueduct_analysis_cba_widget_resource.id
-  path_part   = "{widgetId}"
-}
-
-// /v1/aqueduct/analysis/risk
-resource "aws_api_gateway_resource" "v1_aqueduct_analysis_risk_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_aqueduct_analysis_resource.id
-  path_part   = "risk"
-}
-
-// /v1/aqueduct/analysis/risk/widget
-resource "aws_api_gateway_resource" "v1_aqueduct_analysis_risk_widget_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_aqueduct_analysis_risk_resource.id
-  path_part   = "widget"
-}
-
-// /v1/aqueduct/analysis/risk/widget/{widgetId}
-resource "aws_api_gateway_resource" "v1_aqueduct_analysis_risk_widget_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_aqueduct_analysis_risk_widget_resource.id
-  path_part   = "{widgetId}"
-}
-
-module "aqueduct_analysis_get_v1_aqueduct_analysis" {
+module "aqueduct_analysis_any_v1_aqueduct_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_aqueduct_analysis_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30501/api/v1/aqueduct/analysis"
-  vpc_link     = var.vpc_link
-}
-
-module "aqueduct_analysis_post_v1_aqueduct_analysis" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_aqueduct_analysis_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30501/api/v1/aqueduct/analysis"
-  vpc_link     = var.vpc_link
-}
-
-module "aqueduct_analysis_get_v1_aqueduct_analysis_cba" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_aqueduct_analysis_cba_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30501/api/v1/aqueduct/analysis/cba"
-  vpc_link     = var.vpc_link
-}
-
-module "aqueduct_analysis_get_v1_aqueduct_analysis_cba_default" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_aqueduct_analysis_cba_default_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30501/api/v1/aqueduct/analysis/cba/default"
-  vpc_link     = var.vpc_link
-}
-
-module "aqueduct_analysis_get_v1_aqueduct_analysis_cba_widget_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_aqueduct_analysis_cba_widget_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30501/api/v1/aqueduct/analysis/cba/widget/{widgetId}"
-  vpc_link     = var.vpc_link
-}
-
-module "aqueduct_analysis_delete_v1_aqueduct_analysis_cba_expire_cache" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.v1_aqueduct_analysis_cba_expire_cache_resource
-  method         = "DELETE"
-  backend_method = "POST"
-  uri            = "http://api.resourcewatch.org:30501/api/v1/aqueduct/analysis/cba/expire-cache"
-  vpc_link       = var.vpc_link
-}
-
-module "aqueduct_analysis_get_v1_aqueduct_analysis_risk_widget_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_aqueduct_analysis_risk_widget_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30501/api/v1/aqueduct/analysis/risk/widget/{widgetId}"
+  api_resource = aws_api_gateway_resource.v1_aqueduct_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30501/api/v1/aqueduct/{proxy}"
   vpc_link     = var.vpc_link
 }
