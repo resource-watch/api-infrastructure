@@ -109,7 +109,6 @@ module "query_get_query" {
   api_gateway    = var.api_gateway
   api_resource   = aws_api_gateway_resource.query_resource
   method         = "GET"
-  backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30555/api/v1/query"
   vpc_link       = var.vpc_link
 }
@@ -128,7 +127,6 @@ module "query_get_query_id" {
   api_gateway    = var.api_gateway
   api_resource   = aws_api_gateway_resource.query_dataset_id_resource
   method         = "GET"
-  backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30555/api/v1/query/{datasetId}"
   vpc_link       = var.vpc_link
 }
@@ -147,7 +145,6 @@ module "download_get_download" {
   api_gateway    = var.api_gateway
   api_resource   = aws_api_gateway_resource.download_resource
   method         = "GET"
-  backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30555/api/v1/download"
   vpc_link       = var.vpc_link
 }
@@ -166,7 +163,6 @@ module "download_get_download_id" {
   api_gateway    = var.api_gateway
   api_resource   = aws_api_gateway_resource.download_dataset_id_resource
   method         = "GET"
-  backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30555/api/v1/download/{datasetId}"
   vpc_link       = var.vpc_link
 }
@@ -185,7 +181,6 @@ module "jiminy_get_jiminy" {
   api_gateway    = var.api_gateway
   api_resource   = aws_api_gateway_resource.jiminy_resource
   method         = "GET"
-  backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30555/api/v1/jiminy"
   vpc_link       = var.vpc_link
 }

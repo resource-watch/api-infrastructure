@@ -294,7 +294,6 @@ module "document_adapter_get_query_csv_dataset_id" {
   api_gateway    = var.api_gateway
   api_resource   = aws_api_gateway_resource.query_csv_dataset_id_resource
   method         = "GET"
-  backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30521/api/v1/document/query/csv/{datasetId}"
   vpc_link       = var.vpc_link
 }
@@ -313,7 +312,6 @@ module "document_adapter_get_query_json_dataset_id" {
   api_gateway    = var.api_gateway
   api_resource   = aws_api_gateway_resource.query_json_dataset_id_resource
   method         = "GET"
-  backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30521/api/v1/document/query/json/{datasetId}"
   vpc_link       = var.vpc_link
 }
@@ -332,7 +330,6 @@ module "document_adapter_get_query_tsv_dataset_id" {
   api_gateway    = var.api_gateway
   api_resource   = aws_api_gateway_resource.query_tsv_dataset_id_resource
   method         = "GET"
-  backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30521/api/v1/document/query/tsv/{datasetId}"
   vpc_link       = var.vpc_link
 }
@@ -351,7 +348,6 @@ module "document_adapter_get_query_xml_dataset_id" {
   api_gateway    = var.api_gateway
   api_resource   = aws_api_gateway_resource.query_xml_dataset_id_resource
   method         = "GET"
-  backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30521/api/v1/document/query/xml/{datasetId}"
   vpc_link       = var.vpc_link
 }
@@ -370,7 +366,6 @@ module "document_adapter_get_download_csv_dataset_id" {
   api_gateway    = var.api_gateway
   api_resource   = aws_api_gateway_resource.download_csv_dataset_id_resource
   method         = "GET"
-  backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30521/api/v1/document/download/csv/{datasetId}"
   vpc_link       = var.vpc_link
 }
@@ -389,7 +384,6 @@ module "document_adapter_get_download_json_dataset_id" {
   api_gateway    = var.api_gateway
   api_resource   = aws_api_gateway_resource.download_json_dataset_id_resource
   method         = "GET"
-  backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30521/api/v1/document/download/json/{datasetId}"
   vpc_link       = var.vpc_link
 }
@@ -408,7 +402,6 @@ module "document_adapter_get_download_tsv_dataset_id" {
   api_gateway    = var.api_gateway
   api_resource   = aws_api_gateway_resource.download_tsv_dataset_id_resource
   method         = "GET"
-  backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30521/api/v1/document/download/tsv/{datasetId}"
   vpc_link       = var.vpc_link
 }
@@ -427,7 +420,6 @@ module "document_adapter_get_download_xml_dataset_id" {
   api_gateway    = var.api_gateway
   api_resource   = aws_api_gateway_resource.download_xml_dataset_id_resource
   method         = "GET"
-  backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30521/api/v1/document/download/xml/{datasetId}"
   vpc_link       = var.vpc_link
 }
@@ -446,7 +438,6 @@ module "document_adapter_get_fields_csv_dataset_id" {
   api_gateway    = var.api_gateway
   api_resource   = aws_api_gateway_resource.fields_csv_dataset_id_resource
   method         = "GET"
-  backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30521/api/v1/document/fields/csv/{datasetId}"
   vpc_link       = var.vpc_link
 }
@@ -456,7 +447,6 @@ module "document_adapter_get_fields_json_dataset_id" {
   api_gateway    = var.api_gateway
   api_resource   = aws_api_gateway_resource.fields_json_dataset_id_resource
   method         = "GET"
-  backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30521/api/v1/document/fields/json/{datasetId}"
   vpc_link       = var.vpc_link
 }
@@ -466,7 +456,6 @@ module "document_adapter_get_fields_tsv_dataset_id" {
   api_gateway    = var.api_gateway
   api_resource   = aws_api_gateway_resource.fields_tsv_dataset_id_resource
   method         = "GET"
-  backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30521/api/v1/document/fields/tsv/{datasetId}"
   vpc_link       = var.vpc_link
 }
@@ -476,7 +465,6 @@ module "document_adapter_get_fields_xml_dataset_id" {
   api_gateway    = var.api_gateway
   api_resource   = aws_api_gateway_resource.fields_xml_dataset_id_resource
   method         = "GET"
-  backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30521/api/v1/document/fields/xml/{datasetId}"
   vpc_link       = var.vpc_link
 }

@@ -16,7 +16,7 @@ resource "aws_api_gateway_integration" "endpoint_integration" {
 
   type                    = "HTTP_PROXY"
   uri                     = var.uri
-  integration_http_method = var.backend_method != "" ? var.backend_method : var.method
+  integration_http_method = var.method
 
   connection_type = "VPC_LINK"
   connection_id   = var.vpc_link.id

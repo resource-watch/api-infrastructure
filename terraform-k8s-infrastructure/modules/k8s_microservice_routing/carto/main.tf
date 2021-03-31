@@ -133,7 +133,6 @@ module "carto_get_v1_query_cartodb_dataset_id" {
   api_gateway    = var.api_gateway
   api_resource   = aws_api_gateway_resource.v1_query_cartodb_dataset_id_resource
   method         = "GET"
-  backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30507/api/v1/carto/query/{datasetId}"
   vpc_link       = var.vpc_link
 }
@@ -152,7 +151,6 @@ module "carto_get_v1_download_cartodb_dataset_id" {
   api_gateway    = var.api_gateway
   api_resource   = aws_api_gateway_resource.v1_download_cartodb_dataset_id_resource
   method         = "GET"
-  backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30507/api/v1/carto/download/{datasetId}"
   vpc_link       = var.vpc_link
 }
@@ -171,7 +169,6 @@ module "carto_get_v1_fields_cartodb_dataset_id" {
   api_gateway    = var.api_gateway
   api_resource   = aws_api_gateway_resource.v1_fields_cartodb_dataset_id_resource
   method         = "GET"
-  backend_method = "POST"
   uri            = "http://api.resourcewatch.org:30507/api/v1/carto/fields/{datasetId}"
   vpc_link       = var.vpc_link
 }
