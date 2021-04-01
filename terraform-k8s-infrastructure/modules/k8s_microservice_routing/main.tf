@@ -152,6 +152,10 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.fires-summary-stats.endpoints),
       jsonencode(module.forest-change.endpoints),
       jsonencode(module.forest-watcher-api.endpoints),
+      jsonencode(module.forms.endpoints),
+      jsonencode(module.fw-alerts.endpoints),
+      jsonencode(module.fw-contextual-layers.endpoints),
+      jsonencode(module.fw-teams.endpoints),
       jsonencode(module.gee-tiles.endpoints),
       jsonencode(module.gee.endpoints),
       jsonencode(module.geostore.endpoints),
@@ -485,6 +489,54 @@ module "forest-watcher-api" {
 
 module "forest-change" {
   source           = "./forest-change"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
+  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+}
+
+module "forms" {
+  source           = "./forms"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
+  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+}
+
+module "fw-alerts" {
+  source           = "./fw-alerts"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
+  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+}
+
+module "fw-contextual-layers" {
+  source           = "./fw-contextual-layers"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
+  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+}
+
+module "fw-teams" {
+  source           = "./fw-teams"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint

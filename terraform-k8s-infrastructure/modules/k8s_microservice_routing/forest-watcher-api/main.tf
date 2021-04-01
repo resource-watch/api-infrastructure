@@ -10,7 +10,7 @@ resource "kubernetes_service" "forest_watcher_api_service" {
     port {
       port        = 30525
       node_port   = 30525
-      target_port = 3600
+      target_port = 4400
     }
 
     type = "NodePort"
@@ -64,7 +64,7 @@ resource "aws_api_gateway_resource" "v1_forest_watcher_resource" {
 // /v1/forest-watcher/area
 resource "aws_api_gateway_resource" "v1_forest_watcher_area_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_forest_watcher_area_resource.id
+  parent_id   = aws_api_gateway_resource.v1_forest_watcher_resource.id
   path_part   = "area"
 }
 
