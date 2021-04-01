@@ -67,10 +67,17 @@ resource "aws_api_gateway_resource" "gee_tiles_layer_id_tile_resource" {
   path_part   = "tile"
 }
 
-// /v1/layer/{layerId}/tile/{proxy+}
-resource "aws_api_gateway_resource" "gee_tiles_layer_id_tile_proxy_resource" {
+// /v1/layer/{layerId}/tile/gee
+resource "aws_api_gateway_resource" "gee_tiles_layer_id_tile_gee_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.gee_tiles_layer_id_tile_resource.id
+  path_part   = "gee"
+}
+
+// /v1/layer/{layerId}/tile/gee/{proxy+}
+resource "aws_api_gateway_resource" "gee_tiles_layer_id_tile_gee_proxy_resource" {
+  rest_api_id = var.api_gateway.id
+  parent_id   = aws_api_gateway_resource.gee_tiles_layer_id_tile_gee_resource.id
   path_part   = "{proxy+}"
 }
 
@@ -88,12 +95,12 @@ resource "aws_api_gateway_resource" "gee_layer_gee_proxy_resource" {
   path_part   = "{proxy+}"
 }
 
-module "gee_tiles_any_layer_id_tile_proxy" {
+module "gee_tiles_any_layer_id_tile_gee_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.gee_tiles_layer_id_tile_proxy_resource
+  api_resource = aws_api_gateway_resource.gee_tiles_layer_id_tile_gee_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30531/api/v1/layer/{layerId}/tile/{proxy}"
+  uri          = "http://api.resourcewatch.org:30531/api/v1/layer/{layerId}/tile/gee/{proxy}"
   vpc_link     = var.vpc_link
   endpoint_request_parameters = ["layerId"]
 }
