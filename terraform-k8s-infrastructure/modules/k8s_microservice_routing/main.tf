@@ -164,6 +164,7 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.gfw-ogr.endpoints),
       jsonencode(module.gfw-prodes.endpoints),
       jsonencode(module.gfw-umd.endpoints),
+      jsonencode(module.gfw-user.endpoints),
       jsonencode(module.gfw_metadata.endpoints),
       jsonencode(module.graph-client.endpoints),
       jsonencode(module.layer.endpoints),
@@ -437,6 +438,10 @@ module "dataset" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
   eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+
+  depends_on = [
+    aws_api_gateway_resource.v1_resource
+  ]
 }
 
 module "doc-orchestrator" {
@@ -656,6 +661,18 @@ module "gfw-umd" {
   eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
 }
 
+module "gfw-user" {
+  source           = "./gfw-user"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_lb_vpc_link
+  eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
+}
+
 module "graph-client" {
   source           = "./graph-client"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
@@ -714,7 +731,8 @@ module "nexgddp" {
   eks_asg_names    = data.aws_autoscaling_groups.eks_autoscaling_groups.names
 
   depends_on = [
-    module.layer
+    module.layer,
+    module.gee-tiles
   ]
 }
 

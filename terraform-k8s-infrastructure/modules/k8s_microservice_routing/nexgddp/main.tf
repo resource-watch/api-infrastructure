@@ -226,7 +226,7 @@ resource "aws_api_gateway_resource" "nexgddp_layer_loca_proxy_resource" {
 resource "aws_api_gateway_resource" "nexgddp_v1_query_loca_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = data.aws_api_gateway_resource.nexgddp_v1_query_resource.id
-  path_part   = "nexgddp"
+  path_part   = "loca"
 }
 
 // /v1/query/loca/{datasetId}
