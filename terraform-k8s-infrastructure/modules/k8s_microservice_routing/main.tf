@@ -256,6 +256,13 @@ EOF
 
 // Nginx reverse proxy config, remapped
 
+// /{.*} redirect to /v1/{$1}
+module "v1_redirect" {
+  source      = "./v1-redirect"
+  api_gateway = aws_api_gateway_rest_api.rw_api_gateway
+  target_domain = aws_api_gateway_domain_name.aws_env_resourcewatch_org_gateway_domain_name.domain_name
+}
+
 // /v1/gfw-metadata proxies to external server
 module "gfw_metadata" {
   source      = "./gfw-metadata"
