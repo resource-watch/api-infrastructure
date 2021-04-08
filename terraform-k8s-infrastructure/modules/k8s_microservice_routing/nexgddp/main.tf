@@ -272,12 +272,12 @@ resource "aws_api_gateway_resource" "nexgddp_v1_loca_proxy_resource" {
 }
 
 module "nexgddp_get_v1_query_nexgddp_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.nexgddp_v1_query_nexgddp_dataset_id_resource
-  method         = "GET"
-  uri            = "http://api.resourcewatch.org:30549/api/v1/nexgddp/query/{datasetId}"
-  vpc_link       = var.vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.nexgddp_v1_query_nexgddp_dataset_id_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org:30549/api/v1/nexgddp/query/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "nexgddp_post_v1_query_nexgddp_dataset_id" {
@@ -290,12 +290,12 @@ module "nexgddp_post_v1_query_nexgddp_dataset_id" {
 }
 
 module "nexgddp_get_v1_fields_nexgddp_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.nexgddp_v1_fields_nexgddp_dataset_id_resource
-  method         = "GET"
-  uri            = "http://api.resourcewatch.org:30549/api/v1/nexgddp/fields/{datasetId}"
-  vpc_link       = var.vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.nexgddp_v1_fields_nexgddp_dataset_id_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org:30549/api/v1/nexgddp/fields/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "nexgddp_post_v1_rest_datasets_nexgddp" {
@@ -317,12 +317,12 @@ module "nexgddp_delete_v1_rest_datasets_nexgddp_dataset_id" {
 }
 
 module "nexgddp_get_v1_query_loca_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.nexgddp_v1_query_loca_dataset_id_resource
-  method         = "GET"
-  uri            = "http://api.resourcewatch.org:30549/api/v1/nexgddp/query/{datasetId}"
-  vpc_link       = var.vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.nexgddp_v1_query_loca_dataset_id_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org:30549/api/v1/nexgddp/query/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "nexgddp_post_v1_query_loca_dataset_id" {
@@ -335,12 +335,12 @@ module "nexgddp_post_v1_query_loca_dataset_id" {
 }
 
 module "nexgddp_get_v1_fields_loca_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.nexgddp_v1_fields_loca_dataset_id_resource
-  method         = "GET"
-  uri            = "http://api.resourcewatch.org:30549/api/v1/nexgddp/fields/{datasetId}"
-  vpc_link       = var.vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.nexgddp_v1_fields_loca_dataset_id_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org:30549/api/v1/nexgddp/fields/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "nexgddp_post_v1_rest_datasets_loca" {
@@ -371,41 +371,41 @@ module "nexgddp_any_v1_loca_proxy" {
 }
 
 module "gee_tiles_any_layer_id_tile_nexgddp_proxy_resource" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.nexgddp_v1_layer_id_tile_nexgddp_proxy_resource
-  method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30549/api/v1/nexgddp/layer/{layerId}/tile/nexgddp/{proxy}"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.nexgddp_v1_layer_id_tile_nexgddp_proxy_resource
+  method                      = "ANY"
+  uri                         = "http://api.resourcewatch.org:30549/api/v1/nexgddp/layer/{layerId}/tile/nexgddp/{proxy}"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["layerId"]
 }
 
 module "gee_tiles_any_layer_id_tile_loca_proxy_resource" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.nexgddp_v1_layer_id_tile_loca_proxy_resource
-  method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30549/api/v1/nexgddp/layer/{layerId}/tile/nexgddp/{proxy}"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.nexgddp_v1_layer_id_tile_loca_proxy_resource
+  method                      = "ANY"
+  uri                         = "http://api.resourcewatch.org:30549/api/v1/nexgddp/layer/{layerId}/tile/nexgddp/{proxy}"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["layerId"]
 }
 
 module "gee_tiles_any_layer_nexgddp_proxy_resource" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.nexgddp_layer_nexgddp_proxy_resource
-  method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30549/api/v1/nexgddp/layer/nexgddp/{proxy}"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.nexgddp_layer_nexgddp_proxy_resource
+  method                      = "ANY"
+  uri                         = "http://api.resourcewatch.org:30549/api/v1/nexgddp/layer/nexgddp/{proxy}"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["layerId"]
 }
 
 module "gee_tiles_any_layer_loca_proxy_resource" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.nexgddp_layer_loca_proxy_resource
-  method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30549/api/v1/nexgddp/layer/nexgddp/{proxy}"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.nexgddp_layer_loca_proxy_resource
+  method                      = "ANY"
+  uri                         = "http://api.resourcewatch.org:30549/api/v1/nexgddp/layer/nexgddp/{proxy}"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["layerId"]
 }

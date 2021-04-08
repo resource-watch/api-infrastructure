@@ -96,20 +96,20 @@ resource "aws_api_gateway_resource" "gee_layer_gee_proxy_resource" {
 }
 
 module "gee_tiles_any_layer_id_tile_gee_proxy" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.gee_tiles_layer_id_tile_gee_proxy_resource
-  method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30531/api/v1/layer/{layerId}/tile/gee/{proxy}"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.gee_tiles_layer_id_tile_gee_proxy_resource
+  method                      = "ANY"
+  uri                         = "http://api.resourcewatch.org:30531/api/v1/layer/{layerId}/tile/gee/{proxy}"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["layerId"]
 }
 
 module "gee_tiles_any_gee_layer_gee_proxy" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.gee_layer_gee_proxy_resource
-  method         = "ANY"
-  uri            = "http://api.resourcewatch.org:30531/api/v1/layer/gee/{proxy}"
-  vpc_link       = var.vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.gee_layer_gee_proxy_resource
+  method       = "ANY"
+  uri          = "http://api.resourcewatch.org:30531/api/v1/layer/gee/{proxy}"
+  vpc_link     = var.vpc_link
 }

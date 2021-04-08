@@ -129,12 +129,12 @@ resource "aws_api_gateway_resource" "v1_rest_datasets_featureservice_dataset_id_
 }
 
 module "arcgis_get_v1_query_featureservice_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.v1_query_featureservice_dataset_id_resource
-  method         = "GET"
-  uri            = "http://api.resourcewatch.org:30502/api/v1/arcgis/query/{datasetId}"
-  vpc_link       = var.vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.v1_query_featureservice_dataset_id_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org:30502/api/v1/arcgis/query/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "arcgis_post_v1_query_featureservice_dataset_id" {
@@ -147,12 +147,12 @@ module "arcgis_post_v1_query_featureservice_dataset_id" {
 }
 
 module "arcgis_get_v1_download_featureservice_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.v1_download_featureservice_dataset_id_resource
-  method         = "GET"
-  uri            = "http://api.resourcewatch.org:30502/api/v1/arcgis/download/{datasetId}"
-  vpc_link       = var.vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.v1_download_featureservice_dataset_id_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org:30502/api/v1/arcgis/download/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "arcgis_post_v1_download_featureservice_dataset_id" {
@@ -165,12 +165,12 @@ module "arcgis_post_v1_download_featureservice_dataset_id" {
 }
 
 module "arcgis_get_v1_fields_featureservice_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.v1_fields_featureservice_dataset_id_resource
-  method         = "GET"
-  uri            = "http://api.resourcewatch.org:30502/api/v1/arcgis/fields/{datasetId}"
-  vpc_link       = var.vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.v1_fields_featureservice_dataset_id_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org:30502/api/v1/arcgis/fields/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "arcgis_post_v1_rest_datasets_featureservice" {

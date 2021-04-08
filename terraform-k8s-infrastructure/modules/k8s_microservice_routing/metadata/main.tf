@@ -173,134 +173,134 @@ module "metadata_get" {
 
 // Dataset
 module "metadata_get_for_dataset" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.metadata_dataset_id_metadata_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/metadata"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.metadata_dataset_id_metadata_resource
+  method                      = "GET"
+  uri                         = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/metadata"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
 
 module "metadata_post_for_dataset" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.metadata_dataset_id_metadata_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/metadata"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.metadata_dataset_id_metadata_resource
+  method                      = "POST"
+  uri                         = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/metadata"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
 
 module "metadata_delete_for_dataset" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.metadata_dataset_id_metadata_resource
-  method       = "DELETE"
-  uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/metadata"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.metadata_dataset_id_metadata_resource
+  method                      = "DELETE"
+  uri                         = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/metadata"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
 
 module "metadata_post_for_dataset_clone" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.metadata_dataset_metadata_clone_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/metadata/clone"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.metadata_dataset_metadata_clone_resource
+  method                      = "POST"
+  uri                         = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/metadata/clone"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
 
 module "metadata_patch_for_dataset" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.metadata_dataset_id_metadata_resource
-  method       = "PATCH"
-  uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/metadata"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.metadata_dataset_id_metadata_resource
+  method                      = "PATCH"
+  uri                         = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/metadata"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
 
 // Widget
 module "metadata_get_for_dataset_widget" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.metadata_dataset_id_widget_id_metadata_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/widget/{widgetId}/metadata"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.metadata_dataset_id_widget_id_metadata_resource
+  method                      = "GET"
+  uri                         = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/widget/{widgetId}/metadata"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }
 
 module "metadata_post_for_dataset_widget" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.metadata_dataset_id_widget_id_metadata_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/widget/{widgetId}/metadata"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.metadata_dataset_id_widget_id_metadata_resource
+  method                      = "POST"
+  uri                         = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/widget/{widgetId}/metadata"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }
 
 module "metadata_delete_for_dataset_widget" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.metadata_dataset_id_widget_id_metadata_resource
-  method       = "DELETE"
-  uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/widget/{widgetId}/metadata"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.metadata_dataset_id_widget_id_metadata_resource
+  method                      = "DELETE"
+  uri                         = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/widget/{widgetId}/metadata"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }
 
 module "metadata_patch_for_dataset_widget" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.metadata_dataset_id_widget_id_metadata_resource
-  method       = "PATCH"
-  uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/widget/{widgetId}/metadata"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.metadata_dataset_id_widget_id_metadata_resource
+  method                      = "PATCH"
+  uri                         = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/widget/{widgetId}/metadata"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }
 
 // Layer
 module "metadata_get_for_dataset_layer" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.metadata_dataset_id_layer_id_metadata_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/layer/{layerId}/metadata"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.metadata_dataset_id_layer_id_metadata_resource
+  method                      = "GET"
+  uri                         = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/layer/{layerId}/metadata"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 module "metadata_post_for_dataset_layer" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.metadata_dataset_id_layer_id_metadata_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/layer/{layerId}/metadata"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.metadata_dataset_id_layer_id_metadata_resource
+  method                      = "POST"
+  uri                         = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/layer/{layerId}/metadata"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 module "metadata_delete_for_dataset_layer" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.metadata_dataset_id_layer_id_metadata_resource
-  method       = "DELETE"
-  uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/layer/{layerId}/metadata"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.metadata_dataset_id_layer_id_metadata_resource
+  method                      = "DELETE"
+  uri                         = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/layer/{layerId}/metadata"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 module "metadata_patch_for_dataset_layer" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.metadata_dataset_id_layer_id_metadata_resource
-  method       = "PATCH"
-  uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/layer/{layerId}/metadata"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.metadata_dataset_id_layer_id_metadata_resource
+  method                      = "PATCH"
+  uri                         = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/layer/{layerId}/metadata"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
@@ -315,21 +315,21 @@ module "metadata_dataset_post_find_by_ids" {
 }
 
 module "metadata_layer_post_find_by_ids" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.metadata_dataset_id_layer_metadata_find_by_ids_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/layer/metadata/find-by-ids"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.metadata_dataset_id_layer_metadata_find_by_ids_resource
+  method                      = "POST"
+  uri                         = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/layer/metadata/find-by-ids"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
 
 module "metadata_widget_post_find_by_ids" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.metadata_dataset_id_widget_metadata_find_by_ids_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/widget/metadata/find-by-ids"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.metadata_dataset_id_widget_metadata_find_by_ids_resource
+  method                      = "POST"
+  uri                         = "http://api.resourcewatch.org:30548/api/v1/dataset/{datasetId}/widget/metadata/find-by-ids"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }

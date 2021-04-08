@@ -142,12 +142,12 @@ module "dataset_post_dataset" {
 }
 
 module "dataset_any_dataset_id_proxy" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_proxy_resource
-  method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30516/api/v1/dataset/{datasetId}/{proxy}"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_proxy_resource
+  method                      = "ANY"
+  uri                         = "http://api.resourcewatch.org:30516/api/v1/dataset/{datasetId}/{proxy}"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
 

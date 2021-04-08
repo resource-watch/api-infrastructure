@@ -124,51 +124,51 @@ module "widget_any_widget_proxy" {
 }
 
 module "widget_get_dataset_id_widget" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_widget_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_widget_resource
+  method                      = "GET"
+  uri                         = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
 
 module "widget_post_dataset_id_widget" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_widget_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_widget_resource
+  method                      = "POST"
+  uri                         = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
 
 module "widget_delete_dataset_id_widget" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_widget_resource
-  method       = "DELETE"
-  uri          = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_widget_resource
+  method                      = "DELETE"
+  uri                         = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
 
 module "widget_get_dataset_id_widget_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_widget_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget/{widgetId}"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_widget_id_resource
+  method                      = "GET"
+  uri                         = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget/{widgetId}"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
 
 module "widget_any_dataset_id_widget_id_proxy" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_widget_id_resource
-  method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget/{widgetId}/{proxy}"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_widget_id_resource
+  method                      = "ANY"
+  uri                         = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget/{widgetId}/{proxy}"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }

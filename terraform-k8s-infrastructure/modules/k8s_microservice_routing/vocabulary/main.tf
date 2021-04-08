@@ -145,52 +145,52 @@ resource "aws_api_gateway_resource" "dataset_vocabulary_proxy_resource" {
 }
 
 module "vocabulary_get_dataset_id_vocabulary" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_vocabulary_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_vocabulary_resource
+  method                      = "GET"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
 
 module "vocabulary_post_dataset_id_vocabulary" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_vocabulary_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_vocabulary_resource
+  method                      = "POST"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
 
 module "vocabulary_put_dataset_id_vocabulary" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_vocabulary_resource
-  method       = "PUT"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_vocabulary_resource
+  method                      = "PUT"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
 
 module "vocabulary_any_dataset_id_vocabulary_proxy" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_vocabulary_proxy_resource
-  method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary/{proxy}"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_vocabulary_proxy_resource
+  method                      = "ANY"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary/{proxy}"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
 
 module "vocabulary_delete_dataset_id_vocabulary" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_vocabulary_resource
-  method       = "DELETE"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_vocabulary_resource
+  method                      = "DELETE"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/vocabulary"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
 
@@ -247,82 +247,82 @@ resource "aws_api_gateway_resource" "dataset_id_widget_vocabulary_proxy_resource
 }
 
 module "vocabulary_get_dataset_id_widget_id_vocabulary" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_resource
+  method                      = "GET"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
 
 module "vocabulary_get_dataset_id_widget_id_vocabulary_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_id_resource
+  method                      = "GET"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }
 
 module "vocabulary_post_dataset_id_widget_id_vocabulary" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_resource
+  method                      = "POST"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }
 
 module "vocabulary_post_dataset_id_widget_id_vocabulary_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_id_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_id_resource
+  method                      = "POST"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }
 
 module "vocabulary_patch_dataset_id_widget_id_vocabulary_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_id_resource
-  method       = "PATCH"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_id_resource
+  method                      = "PATCH"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }
 
 module "vocabulary_delete_dataset_id_widget_id_vocabulary" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_resource
-  method       = "DELETE"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_resource
+  method                      = "DELETE"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }
 
 module "vocabulary_delete_dataset_id_widget_id_vocabulary_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_id_resource
-  method       = "DELETE"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_id_resource
+  method                      = "DELETE"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }
 
 module "vocabulary_any_dataset_id_widget_vocabulary_proxy" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_widget_vocabulary_proxy_resource
-  method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/vocabulary/{proxy}"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_widget_vocabulary_proxy_resource
+  method                      = "ANY"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/widget/vocabulary/{proxy}"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
 
@@ -371,82 +371,82 @@ resource "aws_api_gateway_resource" "dataset_id_layer_vocabulary_proxy_resource"
 }
 
 module "vocabulary_get_dataset_id_layer_id_vocabulary" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_resource
+  method                      = "GET"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 module "vocabulary_get_dataset_id_layer_id_vocabulary_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_id_resource
+  method                      = "GET"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 module "vocabulary_post_dataset_id_layer_id_vocabulary" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_resource
+  method                      = "POST"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 module "vocabulary_post_dataset_id_layer_id_vocabulary_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_id_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_id_resource
+  method                      = "POST"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 module "vocabulary_patch_dataset_id_layer_id_vocabulary_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_id_resource
-  method       = "PATCH"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_id_resource
+  method                      = "PATCH"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 module "vocabulary_delete_dataset_id_layer_id_vocabulary" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_resource
-  method       = "DELETE"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_resource
+  method                      = "DELETE"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 module "vocabulary_delete_dataset_id_layer_id_vocabulary_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_id_resource
-  method       = "DELETE"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_id_resource
+  method                      = "DELETE"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
 
 module "vocabulary_any_dataset_id_layer_vocabulary_proxy" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_layer_vocabulary_proxy_resource
-  method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/vocabulary/{proxy}"
-  vpc_link     = var.vpc_link
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_layer_vocabulary_proxy_resource
+  method                      = "ANY"
+  uri                         = "http://api.resourcewatch.org:30565/api/v1/dataset/{datasetId}/layer/vocabulary/{proxy}"
+  vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
 

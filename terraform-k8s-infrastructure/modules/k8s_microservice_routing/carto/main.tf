@@ -129,12 +129,12 @@ resource "aws_api_gateway_resource" "v1_rest_datasets_cartodb_dataset_id_resourc
 }
 
 module "carto_get_v1_query_cartodb_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.v1_query_cartodb_dataset_id_resource
-  method         = "GET"
-  uri            = "http://api.resourcewatch.org:30507/api/v1/carto/query/{datasetId}"
-  vpc_link       = var.vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.v1_query_cartodb_dataset_id_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org:30507/api/v1/carto/query/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "carto_post_v1_query_cartodb_dataset_id" {
@@ -147,12 +147,12 @@ module "carto_post_v1_query_cartodb_dataset_id" {
 }
 
 module "carto_get_v1_download_cartodb_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.v1_download_cartodb_dataset_id_resource
-  method         = "GET"
-  uri            = "http://api.resourcewatch.org:30507/api/v1/carto/download/{datasetId}"
-  vpc_link       = var.vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.v1_download_cartodb_dataset_id_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org:30507/api/v1/carto/download/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "carto_post_v1_download_cartodb_dataset_id" {
@@ -165,12 +165,12 @@ module "carto_post_v1_download_cartodb_dataset_id" {
 }
 
 module "carto_get_v1_fields_cartodb_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.v1_fields_cartodb_dataset_id_resource
-  method         = "GET"
-  uri            = "http://api.resourcewatch.org:30507/api/v1/carto/fields/{datasetId}"
-  vpc_link       = var.vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.v1_fields_cartodb_dataset_id_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org:30507/api/v1/carto/fields/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "carto_post_v1_rest_datasets_cartodb" {

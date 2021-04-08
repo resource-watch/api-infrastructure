@@ -122,12 +122,12 @@ resource "aws_api_gateway_resource" "v1_rest_datasets_bigquery_resource" {
 }
 
 module "bigquery_get_v1_query_bigquery_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.v1_query_bigquery_dataset_id_resource
-  method         = "GET"
-  uri            = "http://api.resourcewatch.org:30506/api/v1/bigquery/query/{datasetId}"
-  vpc_link       = var.vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.v1_query_bigquery_dataset_id_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org:30506/api/v1/bigquery/query/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "bigquery_post_v1_query_bigquery_dataset_id" {
@@ -140,12 +140,12 @@ module "bigquery_post_v1_query_bigquery_dataset_id" {
 }
 
 module "bigquery_get_v1_download_bigquery_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.v1_download_bigquery_dataset_id_resource
-  method         = "GET"
-  uri            = "http://api.resourcewatch.org:30506/api/v1/bigquery/download/{datasetId}"
-  vpc_link       = var.vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.v1_download_bigquery_dataset_id_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org:30506/api/v1/bigquery/download/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "bigquery_post_v1_download_bigquery_dataset_id" {
@@ -158,12 +158,12 @@ module "bigquery_post_v1_download_bigquery_dataset_id" {
 }
 
 module "bigquery_get_v1_fields_bigquery_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.v1_fields_bigquery_dataset_id_resource
-  method         = "GET"
-  uri            = "http://api.resourcewatch.org:30506/api/v1/bigquery/fields/{datasetId}"
-  vpc_link       = var.vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.v1_fields_bigquery_dataset_id_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org:30506/api/v1/bigquery/fields/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "bigquery_post_v1_rest_datasets_bigquery" {

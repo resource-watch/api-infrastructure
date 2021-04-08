@@ -129,12 +129,12 @@ resource "aws_api_gateway_resource" "rest_datasets_gee_dataset_id_resource" {
 }
 
 module "gee_get_query_gee_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.query_gee_dataset_id_resource
-  method         = "GET"
-  uri            = "http://api.resourcewatch.org:30530/api/v1/earthengine/query/{datasetId}"
-  vpc_link       = var.vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.query_gee_dataset_id_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org:30530/api/v1/earthengine/query/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "gee_post_query_gee_dataset_id" {
@@ -147,12 +147,12 @@ module "gee_post_query_gee_dataset_id" {
 }
 
 module "gee_get_download_gee_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.download_gee_dataset_id_resource
-  method         = "GET"
-  uri            = "http://api.resourcewatch.org:30530/api/v1/earthengine/download/{datasetId}"
-  vpc_link       = var.vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.download_gee_dataset_id_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org:30530/api/v1/earthengine/download/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "gee_post_download_gee_dataset_id" {
@@ -165,12 +165,12 @@ module "gee_post_download_gee_dataset_id" {
 }
 
 module "gee_get_fields_gee_dataset_id" {
-  source         = "../endpoint"
-  api_gateway    = var.api_gateway
-  api_resource   = aws_api_gateway_resource.fields_gee_dataset_id_resource
-  method         = "GET"
-  uri            = "http://api.resourcewatch.org:30530/api/v1/earthengine/fields/{datasetId}"
-  vpc_link       = var.vpc_link
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.fields_gee_dataset_id_resource
+  method       = "GET"
+  uri          = "http://api.resourcewatch.org:30530/api/v1/earthengine/fields/{datasetId}"
+  vpc_link     = var.vpc_link
 }
 
 module "gee_get_rest_datasets_gee" {

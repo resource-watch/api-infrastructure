@@ -7,6 +7,6 @@ variable "api_gateway" {
 }
 
 variable "target_domain" {
-  type = string
+  type        = string
   description = "Target URL to which the requests are redirected"
 }
