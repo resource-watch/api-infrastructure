@@ -243,58 +243,19 @@ data:
       </parse>
     </source>
 
-    <source>
-      @type tail
-      @id in_tail_cwagent_logs
-      @label @cwagentlogs
-      path /var/log/containers/cloudwatch-agent*
-      pos_file /var/log/cloudwatch-agent.log.pos
-      tag *
-      read_from_head true
-      <parse>
-        @type json
-        time_format %Y-%m-%dT%H:%M:%S.%NZ
-      </parse>
-    </source>
-
-    <source>
-      @type tail
-      @id in_tail_fluentd_logs
-      @label @fluentdlogs
-      path /var/log/containers/fluentd*
-      pos_file /var/log/fluentd.log.pos
-      tag *
-      read_from_head true
-      <parse>
-        @type json
-        time_format %Y-%m-%dT%H:%M:%S.%NZ
-      </parse>
-    </source>
-
-    <label @fluentdlogs>
-      <filter **>
-        @type kubernetes_metadata
-        @id filter_kube_metadata_fluentd
-      </filter>
-
-      <filter **>
-        @type record_transformer
-        @id filter_fluentd_stream_transformer
-        <record>
-          stream_name $${tag_parts[3]}
-        </record>
-      </filter>
-
-      <match **>
-        @type relabel
-        @label @NORMAL
-      </match>
-    </label>
-
     <label @containers>
       <filter **>
         @type kubernetes_metadata
         @id filter_kube_metadata
+      </filter>
+
+      <filter **>
+        @type grep
+        @id filter_healtcheck
+        <exclude>
+          key log
+          pattern /GET \/healthcheck/
+        </exclude>
       </filter>
 
       <filter **>
@@ -303,41 +264,13 @@ data:
         <record>
           stream_name $${tag_parts[3]}
         </record>
+        remove_keys $.kubernetes.pod_id, $.kubernetes.master_url, $.kubernetes.container_image_id, $.kubernetes.namespace_id
       </filter>
 
       <filter **>
         @type concat
         key log
         multiline_start_regexp /^\S/
-        separator ""
-        flush_interval 5
-        timeout_label @NORMAL
-      </filter>
-
-      <match **>
-        @type relabel
-        @label @NORMAL
-      </match>
-    </label>
-
-    <label @cwagentlogs>
-      <filter **>
-        @type kubernetes_metadata
-        @id filter_kube_metadata_cwagent
-      </filter>
-
-      <filter **>
-        @type record_transformer
-        @id filter_cwagent_stream_transformer
-        <record>
-          stream_name $${tag_parts[3]}
-        </record>
-      </filter>
-
-      <filter **>
-        @type concat
-        key log
-        multiline_start_regexp /^\d{4}[-/]\d{1,2}[-/]\d{1,2}/
         separator ""
         flush_interval 5
         timeout_label @NORMAL
