@@ -49,37 +49,31 @@ resource "aws_autoscaling_attachment" "asg_attachment_query" {
   alb_target_group_arn   = aws_lb_target_group.query_lb_target_group.arn
 }
 
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
-}
-
 // /v1/query
 resource "aws_api_gateway_resource" "query_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "query"
 }
 
 // /v1/download
 resource "aws_api_gateway_resource" "download_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "download"
 }
 
 // /v1/jiminy
 resource "aws_api_gateway_resource" "jiminy_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "jiminy"
 }
 
 // /v1/fields
 resource "aws_api_gateway_resource" "fields_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "fields"
 }
 
@@ -109,7 +103,7 @@ module "query_get_query" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.query_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30555/api/v1/query"
+  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/query"
   vpc_link     = var.vpc_link
 }
 
@@ -118,7 +112,7 @@ module "query_post_query" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.query_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30555/api/v1/query"
+  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/query"
   vpc_link     = var.vpc_link
 }
 
@@ -127,7 +121,7 @@ module "query_get_query_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.query_dataset_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30555/api/v1/query/{datasetId}"
+  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/query/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -136,7 +130,7 @@ module "query_post_query_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.query_dataset_id_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30555/api/v1/query/{datasetId}"
+  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/query/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -145,7 +139,7 @@ module "download_get_download" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.download_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30555/api/v1/download"
+  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/download"
   vpc_link     = var.vpc_link
 }
 
@@ -154,7 +148,7 @@ module "download_post_download" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.download_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30555/api/v1/download"
+  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/download"
   vpc_link     = var.vpc_link
 }
 
@@ -163,7 +157,7 @@ module "download_get_download_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.download_dataset_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30555/api/v1/download/{datasetId}"
+  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/download/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -172,7 +166,7 @@ module "download_post_download_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.download_dataset_id_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30555/api/v1/download/{datasetId}"
+  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/download/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -181,7 +175,7 @@ module "jiminy_get_jiminy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.jiminy_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30555/api/v1/jiminy"
+  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/jiminy"
   vpc_link     = var.vpc_link
 }
 
@@ -190,7 +184,7 @@ module "jiminy_post_jiminy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.jiminy_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30555/api/v1/jiminy"
+  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/jiminy"
   vpc_link     = var.vpc_link
 }
 
@@ -199,6 +193,6 @@ module "fields_get_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.fields_dataset_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30555/api/v1/fields/{datasetId}"
+  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/fields/{datasetId}"
   vpc_link     = var.vpc_link
 }

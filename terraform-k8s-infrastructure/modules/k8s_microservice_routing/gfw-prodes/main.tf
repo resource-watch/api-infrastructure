@@ -48,22 +48,11 @@ resource "aws_autoscaling_attachment" "asg_attachment_gfw_prodes" {
   alb_target_group_arn   = aws_lb_target_group.gfw_prodes_lb_target_group.arn
 }
 
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
-}
-
-// /v2
-data "aws_api_gateway_resource" "v2_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v2"
-}
 
 // /v1/prodes-loss
 resource "aws_api_gateway_resource" "v1_prodes_loss_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "prodes-loss"
 }
 
@@ -77,7 +66,7 @@ resource "aws_api_gateway_resource" "v1_prodes_loss_proxy_resource" {
 // /v2/prodes-loss
 resource "aws_api_gateway_resource" "v2_prodes_loss_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v2_resource.id
+  parent_id   = var.v2_resource.id
   path_part   = "prodes-loss"
 }
 
@@ -93,7 +82,7 @@ module "gfw_prodes_loss_any_v2_prodes_loss_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_prodes_loss_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30537/api/v2/prodes-loss/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30537/api/v2/prodes-loss/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -102,6 +91,6 @@ module "gfw_prodes_loss_any_v1_prodes_loss_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_prodes_loss_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30537/api/v1/prodes-loss/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30537/api/v1/prodes-loss/{proxy}"
   vpc_link     = var.vpc_link
 }

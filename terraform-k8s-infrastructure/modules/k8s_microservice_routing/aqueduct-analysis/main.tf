@@ -48,16 +48,10 @@ resource "aws_autoscaling_attachment" "asg_attachment_aqueduct_analysis" {
   alb_target_group_arn   = aws_lb_target_group.aqueduct_analysis_lb_target_group.arn
 }
 
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
-}
-
 // /v1/aqueduct
 resource "aws_api_gateway_resource" "v1_aqueduct_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "aqueduct"
 }
 
@@ -73,6 +67,6 @@ module "aqueduct_analysis_any_v1_aqueduct_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_aqueduct_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30501/api/v1/aqueduct/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30501/api/v1/aqueduct/{proxy}"
   vpc_link     = var.vpc_link
 }

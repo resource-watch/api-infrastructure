@@ -48,22 +48,11 @@ resource "aws_autoscaling_attachment" "asg_attachment_gfw_guira" {
   alb_target_group_arn   = aws_lb_target_group.gfw_guira_lb_target_group.arn
 }
 
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
-}
-
-// /v2
-data "aws_api_gateway_resource" "v2_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v2"
-}
 
 // /v1/guira-loss
 resource "aws_api_gateway_resource" "v1_guira_loss_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "guira-loss"
 }
 
@@ -77,7 +66,7 @@ resource "aws_api_gateway_resource" "v1_guira_loss_proxy_resource" {
 // /v2/guira-loss
 resource "aws_api_gateway_resource" "v2_guira_loss_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v2_resource.id
+  parent_id   = var.v2_resource.id
   path_part   = "guira-loss"
 }
 
@@ -93,7 +82,7 @@ module "gfw_guira_get_v2_guira_loss" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_guira_loss_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30535/api/v2/guira-loss"
+  uri          = "http://${var.load_balancer.dns_name}:30535/api/v2/guira-loss"
   vpc_link     = var.vpc_link
 }
 
@@ -102,7 +91,7 @@ module "gfw_guira_post_v2_guira_loss" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_guira_loss_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30535/api/v2/guira-loss"
+  uri          = "http://${var.load_balancer.dns_name}:30535/api/v2/guira-loss"
   vpc_link     = var.vpc_link
 }
 
@@ -111,7 +100,7 @@ module "gfw_guira_any_v2_guira_loss_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_guira_loss_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30535/api/v2/guira-loss/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30535/api/v2/guira-loss/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -120,7 +109,7 @@ module "gfw_guira_get_v1_guira_loss" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_guira_loss_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30535/api/v1/guira-loss"
+  uri          = "http://${var.load_balancer.dns_name}:30535/api/v1/guira-loss"
   vpc_link     = var.vpc_link
 }
 
@@ -129,7 +118,7 @@ module "gfw_guira_post_v1_guira_loss" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_guira_loss_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30535/api/v1/guira-loss"
+  uri          = "http://${var.load_balancer.dns_name}:30535/api/v1/guira-loss"
   vpc_link     = var.vpc_link
 }
 
@@ -138,6 +127,6 @@ module "gfw_guira_any_v1_guira_loss_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_guira_loss_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30535/api/v1/guira-loss/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30535/api/v1/guira-loss/{proxy}"
   vpc_link     = var.vpc_link
 }

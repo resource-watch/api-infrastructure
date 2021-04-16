@@ -50,16 +50,10 @@ resource "aws_autoscaling_attachment" "asg_attachment_authorization" {
   alb_target_group_arn   = aws_lb_target_group.authorization_lb_target_group.arn
 }
 
-// /
-data "aws_api_gateway_resource" "root_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/"
-}
-
 // /auth
 resource "aws_api_gateway_resource" "authorization_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.root_resource.id
+  parent_id   = var.root_resource_id
   path_part   = "auth"
 }
 // /auth/{proxy+}
@@ -74,7 +68,7 @@ module "authorization_any_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30505/auth/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30505/auth/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -83,6 +77,6 @@ module "authorization_get" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30505/auth"
+  uri          = "http://${var.load_balancer.dns_name}:30505/auth"
   vpc_link     = var.vpc_link
 }

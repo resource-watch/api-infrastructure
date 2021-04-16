@@ -10,3 +10,7 @@ variable "target_domain" {
   type        = string
   description = "Target URL to which the requests are redirected"
 }
+
+variable "root_resource_id" {
+  type = string
+}

@@ -74,7 +74,7 @@ module "rw_lp_get_home" {
   api_gateway  = var.api_gateway
   api_resource = data.aws_api_gateway_resource.root_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30559/"
+  uri          = "http://${var.load_balancer.dns_name}:30559/"
   vpc_link     = var.vpc_link
 }
 
@@ -83,7 +83,7 @@ module "rw_lp_get_rw_lp_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.rw_lp_proxy_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30559/rw-lp/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30559/rw-lp/{proxy}"
   vpc_link     = var.vpc_link
 }
 

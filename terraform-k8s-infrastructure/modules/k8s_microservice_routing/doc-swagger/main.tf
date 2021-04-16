@@ -17,7 +17,6 @@ resource "kubernetes_service" "doc_swagger_service" {
   }
 }
 
-
 resource "aws_lb_listener" "doc_swagger_nlb_listener" {
   load_balancer_arn = var.load_balancer.arn
   port              = 30519
@@ -49,16 +48,10 @@ resource "aws_autoscaling_attachment" "asg_attachment_doc_swagger" {
   alb_target_group_arn   = aws_lb_target_group.doc_swagger_lb_target_group.arn
 }
 
-// /
-data "aws_api_gateway_resource" "root_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/"
-}
-
 // /documentation
 resource "aws_api_gateway_resource" "documentation_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.root_resource.id
+  parent_id   = var.root_resource_id
   path_part   = "documentation"
 }
 
@@ -74,7 +67,7 @@ module "doc_swagger_any" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.documentation_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30519/documentation"
+  uri          = "http://${var.load_balancer.dns_name}:30519/documentation"
   vpc_link     = var.vpc_link
 }
 
@@ -83,6 +76,6 @@ module "doc_swagger_proxy_any" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.documentation_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30519/documentation/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30519/documentation/{proxy}"
   vpc_link     = var.vpc_link
 }

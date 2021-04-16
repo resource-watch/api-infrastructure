@@ -48,16 +48,10 @@ resource "aws_autoscaling_attachment" "asg_attachment_forms" {
   alb_target_group_arn   = aws_lb_target_group.forms_lb_target_group.arn
 }
 
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
-}
-
 // /v1/form
 resource "aws_api_gateway_resource" "v1_form_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "form"
 }
 
@@ -71,7 +65,7 @@ resource "aws_api_gateway_resource" "v1_form_proxy_resource" {
 // /v1/questionnaire
 resource "aws_api_gateway_resource" "v1_questionnaire_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "questionnaire"
 }
 
@@ -85,7 +79,7 @@ resource "aws_api_gateway_resource" "v1_questionnaire_proxy_resource" {
 // /v1/reports
 resource "aws_api_gateway_resource" "v1_reports_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "reports"
 }
 
@@ -101,7 +95,7 @@ module "forms_any_v1_form_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_form_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30526/api/v1/form/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30526/api/v1/form/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -110,7 +104,7 @@ module "forms_any_v1_questionnaire_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_questionnaire_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30526/api/v1/questionnaire/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30526/api/v1/questionnaire/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -119,6 +113,6 @@ module "forms_any_v1_reports_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_reports_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30526/api/v1/reports/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30526/api/v1/reports/{proxy}"
   vpc_link     = var.vpc_link
 }

@@ -48,23 +48,17 @@ resource "aws_autoscaling_attachment" "asg_attachment_dataset" {
   alb_target_group_arn   = aws_lb_target_group.dataset_lb_target_group.arn
 }
 
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
-}
-
 // /v1/dataset
 resource "aws_api_gateway_resource" "dataset_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "dataset"
 }
 
 // /v1/rest-datasets
 resource "aws_api_gateway_resource" "rest_datasets_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "rest-datasets"
 }
 
@@ -101,7 +95,7 @@ module "dataset_get_dataset" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30516/api/v1/dataset"
+  uri          = "http://${var.load_balancer.dns_name}:30516/api/v1/dataset"
   vpc_link     = var.vpc_link
 }
 
@@ -110,7 +104,7 @@ module "dataset_get_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30516/api/v1/dataset/{datasetId}"
+  uri          = "http://${var.load_balancer.dns_name}:30516/api/v1/dataset/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -119,7 +113,7 @@ module "dataset_update_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_resource
   method       = "PATCH"
-  uri          = "http://api.resourcewatch.org:30516/api/v1/dataset/{datasetId}"
+  uri          = "http://${var.load_balancer.dns_name}:30516/api/v1/dataset/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -128,7 +122,7 @@ module "dataset_delete_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org:30516/api/v1/dataset/{datasetId}"
+  uri          = "http://${var.load_balancer.dns_name}:30516/api/v1/dataset/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -137,7 +131,7 @@ module "dataset_post_dataset" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30516/api/v1/dataset"
+  uri          = "http://${var.load_balancer.dns_name}:30516/api/v1/dataset"
   vpc_link     = var.vpc_link
 }
 
@@ -146,7 +140,7 @@ module "dataset_any_dataset_id_proxy" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_proxy_resource
   method                      = "ANY"
-  uri                         = "http://api.resourcewatch.org:30516/api/v1/dataset/{datasetId}/{proxy}"
+  uri                         = "http://${var.load_balancer.dns_name}:30516/api/v1/dataset/{datasetId}/{proxy}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -156,7 +150,7 @@ module "dataset_post_dataset_find_by_ids" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_find_by_ids_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30516/api/v1/dataset/find-by-ids"
+  uri          = "http://${var.load_balancer.dns_name}:30516/api/v1/dataset/find-by-ids"
   vpc_link     = var.vpc_link
 }
 
@@ -165,6 +159,6 @@ module "dataset_post_dataset_upload" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_upload_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30516/api/v1/dataset/upload"
+  uri          = "http://${var.load_balancer.dns_name}:30516/api/v1/dataset/upload"
   vpc_link     = var.vpc_link
 }

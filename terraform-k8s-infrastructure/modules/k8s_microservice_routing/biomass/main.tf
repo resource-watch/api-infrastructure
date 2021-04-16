@@ -48,22 +48,10 @@ resource "aws_autoscaling_attachment" "asg_attachment_biomass" {
   alb_target_group_arn   = aws_lb_target_group.biomass_lb_target_group.arn
 }
 
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
-}
-
-// /v1/biomass-loss
-data "aws_api_gateway_resource" "biomass_loss_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1/biomass-loss"
-}
-
 // /v1/biomass-loss/admin
 resource "aws_api_gateway_resource" "biomass_loss_admin_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.biomass_loss_resource.id
+  parent_id   = var.v1_biomass_loss_resource.id
   path_part   = "admin"
 }
 
@@ -74,13 +62,12 @@ resource "aws_api_gateway_resource" "biomass_loss_admin_proxy_resource" {
   path_part   = "{proxy+}"
 }
 
-
 # Modules
 module "biomass_v1_any_biomass_loss_admin_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.biomass_loss_admin_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30533/api/v1/biomass-loss/admin/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30533/api/v1/biomass-loss/admin/{proxy}"
   vpc_link     = var.vpc_link
 }

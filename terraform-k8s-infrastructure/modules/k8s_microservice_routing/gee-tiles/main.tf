@@ -48,22 +48,10 @@ resource "aws_autoscaling_attachment" "asg_attachment_gee_tiles" {
   alb_target_group_arn   = aws_lb_target_group.gee_tiles_lb_target_group.arn
 }
 
-// /v1/layer
-data "aws_api_gateway_resource" "layer" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1/layer"
-}
-
-// /v1/layer/{layerId}
-data "aws_api_gateway_resource" "layer_id" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1/layer/{layerId}"
-}
-
 // /v1/layer/{layerId}/tile
 resource "aws_api_gateway_resource" "gee_tiles_layer_id_tile_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.layer_id.id
+  parent_id   = var.v1_layer_id_resource.id
   path_part   = "tile"
 }
 
@@ -84,7 +72,7 @@ resource "aws_api_gateway_resource" "gee_tiles_layer_id_tile_gee_proxy_resource"
 // /v1/layer/gee
 resource "aws_api_gateway_resource" "gee_layer_gee_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.layer.id
+  parent_id   = var.v1_layer_resource.id
   path_part   = "gee"
 }
 
@@ -100,7 +88,7 @@ module "gee_tiles_any_layer_id_tile_gee_proxy" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.gee_tiles_layer_id_tile_gee_proxy_resource
   method                      = "ANY"
-  uri                         = "http://api.resourcewatch.org:30531/api/v1/layer/{layerId}/tile/gee/{proxy}"
+  uri                         = "http://${var.load_balancer.dns_name}:30531/api/v1/layer/{layerId}/tile/gee/{proxy}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["layerId"]
 }
@@ -110,6 +98,6 @@ module "gee_tiles_any_gee_layer_gee_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.gee_layer_gee_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30531/api/v1/layer/gee/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30531/api/v1/layer/gee/{proxy}"
   vpc_link     = var.vpc_link
 }

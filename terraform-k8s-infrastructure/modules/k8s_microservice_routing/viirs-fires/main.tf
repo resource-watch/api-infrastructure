@@ -49,22 +49,11 @@ resource "aws_autoscaling_attachment" "asg_attachment_viirs_active_fires" {
   alb_target_group_arn   = aws_lb_target_group.viirs_active_fires_lb_target_group.arn
 }
 
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
-}
-
-// /v2
-data "aws_api_gateway_resource" "v2_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v2"
-}
 
 // /v1/viirs-active-fires
 resource "aws_api_gateway_resource" "v1_viirs_active_fires_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "viirs-active-fires"
 }
 
@@ -78,7 +67,7 @@ resource "aws_api_gateway_resource" "v1_viirs_active_fires_proxy_resource" {
 // /v2/viirs-active-fires
 resource "aws_api_gateway_resource" "v2_viirs_active_fires_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v2_resource.id
+  parent_id   = var.v2_resource.id
   path_part   = "viirs-active-fires"
 }
 
@@ -94,7 +83,7 @@ module "viirs_fires_get_v1_viirs_active_fires" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_viirs_active_fires_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30564/api/v1/viirs-active-fires"
+  uri          = "http://${var.load_balancer.dns_name}:30564/api/v1/viirs-active-fires"
   vpc_link     = var.vpc_link
 }
 
@@ -103,7 +92,7 @@ module "viirs_fires_post_v1_viirs_active_fires" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_viirs_active_fires_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30564/api/v1/viirs-active-fires"
+  uri          = "http://${var.load_balancer.dns_name}:30564/api/v1/viirs-active-fires"
   vpc_link     = var.vpc_link
 }
 
@@ -112,7 +101,7 @@ module "viirs_fires_any_v1_viirs_active_fires_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_viirs_active_fires_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30564/api/v1/viirs-active-fires/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30564/api/v1/viirs-active-fires/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -121,7 +110,7 @@ module "viirs_fires_get_v2_viirs_active_fires" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_viirs_active_fires_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30564/api/v2/viirs-active-fires"
+  uri          = "http://${var.load_balancer.dns_name}:30564/api/v2/viirs-active-fires"
   vpc_link     = var.vpc_link
 }
 
@@ -130,7 +119,7 @@ module "viirs_fires_post_v2_viirs_active_fires" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_viirs_active_fires_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30564/api/v2/viirs-active-fires"
+  uri          = "http://${var.load_balancer.dns_name}:30564/api/v2/viirs-active-fires"
   vpc_link     = var.vpc_link
 }
 
@@ -139,6 +128,6 @@ module "viirs_fires_any_v2_viirs_active_fires_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_viirs_active_fires_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30564/api/v2/viirs-active-fires/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30564/api/v2/viirs-active-fires/{proxy}"
   vpc_link     = var.vpc_link
 }

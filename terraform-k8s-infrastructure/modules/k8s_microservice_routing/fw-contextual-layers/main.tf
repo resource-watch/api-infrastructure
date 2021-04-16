@@ -48,16 +48,10 @@ resource "aws_autoscaling_attachment" "asg_attachment_fw_contextual_layers" {
   alb_target_group_arn   = aws_lb_target_group.fw_contextual_layers_lb_target_group.arn
 }
 
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
-}
-
 // /v1/contextual-layer
 resource "aws_api_gateway_resource" "v1_contextual_layer_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "contextual-layer"
 }
 
@@ -73,7 +67,7 @@ module "fw_contextual_layers_get_v1_contextual_layer" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_contextual_layer_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30528/api/v1/contextual-layer"
+  uri          = "http://${var.load_balancer.dns_name}:30528/api/v1/contextual-layer"
   vpc_link     = var.vpc_link
 }
 
@@ -82,7 +76,7 @@ module "fw_contextual_layers_post_v1_contextual_layer" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_contextual_layer_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30528/api/v1/contextual-layer"
+  uri          = "http://${var.load_balancer.dns_name}:30528/api/v1/contextual-layer"
   vpc_link     = var.vpc_link
 }
 
@@ -91,6 +85,6 @@ module "fw_contextual_layers_any_v1_contextual_layer_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_contextual_layer_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30528/api/v1/contextual-layer/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30528/api/v1/contextual-layer/{proxy}"
   vpc_link     = var.vpc_link
 }

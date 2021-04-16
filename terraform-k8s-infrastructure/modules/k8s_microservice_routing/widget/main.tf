@@ -49,22 +49,10 @@ resource "aws_autoscaling_attachment" "asg_attachment_widget" {
   alb_target_group_arn   = aws_lb_target_group.widget_lb_target_group.arn
 }
 
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
-}
-
-// /v1/dataset/{datasetId}
-data "aws_api_gateway_resource" "dataset_id_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1/dataset/{datasetId}"
-}
-
 // /v1/widget
 resource "aws_api_gateway_resource" "widget_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "widget"
 }
 
@@ -78,7 +66,7 @@ resource "aws_api_gateway_resource" "widget_proxy_resource" {
 // /v1/dataset/{datasetId}/widget
 resource "aws_api_gateway_resource" "dataset_id_widget_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.dataset_id_resource.id
+  parent_id   = var.v1_dataset_id_resource.id
   path_part   = "widget"
 }
 
@@ -101,7 +89,7 @@ module "widget_get_widget" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.widget_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30567/api/v1/widget"
+  uri          = "http://${var.load_balancer.dns_name}:30567/api/v1/widget"
   vpc_link     = var.vpc_link
 }
 
@@ -110,7 +98,7 @@ module "widget_post_widget" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.widget_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30567/api/v1/widget"
+  uri          = "http://${var.load_balancer.dns_name}:30567/api/v1/widget"
   vpc_link     = var.vpc_link
 }
 
@@ -119,7 +107,7 @@ module "widget_any_widget_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.widget_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30567/api/v1/widget/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30567/api/v1/widget/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -128,7 +116,7 @@ module "widget_get_dataset_id_widget" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_widget_resource
   method                      = "GET"
-  uri                         = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget"
+  uri                         = "http://${var.load_balancer.dns_name}:30567/api/v1/dataset/{datasetId}/widget"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -138,7 +126,7 @@ module "widget_post_dataset_id_widget" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_widget_resource
   method                      = "POST"
-  uri                         = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget"
+  uri                         = "http://${var.load_balancer.dns_name}:30567/api/v1/dataset/{datasetId}/widget"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -148,7 +136,7 @@ module "widget_delete_dataset_id_widget" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_widget_resource
   method                      = "DELETE"
-  uri                         = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget"
+  uri                         = "http://${var.load_balancer.dns_name}:30567/api/v1/dataset/{datasetId}/widget"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -158,7 +146,7 @@ module "widget_get_dataset_id_widget_id" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_widget_id_resource
   method                      = "GET"
-  uri                         = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget/{widgetId}"
+  uri                         = "http://${var.load_balancer.dns_name}:30567/api/v1/dataset/{datasetId}/widget/{widgetId}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -168,7 +156,7 @@ module "widget_any_dataset_id_widget_id_proxy" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_widget_id_resource
   method                      = "ANY"
-  uri                         = "http://api.resourcewatch.org:30567/api/v1/dataset/{datasetId}/widget/{widgetId}/{proxy}"
+  uri                         = "http://${var.load_balancer.dns_name}:30567/api/v1/dataset/{datasetId}/widget/{widgetId}/{proxy}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }

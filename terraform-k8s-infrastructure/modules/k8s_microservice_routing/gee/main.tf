@@ -48,34 +48,10 @@ resource "aws_autoscaling_attachment" "asg_attachment_gee" {
   alb_target_group_arn   = aws_lb_target_group.gee_lb_target_group.arn
 }
 
-// /v1/query
-data "aws_api_gateway_resource" "query_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1/query"
-}
-
-// /v1/download
-data "aws_api_gateway_resource" "download_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1/download"
-}
-
-// /v1/fields
-data "aws_api_gateway_resource" "fields_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1/fields"
-}
-
-// /v1/rest-datasets
-data "aws_api_gateway_resource" "rest_datasets_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1/rest-datasets"
-}
-
 // /v1/query/gee
 resource "aws_api_gateway_resource" "query_gee_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.query_resource.id
+  parent_id   = var.v1_query_resource.id
   path_part   = "gee"
 }
 
@@ -89,7 +65,7 @@ resource "aws_api_gateway_resource" "query_gee_dataset_id_resource" {
 // /v1/download/gee
 resource "aws_api_gateway_resource" "download_gee_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.download_resource.id
+  parent_id   = var.v1_download_resource.id
   path_part   = "gee"
 }
 
@@ -103,7 +79,7 @@ resource "aws_api_gateway_resource" "download_gee_dataset_id_resource" {
 // /v1/fields/gee
 resource "aws_api_gateway_resource" "fields_gee_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.fields_resource.id
+  parent_id   = var.v1_fields_resource.id
   path_part   = "gee"
 }
 
@@ -117,7 +93,7 @@ resource "aws_api_gateway_resource" "fields_gee_dataset_id_resource" {
 // /v1/rest-datasets/gee
 resource "aws_api_gateway_resource" "rest_datasets_gee_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.rest_datasets_resource.id
+  parent_id   = var.v1_rest_datasets_resource.id
   path_part   = "gee"
 }
 
@@ -133,7 +109,7 @@ module "gee_get_query_gee_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.query_gee_dataset_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30530/api/v1/earthengine/query/{datasetId}"
+  uri          = "http://${var.load_balancer.dns_name}:30530/api/v1/earthengine/query/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -142,7 +118,7 @@ module "gee_post_query_gee_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.query_gee_dataset_id_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30530/api/v1/earthengine/query/{datasetId}"
+  uri          = "http://${var.load_balancer.dns_name}:30530/api/v1/earthengine/query/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -151,7 +127,7 @@ module "gee_get_download_gee_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.download_gee_dataset_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30530/api/v1/earthengine/download/{datasetId}"
+  uri          = "http://${var.load_balancer.dns_name}:30530/api/v1/earthengine/download/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -160,7 +136,7 @@ module "gee_post_download_gee_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.download_gee_dataset_id_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30530/api/v1/earthengine/download/{datasetId}"
+  uri          = "http://${var.load_balancer.dns_name}:30530/api/v1/earthengine/download/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -169,7 +145,7 @@ module "gee_get_fields_gee_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.fields_gee_dataset_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30530/api/v1/earthengine/fields/{datasetId}"
+  uri          = "http://${var.load_balancer.dns_name}:30530/api/v1/earthengine/fields/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -178,7 +154,7 @@ module "gee_get_rest_datasets_gee" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.rest_datasets_gee_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30530/api/v1/earthengine/rest-datasets/gee"
+  uri          = "http://${var.load_balancer.dns_name}:30530/api/v1/earthengine/rest-datasets/gee"
   vpc_link     = var.vpc_link
 }
 
@@ -187,6 +163,6 @@ module "gee_delete_rest_datasets_gee_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.rest_datasets_gee_dataset_id_resource
   method       = "DELETE"
-  uri          = "http://api.resourcewatch.org:30530/api/v1/earthengine/rest-datasets/gee/{datasetId}"
+  uri          = "http://${var.load_balancer.dns_name}:30530/api/v1/earthengine/rest-datasets/gee/{datasetId}"
   vpc_link     = var.vpc_link
 }

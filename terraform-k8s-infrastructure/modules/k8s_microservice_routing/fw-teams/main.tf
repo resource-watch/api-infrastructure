@@ -48,16 +48,10 @@ resource "aws_autoscaling_attachment" "asg_attachment_fw_teams" {
   alb_target_group_arn   = aws_lb_target_group.fw_teams_lb_target_group.arn
 }
 
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
-}
-
 // /v1/teams
 resource "aws_api_gateway_resource" "v1_teams_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "teams"
 }
 
@@ -73,7 +67,7 @@ module "fw_teams_post_v1_teams" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_teams_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30529/api/v1/teams"
+  uri          = "http://${var.load_balancer.dns_name}:30529/api/v1/teams"
   vpc_link     = var.vpc_link
 }
 
@@ -82,6 +76,6 @@ module "fw_teams_any_v1_teams_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_teams_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30529/api/v1/teams/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30529/api/v1/teams/{proxy}"
   vpc_link     = var.vpc_link
 }

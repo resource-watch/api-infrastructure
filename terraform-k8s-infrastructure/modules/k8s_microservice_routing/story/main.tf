@@ -48,16 +48,10 @@ resource "aws_autoscaling_attachment" "asg_attachment_story" {
   alb_target_group_arn   = aws_lb_target_group.story_lb_target_group.arn
 }
 
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
-}
-
 // /v1/story
 resource "aws_api_gateway_resource" "v1_story_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "story"
 }
 
@@ -73,7 +67,7 @@ module "story_get_v1_story" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_story_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30560/api/v1/story"
+  uri          = "http://${var.load_balancer.dns_name}:30560/api/v1/story"
   vpc_link     = var.vpc_link
 }
 
@@ -82,7 +76,7 @@ module "story_post_v1_story" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_story_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30560/api/v1/story"
+  uri          = "http://${var.load_balancer.dns_name}:30560/api/v1/story"
   vpc_link     = var.vpc_link
 }
 
@@ -91,6 +85,6 @@ module "story_any_v1_story_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_story_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30560/api/v1/story/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30560/api/v1/story/{proxy}"
   vpc_link     = var.vpc_link
 }

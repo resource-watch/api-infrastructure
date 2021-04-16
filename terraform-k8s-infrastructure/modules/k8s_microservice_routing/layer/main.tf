@@ -49,22 +49,10 @@ resource "aws_autoscaling_attachment" "asg_attachment_layer" {
   alb_target_group_arn   = aws_lb_target_group.layer_lb_target_group.arn
 }
 
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
-}
-
-// /v1/dataset/{datasetId}
-data "aws_api_gateway_resource" "dataset_id_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1/dataset/{datasetId}"
-}
-
 // /v1/layer
 resource "aws_api_gateway_resource" "layer_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "layer"
 }
 
@@ -99,7 +87,7 @@ resource "aws_api_gateway_resource" "layer_change_environment_proxy_resource" {
 // /v1/dataset/{datasetId}/layer/
 resource "aws_api_gateway_resource" "dataset_id_layer_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.dataset_id_resource.id
+  parent_id   = var.v1_dataset_id_resource.id
   path_part   = "layer"
 }
 
@@ -122,7 +110,7 @@ module "layer_get" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.layer_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30546/api/v1/layer"
+  uri          = "http://${var.load_balancer.dns_name}:30546/api/v1/layer"
   vpc_link     = var.vpc_link
 }
 
@@ -131,7 +119,7 @@ module "layer_get_dataset_id_layer" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_layer_resource
   method                      = "GET"
-  uri                         = "http://api.resourcewatch.org:30546/api/v1/dataset/{datasetId}/layer"
+  uri                         = "http://${var.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -141,7 +129,7 @@ module "layer_get_dataset_id" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_layer_id_resource
   method                      = "GET"
-  uri                         = "http://api.resourcewatch.org:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
+  uri                         = "http://${var.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -151,7 +139,7 @@ module "layer_get_layer_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.layer_id_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30546/api/v1/layer/{layerId}"
+  uri          = "http://${var.load_balancer.dns_name}:30546/api/v1/layer/{layerId}"
   vpc_link     = var.vpc_link
 }
 
@@ -160,7 +148,7 @@ module "layer_post_dataset_id_layer" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_layer_resource
   method                      = "POST"
-  uri                         = "http://api.resourcewatch.org:30546/api/v1/dataset/{datasetId}/layer"
+  uri                         = "http://${var.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -170,7 +158,7 @@ module "layer_delete_dataset_id_layer" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_layer_resource
   method                      = "DELETE"
-  uri                         = "http://api.resourcewatch.org:30546/api/v1/dataset/{datasetId}/layer"
+  uri                         = "http://${var.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -180,7 +168,7 @@ module "layer_patch_dataset_id_layer_id" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_layer_id_resource
   method                      = "PATCH"
-  uri                         = "http://api.resourcewatch.org:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
+  uri                         = "http://${var.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -190,7 +178,7 @@ module "layer_any_layer_change_environment_proxy" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.layer_change_environment_proxy_resource
   method                      = "ANY"
-  uri                         = "http://api.resourcewatch.org:30546/api/v1/layer/change-environment/{proxy}"
+  uri                         = "http://${var.load_balancer.dns_name}:30546/api/v1/layer/change-environment/{proxy}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -200,7 +188,7 @@ module "layer_delete_dataset_id_layer_id" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_layer_id_resource
   method                      = "DELETE"
-  uri                         = "http://api.resourcewatch.org:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
+  uri                         = "http://${var.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -210,7 +198,7 @@ module "layer_post_layer_find_by_ids" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.layer_find_by_ids_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30546/api/v1/layer/find-by-ids"
+  uri          = "http://${var.load_balancer.dns_name}:30546/api/v1/layer/find-by-ids"
   vpc_link     = var.vpc_link
 }
 
@@ -219,7 +207,7 @@ module "layer_delete_layer_id_expire_cache" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.layer_id_expire_cache_resource
   method                      = "DELETE"
-  uri                         = "http://api.resourcewatch.org:30546/api/v1/layer/{layerId}/expire-cache"
+  uri                         = "http://${var.load_balancer.dns_name}:30546/api/v1/layer/{layerId}/expire-cache"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["layerId"]
 }

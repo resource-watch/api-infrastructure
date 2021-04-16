@@ -48,16 +48,10 @@ resource "aws_autoscaling_attachment" "asg_attachment_forest_watcher_api" {
   alb_target_group_arn   = aws_lb_target_group.forest_watcher_api_lb_target_group.arn
 }
 
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
-}
-
 // /v1/forest-watcher
 resource "aws_api_gateway_resource" "v1_forest_watcher_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "forest-watcher"
 }
 
@@ -73,7 +67,7 @@ module "forest_watcher_api_get_v1_forest_watcher_area_resource" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_forest_watcher_area_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30525/api/v1/forest-watcher/area"
+  uri          = "http://${var.load_balancer.dns_name}:30525/api/v1/forest-watcher/area"
   vpc_link     = var.vpc_link
 }
 
@@ -82,6 +76,6 @@ module "forest_watcher_api_post_v1_forest_watcher_area_resource" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_forest_watcher_area_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30525/api/v1/forest-watcher/area"
+  uri          = "http://${var.load_balancer.dns_name}:30525/api/v1/forest-watcher/area"
   vpc_link     = var.vpc_link
 }

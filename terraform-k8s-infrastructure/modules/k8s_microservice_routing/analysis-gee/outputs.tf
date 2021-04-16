@@ -44,3 +44,11 @@ output "endpoints" {
     module.analysis_gee_any_v2_biomass_loss_proxy.endpoint_gateway_integration,
   ]
 }
+
+output "v1_biomass_loss_resource" {
+  value = aws_api_gateway_resource.v1_biomass_loss_resource
+}
+
+output "v1_umd_loss_gain_resource" {
+  value = aws_api_gateway_resource.v1_umd_loss_gain_resource
+}

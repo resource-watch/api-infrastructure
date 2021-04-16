@@ -31,8 +31,9 @@ variable "vpc" {
 
 variable "load_balancer" {
   type = object({
-    id  = string
-    arn = string
+    id       = string
+    arn      = string
+    dns_name = string
   })
   description = "AWS NLB that serves as an entry point for the EKS cluster"
 }
@@ -47,4 +48,34 @@ variable "vpc_link" {
 variable "eks_asg_names" {
   type        = list
   description = "List of the EKS ASG names"
+}
+
+variable "v1_resource" {
+  type = object({
+    id = string
+  })
+}
+
+variable "v1_query_resource" {
+  type = object({
+    id = string
+  })
+}
+
+variable "v1_download_resource" {
+  type = object({
+    id = string
+  })
+}
+
+variable "v1_fields_resource" {
+  type = object({
+    id = string
+  })
+}
+
+variable "v1_rest_datasets_resource" {
+  type = object({
+    id = string
+  })
 }

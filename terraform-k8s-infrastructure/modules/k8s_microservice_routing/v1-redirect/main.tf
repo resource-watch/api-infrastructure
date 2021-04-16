@@ -2,16 +2,10 @@
 # /v1/(.*)$ redirects to ${var.target_domain}/v1/$1
 #
 
-// /
-data "aws_api_gateway_resource" "root_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/"
-}
-
 // //{proxy+}
 resource "aws_api_gateway_resource" "v1_redirect_proxy_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.root_resource.id
+  parent_id   = var.root_resource_id
   path_part   = "{proxy+}"
 }
 

@@ -49,16 +49,10 @@ resource "aws_autoscaling_attachment" "asg_attachment_graph_client" {
   alb_target_group_arn   = aws_lb_target_group.graph_client_lb_target_group.arn
 }
 
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
-}
-
 // /v1/graph
 resource "aws_api_gateway_resource" "graph_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "graph"
 }
 
@@ -81,6 +75,6 @@ module "graph_client_any_graph_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.graph_query_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30542/api/v1/graph/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30542/api/v1/graph/{proxy}"
   vpc_link     = var.vpc_link
 }

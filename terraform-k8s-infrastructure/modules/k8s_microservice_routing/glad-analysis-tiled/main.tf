@@ -48,22 +48,10 @@ resource "aws_autoscaling_attachment" "asg_attachment_glad_analysis_tiled" {
   alb_target_group_arn   = aws_lb_target_group.glad_analysis_tiled_lb_target_group.arn
 }
 
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
-}
-
-// /v1/glad-alerts
-data "aws_api_gateway_resource" "v1_glad_alerts_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1/glad-alerts"
-}
-
 // /v1/glad-alerts/admin
 resource "aws_api_gateway_resource" "v1_glad_alerts_admin_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_glad_alerts_resource.id
+  parent_id   = var.v1_glad_alerts_resource.id
   path_part   = "admin"
 }
 
@@ -77,21 +65,21 @@ resource "aws_api_gateway_resource" "v1_glad_alerts_admin_proxy_resource" {
 // /v1/glad-alerts/download
 resource "aws_api_gateway_resource" "v1_glad_alerts_download_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_glad_alerts_resource.id
+  parent_id   = var.v1_glad_alerts_resource.id
   path_part   = "download"
 }
 
 // /v1/glad-alerts/latest
 resource "aws_api_gateway_resource" "v1_glad_alerts_latest_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_glad_alerts_resource.id
+  parent_id   = var.v1_glad_alerts_resource.id
   path_part   = "latest"
 }
 
 // /v1/glad-alerts/wdpa
 resource "aws_api_gateway_resource" "v1_glad_alerts_wdpa_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_glad_alerts_resource.id
+  parent_id   = var.v1_glad_alerts_resource.id
   path_part   = "wdpa"
 }
 
@@ -105,7 +93,7 @@ resource "aws_api_gateway_resource" "v1_glad_alerts_wdpa_proxy_resource" {
 // /v1/glad-alerts/use
 resource "aws_api_gateway_resource" "v1_glad_alerts_use_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_glad_alerts_resource.id
+  parent_id   = var.v1_glad_alerts_resource.id
   path_part   = "use"
 }
 
@@ -121,7 +109,7 @@ module "glad_analysis_tiled_any_v1_glad_alerts_admin_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_glad_alerts_admin_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30541/api/v1/glad-alerts-athena/admin/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena/admin/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -130,7 +118,7 @@ module "glad_analysis_tiled_get_v1_glad_alerts_download" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_glad_alerts_download_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30541/api/v1/glad-alerts-athena/download"
+  uri          = "http://${var.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena/download"
   vpc_link     = var.vpc_link
 }
 
@@ -139,25 +127,25 @@ module "glad_analysis_tiled_post_v1_glad_alerts_download" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_glad_alerts_download_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30541/api/v1/glad-alerts-athena/download"
+  uri          = "http://${var.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena/download"
   vpc_link     = var.vpc_link
 }
 
 module "glad_analysis_tiled_get_v1_glad_alerts" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = data.aws_api_gateway_resource.v1_glad_alerts_resource
+  api_resource = var.v1_glad_alerts_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30541/api/v1/glad-alerts-athena"
+  uri          = "http://${var.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena"
   vpc_link     = var.vpc_link
 }
 
 module "glad_analysis_tiled_post_v1_glad_alerts" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = data.aws_api_gateway_resource.v1_glad_alerts_resource
+  api_resource = var.v1_glad_alerts_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30541/api/v1/glad-alerts-athena"
+  uri          = "http://${var.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena"
   vpc_link     = var.vpc_link
 }
 
@@ -166,7 +154,7 @@ module "glad_analysis_tiled_get_v1_glad_alerts_latest" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_glad_alerts_latest_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30541/api/v1/glad-alerts-athena/latest"
+  uri          = "http://${var.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena/latest"
   vpc_link     = var.vpc_link
 }
 
@@ -175,7 +163,7 @@ module "glad_analysis_tiled_any_v1_glad_alerts_wdpa_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_glad_alerts_wdpa_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30541/api/v1/glad-alerts-athena/wdpa/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena/wdpa/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -184,7 +172,7 @@ module "glad_analysis_tiled_any_v1_glad_alerts_use_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_glad_alerts_use_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30541/api/v1/glad-alerts-athena/use/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena/use/{proxy}"
   vpc_link     = var.vpc_link
 }
 

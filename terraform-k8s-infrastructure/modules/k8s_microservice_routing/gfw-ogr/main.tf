@@ -48,22 +48,11 @@ resource "aws_autoscaling_attachment" "asg_attachment_gfw_ogr" {
   alb_target_group_arn   = aws_lb_target_group.gfw_ogr_lb_target_group.arn
 }
 
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
-}
-
-// /v2
-data "aws_api_gateway_resource" "v2_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v2"
-}
 
 // /v1/ogr
 resource "aws_api_gateway_resource" "v1_ogr_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "ogr"
 }
 
@@ -77,7 +66,7 @@ resource "aws_api_gateway_resource" "v1_ogr_proxy_resource" {
 // /v2/ogr
 resource "aws_api_gateway_resource" "v2_ogr_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v2_resource.id
+  parent_id   = var.v2_resource.id
   path_part   = "ogr"
 }
 
@@ -93,7 +82,7 @@ module "gfw_ogr_any_v2_ogr_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_ogr_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30536/api/v2/ogr/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30536/api/v2/ogr/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -102,6 +91,6 @@ module "gfw_ogr_any_v1_ogr_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_ogr_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30536/api/v1/ogr/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30536/api/v1/ogr/{proxy}"
   vpc_link     = var.vpc_link
 }

@@ -48,16 +48,10 @@ resource "aws_autoscaling_attachment" "asg_attachment_high_res" {
   alb_target_group_arn   = aws_lb_target_group.high_res_lb_target_group.arn
 }
 
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
-}
-
 // /v1/high-res
 resource "aws_api_gateway_resource" "v1_high_res_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "high-res"
 }
 
@@ -73,7 +67,7 @@ module "high_res_get_v1_high_res_sensor" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_high_res_sensor_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30544/api/v1/high-res/{sensor}"
+  uri          = "http://${var.load_balancer.dns_name}:30544/api/v1/high-res/{sensor}"
   vpc_link     = var.vpc_link
 }
 

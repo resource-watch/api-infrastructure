@@ -10,3 +10,15 @@ output "endpoints" {
     module.dataset_post_dataset_upload.endpoint_gateway_integration,
   ]
 }
+
+output "v1_dataset_resource" {
+  value = aws_api_gateway_resource.dataset_resource
+}
+
+output "v1_dataset_id_resource" {
+  value = aws_api_gateway_resource.dataset_id_resource
+}
+
+output "v1_rest_datasets_resource" {
+  value = aws_api_gateway_resource.rest_datasets_resource
+}

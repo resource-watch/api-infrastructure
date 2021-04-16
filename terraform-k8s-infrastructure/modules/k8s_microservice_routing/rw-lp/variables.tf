@@ -31,8 +31,9 @@ variable "vpc" {
 
 variable "load_balancer" {
   type = object({
-    id  = string
-    arn = string
+    id       = string
+    arn      = string
+    dns_name = string
   })
   description = "AWS NLB that serves as an entry point for the EKS cluster"
 }

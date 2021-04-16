@@ -52,22 +52,11 @@ resource "aws_autoscaling_attachment" "asg_attachment_geostore" {
 # V1 Geostore
 #
 
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
-}
-
-// /v2
-data "aws_api_gateway_resource" "v2_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v2"
-}
 
 // /v1/geostore
 resource "aws_api_gateway_resource" "v1_geostore_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "geostore"
 }
 
@@ -83,7 +72,7 @@ module "geostore_post_v1_geostore" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_geostore_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30532/api/v1/geostore"
+  uri          = "http://${var.load_balancer.dns_name}:30532/api/v1/geostore"
   vpc_link     = var.vpc_link
 }
 
@@ -92,7 +81,7 @@ module "geostore_any_v1_geostore_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_geostore_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30532/api/v1/geostore/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30532/api/v1/geostore/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -103,7 +92,7 @@ module "geostore_any_v1_geostore_proxy" {
 // /v1/coverage
 resource "aws_api_gateway_resource" "v1_coverage_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "coverage"
 }
 
@@ -119,7 +108,7 @@ module "geostore_any_v1_coverage_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_coverage_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30532/api/v1/coverage/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30532/api/v1/coverage/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -130,7 +119,7 @@ module "geostore_any_v1_coverage_proxy" {
 // /v2/geostore
 resource "aws_api_gateway_resource" "v2_geostore_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v2_resource.id
+  parent_id   = var.v2_resource.id
   path_part   = "geostore"
 }
 
@@ -146,7 +135,7 @@ module "geostore_post_v2_geostore" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_geostore_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30532/api/v2/geostore"
+  uri          = "http://${var.load_balancer.dns_name}:30532/api/v2/geostore"
   vpc_link     = var.vpc_link
 }
 
@@ -155,7 +144,7 @@ module "geostore_any_v2_geostore_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_geostore_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30532/api/v2/geostore/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30532/api/v2/geostore/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -166,7 +155,7 @@ module "geostore_any_v2_geostore_proxy" {
 // /v2/coverage
 resource "aws_api_gateway_resource" "v2_coverage_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v2_resource.id
+  parent_id   = var.v2_resource.id
   path_part   = "coverage"
 }
 
@@ -182,6 +171,6 @@ module "geostore_any_v2_coverage_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_coverage_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30532/api/v2/coverage/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30532/api/v2/coverage/{proxy}"
   vpc_link     = var.vpc_link
 }

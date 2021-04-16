@@ -71,7 +71,6 @@ resource "aws_iam_role_policy" "api_gateway_monitoring_cloudwatch_policy" {
 EOF
 }
 
-
 resource "aws_api_gateway_method_settings" "rw_api_gateway_general_settings" {
   rest_api_id = aws_api_gateway_rest_api.rw_api_gateway.id
   stage_name  = aws_api_gateway_deployment.prod.stage_name
@@ -107,17 +106,13 @@ data "aws_subnet_ids" "private_subnets" {
   }
 }
 
-//data "aws_autoscaling_groups" "eks_autoscaling_groups" {
-//  filter {
-//    name   = "key"
-//    values = ["kubernetes.io/cluster/core-k8s-cluster-${var.environment}"]
-//  }
-//
-//  filter {
-//    name   = "value"
-//    values = ["owned"]
-//  }
-//}
+data "aws_subnet_ids" "public_subnets" {
+  vpc_id = var.vpc.id
+
+  tags = {
+    tier = "public"
+  }
+}
 
 data "aws_autoscaling_groups" "apps_autoscaling_group" {
   filter {
@@ -165,41 +160,38 @@ data "aws_autoscaling_groups" "gfw_pro_autoscaling_group" {
   }
 }
 
-data "aws_autoscaling_groups" "gateway_autoscaling_group" {
-  filter {
-    name   = "key"
-    values = ["eks:nodegroup-name"]
-  }
-  filter {
-    name   = "value"
-    values = [data.terraform_remote_state.core.outputs.node_group_names["gateway"]]
-  }
-}
-
-data "aws_autoscaling_groups" "webapps_autoscaling_group" {
-  filter {
-    name   = "key"
-    values = ["eks:nodegroup-name"]
-  }
-  filter {
-    name   = "value"
-    values = [data.terraform_remote_state.core.outputs.node_group_names["webapps"]]
-  }
-}
-
-resource "aws_lb" "api_gateway_default_nlb" {
-  name               = "rw-api-default-nlb"
-  internal           = true
+resource "aws_lb" "api_gateway_apps_nlb" {
+  name               = "rw-api-apps-nlb"
+  internal           = false
   load_balancer_type = "network"
-  subnets            = data.aws_subnet_ids.private_subnets.ids
+  subnets            = data.aws_subnet_ids.public_subnets.ids
 
   enable_deletion_protection = true
 }
 
-resource "aws_api_gateway_vpc_link" "rw_api_default_lb_vpc_link" {
-  name        = "RW API default LB VPC link"
-  description = "VPC link to the RW API service default load balancer"
-  target_arns = [aws_lb.api_gateway_default_nlb.arn]
+resource "aws_api_gateway_vpc_link" "rw_api_apps_lb_vpc_link" {
+  name        = "RW API apps LB VPC link"
+  description = "VPC link to the RW API service apps load balancer"
+  target_arns = [aws_lb.api_gateway_apps_nlb.arn]
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_lb" "api_gateway_core_nlb" {
+  name               = "rw-api-core-nlb"
+  internal           = false
+  load_balancer_type = "network"
+  subnets            = data.aws_subnet_ids.public_subnets.ids
+
+  enable_deletion_protection = true
+}
+
+resource "aws_api_gateway_vpc_link" "rw_api_core_lb_vpc_link" {
+  name        = "RW API core LB VPC link"
+  description = "VPC link to the RW API service core load balancer"
+  target_arns = [aws_lb.api_gateway_core_nlb.arn]
 
   lifecycle {
     create_before_destroy = true
@@ -208,9 +200,9 @@ resource "aws_api_gateway_vpc_link" "rw_api_default_lb_vpc_link" {
 
 resource "aws_lb" "api_gateway_gfw_nlb" {
   name               = "rw-api-gfw-nlb"
-  internal           = true
+  internal           = false
   load_balancer_type = "network"
-  subnets            = data.aws_subnet_ids.private_subnets.ids
+  subnets            = data.aws_subnet_ids.public_subnets.ids
 
   enable_deletion_protection = true
 }
@@ -241,7 +233,6 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.biomass.endpoints),
       jsonencode(module.carto.endpoints),
       jsonencode(module.converter.endpoints),
-      jsonencode(module.ct.endpoints),
       jsonencode(module.dataset.endpoints),
       jsonencode(module.doc-orchestrator.endpoints),
       jsonencode(module.doc-swagger.endpoints),
@@ -285,6 +276,7 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.vocabulary.endpoints),
       jsonencode(module.webshot.endpoints),
       jsonencode(module.widget.endpoints),
+      jsonencode(module.v1_redirect.endpoints),
     )))
   }
 
@@ -359,20 +351,21 @@ EOF
   }
 }
 
-
 // Nginx reverse proxy config, remapped
 
 // /{.*} redirect to /v1/{$1}
 module "v1_redirect" {
-  source        = "./v1-redirect"
-  api_gateway   = aws_api_gateway_rest_api.rw_api_gateway
-  target_domain = aws_api_gateway_domain_name.aws_env_resourcewatch_org_gateway_domain_name.domain_name
+  source           = "./v1-redirect"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  target_domain    = aws_api_gateway_domain_name.aws_env_resourcewatch_org_gateway_domain_name.domain_name
+  root_resource_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
 }
 
 // /v1/gfw-metadata proxies to external server
 module "gfw-metadata" {
-  source      = "./gfw-metadata"
-  api_gateway = aws_api_gateway_rest_api.rw_api_gateway
+  source           = "./gfw-metadata"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  root_resource_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
 }
 
 // /documentation uses doc-swagger MS (no CT)
@@ -382,29 +375,14 @@ module "doc-swagger" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+  root_resource_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
+
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.webapps_autoscaling_group.names.0
-  ]
-}
-
-
-// Import routes per MS, one by one
-module "ct" {
-  source           = "./ct"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
-  eks_asg_names = [
-    data.aws_autoscaling_groups.gateway_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.core_autoscaling_group.names.0
   ]
 }
 
@@ -416,10 +394,17 @@ module "analysis-gee" {
   cluster_name     = var.cluster_name
   load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+  v2_resource      = aws_api_gateway_resource.v2_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.gfw_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.core_autoscaling_group.names.0
+  ]
+
+  depends_on = [
+    aws_api_gateway_resource.v1_resource,
+    aws_api_gateway_resource.v2_resource
   ]
 }
 
@@ -429,32 +414,37 @@ module "aqueduct-analysis" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.gfw_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gfw_pro_autoscaling_group.names.0
+    data.aws_autoscaling_groups.gfw_autoscaling_group.names.0
   ]
 }
 
 module "arcgis" {
-  source           = "./arcgis"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  source                    = "./arcgis"
+  api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca                = var.cluster_ca
+  cluster_endpoint          = var.cluster_endpoint
+  cluster_name              = var.cluster_name
+  load_balancer             = aws_lb.api_gateway_apps_nlb
+  vpc                       = var.vpc
+  vpc_link                  = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource               = aws_api_gateway_resource.v1_resource
+  v1_query_resource         = module.query.v1_query_resource
+  v1_download_resource      = module.query.v1_download_resource
+  v1_fields_resource        = module.query.v1_fields_resource
+  v1_rest_datasets_resource = module.dataset.v1_rest_datasets_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.webapps_autoscaling_group.names.0
   ]
 
   depends_on = [
     module.dataset,
-    module.query,
   ]
 }
 
@@ -466,10 +456,11 @@ module "arcgis-proxy" {
   cluster_name     = var.cluster_name
   load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.core_autoscaling_group.names.0
   ]
 }
 
@@ -481,10 +472,17 @@ module "area" {
   cluster_name     = var.cluster_name
   load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+  v2_resource      = aws_api_gateway_resource.v2_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.gfw_pro_autoscaling_group.names.0,
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
+  ]
+
+  depends_on = [
+    aws_api_gateway_resource.v1_resource,
+    aws_api_gateway_resource.v2_resource
   ]
 }
 
@@ -494,27 +492,34 @@ module "auth" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_core_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_core_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+  root_resource_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.core_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gateway_autoscaling_group.names.0
+    data.aws_autoscaling_groups.core_autoscaling_group.names.0
   ]
 }
 
 module "bigquery" {
-  source           = "./bigquery"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  source                    = "./bigquery"
+  api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca                = var.cluster_ca
+  cluster_endpoint          = var.cluster_endpoint
+  cluster_name              = var.cluster_name
+  load_balancer             = aws_lb.api_gateway_apps_nlb
+  vpc                       = var.vpc
+  vpc_link                  = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource               = aws_api_gateway_resource.v1_resource
+  v1_query_resource         = module.query.v1_query_resource
+  v1_download_resource      = module.query.v1_download_resource
+  v1_fields_resource        = module.query.v1_fields_resource
+  v1_rest_datasets_resource = module.dataset.v1_rest_datasets_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gfw_pro_autoscaling_group.names.0
   ]
 
   depends_on = [
@@ -524,17 +529,19 @@ module "bigquery" {
 }
 
 module "biomass" {
-  source           = "./biomass"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  source                   = "./biomass"
+  api_gateway              = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca               = var.cluster_ca
+  cluster_endpoint         = var.cluster_endpoint
+  cluster_name             = var.cluster_name
+  load_balancer            = aws_lb.api_gateway_apps_nlb
+  vpc                      = var.vpc
+  vpc_link                 = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource              = aws_api_gateway_resource.v1_resource
+  v1_biomass_loss_resource = module.analysis-gee.v1_biomass_loss_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.core_autoscaling_group.names.0
   ]
 
   depends_on = [
@@ -543,17 +550,22 @@ module "biomass" {
 }
 
 module "carto" {
-  source           = "./carto"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  source                    = "./carto"
+  api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca                = var.cluster_ca
+  cluster_endpoint          = var.cluster_endpoint
+  cluster_name              = var.cluster_name
+  load_balancer             = aws_lb.api_gateway_apps_nlb
+  vpc                       = var.vpc
+  vpc_link                  = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource               = aws_api_gateway_resource.v1_resource
+  v1_query_resource         = module.query.v1_query_resource
+  v1_download_resource      = module.query.v1_download_resource
+  v1_fields_resource        = module.query.v1_fields_resource
+  v1_rest_datasets_resource = module.dataset.v1_rest_datasets_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.core_autoscaling_group.names.0
   ]
 
   depends_on = [
@@ -568,12 +580,12 @@ module "converter" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
   eks_asg_names = [
-    data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.webapps_autoscaling_group.names.0
+    data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
 }
 
@@ -583,17 +595,15 @@ module "dataset" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gateway_autoscaling_group.names.0
+    data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
 
-  depends_on = [
-    aws_api_gateway_resource.v1_resource
-  ]
 }
 
 module "doc-orchestrator" {
@@ -602,27 +612,33 @@ module "doc-orchestrator" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gateway_autoscaling_group.names.0
+    data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
 }
 
 module "document-adapter" {
-  source           = "./document-adapter"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  source                 = "./document-adapter"
+  api_gateway            = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca             = var.cluster_ca
+  cluster_endpoint       = var.cluster_endpoint
+  cluster_name           = var.cluster_name
+  load_balancer          = aws_lb.api_gateway_apps_nlb
+  vpc                    = var.vpc
+  vpc_link               = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource            = aws_api_gateway_resource.v1_resource
+  v1_dataset_id_resource = module.dataset.v1_dataset_id_resource
+  v1_query_resource      = module.query.v1_query_resource
+  v1_download_resource   = module.query.v1_download_resource
+  v1_fields_resource     = module.query.v1_fields_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gateway_autoscaling_group.names.0
+    data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
 
   depends_on = [
@@ -637,12 +653,13 @@ module "fires-summary-stats" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.core_autoscaling_group.names.0
+    data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
 }
 
@@ -652,12 +669,13 @@ module "forest-watcher-api" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gfw_pro_autoscaling_group.names.0
+    data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
 }
 
@@ -669,10 +687,11 @@ module "forest-change" {
   cluster_name     = var.cluster_name
   load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.gfw_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gfw_pro_autoscaling_group.names.0
+    data.aws_autoscaling_groups.gfw_autoscaling_group.names.0
   ]
 }
 
@@ -682,12 +701,13 @@ module "forms" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.gfw_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gateway_autoscaling_group.names.0
+    data.aws_autoscaling_groups.gfw_autoscaling_group.names.0
   ]
 }
 
@@ -697,12 +717,13 @@ module "fw-alerts" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.gfw_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.webapps_autoscaling_group.names.0
   ]
 }
 
@@ -712,12 +733,13 @@ module "fw-contextual-layers" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.gfw_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.webapps_autoscaling_group.names.0
   ]
 }
 
@@ -727,27 +749,33 @@ module "fw-teams" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.gfw_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gateway_autoscaling_group.names.0
+    data.aws_autoscaling_groups.gfw_autoscaling_group.names.0
   ]
 }
 
 module "gee" {
-  source           = "./gee"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  source                    = "./gee"
+  api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca                = var.cluster_ca
+  cluster_endpoint          = var.cluster_endpoint
+  cluster_name              = var.cluster_name
+  load_balancer             = aws_lb.api_gateway_apps_nlb
+  vpc                       = var.vpc
+  vpc_link                  = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource               = aws_api_gateway_resource.v1_resource
+  v1_query_resource         = module.query.v1_query_resource
+  v1_download_resource      = module.query.v1_download_resource
+  v1_fields_resource        = module.query.v1_fields_resource
+  v1_rest_datasets_resource = module.dataset.v1_rest_datasets_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.core_autoscaling_group.names.0
+    data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
 
   depends_on = [
@@ -756,17 +784,20 @@ module "gee" {
 }
 
 module "gee-tiles" {
-  source           = "./gee-tiles"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  source               = "./gee-tiles"
+  api_gateway          = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca           = var.cluster_ca
+  cluster_endpoint     = var.cluster_endpoint
+  cluster_name         = var.cluster_name
+  load_balancer        = aws_lb.api_gateway_apps_nlb
+  vpc                  = var.vpc
+  vpc_link             = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource          = aws_api_gateway_resource.v1_resource
+  v1_layer_resource    = module.layer.v1_layer_resource
+  v1_layer_id_resource = module.layer.v1_layer_id_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.core_autoscaling_group.names.0
+    data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
 
   depends_on = [
@@ -780,12 +811,14 @@ module "geostore" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+  v2_resource      = aws_api_gateway_resource.v2_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gateway_autoscaling_group.names.0
+    data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
 }
 
@@ -797,9 +830,10 @@ module "gfw-forma" {
   cluster_name     = var.cluster_name
   load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.webapps_autoscaling_group.names.0,
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
 }
@@ -810,12 +844,14 @@ module "gfw-guira" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
+  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+  v2_resource      = aws_api_gateway_resource.v2_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gfw_pro_autoscaling_group.names.0
+    data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
 }
 
@@ -825,12 +861,14 @@ module "gfw-ogr" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
+  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+  v2_resource      = aws_api_gateway_resource.v2_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.webapps_autoscaling_group.names.0
+    data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
 }
 
@@ -842,9 +880,10 @@ module "gfw-ogr-gfw-ogr" {
   cluster_name     = var.cluster_name
   load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
     data.aws_autoscaling_groups.gfw_pro_autoscaling_group.names.0
   ]
 }
@@ -857,25 +896,31 @@ module "gfw-prodes" {
   cluster_name     = var.cluster_name
   load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+  v2_resource      = aws_api_gateway_resource.v2_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.webapps_autoscaling_group.names.0
+    data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
 }
 
 module "gfw-umd" {
-  source           = "./gfw-umd"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  source                    = "./gfw-umd"
+  api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca                = var.cluster_ca
+  cluster_endpoint          = var.cluster_endpoint
+  cluster_name              = var.cluster_name
+  load_balancer             = aws_lb.api_gateway_gfw_nlb
+  vpc                       = var.vpc
+  vpc_link                  = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource               = aws_api_gateway_resource.v1_resource
+  v2_resource               = aws_api_gateway_resource.v2_resource
+  v3_resource               = aws_api_gateway_resource.v3_resource
+  v1_umd_loss_gain_resource = module.analysis-gee.v1_umd_loss_gain_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.gfw_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gfw_pro_autoscaling_group.names.0
   ]
 }
 
@@ -887,25 +932,28 @@ module "gfw-user" {
   cluster_name     = var.cluster_name
   load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.gfw_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.core_autoscaling_group.names.0
   ]
 }
 
 module "glad-analysis-tiled" {
-  source           = "./glad-analysis-tiled"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  source                  = "./glad-analysis-tiled"
+  api_gateway             = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca              = var.cluster_ca
+  cluster_endpoint        = var.cluster_endpoint
+  cluster_name            = var.cluster_name
+  load_balancer           = aws_lb.api_gateway_gfw_nlb
+  vpc                     = var.vpc
+  vpc_link                = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource             = aws_api_gateway_resource.v1_resource
+  v1_glad_alerts_resource = module.fires-summary-stats.v1_glad_alerts_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gateway_autoscaling_group.names.0
   ]
 
   depends_on = [
@@ -918,12 +966,13 @@ module "graph-client" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.core_autoscaling_group.names.0
   ]
 }
 
@@ -933,12 +982,13 @@ module "gs-pro-config" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gateway_autoscaling_group.names.0
   ]
 }
 
@@ -950,10 +1000,11 @@ module "high-res" {
   cluster_name     = var.cluster_name
   load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.gfw_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.webapps_autoscaling_group.names.0
+    data.aws_autoscaling_groups.gfw_autoscaling_group.names.0
   ]
 }
 
@@ -965,68 +1016,87 @@ module "imazon" {
   cluster_name     = var.cluster_name
   load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+  v2_resource      = aws_api_gateway_resource.v2_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gfw_pro_autoscaling_group.names.0
+  ]
+
+  depends_on = [
+    aws_api_gateway_resource.v1_resource,
+    aws_api_gateway_resource.v2_resource
   ]
 }
 
 module "layer" {
-  source           = "./layer"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  source                 = "./layer"
+  api_gateway            = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca             = var.cluster_ca
+  cluster_endpoint       = var.cluster_endpoint
+  cluster_name           = var.cluster_name
+  load_balancer          = aws_lb.api_gateway_apps_nlb
+  vpc                    = var.vpc
+  vpc_link               = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource            = aws_api_gateway_resource.v1_resource
+  v1_dataset_id_resource = module.dataset.v1_dataset_id_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gfw_pro_autoscaling_group.names.0
+    data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
 
   depends_on = [
+    aws_api_gateway_resource.v1_resource,
     module.dataset,
   ]
 }
 
 module "metadata" {
-  source           = "./metadata"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  source                           = "./metadata"
+  api_gateway                      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca                       = var.cluster_ca
+  cluster_endpoint                 = var.cluster_endpoint
+  cluster_name                     = var.cluster_name
+  load_balancer                    = aws_lb.api_gateway_apps_nlb
+  vpc                              = var.vpc
+  vpc_link                         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource                      = aws_api_gateway_resource.v1_resource
+  v1_dataset_resource              = module.dataset.v1_dataset_resource
+  v1_dataset_id_resource           = module.dataset.v1_dataset_id_resource
+  v1_dataset_id_layer_resource     = module.layer.v1_dataset_id_layer_resource
+  v1_dataset_id_layer_id_resource  = module.layer.v1_dataset_id_layer_id_resource
+  v1_dataset_id_widget_resource    = module.widget.v1_dataset_id_widget_resource
+  v1_dataset_id_widget_id_resource = module.widget.v1_dataset_id_widget_id_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gateway_autoscaling_group.names.0
-  ]
-
-  depends_on = [
-    module.dataset,
-    module.layer,
-    module.widget,
   ]
 }
 
 module "nexgddp" {
-  source           = "./nexgddp"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  source                    = "./nexgddp"
+  api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca                = var.cluster_ca
+  cluster_endpoint          = var.cluster_endpoint
+  cluster_name              = var.cluster_name
+  load_balancer             = aws_lb.api_gateway_apps_nlb
+  vpc                       = var.vpc
+  vpc_link                  = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource               = aws_api_gateway_resource.v1_resource
+  v1_query_resource         = module.query.v1_query_resource
+  v1_download_resource      = module.query.v1_download_resource
+  v1_fields_resource        = module.query.v1_fields_resource
+  v1_rest_datasets_resource = module.dataset.v1_rest_datasets_resource
+  v1_layer_resource         = module.layer.v1_layer_resource
+  v1_layer_id_tile_resource = module.gee-tiles.v1_gee_tiles_layer_id_tile_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.webapps_autoscaling_group.names.0
   ]
 
   depends_on = [
+    aws_api_gateway_resource.v1_resource,
     module.layer,
     module.gee-tiles
   ]
@@ -1038,12 +1108,17 @@ module "proxy" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gateway_autoscaling_group.names.0
+    data.aws_autoscaling_groups.apps_autoscaling_group.names.0
+  ]
+
+  depends_on = [
+    aws_api_gateway_resource.v1_resource,
   ]
 }
 
@@ -1053,12 +1128,17 @@ module "query" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.webapps_autoscaling_group.names.0
+  ]
+
+  depends_on = [
+    aws_api_gateway_resource.v1_resource
   ]
 }
 
@@ -1070,10 +1150,15 @@ module "quicc" {
   cluster_name     = var.cluster_name
   load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.webapps_autoscaling_group.names.0
+  ]
+
+  depends_on = [
+    aws_api_gateway_resource.v1_resource
   ]
 }
 
@@ -1083,12 +1168,12 @@ module "rw-lp" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.webapps_autoscaling_group.names.0
+    data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
 }
 
@@ -1098,11 +1183,12 @@ module "resource-watch-manager" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.gfw_pro_autoscaling_group.names.0,
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
 }
@@ -1115,10 +1201,11 @@ module "story" {
   cluster_name     = var.cluster_name
   load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gateway_autoscaling_group.names.0
   ]
 }
 
@@ -1130,10 +1217,11 @@ module "subscriptions" {
   cluster_name     = var.cluster_name
   load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.core_autoscaling_group.names.0
   ]
 }
 
@@ -1143,11 +1231,12 @@ module "task-executor" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.webapps_autoscaling_group.names.0,
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
 }
@@ -1160,9 +1249,10 @@ module "true-color-tiles" {
   cluster_name     = var.cluster_name
   load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.gfw_pro_autoscaling_group.names.0,
     data.aws_autoscaling_groups.gfw_autoscaling_group.names.0
   ]
 }
@@ -1175,28 +1265,38 @@ module "viirs-fires" {
   cluster_name     = var.cluster_name
   load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+  v2_resource      = aws_api_gateway_resource.v2_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.gfw_pro_autoscaling_group.names.0
   ]
 }
 
 module "vocabulary" {
-  source           = "./vocabulary"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  source                           = "./vocabulary"
+  api_gateway                      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca                       = var.cluster_ca
+  cluster_endpoint                 = var.cluster_endpoint
+  cluster_name                     = var.cluster_name
+  load_balancer                    = aws_lb.api_gateway_apps_nlb
+  vpc                              = var.vpc
+  vpc_link                         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource                      = aws_api_gateway_resource.v1_resource
+  v1_dataset_resource              = module.dataset.v1_dataset_resource
+  v1_dataset_id_resource           = module.dataset.v1_dataset_id_resource
+  v1_dataset_id_layer_resource     = module.layer.v1_dataset_id_layer_resource
+  v1_dataset_id_layer_id_resource  = module.layer.v1_dataset_id_layer_id_resource
+  v1_dataset_id_widget_resource    = module.widget.v1_dataset_id_widget_resource
+  v1_dataset_id_widget_id_resource = module.widget.v1_dataset_id_widget_id_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.webapps_autoscaling_group.names.0
   ]
 
   depends_on = [
+    aws_api_gateway_resource.v1_resource,
     module.dataset,
     module.widget,
     module.layer,
@@ -1209,30 +1309,34 @@ module "webshot" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
+  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-    data.aws_autoscaling_groups.webapps_autoscaling_group.names.0
   ]
 }
 
 module "widget" {
-  source           = "./widget"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_default_nlb
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_default_lb_vpc_link
+  source                 = "./widget"
+  api_gateway            = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca             = var.cluster_ca
+  cluster_endpoint       = var.cluster_endpoint
+  cluster_name           = var.cluster_name
+  load_balancer          = aws_lb.api_gateway_apps_nlb
+  vpc                    = var.vpc
+  vpc_link               = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource            = aws_api_gateway_resource.v1_resource
+  v1_dataset_id_resource = module.dataset.v1_dataset_id_resource
+
   eks_asg_names = [
-    data.aws_autoscaling_groups.core_autoscaling_group.names.0,
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
 
   depends_on = [
+    aws_api_gateway_resource.v1_resource,
     module.dataset,
   ]
 }

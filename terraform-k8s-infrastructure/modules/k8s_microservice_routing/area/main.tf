@@ -49,22 +49,11 @@ resource "aws_autoscaling_attachment" "asg_attachment_area" {
   alb_target_group_arn   = aws_lb_target_group.area_lb_target_group.arn
 }
 
-// /v1
-data "aws_api_gateway_resource" "v1_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1"
-}
-
-// /v2
-data "aws_api_gateway_resource" "v2_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v2"
-}
 
 // /v2/area
 resource "aws_api_gateway_resource" "v2_area_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v2_resource.id
+  parent_id   = var.v2_resource.id
   path_part   = "area"
 }
 
@@ -92,7 +81,7 @@ resource "aws_api_gateway_resource" "v2_area_download_tiles_proxy_resource" {
 // /v1/area
 resource "aws_api_gateway_resource" "v1_area_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.v1_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "area"
 }
 
@@ -122,7 +111,7 @@ module "area_get_area_v2" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_area_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30504/api/v2/area"
+  uri          = "http://${var.load_balancer.dns_name}:30504/api/v2/area"
   vpc_link     = var.vpc_link
 }
 
@@ -131,7 +120,7 @@ module "area_post_area_v2" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_area_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30504/api/v2/area"
+  uri          = "http://${var.load_balancer.dns_name}:30504/api/v2/area"
   vpc_link     = var.vpc_link
 }
 
@@ -140,7 +129,7 @@ module "area_any_area_v2_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_area_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30504/api/v2/area/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30504/api/v2/area/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -149,7 +138,7 @@ module "area_get_v1_area" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_area_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org:30504/api/v1/area"
+  uri          = "http://${var.load_balancer.dns_name}:30504/api/v1/area"
   vpc_link     = var.vpc_link
 }
 
@@ -158,7 +147,7 @@ module "area_post_v1_area" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_area_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org:30504/api/v1/area"
+  uri          = "http://${var.load_balancer.dns_name}:30504/api/v1/area"
   vpc_link     = var.vpc_link
 }
 
@@ -167,6 +156,6 @@ module "area_any_v1_area_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_area_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org:30504/api/v1/area/{proxy}"
+  uri          = "http://${var.load_balancer.dns_name}:30504/api/v1/area/{proxy}"
   vpc_link     = var.vpc_link
 }
