@@ -37,8 +37,7 @@ resource "aws_lb_target_group" "resource_watch_manager_lb_target_group" {
 
   health_check {
     enabled  = true
-    protocol = "HTTP"
-    path     = "/health"
+    protocol = "TCP"
   }
 }
 
