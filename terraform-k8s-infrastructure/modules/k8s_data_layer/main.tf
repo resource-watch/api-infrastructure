@@ -3,7 +3,7 @@ data "aws_eks_cluster_auth" "cluster" {
 }
 
 provider "kubernetes" {
-  version = "~> 1.12.0"
+  version = "~> 2.1"
 }
 
 provider "kubectl" {
