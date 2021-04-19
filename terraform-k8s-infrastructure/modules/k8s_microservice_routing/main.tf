@@ -149,17 +149,6 @@ data "aws_autoscaling_groups" "gfw_autoscaling_group" {
   }
 }
 
-data "aws_autoscaling_groups" "gfw_pro_autoscaling_group" {
-  filter {
-    name   = "key"
-    values = ["eks:nodegroup-name"]
-  }
-  filter {
-    name   = "value"
-    values = [data.terraform_remote_state.core.outputs.node_group_names["gfw-pro"]]
-  }
-}
-
 resource "aws_lb" "api_gateway_apps_nlb" {
   name               = "rw-api-apps-nlb"
   internal           = false
@@ -884,7 +873,7 @@ module "gfw-ogr-gfw-ogr" {
   v1_resource      = aws_api_gateway_resource.v1_resource
 
   eks_asg_names = [
-    data.aws_autoscaling_groups.gfw_pro_autoscaling_group.names.0
+    data.aws_autoscaling_groups.gfw_autoscaling_group.names.0
   ]
 }
 

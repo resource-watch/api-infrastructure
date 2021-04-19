@@ -46,7 +46,7 @@ variable "vpc_link" {
 }
 
 variable "eks_asg_names" {
-  type        = list
+  type        = list(any)
   description = "List of the EKS ASG names"
 }
 
