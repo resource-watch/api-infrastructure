@@ -49,6 +49,11 @@ variable "elasticsearch_data_nodes_count" {
   description = "Number of data nodes to use on the ES cluster"
 }
 
+variable "elasticsearch_data_nodes_type" {
+  type        = string
+  description = "Instance type of data nodes to use on the ES cluster"
+}
+
 variable "backups_bucket" {
   type        = string
   description = "S3 bucket to which backups will be performed"

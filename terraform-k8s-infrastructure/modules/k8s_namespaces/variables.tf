@@ -9,7 +9,7 @@ variable "cluster_ca" {
 }
 
 variable "cluster_name" {
-  type = string
+  type        = string
   description = "The k8s cluster name"
 }
 

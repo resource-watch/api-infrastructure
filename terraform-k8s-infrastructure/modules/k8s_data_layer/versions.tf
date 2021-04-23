@@ -23,9 +23,9 @@ provider "aws" {
 }
 
 provider "kubernetes" {
-  version = "~> 2.1"
+  version                = "~> 2.1"
   host                   = var.cluster_endpoint
-  config_path = "~/.kube/config"
+  config_path            = "~/.kube/config"
   cluster_ca_certificate = base64decode(var.cluster_ca)
   exec {
     api_version = "client.authentication.k8s.io/v1alpha1"
@@ -53,7 +53,7 @@ provider "helm" {
         "eks",
         "get-token",
         "--cluster-name",
-        var.cluster_name]
+      var.cluster_name]
       command = "aws"
     }
   }

@@ -6,3 +6,4 @@ backups_bucket                           = "wri-api-staging-backups"
 dns_prefix                               = "staging"
 tf_core_state_bucket                     = "wri-api-terraform-staging"
 deploy_metrics_server                    = false
+elasticsearch_data_nodes_type            = "m5.xlarge.elasticsearch"

@@ -143,18 +143,18 @@ resource "aws_api_gateway_deployment" "prod" {
 
   triggers = {
     redeployment = sha1(join(",", list(
-    jsonencode(aws_api_gateway_integration.get_v1_endpoint_integration),
-    jsonencode(module.gfw_metadata.endpoints),
-//    jsonencode(module.doc_swagger.endpoints),
-    jsonencode(module.auth.endpoints),
-    jsonencode(module.ct.endpoints),
-//    jsonencode(module.dataset.endpoints),
-//    jsonencode(module.layer.endpoints),
-//    jsonencode(module.query.endpoints),
-//    jsonencode(module.query.endpoints),
-//    jsonencode(module.widget.endpoints),
-//    jsonencode(module.metadata.endpoints),
-//    jsonencode(module.webshot.endpoints),
+      jsonencode(aws_api_gateway_integration.get_v1_endpoint_integration),
+      jsonencode(module.gfw_metadata.endpoints),
+      //    jsonencode(module.doc_swagger.endpoints),
+      jsonencode(module.auth.endpoints),
+      jsonencode(module.ct.endpoints),
+      //    jsonencode(module.dataset.endpoints),
+      //    jsonencode(module.layer.endpoints),
+      //    jsonencode(module.query.endpoints),
+      //    jsonencode(module.query.endpoints),
+      //    jsonencode(module.widget.endpoints),
+      //    jsonencode(module.metadata.endpoints),
+      //    jsonencode(module.webshot.endpoints),
     )))
   }
 
@@ -189,10 +189,10 @@ resource "aws_api_gateway_resource" "v3_resource" {
 
 // /v1 200 response, needed by FW
 resource "aws_api_gateway_method" "get_v1_endpoint_method" {
-  rest_api_id        = aws_api_gateway_rest_api.rw_api_gateway.id
-  resource_id        = aws_api_gateway_resource.v1_resource.id
-  http_method        = "GET"
-  authorization      = "NONE"
+  rest_api_id   = aws_api_gateway_rest_api.rw_api_gateway.id
+  resource_id   = aws_api_gateway_resource.v1_resource.id
+  http_method   = "GET"
+  authorization = "NONE"
 }
 
 resource "aws_api_gateway_integration" "get_v1_endpoint_integration" {
@@ -202,10 +202,10 @@ resource "aws_api_gateway_integration" "get_v1_endpoint_integration" {
   type        = "MOCK"
 
   request_templates = {
-    "application/json": "{\"statusCode\": 200}"
+    "application/json" : "{\"statusCode\": 200}"
   }
   depends_on = [
-    aws_api_gateway_method.get_v1_endpoint_method]
+  aws_api_gateway_method.get_v1_endpoint_method]
 }
 
 resource "aws_api_gateway_method_response" "get_v1_endpoint_method_response" {
