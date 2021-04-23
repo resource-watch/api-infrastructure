@@ -60,3 +60,15 @@ resource "kubectl_manifest" "container_insights" {
   count     = length(data.kubectl_path_documents.container_insights_manifests.documents)
   yaml_body = element(data.kubectl_path_documents.container_insights_manifests.documents, count.index)
 }
+
+// https://docs.aws.amazon.com/eks/latest/userguide/cni-upgrades.html
+// AWS VPC CNI plugin for Kubernetes
+// File has changes - see link above for details
+data "kubectl_path_documents" "cni_plugin_manifests" {
+  pattern = "${path.module}/cni_plugin/aws-k8s-cni.yaml"
+}
+
+resource "kubectl_manifest" "cni_plugin" {
+  count     = length(data.kubectl_path_documents.cni_plugin_manifests.documents)
+  yaml_body = element(data.kubectl_path_documents.cni_plugin_manifests.documents, count.index)
+}
