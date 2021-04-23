@@ -71,45 +71,6 @@ resource "aws_iam_role_policy" "api_gateway_monitoring_cloudwatch_policy" {
 EOF
 }
 
-data "aws_subnet_ids" "public_subnets" {
-  vpc_id = var.vpc.id
-
-  tags = {
-    tier = "public"
-  }
-}
-
-data "aws_autoscaling_groups" "core_autoscaling_group" {
-  filter {
-    name   = "key"
-    values = ["eks:nodegroup-name"]
-  }
-
-  filter {
-    name   = "value"
-    values = [data.terraform_remote_state.core.outputs.node_group_names["core"]]
-  }
-}
-
-resource "aws_lb" "api_gateway_core_nlb" {
-  name               = "rw-api-core-nlb"
-  internal           = false
-  load_balancer_type = "network"
-  subnets            = data.aws_subnet_ids.public_subnets.ids
-
-  enable_deletion_protection = true
-}
-
-resource "aws_api_gateway_vpc_link" "rw_api_core_lb_vpc_link" {
-  name        = "RW API core LB VPC link"
-  description = "VPC link to the RW API service core load balancer"
-  target_arns = [aws_lb.api_gateway_core_nlb.arn]
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
 resource "aws_api_gateway_method_settings" "rw_api_gateway_general_settings" {
   rest_api_id = aws_api_gateway_rest_api.rw_api_gateway.id
   stage_name  = aws_api_gateway_deployment.prod.stage_name
@@ -137,6 +98,114 @@ resource "aws_api_gateway_rest_api" "rw_api_gateway" {
   }
 }
 
+data "aws_subnet_ids" "private_subnets" {
+  vpc_id = var.vpc.id
+
+  tags = {
+    tier = "private"
+  }
+}
+
+data "aws_subnet_ids" "public_subnets" {
+  vpc_id = var.vpc.id
+
+  tags = {
+    tier = "public"
+  }
+}
+
+data "aws_autoscaling_groups" "apps_autoscaling_group" {
+  filter {
+    name   = "key"
+    values = ["eks:nodegroup-name"]
+  }
+
+  filter {
+    name   = "value"
+    values = [data.terraform_remote_state.core.outputs.node_group_names["apps"]]
+  }
+}
+
+data "aws_autoscaling_groups" "core_autoscaling_group" {
+  filter {
+    name   = "key"
+    values = ["eks:nodegroup-name"]
+  }
+
+  filter {
+    name   = "value"
+    values = [data.terraform_remote_state.core.outputs.node_group_names["core"]]
+  }
+}
+
+data "aws_autoscaling_groups" "gfw_autoscaling_group" {
+  filter {
+    name   = "key"
+    values = ["eks:nodegroup-name"]
+  }
+  filter {
+    name   = "value"
+    values = [data.terraform_remote_state.core.outputs.node_group_names["gfw"]]
+  }
+}
+
+resource "aws_lb" "api_gateway_apps_nlb" {
+  name               = "rw-api-apps-nlb"
+  internal           = false
+  load_balancer_type = "network"
+  subnets            = data.aws_subnet_ids.public_subnets.ids
+
+  enable_deletion_protection = true
+}
+
+resource "aws_api_gateway_vpc_link" "rw_api_apps_lb_vpc_link" {
+  name        = "RW API apps LB VPC link"
+  description = "VPC link to the RW API service apps load balancer"
+  target_arns = [aws_lb.api_gateway_apps_nlb.arn]
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_lb" "api_gateway_core_nlb" {
+  name               = "rw-api-core-nlb"
+  internal           = false
+  load_balancer_type = "network"
+  subnets            = data.aws_subnet_ids.public_subnets.ids
+
+  enable_deletion_protection = true
+}
+
+resource "aws_api_gateway_vpc_link" "rw_api_core_lb_vpc_link" {
+  name        = "RW API core LB VPC link"
+  description = "VPC link to the RW API service core load balancer"
+  target_arns = [aws_lb.api_gateway_core_nlb.arn]
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_lb" "api_gateway_gfw_nlb" {
+  name               = "rw-api-gfw-nlb"
+  internal           = false
+  load_balancer_type = "network"
+  subnets            = data.aws_subnet_ids.public_subnets.ids
+
+  enable_deletion_protection = true
+}
+
+resource "aws_api_gateway_vpc_link" "rw_api_gfw_lb_vpc_link" {
+  name        = "RW API gfw LB VPC link"
+  description = "VPC link to the RW API service GFW load balancer"
+  target_arns = [aws_lb.api_gateway_gfw_nlb.arn]
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 resource "aws_api_gateway_deployment" "prod" {
   rest_api_id = aws_api_gateway_rest_api.rw_api_gateway.id
   stage_name  = "prod"
@@ -152,6 +221,7 @@ resource "aws_api_gateway_deployment" "prod" {
       //    jsonencode(module.layer.endpoints),
       //    jsonencode(module.query.endpoints),
       //    jsonencode(module.query.endpoints),
+      jsonencode(module.resource-watch-manager.endpoints),
       //    jsonencode(module.widget.endpoints),
       //    jsonencode(module.metadata.endpoints),
       //    jsonencode(module.webshot.endpoints),
@@ -321,7 +391,23 @@ module "auth" {
 //  cluster_endpoint = var.cluster_endpoint
 //  cluster_name     = var.cluster_name
 //}
-//
+
+module "resource-watch-manager" {
+  source           = "./resource-watch-manager"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_apps_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = aws_api_gateway_resource.v1_resource
+
+  eks_asg_names = [
+    data.aws_autoscaling_groups.apps_autoscaling_group.names.0
+  ]
+}
+
 //module "webshot" {
 //  source           = "./webshot"
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
