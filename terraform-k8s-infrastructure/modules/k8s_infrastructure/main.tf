@@ -45,6 +45,18 @@ resource "kubectl_manifest" "cluster_autoscaler" {
   yaml_body = element(data.kubectl_path_documents.cluster_autoscaler_manifests.documents, count.index)
 }
 
+// https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html
+// AWS Metrics server for HPA support
+// File has no changes
+data "kubectl_path_documents" "metrics_server_manifests" {
+  pattern = "${path.module}/metrics_server/metrics_server.yaml"
+}
+
+resource "kubectl_manifest" "metrics_server" {
+  count     = length(data.kubectl_path_documents.metrics_server_manifests.documents)
+  yaml_body = element(data.kubectl_path_documents.metrics_server_manifests.documents, count.index)
+}
+
 // https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Container-Insights-setup-EKS-quickstart.html
 // Container insights
 // File has changes - see link above for details
