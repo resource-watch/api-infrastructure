@@ -5,3 +5,4 @@ elasticsearch_data_nodes_count           = 4
 backups_bucket                           = "wri-api-production-backups"
 dns_prefix                               = "prod"
 tf_core_state_bucket                     = "wri-api-terraform"
+deploy_metrics_server                    = true

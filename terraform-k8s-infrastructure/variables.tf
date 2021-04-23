@@ -58,3 +58,8 @@ variable "tf_core_state_bucket" {
   type        = string
   description = "S3 bucket that holds the core TF state"
 }
+
+variable "deploy_metrics_server" {
+  type        = bool
+  description = "If AWS Metrics server should be deployed"
+}
