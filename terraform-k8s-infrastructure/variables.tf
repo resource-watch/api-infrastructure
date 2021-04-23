@@ -53,3 +53,8 @@ variable "backups_bucket" {
   type        = string
   description = "S3 bucket to which backups will be performed"
 }
+
+variable "tf_core_state_bucket" {
+  type        = string
+  description = "S3 bucket that holds the core TF state"
+}

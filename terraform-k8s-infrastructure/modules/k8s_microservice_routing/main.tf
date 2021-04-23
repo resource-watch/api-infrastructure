@@ -1,3 +1,23 @@
+# import core state
+data "terraform_remote_state" "core" {
+  backend = "s3"
+  config = {
+    bucket = var.tf_core_state_bucket
+    region = var.aws_region
+    key    = "core.tfstate"
+  }
+}
+
+provider "kubernetes" {
+  host                   = var.cluster_endpoint
+  cluster_ca_certificate = base64decode(var.cluster_ca)
+  exec {
+    api_version = "client.authentication.k8s.io/v1alpha1"
+    args        = ["eks", "get-token", "--cluster-name", var.cluster_name]
+    command     = "aws"
+  }
+}
+
 #
 # Base API Gateway setup
 #
@@ -51,6 +71,44 @@ resource "aws_iam_role_policy" "api_gateway_monitoring_cloudwatch_policy" {
 EOF
 }
 
+data "aws_subnet_ids" "public_subnets" {
+  vpc_id = var.vpc.id
+
+  tags = {
+    tier = "public"
+  }
+}
+
+data "aws_autoscaling_groups" "core_autoscaling_group" {
+  filter {
+    name   = "key"
+    values = ["eks:nodegroup-name"]
+  }
+
+  filter {
+    name   = "value"
+    values = [data.terraform_remote_state.core.outputs.node_group_names["core"]]
+  }
+}
+
+resource "aws_lb" "api_gateway_core_nlb" {
+  name               = "rw-api-core-nlb"
+  internal           = false
+  load_balancer_type = "network"
+  subnets            = data.aws_subnet_ids.public_subnets.ids
+
+  enable_deletion_protection = true
+}
+
+resource "aws_api_gateway_vpc_link" "rw_api_core_lb_vpc_link" {
+  name        = "RW API core LB VPC link"
+  description = "VPC link to the RW API service core load balancer"
+  target_arns = [aws_lb.api_gateway_core_nlb.arn]
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
 
 resource "aws_api_gateway_method_settings" "rw_api_gateway_general_settings" {
   rest_api_id = aws_api_gateway_rest_api.rw_api_gateway.id
@@ -87,7 +145,7 @@ resource "aws_api_gateway_deployment" "prod" {
     redeployment = sha1(join(",", list(
     jsonencode(aws_api_gateway_integration.get_v1_endpoint_integration),
     jsonencode(module.gfw_metadata.endpoints),
-    jsonencode(module.doc_swagger.endpoints),
+//    jsonencode(module.doc_swagger.endpoints),
     jsonencode(module.auth.endpoints),
     jsonencode(module.ct.endpoints),
 //    jsonencode(module.dataset.endpoints),
@@ -183,14 +241,14 @@ module "gfw_metadata" {
 }
 
 // /documentation uses doc-swagger MS (no CT)
-module "doc_swagger" {
-  source           = "./doc-swagger"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-}
+//module "doc_swagger" {
+//  source           = "./doc-swagger"
+//  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+//  resource_root_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
+//  cluster_ca       = var.cluster_ca
+//  cluster_endpoint = var.cluster_endpoint
+//  cluster_name     = var.cluster_name
+//}
 
 
 // Import routes per MS, one by one
@@ -206,10 +264,17 @@ module "ct" {
 module "auth" {
   source           = "./authorization"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  resource_root_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
+  load_balancer    = aws_lb.api_gateway_core_nlb
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_core_lb_vpc_link
+  root_resource_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
+
+  eks_asg_names = [
+    data.aws_autoscaling_groups.core_autoscaling_group.names.0
+  ]
 }
 
 //module "dataset" {

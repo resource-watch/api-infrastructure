@@ -21,7 +21,35 @@ variable "api_gateway" {
   description = "Instance of aws_api_gateway_rest_api"
 }
 
-variable "resource_root_id" {
-  type        = string
-  description = "Instance of aws_api_gateway_resource"
+variable "vpc" {
+  type = object({
+    id         = string
+    cidr_block = string
+  })
+  description = "The id of the VPC"
+}
+
+variable "load_balancer" {
+  type = object({
+    id       = string
+    arn      = string
+    dns_name = string
+  })
+  description = "AWS NLB that serves as an entry point for the EKS cluster"
+}
+
+variable "vpc_link" {
+  type = object({
+    id = string
+  })
+  description = "VPC Link to the LB"
+}
+
+variable "eks_asg_names" {
+  type        = list(any)
+  description = "List of the EKS ASG names"
+}
+
+variable "root_resource_id" {
+  type = string
 }

@@ -13,6 +13,14 @@ variable "cluster_name" {
   description = "The k8s cluster name"
 }
 
+variable "vpc" {
+  type = object({
+    id         = string
+    cidr_block = string
+  })
+  description = "The id of the VPC"
+}
+
 variable "environment" {
   type        = string
   description = "Environment name"
@@ -33,4 +41,9 @@ variable "project" {
   default     = "WRI API"
   type        = string
   description = "A project namespace for the infrastructure."
+}
+
+variable "tf_core_state_bucket" {
+  type        = string
+  description = "S3 bucket that holds the core TF state"
 }
