@@ -23,7 +23,7 @@ provider "aws" {
 }
 
 provider "kubernetes" {
-  version = "~> 2.1"
+  version     = "~> 2.1"
   config_path = "~/.kube/config"
 }
 
