@@ -17,12 +17,13 @@ data "aws_vpc" "eks_vpc" {
 }
 
 module "k8s_infrastructure" {
-  source           = "./modules/k8s_infrastructure"
-  cluster_endpoint = "${data.aws_eks_cluster.rw_api.endpoint}:4433"
-  cluster_ca       = data.aws_eks_cluster.rw_api.certificate_authority.0.data
-  cluster_name     = data.aws_eks_cluster.rw_api.name
-  aws_region       = var.aws_region
-  vpc_id           = data.aws_vpc.eks_vpc.id
+  source                = "./modules/k8s_infrastructure"
+  cluster_endpoint      = "${data.aws_eks_cluster.rw_api.endpoint}:4433"
+  cluster_ca            = data.aws_eks_cluster.rw_api.certificate_authority.0.data
+  cluster_name          = data.aws_eks_cluster.rw_api.name
+  aws_region            = var.aws_region
+  vpc_id                = data.aws_vpc.eks_vpc.id
+  deploy_metrics_server = var.deploy_metrics_server
 }
 
 module "k8s_data_layer" {

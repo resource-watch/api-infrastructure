@@ -40,11 +40,21 @@ variable "elasticsearch_use_dedicated_master_nodes" {
 
 variable "elasticsearch_data_nodes_count" {
   type        = number
-  default = 3
+  default     = 3
   description = "Number of data nodes to use on the ES cluster"
 }
 
 variable "backups_bucket" {
   type        = string
   description = "S3 bucket to which backups will be performed"
+}
+
+variable "tf_core_state_bucket" {
+  type        = string
+  description = "S3 bucket that holds the core TF state"
+}
+
+variable "deploy_metrics_server" {
+  type        = bool
+  description = "If AWS Metrics server should be deployed"
 }

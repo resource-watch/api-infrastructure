@@ -34,13 +34,13 @@ variable "elasticsearch_disk_size_gb" {
 
 variable "elasticsearch_use_dedicated_master_nodes" {
   type        = bool
-  default = false
+  default     = false
   description = "If the cluster should use dedicated master nodes"
 }
 
 variable "elasticsearch_data_nodes_count" {
   type        = number
-  default = 3
+  default     = 3
   description = "Number of data nodes to use on the ES cluster"
 }
 
