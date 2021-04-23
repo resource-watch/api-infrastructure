@@ -53,7 +53,7 @@ data "kubectl_path_documents" "metrics_server_manifests" {
 }
 
 resource "kubectl_manifest" "metrics_server" {
-  count     = length(data.kubectl_path_documents.metrics_server_manifests.documents)
+  count     = var.deploy_metrics_server ? length(data.kubectl_path_documents.metrics_server_manifests.documents) : 0
   yaml_body = element(data.kubectl_path_documents.metrics_server_manifests.documents, count.index)
 }
 
