@@ -5,11 +5,6 @@ terraform {
       version = "~> 3.0"
     }
 
-    kubectl = {
-      source  = "gavinbunney/kubectl"
-      version = "~> 1.10.0"
-    }
-
     kubernetes = {
       source  = "hashicorp/kubernetes"
       version = "~> 2.1"
@@ -25,11 +20,4 @@ provider "aws" {
 provider "kubernetes" {
   version = "~> 2.1"
   config_path = "~/.kube/config"
-}
-
-provider "kubectl" {
-  host                   = var.cluster_endpoint
-  cluster_ca_certificate = base64decode(var.cluster_ca)
-  token                  = data.aws_eks_cluster_auth.cluster.token
-  load_config_file       = false
 }
