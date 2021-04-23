@@ -37,6 +37,7 @@ module "k8s_data_layer" {
   elasticsearch_use_dedicated_master_nodes = var.elasticsearch_use_dedicated_master_nodes
   elasticsearch_data_nodes_count           = var.elasticsearch_data_nodes_count
   backups_bucket                           = var.backups_bucket
+  elasticsearch_data_nodes_type            = var.elasticsearch_data_nodes_type
 }
 
 module "k8s_microservice_routing" {

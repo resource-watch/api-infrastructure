@@ -13,17 +13,9 @@ spec:
   tls:
     - hosts:
         - indonesia.climatewatchdata.org
-        - indonesia-platform-staging.vizzuality.com
       secretName: climate-watch-indonesia-certificate
   rules:
     - host: indonesia.climatewatchdata.org
-      http:
-        paths:
-          - path: /*
-            backend:
-              serviceName: nginx
-              servicePort: 80
-    - host: indonesia-platform-staging.vizzuality.com
       http:
         paths:
           - path: /*
