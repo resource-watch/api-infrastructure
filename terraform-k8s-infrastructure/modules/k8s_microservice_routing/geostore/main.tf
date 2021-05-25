@@ -17,8 +17,12 @@ resource "kubernetes_service" "geostore_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "geostore_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30532
   protocol          = "TCP"
 
@@ -72,7 +76,7 @@ module "geostore_post_v1_geostore" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_geostore_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30532/api/v1/geostore"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30532/api/v1/geostore"
   vpc_link     = var.vpc_link
 }
 
@@ -81,7 +85,7 @@ module "geostore_any_v1_geostore_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_geostore_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30532/api/v1/geostore/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30532/api/v1/geostore/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -108,7 +112,7 @@ module "geostore_any_v1_coverage_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_coverage_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30532/api/v1/coverage/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30532/api/v1/coverage/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -135,7 +139,7 @@ module "geostore_post_v2_geostore" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_geostore_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30532/api/v2/geostore"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30532/api/v2/geostore"
   vpc_link     = var.vpc_link
 }
 
@@ -144,7 +148,7 @@ module "geostore_any_v2_geostore_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_geostore_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30532/api/v2/geostore/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30532/api/v2/geostore/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -171,6 +175,6 @@ module "geostore_any_v2_coverage_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_coverage_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30532/api/v2/coverage/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30532/api/v2/coverage/{proxy}"
   vpc_link     = var.vpc_link
 }

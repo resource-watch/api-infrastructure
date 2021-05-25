@@ -17,8 +17,12 @@ resource "kubernetes_service" "bigquery_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "bigquery_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30506
   protocol          = "TCP"
 
@@ -102,7 +106,7 @@ module "bigquery_get_v1_query_bigquery_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_query_bigquery_dataset_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30506/api/v1/bigquery/query/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30506/api/v1/bigquery/query/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -111,7 +115,7 @@ module "bigquery_post_v1_query_bigquery_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_query_bigquery_dataset_id_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30506/api/v1/bigquery/query/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30506/api/v1/bigquery/query/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -120,7 +124,7 @@ module "bigquery_get_v1_download_bigquery_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_download_bigquery_dataset_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30506/api/v1/bigquery/download/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30506/api/v1/bigquery/download/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -129,7 +133,7 @@ module "bigquery_post_v1_download_bigquery_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_download_bigquery_dataset_id_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30506/api/v1/bigquery/download/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30506/api/v1/bigquery/download/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -138,7 +142,7 @@ module "bigquery_get_v1_fields_bigquery_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_fields_bigquery_dataset_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30506/api/v1/bigquery/fields/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30506/api/v1/bigquery/fields/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -147,7 +151,7 @@ module "bigquery_post_v1_rest_datasets_bigquery" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_rest_datasets_bigquery_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30506/api/v1/bigquery/rest-datasets/bigquery"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30506/api/v1/bigquery/rest-datasets/bigquery"
   vpc_link     = var.vpc_link
 }
 

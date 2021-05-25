@@ -17,8 +17,12 @@ resource "kubernetes_service" "doc_swagger_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "doc_swagger_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30519
   protocol          = "TCP"
 
@@ -67,7 +71,7 @@ module "doc_swagger_any" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.documentation_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30519/documentation"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30519/documentation"
   vpc_link     = var.vpc_link
 }
 
@@ -76,6 +80,6 @@ module "doc_swagger_proxy_any" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.documentation_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30519/documentation/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30519/documentation/{proxy}"
   vpc_link     = var.vpc_link
 }

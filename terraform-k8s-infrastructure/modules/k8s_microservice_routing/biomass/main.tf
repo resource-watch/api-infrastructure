@@ -17,8 +17,12 @@ resource "kubernetes_service" "biomass_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "biomass_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30533
   protocol          = "TCP"
 
@@ -68,6 +72,6 @@ module "biomass_v1_any_biomass_loss_admin_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.biomass_loss_admin_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30533/api/v1/biomass-loss/admin/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30533/api/v1/biomass-loss/admin/{proxy}"
   vpc_link     = var.vpc_link
 }

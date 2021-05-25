@@ -17,8 +17,12 @@ resource "kubernetes_service" "gfw_prodes_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "gfw_prodes_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30537
   protocol          = "TCP"
 
@@ -77,12 +81,30 @@ resource "aws_api_gateway_resource" "v2_prodes_loss_proxy_resource" {
   path_part   = "{proxy+}"
 }
 
+module "gfw_prodes_loss_get_v2_prodes_loss" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.v2_prodes_loss_resource
+  method       = "GET"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30537/api/v2/prodes-loss"
+  vpc_link     = var.vpc_link
+}
+
+module "gfw_prodes_loss_post_v2_prodes_loss" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.v2_prodes_loss_resource
+  method       = "POST"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30537/api/v2/prodes-loss"
+  vpc_link     = var.vpc_link
+}
+
 module "gfw_prodes_loss_any_v2_prodes_loss_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_prodes_loss_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30537/api/v2/prodes-loss/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30537/api/v2/prodes-loss/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -91,6 +113,24 @@ module "gfw_prodes_loss_any_v1_prodes_loss_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_prodes_loss_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30537/api/v1/prodes-loss/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30537/api/v1/prodes-loss/{proxy}"
+  vpc_link     = var.vpc_link
+}
+
+module "gfw_prodes_loss_get_v1_prodes_loss" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.v1_prodes_loss_resource
+  method       = "GET"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30537/api/v1/prodes-loss"
+  vpc_link     = var.vpc_link
+}
+
+module "gfw_prodes_loss_post_v1_prodes_loss" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.v1_prodes_loss_resource
+  method       = "POST"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30537/api/v1/prodes-loss"
   vpc_link     = var.vpc_link
 }

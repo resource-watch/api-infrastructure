@@ -17,8 +17,12 @@ resource "kubernetes_service" "true_color_tiles_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "true_color_tiles_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30563
   protocol          = "TCP"
 
@@ -67,7 +71,7 @@ module "true_color_tiles_get_v1_true_color_tiles_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_true_color_tiles_proxy_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30563/api/v1/true-color-tiles/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30563/api/v1/true-color-tiles/{proxy}"
   vpc_link     = var.vpc_link
 }
 

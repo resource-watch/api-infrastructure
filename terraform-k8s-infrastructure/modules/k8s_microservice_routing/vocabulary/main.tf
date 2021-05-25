@@ -18,8 +18,12 @@ resource "kubernetes_service" "vocabulary_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "vocabulary_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30565
   protocol          = "TCP"
 
@@ -72,7 +76,7 @@ module "vocabulary_get_vocabulary" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.vocabulary_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30565/api/v1/vocabulary"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/vocabulary"
   vpc_link     = var.vpc_link
 }
 
@@ -81,7 +85,7 @@ module "vocabulary_post_vocabulary" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.vocabulary_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30565/api/v1/vocabulary"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/vocabulary"
   vpc_link     = var.vpc_link
 }
 
@@ -90,7 +94,7 @@ module "vocabulary_any_vocabulary_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.vocabulary_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30565/api/v1/vocabulary/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/vocabulary/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -131,7 +135,7 @@ module "vocabulary_get_dataset_id_vocabulary" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_vocabulary_resource
   method                      = "GET"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/vocabulary"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/vocabulary"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -141,7 +145,7 @@ module "vocabulary_post_dataset_id_vocabulary" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_vocabulary_resource
   method                      = "POST"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/vocabulary"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/vocabulary"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -151,7 +155,7 @@ module "vocabulary_put_dataset_id_vocabulary" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_vocabulary_resource
   method                      = "PUT"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/vocabulary"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/vocabulary"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -161,7 +165,7 @@ module "vocabulary_any_dataset_id_vocabulary_proxy" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_vocabulary_proxy_resource
   method                      = "ANY"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/vocabulary/{proxy}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/vocabulary/{proxy}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -171,7 +175,7 @@ module "vocabulary_delete_dataset_id_vocabulary" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_vocabulary_resource
   method                      = "DELETE"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/vocabulary"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/vocabulary"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -181,7 +185,7 @@ module "vocabulary_any_dataset_vocabulary_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_vocabulary_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/vocabulary/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/vocabulary/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -222,7 +226,7 @@ module "vocabulary_get_dataset_id_widget_id_vocabulary" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_resource
   method                      = "GET"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -232,7 +236,7 @@ module "vocabulary_get_dataset_id_widget_id_vocabulary_id" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_id_resource
   method                      = "GET"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }
@@ -242,7 +246,7 @@ module "vocabulary_post_dataset_id_widget_id_vocabulary" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_resource
   method                      = "POST"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }
@@ -252,7 +256,7 @@ module "vocabulary_post_dataset_id_widget_id_vocabulary_id" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_id_resource
   method                      = "POST"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }
@@ -262,7 +266,7 @@ module "vocabulary_patch_dataset_id_widget_id_vocabulary_id" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_id_resource
   method                      = "PATCH"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }
@@ -272,7 +276,7 @@ module "vocabulary_delete_dataset_id_widget_id_vocabulary" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_resource
   method                      = "DELETE"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }
@@ -282,7 +286,7 @@ module "vocabulary_delete_dataset_id_widget_id_vocabulary_id" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_widget_id_vocabulary_id_resource
   method                      = "DELETE"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }
@@ -292,7 +296,7 @@ module "vocabulary_any_dataset_id_widget_vocabulary_proxy" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_widget_vocabulary_proxy_resource
   method                      = "ANY"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/widget/vocabulary/{proxy}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/widget/vocabulary/{proxy}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -334,7 +338,7 @@ module "vocabulary_get_dataset_id_layer_id_vocabulary" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_resource
   method                      = "GET"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
@@ -344,7 +348,7 @@ module "vocabulary_get_dataset_id_layer_id_vocabulary_id" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_id_resource
   method                      = "GET"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
@@ -354,7 +358,7 @@ module "vocabulary_post_dataset_id_layer_id_vocabulary" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_resource
   method                      = "POST"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
@@ -364,7 +368,7 @@ module "vocabulary_post_dataset_id_layer_id_vocabulary_id" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_id_resource
   method                      = "POST"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
@@ -374,7 +378,7 @@ module "vocabulary_patch_dataset_id_layer_id_vocabulary_id" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_id_resource
   method                      = "PATCH"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
@@ -384,7 +388,7 @@ module "vocabulary_delete_dataset_id_layer_id_vocabulary" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_resource
   method                      = "DELETE"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
@@ -394,7 +398,7 @@ module "vocabulary_delete_dataset_id_layer_id_vocabulary_id" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_layer_id_vocabulary_id_resource
   method                      = "DELETE"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
@@ -404,7 +408,7 @@ module "vocabulary_any_dataset_id_layer_vocabulary_proxy" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_layer_vocabulary_proxy_resource
   method                      = "ANY"
-  uri                         = "http://${var.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/layer/vocabulary/{proxy}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/dataset/{datasetId}/layer/vocabulary/{proxy}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -432,7 +436,7 @@ module "vocabulary_get_favourite" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.favourite_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30565/api/v1/favourite"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/favourite"
   vpc_link     = var.vpc_link
 }
 
@@ -441,7 +445,7 @@ module "vocabulary_post_favourite" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.favourite_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30565/api/v1/favourite"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/favourite"
   vpc_link     = var.vpc_link
 }
 
@@ -450,7 +454,7 @@ module "vocabulary_any_favourite_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.favourite_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30565/api/v1/favourite/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/favourite/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -477,7 +481,7 @@ module "vocabulary_get_collection" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.collection_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30565/api/v1/collection"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/collection"
   vpc_link     = var.vpc_link
 }
 
@@ -486,7 +490,7 @@ module "vocabulary_any_collection_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.collection_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30565/api/v1/collection/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/collection/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -495,6 +499,6 @@ module "vocabulary_post_collection" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.collection_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30565/api/v1/collection"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30565/api/v1/collection"
   vpc_link     = var.vpc_link
 }

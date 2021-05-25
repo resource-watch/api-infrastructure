@@ -17,8 +17,12 @@ resource "kubernetes_service" "aqueduct_analysis_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "aqueduct_analysis_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30501
   protocol          = "TCP"
 
@@ -67,6 +71,6 @@ module "aqueduct_analysis_any_v1_aqueduct_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_aqueduct_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30501/api/v1/aqueduct/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30501/api/v1/aqueduct/{proxy}"
   vpc_link     = var.vpc_link
 }

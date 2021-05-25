@@ -18,8 +18,12 @@ resource "kubernetes_service" "rw_lp_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "rw_lp_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30559
   protocol          = "TCP"
 
@@ -74,7 +78,7 @@ module "rw_lp_get_home" {
   api_gateway  = var.api_gateway
   api_resource = data.aws_api_gateway_resource.root_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30559/"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30559/"
   vpc_link     = var.vpc_link
 }
 
@@ -83,7 +87,7 @@ module "rw_lp_get_rw_lp_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.rw_lp_proxy_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30559/rw-lp/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30559/rw-lp/{proxy}"
   vpc_link     = var.vpc_link
 }
 

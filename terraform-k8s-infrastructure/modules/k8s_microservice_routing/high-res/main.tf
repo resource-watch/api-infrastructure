@@ -17,8 +17,12 @@ resource "kubernetes_service" "high_res_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "high_res_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30544
   protocol          = "TCP"
 
@@ -67,7 +71,7 @@ module "high_res_get_v1_high_res_sensor" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_high_res_sensor_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30544/api/v1/high-res/{sensor}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30544/api/v1/high-res/{sensor}"
   vpc_link     = var.vpc_link
 }
 

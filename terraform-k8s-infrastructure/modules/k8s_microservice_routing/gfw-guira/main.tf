@@ -17,8 +17,12 @@ resource "kubernetes_service" "gfw_guira_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "gfw_guira_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30535
   protocol          = "TCP"
 
@@ -82,7 +86,7 @@ module "gfw_guira_get_v2_guira_loss" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_guira_loss_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30535/api/v2/guira-loss"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30535/api/v2/guira-loss"
   vpc_link     = var.vpc_link
 }
 
@@ -91,7 +95,7 @@ module "gfw_guira_post_v2_guira_loss" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_guira_loss_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30535/api/v2/guira-loss"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30535/api/v2/guira-loss"
   vpc_link     = var.vpc_link
 }
 
@@ -100,7 +104,7 @@ module "gfw_guira_any_v2_guira_loss_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_guira_loss_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30535/api/v2/guira-loss/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30535/api/v2/guira-loss/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -109,7 +113,7 @@ module "gfw_guira_get_v1_guira_loss" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_guira_loss_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30535/api/v1/guira-loss"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30535/api/v1/guira-loss"
   vpc_link     = var.vpc_link
 }
 
@@ -118,7 +122,7 @@ module "gfw_guira_post_v1_guira_loss" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_guira_loss_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30535/api/v1/guira-loss"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30535/api/v1/guira-loss"
   vpc_link     = var.vpc_link
 }
 
@@ -127,6 +131,6 @@ module "gfw_guira_any_v1_guira_loss_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_guira_loss_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30535/api/v1/guira-loss/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30535/api/v1/guira-loss/{proxy}"
   vpc_link     = var.vpc_link
 }

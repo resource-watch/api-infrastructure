@@ -18,8 +18,12 @@ resource "kubernetes_service" "area_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "area_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30504
   protocol          = "TCP"
 
@@ -65,16 +69,16 @@ resource "aws_api_gateway_resource" "v2_area_proxy_resource" {
 }
 
 // /v2/download-tiles
-resource "aws_api_gateway_resource" "v2_area_download_tiles_resource" {
+resource "aws_api_gateway_resource" "v2_download_tiles_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_area_resource.id
+  parent_id   = var.v2_resource.id
   path_part   = "download-tiles"
 }
 
 // /v2/download-tiles/{proxy+}
-resource "aws_api_gateway_resource" "v2_area_download_tiles_proxy_resource" {
+resource "aws_api_gateway_resource" "v2_download_tiles_proxy_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_area_download_tiles_resource.id
+  parent_id   = aws_api_gateway_resource.v2_download_tiles_resource.id
   path_part   = "{proxy+}"
 }
 
@@ -93,16 +97,16 @@ resource "aws_api_gateway_resource" "v1_area_proxy_resource" {
 }
 
 // /v1/download-tiles
-resource "aws_api_gateway_resource" "v1_area_download_tiles_resource" {
+resource "aws_api_gateway_resource" "v1_download_tiles_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_area_resource.id
+  parent_id   = var.v1_resource.id
   path_part   = "download-tiles"
 }
 
 // /v1/download-tiles/{proxy+}
-resource "aws_api_gateway_resource" "v1_area_download_tiles_proxy_resource" {
+resource "aws_api_gateway_resource" "v1_download_tiles_proxy_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_area_download_tiles_resource.id
+  parent_id   = aws_api_gateway_resource.v1_download_tiles_resource.id
   path_part   = "{proxy+}"
 }
 
@@ -111,7 +115,7 @@ module "area_get_area_v2" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_area_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30504/api/v2/area"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30504/api/v2/area"
   vpc_link     = var.vpc_link
 }
 
@@ -120,7 +124,7 @@ module "area_post_area_v2" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_area_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30504/api/v2/area"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30504/api/v2/area"
   vpc_link     = var.vpc_link
 }
 
@@ -129,7 +133,7 @@ module "area_any_area_v2_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_area_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30504/api/v2/area/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30504/api/v2/area/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -138,7 +142,7 @@ module "area_get_v1_area" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_area_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30504/api/v1/area"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30504/api/v1/area"
   vpc_link     = var.vpc_link
 }
 
@@ -147,7 +151,7 @@ module "area_post_v1_area" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_area_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30504/api/v1/area"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30504/api/v1/area"
   vpc_link     = var.vpc_link
 }
 
@@ -156,6 +160,24 @@ module "area_any_v1_area_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_area_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30504/api/v1/area/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30504/api/v1/area/{proxy}"
+  vpc_link     = var.vpc_link
+}
+
+module "area_any_v1_download_tiles_proxy" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.v1_download_tiles_proxy_resource
+  method       = "ANY"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30504/api/v1/download-tiles/{proxy}"
+  vpc_link     = var.vpc_link
+}
+
+module "area_any_v2_download_tiles_proxy" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.v2_download_tiles_proxy_resource
+  method       = "ANY"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30504/api/v2/download-tiles/{proxy}"
   vpc_link     = var.vpc_link
 }

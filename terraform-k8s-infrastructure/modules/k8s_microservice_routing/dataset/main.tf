@@ -17,8 +17,12 @@ resource "kubernetes_service" "dataset_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "dataset_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30516
   protocol          = "TCP"
 
@@ -87,7 +91,7 @@ resource "aws_api_gateway_resource" "dataset_upload_resource" {
 resource "aws_api_gateway_resource" "dataset_id_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.dataset_id_resource.id
-  path_part   = "flush"
+  path_part   = "{proxy+}"
 }
 
 module "dataset_get_dataset" {
@@ -95,7 +99,7 @@ module "dataset_get_dataset" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30516/api/v1/dataset"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30516/api/v1/dataset"
   vpc_link     = var.vpc_link
 }
 
@@ -104,7 +108,7 @@ module "dataset_get_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30516/api/v1/dataset/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30516/api/v1/dataset/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -113,7 +117,7 @@ module "dataset_update_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_resource
   method       = "PATCH"
-  uri          = "http://${var.load_balancer.dns_name}:30516/api/v1/dataset/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30516/api/v1/dataset/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -122,7 +126,7 @@ module "dataset_delete_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_id_resource
   method       = "DELETE"
-  uri          = "http://${var.load_balancer.dns_name}:30516/api/v1/dataset/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30516/api/v1/dataset/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -131,7 +135,7 @@ module "dataset_post_dataset" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30516/api/v1/dataset"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30516/api/v1/dataset"
   vpc_link     = var.vpc_link
 }
 
@@ -140,7 +144,7 @@ module "dataset_any_dataset_id_proxy" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_proxy_resource
   method                      = "ANY"
-  uri                         = "http://${var.load_balancer.dns_name}:30516/api/v1/dataset/{datasetId}/{proxy}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30516/api/v1/dataset/{datasetId}/{proxy}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -150,7 +154,7 @@ module "dataset_post_dataset_find_by_ids" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_find_by_ids_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30516/api/v1/dataset/find-by-ids"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30516/api/v1/dataset/find-by-ids"
   vpc_link     = var.vpc_link
 }
 
@@ -159,6 +163,6 @@ module "dataset_post_dataset_upload" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.dataset_upload_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30516/api/v1/dataset/upload"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30516/api/v1/dataset/upload"
   vpc_link     = var.vpc_link
 }

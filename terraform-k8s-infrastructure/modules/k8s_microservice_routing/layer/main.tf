@@ -18,8 +18,12 @@ resource "kubernetes_service" "layer_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "layer_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30546
   protocol          = "TCP"
 
@@ -110,7 +114,7 @@ module "layer_get" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.layer_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30546/api/v1/layer"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/layer"
   vpc_link     = var.vpc_link
 }
 
@@ -119,7 +123,7 @@ module "layer_get_dataset_id_layer" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_layer_resource
   method                      = "GET"
-  uri                         = "http://${var.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -129,7 +133,7 @@ module "layer_get_dataset_id" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_layer_id_resource
   method                      = "GET"
-  uri                         = "http://${var.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -139,7 +143,7 @@ module "layer_get_layer_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.layer_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30546/api/v1/layer/{layerId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/layer/{layerId}"
   vpc_link     = var.vpc_link
 }
 
@@ -148,7 +152,7 @@ module "layer_post_dataset_id_layer" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_layer_resource
   method                      = "POST"
-  uri                         = "http://${var.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -158,7 +162,7 @@ module "layer_delete_dataset_id_layer" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_layer_resource
   method                      = "DELETE"
-  uri                         = "http://${var.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -168,7 +172,7 @@ module "layer_patch_dataset_id_layer_id" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_layer_id_resource
   method                      = "PATCH"
-  uri                         = "http://${var.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -178,7 +182,7 @@ module "layer_any_layer_change_environment_proxy" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.layer_change_environment_proxy_resource
   method                      = "ANY"
-  uri                         = "http://${var.load_balancer.dns_name}:30546/api/v1/layer/change-environment/{proxy}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/layer/change-environment/{proxy}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -188,7 +192,7 @@ module "layer_delete_dataset_id_layer_id" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.dataset_id_layer_id_resource
   method                      = "DELETE"
-  uri                         = "http://${var.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -198,7 +202,7 @@ module "layer_post_layer_find_by_ids" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.layer_find_by_ids_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30546/api/v1/layer/find-by-ids"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/layer/find-by-ids"
   vpc_link     = var.vpc_link
 }
 
@@ -207,7 +211,7 @@ module "layer_delete_layer_id_expire_cache" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.layer_id_expire_cache_resource
   method                      = "DELETE"
-  uri                         = "http://${var.load_balancer.dns_name}:30546/api/v1/layer/{layerId}/expire-cache"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/layer/{layerId}/expire-cache"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["layerId"]
 }

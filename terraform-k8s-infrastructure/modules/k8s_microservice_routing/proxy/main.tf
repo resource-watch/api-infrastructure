@@ -18,8 +18,12 @@ resource "kubernetes_service" "proxy_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "proxy_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30554
   protocol          = "TCP"
 
@@ -68,6 +72,6 @@ module "gee_tiles_any_proxy_v1_proxy_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.proxy_v1_proxy_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30554/api/v1/proxy/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30554/api/v1/proxy/{proxy}"
   vpc_link     = var.vpc_link
 }

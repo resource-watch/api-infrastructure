@@ -17,19 +17,23 @@ resource "kubernetes_service" "converter_service" {
   }
 }
 
-resource "aws_lb_listener" "convert_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
+resource "aws_lb_listener" "converter_nlb_listener" {
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30514
   protocol          = "TCP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.convert_lb_target_group.arn
+    target_group_arn = aws_lb_target_group.converter_lb_target_group.arn
   }
 }
 
-resource "aws_lb_target_group" "convert_lb_target_group" {
-  name        = "convert-lb-tg"
+resource "aws_lb_target_group" "converter_lb_target_group" {
+  name        = "converter-lb-tg"
   port        = 30514
   protocol    = "TCP"
   target_type = "instance"
@@ -45,28 +49,28 @@ resource "aws_autoscaling_attachment" "asg_attachment_convert" {
   count = length(var.eks_asg_names)
 
   autoscaling_group_name = var.eks_asg_names[count.index]
-  alb_target_group_arn   = aws_lb_target_group.convert_lb_target_group.arn
+  alb_target_group_arn   = aws_lb_target_group.converter_lb_target_group.arn
 }
 
-// /v1/converter
-resource "aws_api_gateway_resource" "converter_resource" {
+// /v1/convert
+resource "aws_api_gateway_resource" "convert_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
-  path_part   = "converter"
+  path_part   = "convert"
 }
 
-// /v1/converter/{proxy+}
-resource "aws_api_gateway_resource" "converter_proxy_resource" {
+// /v1/convert/{proxy+}
+resource "aws_api_gateway_resource" "convert_proxy_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.converter_resource.id
+  parent_id   = aws_api_gateway_resource.convert_resource.id
   path_part   = "{proxy+}"
 }
 
-module "converter_any_converter_fs2sql" {
+module "converter_any_convert_fs2sql" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.converter_proxy_resource
+  api_resource = aws_api_gateway_resource.convert_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30514/api/v1/convert/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30514/api/v1/convert/{proxy}"
   vpc_link     = var.vpc_link
 }

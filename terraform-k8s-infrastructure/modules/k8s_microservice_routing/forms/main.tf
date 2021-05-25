@@ -17,8 +17,12 @@ resource "kubernetes_service" "forms_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "forms_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30526
   protocol          = "TCP"
 
@@ -95,7 +99,16 @@ module "forms_any_v1_form_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_form_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30526/api/v1/form/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30526/api/v1/form/{proxy}"
+  vpc_link     = var.vpc_link
+}
+
+module "forms_any_v1_questionnaire" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.v1_questionnaire_resource
+  method       = "ANY"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30526/api/v1/questionnaire"
   vpc_link     = var.vpc_link
 }
 
@@ -104,7 +117,16 @@ module "forms_any_v1_questionnaire_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_questionnaire_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30526/api/v1/questionnaire/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30526/api/v1/questionnaire/{proxy}"
+  vpc_link     = var.vpc_link
+}
+
+module "forms_any_v1_reports" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.v1_reports_resource
+  method       = "ANY"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30526/api/v1/reports"
   vpc_link     = var.vpc_link
 }
 
@@ -113,6 +135,6 @@ module "forms_any_v1_reports_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_reports_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30526/api/v1/reports/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30526/api/v1/reports/{proxy}"
   vpc_link     = var.vpc_link
 }

@@ -151,11 +151,12 @@ data "aws_autoscaling_groups" "gfw_autoscaling_group" {
 
 resource "aws_lb" "api_gateway_apps_nlb" {
   name               = "rw-api-apps-nlb"
-  internal           = false
+  internal           = true
   load_balancer_type = "network"
-  subnets            = data.aws_subnet_ids.public_subnets.ids
+  subnets            = data.aws_subnet_ids.private_subnets.ids
+  enable_cross_zone_load_balancing = true
 
-  enable_deletion_protection = true
+  enable_deletion_protection = false
 }
 
 resource "aws_api_gateway_vpc_link" "rw_api_apps_lb_vpc_link" {
@@ -170,11 +171,12 @@ resource "aws_api_gateway_vpc_link" "rw_api_apps_lb_vpc_link" {
 
 resource "aws_lb" "api_gateway_core_nlb" {
   name               = "rw-api-core-nlb"
-  internal           = false
+  internal           = true
   load_balancer_type = "network"
-  subnets            = data.aws_subnet_ids.public_subnets.ids
+  subnets            = data.aws_subnet_ids.private_subnets.ids
+  enable_cross_zone_load_balancing = true
 
-  enable_deletion_protection = true
+  enable_deletion_protection = false
 }
 
 resource "aws_api_gateway_vpc_link" "rw_api_core_lb_vpc_link" {
@@ -189,11 +191,12 @@ resource "aws_api_gateway_vpc_link" "rw_api_core_lb_vpc_link" {
 
 resource "aws_lb" "api_gateway_gfw_nlb" {
   name               = "rw-api-gfw-nlb"
-  internal           = false
+  internal           = true
   load_balancer_type = "network"
-  subnets            = data.aws_subnet_ids.public_subnets.ids
+  subnets            = data.aws_subnet_ids.private_subnets.ids
+  enable_cross_zone_load_balancing = true
 
-  enable_deletion_protection = true
+  enable_deletion_protection = false
 }
 
 resource "aws_api_gateway_vpc_link" "rw_api_gfw_lb_vpc_link" {
@@ -364,7 +367,6 @@ module "doc-swagger" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -381,7 +383,6 @@ module "analysis-gee" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -403,7 +404,6 @@ module "aqueduct-analysis" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -419,7 +419,6 @@ module "arcgis" {
   cluster_ca                = var.cluster_ca
   cluster_endpoint          = var.cluster_endpoint
   cluster_name              = var.cluster_name
-  load_balancer             = aws_lb.api_gateway_apps_nlb
   vpc                       = var.vpc
   vpc_link                  = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource               = aws_api_gateway_resource.v1_resource
@@ -443,7 +442,6 @@ module "arcgis-proxy" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -459,7 +457,6 @@ module "area" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -481,7 +478,6 @@ module "auth" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_core_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_core_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -498,7 +494,6 @@ module "bigquery" {
   cluster_ca                = var.cluster_ca
   cluster_endpoint          = var.cluster_endpoint
   cluster_name              = var.cluster_name
-  load_balancer             = aws_lb.api_gateway_apps_nlb
   vpc                       = var.vpc
   vpc_link                  = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource               = aws_api_gateway_resource.v1_resource
@@ -523,7 +518,6 @@ module "biomass" {
   cluster_ca               = var.cluster_ca
   cluster_endpoint         = var.cluster_endpoint
   cluster_name             = var.cluster_name
-  load_balancer            = aws_lb.api_gateway_apps_nlb
   vpc                      = var.vpc
   vpc_link                 = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource              = aws_api_gateway_resource.v1_resource
@@ -544,7 +538,6 @@ module "carto" {
   cluster_ca                = var.cluster_ca
   cluster_endpoint          = var.cluster_endpoint
   cluster_name              = var.cluster_name
-  load_balancer             = aws_lb.api_gateway_apps_nlb
   vpc                       = var.vpc
   vpc_link                  = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource               = aws_api_gateway_resource.v1_resource
@@ -569,7 +562,6 @@ module "converter" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -584,7 +576,6 @@ module "dataset" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -601,7 +592,6 @@ module "doc-orchestrator" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -617,7 +607,6 @@ module "document-adapter" {
   cluster_ca             = var.cluster_ca
   cluster_endpoint       = var.cluster_endpoint
   cluster_name           = var.cluster_name
-  load_balancer          = aws_lb.api_gateway_apps_nlb
   vpc                    = var.vpc
   vpc_link               = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource            = aws_api_gateway_resource.v1_resource
@@ -642,7 +631,6 @@ module "fires-summary-stats" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -658,7 +646,6 @@ module "forest-watcher-api" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -674,7 +661,6 @@ module "forest-change" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -690,7 +676,6 @@ module "forms" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -706,7 +691,6 @@ module "fw-alerts" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -722,7 +706,6 @@ module "fw-contextual-layers" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -738,7 +721,6 @@ module "fw-teams" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -754,7 +736,6 @@ module "gee" {
   cluster_ca                = var.cluster_ca
   cluster_endpoint          = var.cluster_endpoint
   cluster_name              = var.cluster_name
-  load_balancer             = aws_lb.api_gateway_apps_nlb
   vpc                       = var.vpc
   vpc_link                  = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource               = aws_api_gateway_resource.v1_resource
@@ -778,7 +759,6 @@ module "gee-tiles" {
   cluster_ca           = var.cluster_ca
   cluster_endpoint     = var.cluster_endpoint
   cluster_name         = var.cluster_name
-  load_balancer        = aws_lb.api_gateway_apps_nlb
   vpc                  = var.vpc
   vpc_link             = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource          = aws_api_gateway_resource.v1_resource
@@ -800,7 +780,6 @@ module "geostore" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -817,7 +796,6 @@ module "gfw-forma" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -833,7 +811,6 @@ module "gfw-guira" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -850,7 +827,6 @@ module "gfw-ogr" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -867,7 +843,6 @@ module "gfw-ogr-gfw-ogr" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -883,7 +858,6 @@ module "gfw-prodes" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -900,7 +874,6 @@ module "gfw-umd" {
   cluster_ca                = var.cluster_ca
   cluster_endpoint          = var.cluster_endpoint
   cluster_name              = var.cluster_name
-  load_balancer             = aws_lb.api_gateway_gfw_nlb
   vpc                       = var.vpc
   vpc_link                  = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource               = aws_api_gateway_resource.v1_resource
@@ -919,9 +892,8 @@ module "gfw-user" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
 
   eks_asg_names = [
@@ -935,7 +907,6 @@ module "glad-analysis-tiled" {
   cluster_ca              = var.cluster_ca
   cluster_endpoint        = var.cluster_endpoint
   cluster_name            = var.cluster_name
-  load_balancer           = aws_lb.api_gateway_gfw_nlb
   vpc                     = var.vpc
   vpc_link                = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource             = aws_api_gateway_resource.v1_resource
@@ -955,7 +926,6 @@ module "graph-client" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -971,7 +941,6 @@ module "gs-pro-config" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -987,7 +956,6 @@ module "high-res" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -1003,7 +971,6 @@ module "imazon" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -1025,7 +992,6 @@ module "layer" {
   cluster_ca             = var.cluster_ca
   cluster_endpoint       = var.cluster_endpoint
   cluster_name           = var.cluster_name
-  load_balancer          = aws_lb.api_gateway_apps_nlb
   vpc                    = var.vpc
   vpc_link               = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource            = aws_api_gateway_resource.v1_resource
@@ -1047,7 +1013,6 @@ module "metadata" {
   cluster_ca                       = var.cluster_ca
   cluster_endpoint                 = var.cluster_endpoint
   cluster_name                     = var.cluster_name
-  load_balancer                    = aws_lb.api_gateway_apps_nlb
   vpc                              = var.vpc
   vpc_link                         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource                      = aws_api_gateway_resource.v1_resource
@@ -1069,7 +1034,6 @@ module "nexgddp" {
   cluster_ca                = var.cluster_ca
   cluster_endpoint          = var.cluster_endpoint
   cluster_name              = var.cluster_name
-  load_balancer             = aws_lb.api_gateway_apps_nlb
   vpc                       = var.vpc
   vpc_link                  = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource               = aws_api_gateway_resource.v1_resource
@@ -1097,7 +1061,6 @@ module "proxy" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -1117,7 +1080,6 @@ module "query" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -1137,7 +1099,6 @@ module "quicc" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -1157,7 +1118,6 @@ module "rw-lp" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 
@@ -1172,7 +1132,6 @@ module "resource-watch-manager" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -1188,7 +1147,6 @@ module "story" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -1204,7 +1162,6 @@ module "subscriptions" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -1220,7 +1177,6 @@ module "task-executor" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -1236,7 +1192,6 @@ module "true-color-tiles" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -1252,7 +1207,6 @@ module "viirs-fires" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_gfw_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -1269,7 +1223,6 @@ module "vocabulary" {
   cluster_ca                       = var.cluster_ca
   cluster_endpoint                 = var.cluster_endpoint
   cluster_name                     = var.cluster_name
-  load_balancer                    = aws_lb.api_gateway_apps_nlb
   vpc                              = var.vpc
   vpc_link                         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource                      = aws_api_gateway_resource.v1_resource
@@ -1298,7 +1251,6 @@ module "webshot" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
-  load_balancer    = aws_lb.api_gateway_apps_nlb
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = aws_api_gateway_resource.v1_resource
@@ -1314,7 +1266,6 @@ module "widget" {
   cluster_ca             = var.cluster_ca
   cluster_endpoint       = var.cluster_endpoint
   cluster_name           = var.cluster_name
-  load_balancer          = aws_lb.api_gateway_apps_nlb
   vpc                    = var.vpc
   vpc_link               = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource            = aws_api_gateway_resource.v1_resource

@@ -17,8 +17,12 @@ resource "kubernetes_service" "gee_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "gee_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30530
   protocol          = "TCP"
 
@@ -109,7 +113,7 @@ module "gee_get_query_gee_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.query_gee_dataset_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30530/api/v1/earthengine/query/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30530/api/v1/earthengine/query/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -118,7 +122,7 @@ module "gee_post_query_gee_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.query_gee_dataset_id_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30530/api/v1/earthengine/query/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30530/api/v1/earthengine/query/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -127,7 +131,7 @@ module "gee_get_download_gee_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.download_gee_dataset_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30530/api/v1/earthengine/download/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30530/api/v1/earthengine/download/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -136,7 +140,7 @@ module "gee_post_download_gee_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.download_gee_dataset_id_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30530/api/v1/earthengine/download/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30530/api/v1/earthengine/download/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -145,7 +149,7 @@ module "gee_get_fields_gee_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.fields_gee_dataset_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30530/api/v1/earthengine/fields/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30530/api/v1/earthengine/fields/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -154,7 +158,7 @@ module "gee_get_rest_datasets_gee" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.rest_datasets_gee_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30530/api/v1/earthengine/rest-datasets/gee"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30530/api/v1/earthengine/rest-datasets/gee"
   vpc_link     = var.vpc_link
 }
 
@@ -163,6 +167,6 @@ module "gee_delete_rest_datasets_gee_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.rest_datasets_gee_dataset_id_resource
   method       = "DELETE"
-  uri          = "http://${var.load_balancer.dns_name}:30530/api/v1/earthengine/rest-datasets/gee/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30530/api/v1/earthengine/rest-datasets/gee/{datasetId}"
   vpc_link     = var.vpc_link
 }

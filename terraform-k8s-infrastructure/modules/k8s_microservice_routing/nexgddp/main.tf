@@ -18,8 +18,12 @@ resource "kubernetes_service" "nexgddp_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "nexgddp_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30549
   protocol          = "TCP"
 
@@ -229,7 +233,7 @@ module "nexgddp_get_v1_query_nexgddp_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.nexgddp_v1_query_nexgddp_dataset_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30549/api/v1/nexgddp/query/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/query/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -238,7 +242,7 @@ module "nexgddp_post_v1_query_nexgddp_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.nexgddp_v1_query_nexgddp_dataset_id_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30549/api/v1/nexgddp/query/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/query/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -247,7 +251,7 @@ module "nexgddp_get_v1_fields_nexgddp_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.nexgddp_v1_fields_nexgddp_dataset_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30549/api/v1/nexgddp/fields/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/fields/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -256,7 +260,7 @@ module "nexgddp_post_v1_rest_datasets_nexgddp" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.nexgddp_v1_rest_datasets_nexgddp_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30549/api/v1/nexgddp/rest-datasets/nexgddp"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/rest-datasets/nexgddp"
   vpc_link     = var.vpc_link
 }
 
@@ -265,7 +269,7 @@ module "nexgddp_delete_v1_rest_datasets_nexgddp_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.nexgddp_v1_rest_datasets_nexgddp_dataset_id_resource
   method       = "DELETE"
-  uri          = "http://${var.load_balancer.dns_name}:30549/api/v1/nexgddp/rest-datasets/nexgddp/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/rest-datasets/nexgddp/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -274,7 +278,7 @@ module "nexgddp_get_v1_query_loca_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.nexgddp_v1_query_loca_dataset_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30549/api/v1/nexgddp/query/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/query/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -283,7 +287,7 @@ module "nexgddp_post_v1_query_loca_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.nexgddp_v1_query_loca_dataset_id_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30549/api/v1/nexgddp/query/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/query/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -292,7 +296,7 @@ module "nexgddp_get_v1_fields_loca_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.nexgddp_v1_fields_loca_dataset_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30549/api/v1/nexgddp/fields/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/fields/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -301,7 +305,7 @@ module "nexgddp_post_v1_rest_datasets_loca" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.nexgddp_v1_rest_datasets_loca_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30549/api/v1/nexgddp/rest-datasets/nexgddp"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/rest-datasets/nexgddp"
   vpc_link     = var.vpc_link
 }
 
@@ -310,7 +314,7 @@ module "nexgddp_any_v1_nexgddp_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.nexgddp_v1_nexgddp_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30549/api/v1/nexgddp/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -319,7 +323,7 @@ module "nexgddp_any_v1_loca_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.nexgddp_v1_loca_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30549/api/v1/nexgddp/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -328,7 +332,7 @@ module "gee_tiles_any_layer_id_tile_nexgddp_proxy_resource" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.nexgddp_v1_layer_id_tile_nexgddp_proxy_resource
   method                      = "ANY"
-  uri                         = "http://${var.load_balancer.dns_name}:30549/api/v1/nexgddp/layer/{layerId}/tile/nexgddp/{proxy}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/layer/{layerId}/tile/nexgddp/{proxy}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["layerId"]
 }
@@ -338,7 +342,7 @@ module "gee_tiles_any_layer_id_tile_loca_proxy_resource" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.nexgddp_v1_layer_id_tile_loca_proxy_resource
   method                      = "ANY"
-  uri                         = "http://${var.load_balancer.dns_name}:30549/api/v1/nexgddp/layer/{layerId}/tile/nexgddp/{proxy}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/layer/{layerId}/tile/nexgddp/{proxy}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["layerId"]
 }
@@ -348,7 +352,7 @@ module "gee_tiles_any_layer_nexgddp_proxy_resource" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.nexgddp_layer_nexgddp_proxy_resource
   method                      = "ANY"
-  uri                         = "http://${var.load_balancer.dns_name}:30549/api/v1/nexgddp/layer/nexgddp/{proxy}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/layer/nexgddp/{proxy}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["layerId"]
 }
@@ -358,7 +362,7 @@ module "gee_tiles_any_layer_loca_proxy_resource" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.nexgddp_layer_loca_proxy_resource
   method                      = "ANY"
-  uri                         = "http://${var.load_balancer.dns_name}:30549/api/v1/nexgddp/layer/nexgddp/{proxy}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/layer/nexgddp/{proxy}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["layerId"]
 }

@@ -18,8 +18,12 @@ resource "kubernetes_service" "webshot_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "webshot_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30566
   protocol          = "TCP"
 
@@ -68,7 +72,7 @@ module "webshot_get_v1_webshot" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.webshot_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30566/api/v1/webshot"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30566/api/v1/webshot"
   vpc_link     = var.vpc_link
 }
 
@@ -77,6 +81,6 @@ module "webshot_any_v1_webshot_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.webshot_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30566/api/v1/webshot/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30566/api/v1/webshot/{proxy}"
   vpc_link     = var.vpc_link
 }

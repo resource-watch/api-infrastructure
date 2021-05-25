@@ -17,8 +17,12 @@ resource "kubernetes_service" "quicc_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "quicc_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30556
   protocol          = "TCP"
 
@@ -67,7 +71,7 @@ module "quicc_get_v1_quicc_alerts" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_quicc_alerts_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30556/api/v1/quicc-alerts"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30556/api/v1/quicc-alerts"
   vpc_link     = var.vpc_link
 }
 
@@ -76,6 +80,6 @@ module "quicc_any_v1_quicc_alerts_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_quicc_alerts_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30556/api/v1/quicc-alerts/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30556/api/v1/quicc-alerts/{proxy}"
   vpc_link     = var.vpc_link
 }

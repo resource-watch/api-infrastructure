@@ -17,8 +17,12 @@ resource "kubernetes_service" "subscriptions_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "subscriptions_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30561
   protocol          = "TCP"
 
@@ -67,7 +71,7 @@ module "subscriptions_get_v1_subscriptions" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_subscriptions_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30561/api/v1/subscriptions"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30561/api/v1/subscriptions"
   vpc_link     = var.vpc_link
 }
 
@@ -76,7 +80,7 @@ module "subscriptions_post_v1_subscriptions" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_subscriptions_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30561/api/v1/subscriptions"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30561/api/v1/subscriptions"
   vpc_link     = var.vpc_link
 }
 
@@ -85,6 +89,6 @@ module "subscriptions_any_v1_subscriptions_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_subscriptions_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30561/api/v1/subscriptions/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30561/api/v1/subscriptions/{proxy}"
   vpc_link     = var.vpc_link
 }

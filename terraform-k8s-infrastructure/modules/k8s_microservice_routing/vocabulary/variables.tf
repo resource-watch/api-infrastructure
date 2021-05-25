@@ -29,18 +29,10 @@ variable "vpc" {
   description = "The id of the VPC"
 }
 
-variable "load_balancer" {
-  type = object({
-    id       = string
-    arn      = string
-    dns_name = string
-  })
-  description = "AWS NLB that serves as an entry point for the EKS cluster"
-}
-
 variable "vpc_link" {
   type = object({
     id = string
+    target_arns = list(string)
   })
   description = "VPC Link to the LB"
 }

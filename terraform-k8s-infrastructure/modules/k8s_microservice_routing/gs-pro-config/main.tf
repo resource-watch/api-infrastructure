@@ -17,8 +17,12 @@ resource "kubernetes_service" "gs_pro_config_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "gs_pro_config_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30543
   protocol          = "TCP"
 
@@ -67,7 +71,7 @@ module "gs_pro_config_get_v1_pro_config_tech_title" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_pro_config_tech_title_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30543/api/v1/proconfig/{techTitle}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30543/api/v1/proconfig/{techTitle}"
   vpc_link     = var.vpc_link
 }
 

@@ -18,8 +18,12 @@ resource "kubernetes_service" "metadata_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "metadata_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30548
   protocol          = "TCP"
 
@@ -131,7 +135,7 @@ module "metadata_get" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.metadata_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30548/api/v1/metadata"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30548/api/v1/metadata"
   vpc_link     = var.vpc_link
 }
 
@@ -141,7 +145,7 @@ module "metadata_get_for_dataset" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.metadata_dataset_id_metadata_resource
   method                      = "GET"
-  uri                         = "http://${var.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/metadata"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/metadata"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -151,7 +155,7 @@ module "metadata_post_for_dataset" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.metadata_dataset_id_metadata_resource
   method                      = "POST"
-  uri                         = "http://${var.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/metadata"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/metadata"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -161,7 +165,7 @@ module "metadata_delete_for_dataset" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.metadata_dataset_id_metadata_resource
   method                      = "DELETE"
-  uri                         = "http://${var.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/metadata"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/metadata"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -171,7 +175,7 @@ module "metadata_post_for_dataset_clone" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.metadata_dataset_metadata_clone_resource
   method                      = "POST"
-  uri                         = "http://${var.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/metadata/clone"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/metadata/clone"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -181,7 +185,7 @@ module "metadata_patch_for_dataset" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.metadata_dataset_id_metadata_resource
   method                      = "PATCH"
-  uri                         = "http://${var.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/metadata"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/metadata"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -192,7 +196,7 @@ module "metadata_get_for_dataset_widget" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.metadata_dataset_id_widget_id_metadata_resource
   method                      = "GET"
-  uri                         = "http://${var.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/widget/{widgetId}/metadata"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/widget/{widgetId}/metadata"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }
@@ -202,7 +206,7 @@ module "metadata_post_for_dataset_widget" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.metadata_dataset_id_widget_id_metadata_resource
   method                      = "POST"
-  uri                         = "http://${var.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/widget/{widgetId}/metadata"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/widget/{widgetId}/metadata"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }
@@ -212,7 +216,7 @@ module "metadata_delete_for_dataset_widget" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.metadata_dataset_id_widget_id_metadata_resource
   method                      = "DELETE"
-  uri                         = "http://${var.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/widget/{widgetId}/metadata"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/widget/{widgetId}/metadata"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }
@@ -222,7 +226,7 @@ module "metadata_patch_for_dataset_widget" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.metadata_dataset_id_widget_id_metadata_resource
   method                      = "PATCH"
-  uri                         = "http://${var.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/widget/{widgetId}/metadata"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/widget/{widgetId}/metadata"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "widgetId"]
 }
@@ -233,7 +237,7 @@ module "metadata_get_for_dataset_layer" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.metadata_dataset_id_layer_id_metadata_resource
   method                      = "GET"
-  uri                         = "http://${var.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/layer/{layerId}/metadata"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/layer/{layerId}/metadata"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
@@ -243,7 +247,7 @@ module "metadata_post_for_dataset_layer" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.metadata_dataset_id_layer_id_metadata_resource
   method                      = "POST"
-  uri                         = "http://${var.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/layer/{layerId}/metadata"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/layer/{layerId}/metadata"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
@@ -253,7 +257,7 @@ module "metadata_delete_for_dataset_layer" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.metadata_dataset_id_layer_id_metadata_resource
   method                      = "DELETE"
-  uri                         = "http://${var.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/layer/{layerId}/metadata"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/layer/{layerId}/metadata"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
@@ -263,7 +267,7 @@ module "metadata_patch_for_dataset_layer" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.metadata_dataset_id_layer_id_metadata_resource
   method                      = "PATCH"
-  uri                         = "http://${var.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/layer/{layerId}/metadata"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/layer/{layerId}/metadata"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId", "layerId"]
 }
@@ -274,7 +278,7 @@ module "metadata_dataset_post_find_by_ids" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.metadata_dataset_metadata_find_by_ids_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30548/api/v1/dataset/metadata/find-by-ids"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30548/api/v1/dataset/metadata/find-by-ids"
   vpc_link     = var.vpc_link
 }
 
@@ -283,7 +287,7 @@ module "metadata_layer_post_find_by_ids" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.metadata_dataset_id_layer_metadata_find_by_ids_resource
   method                      = "POST"
-  uri                         = "http://${var.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/layer/metadata/find-by-ids"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/layer/metadata/find-by-ids"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }
@@ -293,7 +297,7 @@ module "metadata_widget_post_find_by_ids" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.metadata_dataset_id_widget_metadata_find_by_ids_resource
   method                      = "POST"
-  uri                         = "http://${var.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/widget/metadata/find-by-ids"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30548/api/v1/dataset/{datasetId}/widget/metadata/find-by-ids"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["datasetId"]
 }

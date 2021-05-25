@@ -17,8 +17,12 @@ resource "kubernetes_service" "fires_summary_stats_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "fires_summary_stats_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30523
   protocol          = "TCP"
 
@@ -88,7 +92,7 @@ module "fires_summary_stats_any_fire_alerts_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.fire_alerts_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30523/api/v1/fire-alerts/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30523/api/v1/fire-alerts/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -97,7 +101,7 @@ module "fires_summary_stats_any_glad_alerts_summary_stats_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.glad_alerts_summary_stats_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30523/api/v1/glad-alerts/summary-stats/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30523/api/v1/glad-alerts/summary-stats/{proxy}"
   vpc_link     = var.vpc_link
 }
 

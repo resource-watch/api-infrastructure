@@ -1,5 +1,5 @@
 output "endpoints" {
   value = [
-    module.converter_any_converter_fs2sql.endpoint_gateway_integration
+    module.converter_any_convert_fs2sql.endpoint_gateway_integration
   ]
 }

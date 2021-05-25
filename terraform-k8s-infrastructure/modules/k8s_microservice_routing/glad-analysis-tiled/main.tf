@@ -5,7 +5,7 @@ resource "kubernetes_service" "glad_analysis_tiled_service" {
   }
   spec {
     selector = {
-      name = "glad-analysis-tiled"
+      name = "glad-analysis-athena"
     }
     port {
       port        = 30541
@@ -17,8 +17,12 @@ resource "kubernetes_service" "glad_analysis_tiled_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "glad_analysis_tiled_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30541
   protocol          = "TCP"
 
@@ -109,7 +113,7 @@ module "glad_analysis_tiled_any_v1_glad_alerts_admin_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_glad_alerts_admin_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena/admin/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena/admin/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -118,7 +122,7 @@ module "glad_analysis_tiled_get_v1_glad_alerts_download" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_glad_alerts_download_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena/download"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena/download"
   vpc_link     = var.vpc_link
 }
 
@@ -127,7 +131,7 @@ module "glad_analysis_tiled_post_v1_glad_alerts_download" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_glad_alerts_download_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena/download"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena/download"
   vpc_link     = var.vpc_link
 }
 
@@ -136,7 +140,7 @@ module "glad_analysis_tiled_get_v1_glad_alerts" {
   api_gateway  = var.api_gateway
   api_resource = var.v1_glad_alerts_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena"
   vpc_link     = var.vpc_link
 }
 
@@ -145,7 +149,7 @@ module "glad_analysis_tiled_post_v1_glad_alerts" {
   api_gateway  = var.api_gateway
   api_resource = var.v1_glad_alerts_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena"
   vpc_link     = var.vpc_link
 }
 
@@ -154,7 +158,7 @@ module "glad_analysis_tiled_get_v1_glad_alerts_latest" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_glad_alerts_latest_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena/latest"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena/latest"
   vpc_link     = var.vpc_link
 }
 
@@ -163,7 +167,7 @@ module "glad_analysis_tiled_any_v1_glad_alerts_wdpa_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_glad_alerts_wdpa_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena/wdpa/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena/wdpa/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -172,7 +176,7 @@ module "glad_analysis_tiled_any_v1_glad_alerts_use_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_glad_alerts_use_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena/use/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30541/api/v1/glad-alerts-athena/use/{proxy}"
   vpc_link     = var.vpc_link
 }
 

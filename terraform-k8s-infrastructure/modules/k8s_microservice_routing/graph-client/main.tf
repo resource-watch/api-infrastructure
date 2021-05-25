@@ -18,8 +18,12 @@ resource "kubernetes_service" "graph_client_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "graph_client_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30542
   protocol          = "TCP"
 
@@ -56,13 +60,6 @@ resource "aws_api_gateway_resource" "graph_resource" {
   path_part   = "graph"
 }
 
-// /v1/graph/query
-resource "aws_api_gateway_resource" "graph_query_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.graph_resource.id
-  path_part   = "query"
-}
-
 // /v1/graph/{proxy+}
 resource "aws_api_gateway_resource" "graph_proxy_resource" {
   rest_api_id = var.api_gateway.id
@@ -73,8 +70,8 @@ resource "aws_api_gateway_resource" "graph_proxy_resource" {
 module "graph_client_any_graph_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.graph_query_resource
+  api_resource = aws_api_gateway_resource.graph_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30542/api/v1/graph/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30542/api/v1/graph/{proxy}"
   vpc_link     = var.vpc_link
 }

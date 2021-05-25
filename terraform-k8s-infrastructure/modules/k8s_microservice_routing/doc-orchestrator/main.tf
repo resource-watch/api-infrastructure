@@ -17,8 +17,12 @@ resource "kubernetes_service" "doc_orchestrator_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "doc_orchestrator_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30518
   protocol          = "TCP"
 
@@ -59,7 +63,7 @@ resource "aws_api_gateway_resource" "doc_importer_resource" {
 resource "aws_api_gateway_resource" "doc_importer_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.doc_importer_resource.id
-  path_part   = "task"
+  path_part   = "{proxy+}"
 }
 
 module "doc_orchestrator_any_doc_importer_proxy" {
@@ -67,6 +71,6 @@ module "doc_orchestrator_any_doc_importer_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.doc_importer_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30518/api/v1/doc-importer/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30518/api/v1/doc-importer/{proxy}"
   vpc_link     = var.vpc_link
 }

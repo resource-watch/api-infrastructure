@@ -17,8 +17,12 @@ resource "kubernetes_service" "gee_tiles_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "gee_tiles_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30531
   protocol          = "TCP"
 
@@ -88,7 +92,7 @@ module "gee_tiles_any_layer_id_tile_gee_proxy" {
   api_gateway                 = var.api_gateway
   api_resource                = aws_api_gateway_resource.gee_tiles_layer_id_tile_gee_proxy_resource
   method                      = "ANY"
-  uri                         = "http://${var.load_balancer.dns_name}:30531/api/v1/layer/{layerId}/tile/gee/{proxy}"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30531/api/v1/layer/{layerId}/tile/gee/{proxy}"
   vpc_link                    = var.vpc_link
   endpoint_request_parameters = ["layerId"]
 }
@@ -98,6 +102,6 @@ module "gee_tiles_any_gee_layer_gee_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.gee_layer_gee_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30531/api/v1/layer/gee/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30531/api/v1/layer/gee/{proxy}"
   vpc_link     = var.vpc_link
 }

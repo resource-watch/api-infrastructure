@@ -17,8 +17,12 @@ resource "kubernetes_service" "fw_alerts_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "fw_alerts_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30527
   protocol          = "TCP"
 
@@ -67,6 +71,6 @@ module "fw_alerts_any_v1_form_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_fw_alerts_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30527/api/v1/fw-alerts/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30527/api/v1/fw-alerts/{proxy}"
   vpc_link     = var.vpc_link
 }

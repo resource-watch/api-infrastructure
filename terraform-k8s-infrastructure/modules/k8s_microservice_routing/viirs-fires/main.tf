@@ -18,8 +18,12 @@ resource "kubernetes_service" "viirs_active_fires_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "viirs_active_fires_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30564
   protocol          = "TCP"
 
@@ -61,7 +65,7 @@ resource "aws_api_gateway_resource" "v1_viirs_active_fires_resource" {
 resource "aws_api_gateway_resource" "v1_viirs_active_fires_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.v1_viirs_active_fires_resource.id
-  path_part   = "latest"
+  path_part   = "{proxy+}"
 }
 
 // /v2/viirs-active-fires
@@ -75,7 +79,7 @@ resource "aws_api_gateway_resource" "v2_viirs_active_fires_resource" {
 resource "aws_api_gateway_resource" "v2_viirs_active_fires_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.v2_viirs_active_fires_resource.id
-  path_part   = "latest"
+  path_part   = "{proxy+}"
 }
 
 module "viirs_fires_get_v1_viirs_active_fires" {
@@ -83,7 +87,7 @@ module "viirs_fires_get_v1_viirs_active_fires" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_viirs_active_fires_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30564/api/v1/viirs-active-fires"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30564/api/v1/viirs-active-fires"
   vpc_link     = var.vpc_link
 }
 
@@ -92,7 +96,7 @@ module "viirs_fires_post_v1_viirs_active_fires" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_viirs_active_fires_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30564/api/v1/viirs-active-fires"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30564/api/v1/viirs-active-fires"
   vpc_link     = var.vpc_link
 }
 
@@ -101,7 +105,7 @@ module "viirs_fires_any_v1_viirs_active_fires_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_viirs_active_fires_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30564/api/v1/viirs-active-fires/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30564/api/v1/viirs-active-fires/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -110,7 +114,7 @@ module "viirs_fires_get_v2_viirs_active_fires" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_viirs_active_fires_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30564/api/v2/viirs-active-fires"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30564/api/v2/viirs-active-fires"
   vpc_link     = var.vpc_link
 }
 
@@ -119,7 +123,7 @@ module "viirs_fires_post_v2_viirs_active_fires" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_viirs_active_fires_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30564/api/v2/viirs-active-fires"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30564/api/v2/viirs-active-fires"
   vpc_link     = var.vpc_link
 }
 
@@ -128,6 +132,6 @@ module "viirs_fires_any_v2_viirs_active_fires_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v2_viirs_active_fires_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30564/api/v2/viirs-active-fires/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30564/api/v2/viirs-active-fires/{proxy}"
   vpc_link     = var.vpc_link
 }

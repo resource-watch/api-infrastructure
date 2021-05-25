@@ -17,8 +17,12 @@ resource "kubernetes_service" "arcgis_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "arcgis_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30502
   protocol          = "TCP"
 
@@ -109,7 +113,7 @@ module "arcgis_get_v1_query_featureservice_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_query_featureservice_dataset_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30502/api/v1/arcgis/query/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30502/api/v1/arcgis/query/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -118,7 +122,7 @@ module "arcgis_post_v1_query_featureservice_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_query_featureservice_dataset_id_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30502/api/v1/arcgis/query/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30502/api/v1/arcgis/query/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -127,7 +131,7 @@ module "arcgis_get_v1_download_featureservice_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_download_featureservice_dataset_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30502/api/v1/arcgis/download/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30502/api/v1/arcgis/download/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -136,7 +140,7 @@ module "arcgis_post_v1_download_featureservice_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_download_featureservice_dataset_id_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30502/api/v1/arcgis/download/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30502/api/v1/arcgis/download/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -145,7 +149,7 @@ module "arcgis_get_v1_fields_featureservice_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_fields_featureservice_dataset_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30502/api/v1/arcgis/fields/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30502/api/v1/arcgis/fields/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -154,7 +158,7 @@ module "arcgis_post_v1_rest_datasets_featureservice" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_rest_datasets_featureservice_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30502/api/v1/arcgis/rest-datasets/featureservice"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30502/api/v1/arcgis/rest-datasets/featureservice"
   vpc_link     = var.vpc_link
 }
 
@@ -163,6 +167,6 @@ module "arcgis_delete_v1_rest_datasets_featureservice_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_rest_datasets_featureservice_dataset_id_resource
   method       = "DELETE"
-  uri          = "http://${var.load_balancer.dns_name}:30502/api/v1/arcgis/rest-datasets/featureservice/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30502/api/v1/arcgis/rest-datasets/featureservice/{datasetId}"
   vpc_link     = var.vpc_link
 }

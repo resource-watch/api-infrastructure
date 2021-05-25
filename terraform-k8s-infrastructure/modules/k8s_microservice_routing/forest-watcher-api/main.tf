@@ -17,8 +17,12 @@ resource "kubernetes_service" "forest_watcher_api_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "forest_watcher_api_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30525
   protocol          = "TCP"
 
@@ -67,7 +71,7 @@ module "forest_watcher_api_get_v1_forest_watcher_area_resource" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_forest_watcher_area_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30525/api/v1/forest-watcher/area"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30525/api/v1/forest-watcher/area"
   vpc_link     = var.vpc_link
 }
 
@@ -76,6 +80,6 @@ module "forest_watcher_api_post_v1_forest_watcher_area_resource" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_forest_watcher_area_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30525/api/v1/forest-watcher/area"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30525/api/v1/forest-watcher/area"
   vpc_link     = var.vpc_link
 }

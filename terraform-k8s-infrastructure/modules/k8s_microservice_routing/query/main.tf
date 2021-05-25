@@ -18,8 +18,12 @@ resource "kubernetes_service" "query_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "query_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30555
   protocol          = "TCP"
 
@@ -103,7 +107,7 @@ module "query_get_query" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.query_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/query"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/query"
   vpc_link     = var.vpc_link
 }
 
@@ -112,7 +116,7 @@ module "query_post_query" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.query_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/query"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/query"
   vpc_link     = var.vpc_link
 }
 
@@ -121,7 +125,7 @@ module "query_get_query_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.query_dataset_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/query/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/query/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -130,7 +134,7 @@ module "query_post_query_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.query_dataset_id_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/query/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/query/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -139,7 +143,7 @@ module "download_get_download" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.download_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/download"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/download"
   vpc_link     = var.vpc_link
 }
 
@@ -148,7 +152,7 @@ module "download_post_download" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.download_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/download"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/download"
   vpc_link     = var.vpc_link
 }
 
@@ -157,7 +161,7 @@ module "download_get_download_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.download_dataset_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/download/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/download/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -166,7 +170,7 @@ module "download_post_download_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.download_dataset_id_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/download/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/download/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
@@ -175,7 +179,7 @@ module "jiminy_get_jiminy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.jiminy_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/jiminy"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/jiminy"
   vpc_link     = var.vpc_link
 }
 
@@ -184,7 +188,7 @@ module "jiminy_post_jiminy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.jiminy_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/jiminy"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/jiminy"
   vpc_link     = var.vpc_link
 }
 
@@ -193,6 +197,6 @@ module "fields_get_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.fields_dataset_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30555/api/v1/fields/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/fields/{datasetId}"
   vpc_link     = var.vpc_link
 }

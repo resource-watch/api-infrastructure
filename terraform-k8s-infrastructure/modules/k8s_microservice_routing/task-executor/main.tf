@@ -18,8 +18,12 @@ resource "kubernetes_service" "task_async_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "task_async_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30562
   protocol          = "TCP"
 
@@ -68,7 +72,7 @@ module "task_async_get_task" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.task_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30562/api/v1/task"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30562/api/v1/task"
   vpc_link     = var.vpc_link
 }
 
@@ -77,7 +81,7 @@ module "task_async_any_task_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.task_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30562/api/v1/task/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30562/api/v1/task/{proxy}"
   vpc_link     = var.vpc_link
 }
 

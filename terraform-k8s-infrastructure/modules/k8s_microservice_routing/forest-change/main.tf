@@ -17,8 +17,12 @@ resource "kubernetes_service" "forest_change_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "forest_change_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30524
   protocol          = "TCP"
 
@@ -67,7 +71,7 @@ module "forest_change_get_v1_terrai_alerts" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_terrai_alerts_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30524/api/v2/ms/terrai-alerts"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30524/api/v2/ms/terrai-alerts"
   vpc_link     = var.vpc_link
 }
 
@@ -76,7 +80,7 @@ module "forest_change_post_v1_terrai_alerts" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_terrai_alerts_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30524/api/v2/ms/terrai-alerts"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30524/api/v2/ms/terrai-alerts"
   vpc_link     = var.vpc_link
 }
 
@@ -85,6 +89,6 @@ module "forest_change_any_v1_terrai_alerts_admin_iso_code" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_terrai_alerts_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30524/api/v2/ms/terrai-alerts/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30524/api/v2/ms/terrai-alerts/{proxy}"
   vpc_link     = var.vpc_link
 }

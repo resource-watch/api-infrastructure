@@ -17,8 +17,12 @@ resource "kubernetes_service" "gfw_ogr_gfw_pro_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "gfw_ogr_gfw_pro_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30568
   protocol          = "TCP"
 
@@ -67,6 +71,6 @@ module "gfw_ogr_any_v1_gfw_pro_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_gfw_pro_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30568/api/v1/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30568/api/v1/{proxy}"
   vpc_link     = var.vpc_link
 }
