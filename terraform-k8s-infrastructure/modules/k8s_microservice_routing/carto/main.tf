@@ -167,7 +167,7 @@ module "carto_delete_v1_rest_datasets_cartodb_dataset_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_rest_datasets_cartodb_dataset_id_resource
   method       = "DELETE"
-  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30502/api/v1/carto/rest-datasets/cartodb/{datasetId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30507/api/v1/carto/rest-datasets/cartodb/{datasetId}"
   vpc_link     = var.vpc_link
 }
 
