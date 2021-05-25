@@ -1,15 +1,24 @@
 output "endpoints" {
   value = [
-    module.dataset_clone.endpoint_gateway_integration,
-    module.dataset_flush.endpoint_gateway_integration,
-    module.dataset_get.endpoint_gateway_integration,
-    module.dataset_get_by_id.endpoint_gateway_integration,
-    module.dataset_last_updated.endpoint_gateway_integration,
-    module.dataset_create.endpoint_gateway_integration,
-    module.dataset_post_find_by_ids.endpoint_gateway_integration,
-    module.dataset_post_upload.endpoint_gateway_integration,
-    module.dataset_recover.endpoint_gateway_integration,
-    module.dataset_delete_by_id.endpoint_gateway_integration,
-    module.dataset_update_by_id.endpoint_gateway_integration
+    module.dataset_get_dataset.endpoint_gateway_integration,
+    module.dataset_get_dataset_id.endpoint_gateway_integration,
+    module.dataset_update_dataset_id.endpoint_gateway_integration,
+    module.dataset_delete_dataset_id.endpoint_gateway_integration,
+    module.dataset_post_dataset.endpoint_gateway_integration,
+    module.dataset_any_dataset_id_proxy.endpoint_gateway_integration,
+    module.dataset_post_dataset_find_by_ids.endpoint_gateway_integration,
+    module.dataset_post_dataset_upload.endpoint_gateway_integration,
   ]
+}
+
+output "v1_dataset_resource" {
+  value = aws_api_gateway_resource.dataset_resource
+}
+
+output "v1_dataset_id_resource" {
+  value = aws_api_gateway_resource.dataset_id_resource
+}
+
+output "v1_rest_datasets_resource" {
+  value = aws_api_gateway_resource.rest_datasets_resource
 }

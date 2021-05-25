@@ -16,11 +16,14 @@ resource "kubernetes_service" "authorization_service" {
 
     type = "NodePort"
   }
+}
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "authorization_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30505
   protocol          = "TCP"
 
@@ -68,7 +71,7 @@ module "authorization_any_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30505/auth/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30505/auth/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -77,6 +80,6 @@ module "authorization_get" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.authorization_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30505/auth"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30505/auth"
   vpc_link     = var.vpc_link
 }

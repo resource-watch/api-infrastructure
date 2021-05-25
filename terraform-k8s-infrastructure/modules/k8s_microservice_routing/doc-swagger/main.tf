@@ -1,60 +1,65 @@
-provider "kubernetes" {
-  host                   = var.cluster_endpoint
-  cluster_ca_certificate = base64decode(var.cluster_ca)
-  exec {
-    api_version = "client.authentication.k8s.io/v1alpha1"
-    args        = ["eks", "get-token", "--cluster-name", var.cluster_name]
-    command     = "aws"
-  }
-}
-
 resource "kubernetes_service" "doc_swagger_service" {
   metadata {
     name = "doc-swagger"
-    annotations = {
-      "service.beta.kubernetes.io/aws-load-balancer-type"                     = "nlb"
-      "service.beta.kubernetes.io/aws-load-balancer-internal"                 = "true"
-      "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags" = "service=doc-swagger"
-    }
+
   }
   spec {
     selector = {
       name = "doc-swagger"
     }
     port {
-      port        = 80
+      port        = 30519
+      node_port   = 30519
       target_port = 3500
     }
 
-    type = "LoadBalancer"
+    type = "NodePort"
   }
 }
 
-data "aws_lb" "doc_swagger_lb" {
-  name = split("-", kubernetes_service.doc_swagger_service.status.0.load_balancer.0.ingress.0.hostname).0
-
-  depends_on = [
-    kubernetes_service.doc_swagger_service
-  ]
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
 }
 
-resource "aws_api_gateway_vpc_link" "doc_swagger_lb_vpc_link" {
-  name        = "Doc swagger LB VPC link"
-  description = "VPC link to the doc-swagger service load balancer"
-  target_arns = [data.aws_lb.doc_swagger_lb.arn]
+resource "aws_lb_listener" "doc_swagger_nlb_listener" {
+  load_balancer_arn = data.aws_lb.load_balancer.arn
+  port              = 30519
+  protocol          = "TCP"
 
-  lifecycle {
-    create_before_destroy = true
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.doc_swagger_lb_target_group.arn
   }
 }
 
-//  /documentation
+resource "aws_lb_target_group" "doc_swagger_lb_target_group" {
+  name        = "doc-swagger-lb-tg"
+  port        = 30519
+  protocol    = "TCP"
+  target_type = "instance"
+  vpc_id      = var.vpc.id
+
+  health_check {
+    enabled  = true
+    protocol = "TCP"
+  }
+}
+
+resource "aws_autoscaling_attachment" "asg_attachment_doc_swagger" {
+  count = length(var.eks_asg_names)
+
+  autoscaling_group_name = var.eks_asg_names[count.index]
+  alb_target_group_arn   = aws_lb_target_group.doc_swagger_lb_target_group.arn
+}
+
+// /documentation
 resource "aws_api_gateway_resource" "documentation_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_id
+  parent_id   = var.root_resource_id
   path_part   = "documentation"
 }
 
+// /documentation/{proxy+}
 resource "aws_api_gateway_resource" "documentation_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.documentation_resource.id
@@ -66,8 +71,8 @@ module "doc_swagger_any" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.documentation_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org/documentation"
-  vpc_link     = aws_api_gateway_vpc_link.doc_swagger_lb_vpc_link
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30519/documentation"
+  vpc_link     = var.vpc_link
 }
 
 module "doc_swagger_proxy_any" {
@@ -75,6 +80,6 @@ module "doc_swagger_proxy_any" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.documentation_proxy_resource
   method       = "ANY"
-  uri          = "http://api.resourcewatch.org/documentation/{proxy}"
-  vpc_link     = aws_api_gateway_vpc_link.doc_swagger_lb_vpc_link
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30519/documentation/{proxy}"
+  vpc_link     = var.vpc_link
 }

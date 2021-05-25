@@ -1,336 +1,137 @@
-provider "kubernetes" {
-  host                   = var.cluster_endpoint
-  cluster_ca_certificate = base64decode(var.cluster_ca)
-  exec {
-    api_version = "client.authentication.k8s.io/v1alpha1"
-    args        = ["eks", "get-token", "--cluster-name", var.cluster_name]
-    command     = "aws"
-  }
-}
-
-resource "kubernetes_service" "viirs_fires_service" {
+resource "kubernetes_service" "viirs_active_fires_service" {
   metadata {
     name      = "viirs-fires"
     namespace = "gfw"
-    annotations = {
-      "service.beta.kubernetes.io/aws-load-balancer-type"                     = "nlb"
-      "service.beta.kubernetes.io/aws-load-balancer-internal"                 = "true"
-      "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags" = "service=viirs-fires"
-    }
+
   }
   spec {
     selector = {
       name = "viirs-fires"
     }
     port {
-      port        = 80
+      port        = 30564
+      node_port   = 30564
       target_port = 3600
     }
 
-    type = "LoadBalancer"
+    type = "NodePort"
   }
 }
 
-data "aws_lb" "viirs_fires_lb" {
-  name = split("-", kubernetes_service.viirs_fires_service.status.0.load_balancer.0.ingress.0.hostname).0
-
-  depends_on = [
-    kubernetes_service.viirs_fires_service
-  ]
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
 }
 
-resource "aws_api_gateway_vpc_link" "viirs_fires_lb_vpc_link" {
-  name        = "Viirs Fires LB VPC link"
-  description = "VPC link to the viirs fires service load balancer"
-  target_arns = [data.aws_lb.viirs_fires_lb.arn]
+resource "aws_lb_listener" "viirs_active_fires_nlb_listener" {
+  load_balancer_arn = data.aws_lb.load_balancer.arn
+  port              = 30564
+  protocol          = "TCP"
 
-  lifecycle {
-    create_before_destroy = true
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.viirs_active_fires_lb_target_group.arn
   }
 }
 
-resource "aws_api_gateway_resource" "viirs_fires_v2_resource" {
+resource "aws_lb_target_group" "viirs_active_fires_lb_target_group" {
+  name        = "viirs-fires-lb-tg"
+  port        = 30564
+  protocol    = "TCP"
+  target_type = "instance"
+  vpc_id      = var.vpc.id
+
+  health_check {
+    enabled  = true
+    protocol = "TCP"
+  }
+}
+
+resource "aws_autoscaling_attachment" "asg_attachment_viirs_active_fires" {
+  count = length(var.eks_asg_names)
+
+  autoscaling_group_name = var.eks_asg_names[count.index]
+  alb_target_group_arn   = aws_lb_target_group.viirs_active_fires_lb_target_group.arn
+}
+
+
+// /v1/viirs-active-fires
+resource "aws_api_gateway_resource" "v1_viirs_active_fires_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_v2_id
+  parent_id   = var.v1_resource.id
   path_part   = "viirs-active-fires"
 }
 
-resource "aws_api_gateway_resource" "viirs_latest_v2_resource" {
+// /v1/viirs-active-fires/{proxy+}
+resource "aws_api_gateway_resource" "v1_viirs_active_fires_proxy_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.viirs_fires_v2_resource.id
-  path_part   = "latest"
+  parent_id   = aws_api_gateway_resource.v1_viirs_active_fires_resource.id
+  path_part   = "{proxy+}"
 }
 
-# Access by GADM levels
-resource "aws_api_gateway_resource" "viirs_fires_admin_v2_resource" {
+// /v2/viirs-active-fires
+resource "aws_api_gateway_resource" "v2_viirs_active_fires_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.viirs_fires_v2_resource.id
-  path_part   = "admin"
-}
-
-resource "aws_api_gateway_resource" "viirs_fires_by_iso_v2_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.viirs_fires_admin_v2_resource.id
-  path_part   = "{iso}"
-}
-
-resource "aws_api_gateway_resource" "viirs_fires_by_id1_v2_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.viirs_fires_by_iso_v2_resource.id
-  path_part   = "{id1}"
-}
-
-resource "aws_api_gateway_resource" "viirs_fires_by_id2_v2_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.viirs_fires_by_id1_v2_resource.id
-  path_part   = "{id2}"
-}
-
-# Access by area id
-resource "aws_api_gateway_resource" "viirs_fires_use_v2_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.viirs_fires_v2_resource.id
-  path_part   = "use"
-}
-
-resource "aws_api_gateway_resource" "viirs_fires_use_by_name_v2_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.viirs_fires_use_v2_resource.id
-  path_part   = "{name}"
-}
-
-resource "aws_api_gateway_resource" "viirs_fires_use_by_id_v2_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.viirs_fires_use_by_name_v2_resource.id
-  path_part   = "{id}"
-}
-
-# Access Protected Areas by id
-resource "aws_api_gateway_resource" "viirs_fires_wdpa_v2_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.viirs_fires_v2_resource.id
-  path_part   = "wdpa"
-}
-
-resource "aws_api_gateway_resource" "viirs_fires_wdpa_by_id_v2_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.viirs_fires_wdpa_v2_resource.id
-  path_part   = "{id}"
-}
-
-# v1 resources
-resource "aws_api_gateway_resource" "viirs_fires_v1_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_v1_id
+  parent_id   = var.v2_resource.id
   path_part   = "viirs-active-fires"
 }
 
-resource "aws_api_gateway_resource" "viirs_latest_v1_resource" {
+// /v2/viirs-active-fires/{proxy+}
+resource "aws_api_gateway_resource" "v2_viirs_active_fires_proxy_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.viirs_fires_v1_resource.id
-  path_part   = "latest"
+  parent_id   = aws_api_gateway_resource.v2_viirs_active_fires_resource.id
+  path_part   = "{proxy+}"
 }
 
-# Access by GADM levels
-resource "aws_api_gateway_resource" "viirs_fires_admin_v1_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.viirs_fires_v1_resource.id
-  path_part   = "admin"
-}
-
-resource "aws_api_gateway_resource" "viirs_fires_by_iso_v1_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.viirs_fires_admin_v1_resource.id
-  path_part   = "{iso}"
-}
-
-resource "aws_api_gateway_resource" "viirs_fires_by_id1_v1_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.viirs_fires_by_iso_v1_resource.id
-  path_part   = "{id1}"
-}
-
-resource "aws_api_gateway_resource" "viirs_fires_by_id2_v1_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.viirs_fires_by_id1_v1_resource.id
-  path_part   = "{id2}"
-}
-
-# Access by area id
-resource "aws_api_gateway_resource" "viirs_fires_use_v1_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.viirs_fires_v1_resource.id
-  path_part   = "use"
-}
-
-resource "aws_api_gateway_resource" "viirs_fires_use_by_name_v1_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.viirs_fires_use_v1_resource.id
-  path_part   = "{name}"
-}
-
-resource "aws_api_gateway_resource" "viirs_fires_use_by_id_v1_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.viirs_fires_use_by_name_v1_resource.id
-  path_part   = "{id}"
-}
-
-# Access Protected Areas by id
-resource "aws_api_gateway_resource" "viirs_fires_wdpa_v1_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.viirs_fires_v1_resource.id
-  path_part   = "wdpa"
-}
-
-resource "aws_api_gateway_resource" "viirs_fires_wdpa_by_id_v1_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.viirs_fires_wdpa_v1_resource.id
-  path_part   = "{id}"
-}
-
-# Modules
-module "viirs_fires_v2_get_by_iso" {
+module "viirs_fires_get_v1_viirs_active_fires" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.viirs_fires_by_iso_v2_resource
+  api_resource = aws_api_gateway_resource.v1_viirs_active_fires_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/viirs-active-fires/admin/{iso}"
-  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30564/api/v1/viirs-active-fires"
+  vpc_link     = var.vpc_link
 }
 
-module "viirs_fires_v2_get_by_id1" {
+module "viirs_fires_post_v1_viirs_active_fires" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.viirs_fires_by_id1_v2_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/viirs-active-fires/admin/{iso}/{id1}"
-  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
-}
-
-module "viirs_fires_v2_get_by_id2" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.viirs_fires_by_id2_v2_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/viirs-active-fires/admin/{iso}/{id1}/{id2}"
-  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
-}
-
-module "viirs_fires_v2_get_by_area" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.viirs_fires_use_by_id_v2_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/viirs-active-fires/use/{name}/{id}"
-  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
-}
-
-module "viirs_fires_v2_get_wdpa" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.viirs_fires_wdpa_by_id_v2_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/viirs-active-fires/wdpa/{id}"
-  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
-}
-
-module "viirs_fires_v2_get_active_fires" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.viirs_fires_v2_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/viirs-active-fires"
-  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
-}
-
-module "viirs_fires_v2_set_active_fires" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.viirs_fires_v2_resource
+  api_resource = aws_api_gateway_resource.v1_viirs_active_fires_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v2/viirs-active-fires"
-  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30564/api/v1/viirs-active-fires"
+  vpc_link     = var.vpc_link
 }
 
-module "viirs_fires_v2_get_latest_fires" {
+module "viirs_fires_any_v1_viirs_active_fires_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.viirs_latest_v2_resource
+  api_resource = aws_api_gateway_resource.v1_viirs_active_fires_proxy_resource
+  method       = "ANY"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30564/api/v1/viirs-active-fires/{proxy}"
+  vpc_link     = var.vpc_link
+}
+
+module "viirs_fires_get_v2_viirs_active_fires" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = aws_api_gateway_resource.v2_viirs_active_fires_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/viirs-active-fires/latest"
-  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30564/api/v2/viirs-active-fires"
+  vpc_link     = var.vpc_link
 }
 
-# v1 modules
-module "viirs_fires_v1_get_by_iso" {
+module "viirs_fires_post_v2_viirs_active_fires" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.viirs_fires_by_iso_v1_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/viirs-active-fires/admin/{iso}"
-  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
-}
-
-module "viirs_fires_v1_get_by_id1" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.viirs_fires_by_id1_v1_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/viirs-active-fires/admin/{iso}/{id1}"
-  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
-}
-
-module "viirs_fires_v1_get_by_id2" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.viirs_fires_by_id2_v1_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/viirs-active-fires/admin/{iso}/{id1}/{id2}"
-  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
-}
-
-module "viirs_fires_v1_get_by_area" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.viirs_fires_use_by_id_v1_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/viirs-active-fires/use/{name}/{id}"
-  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
-}
-
-module "viirs_fires_v1_get_wdpa" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.viirs_fires_wdpa_by_id_v1_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/viirs-active-fires/wdpa/{id}"
-  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
-}
-
-module "viirs_fires_v1_get_active_fires" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.viirs_fires_v1_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/viirs-active-fires"
-  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
-}
-
-module "viirs_fires_v1_set_active_fires" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.viirs_fires_v1_resource
+  api_resource = aws_api_gateway_resource.v2_viirs_active_fires_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v2/viirs-active-fires"
-  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30564/api/v2/viirs-active-fires"
+  vpc_link     = var.vpc_link
 }
 
-module "viirs_fires_v1_get_latest_fires" {
+module "viirs_fires_any_v2_viirs_active_fires_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.viirs_latest_v1_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v2/viirs-active-fires/latest"
-  vpc_link     = aws_api_gateway_vpc_link.viirs_fires_lb_vpc_link
+  api_resource = aws_api_gateway_resource.v2_viirs_active_fires_proxy_resource
+  method       = "ANY"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30564/api/v2/viirs-active-fires/{proxy}"
+  vpc_link     = var.vpc_link
 }
-

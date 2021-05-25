@@ -26,6 +26,10 @@ resource "aws_eks_node_group" "eks-node-group" {
 
   labels = var.labels
 
+  tags = {
+    node_group_name = var.node_group_name
+  }
+
   depends_on = [
     var.cluster
   ]

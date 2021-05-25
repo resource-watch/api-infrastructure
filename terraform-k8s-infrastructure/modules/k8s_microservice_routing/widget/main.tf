@@ -1,260 +1,166 @@
-provider "kubernetes" {
-  host                   = var.cluster_endpoint
-  cluster_ca_certificate = base64decode(var.cluster_ca)
-  exec {
-    api_version = "client.authentication.k8s.io/v1alpha1"
-    args        = ["eks", "get-token", "--cluster-name", var.cluster_name]
-    command     = "aws"
-  }
-}
-
 resource "kubernetes_service" "widget_service" {
   metadata {
     name      = "widget"
     namespace = "default"
-    annotations = {
-      "service.beta.kubernetes.io/aws-load-balancer-type"                     = "nlb"
-      "service.beta.kubernetes.io/aws-load-balancer-internal"                 = "true"
-      "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags" = "service=widget"
-    }
+
   }
   spec {
     selector = {
       name = "widget"
     }
     port {
-      port        = 80
+      port        = 30567
+      node_port   = 30567
       target_port = 3050
     }
 
-    type = "LoadBalancer"
+    type = "NodePort"
   }
 }
 
-data "aws_lb" "widget_lb" {
-  name = split("-", kubernetes_service.widget_service.status.0.load_balancer.0.ingress.0.hostname).0
-
-  depends_on = [
-    kubernetes_service.widget_service
-  ]
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
 }
 
-resource "aws_api_gateway_vpc_link" "widget_lb_vpc_link" {
-  name        = "Widget LB VPC link"
-  description = "VPC link to the widget service load balancer"
-  target_arns = [data.aws_lb.widget_lb.arn]
+resource "aws_lb_listener" "widget_nlb_listener" {
+  load_balancer_arn = data.aws_lb.load_balancer.arn
+  port              = 30567
+  protocol          = "TCP"
 
-  lifecycle {
-    create_before_destroy = true
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.widget_lb_target_group.arn
   }
 }
 
-data "aws_api_gateway_resource" "dataset_id_resource" {
-  rest_api_id = var.api_gateway.id
-  path        = "/v1/dataset/{datasetId}"
+resource "aws_lb_target_group" "widget_lb_target_group" {
+  name        = "widget-lb-tg"
+  port        = 30567
+  protocol    = "TCP"
+  target_type = "instance"
+  vpc_id      = var.vpc.id
+
+  health_check {
+    enabled  = true
+    protocol = "TCP"
+  }
 }
 
-// /api/v1/widget
+resource "aws_autoscaling_attachment" "asg_attachment_widget" {
+  count = length(var.eks_asg_names)
+
+  autoscaling_group_name = var.eks_asg_names[count.index]
+  alb_target_group_arn   = aws_lb_target_group.widget_lb_target_group.arn
+}
+
+// /v1/widget
 resource "aws_api_gateway_resource" "widget_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = var.resource_root_id
+  parent_id   = var.v1_resource.id
   path_part   = "widget"
 }
 
-// /api/v1/widget/find-by-ids
-resource "aws_api_gateway_resource" "widget_find_by_ids_resource" {
+// /v1/widget/{proxy+}
+resource "aws_api_gateway_resource" "widget_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.widget_resource.id
-  path_part   = "find-by-ids"
+  path_part   = "{proxy+}"
 }
 
-// /api/v1/widget/change-environment
-resource "aws_api_gateway_resource" "widget_change_environment_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.widget_resource.id
-  path_part   = "change-environment"
-}
-
-// /api/v1/widget/{widgetId}
-resource "aws_api_gateway_resource" "widget_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.widget_resource.id
-  path_part   = "{widgetId}"
-}
-
-// /api/v1/widget/change-environment/{datasetId}
-resource "aws_api_gateway_resource" "widget_change_environment_dataset_id_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.widget_change_environment_resource.id
-  path_part   = "{datasetId}"
-}
-
-// /api/v1/widget/change-environment/{datasetId}/{env}
-resource "aws_api_gateway_resource" "widget_env_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.widget_change_environment_dataset_id_resource.id
-  path_part   = "{env}"
-}
-
-// /api/v1/dataset/{datasetId}/widget
+// /v1/dataset/{datasetId}/widget
 resource "aws_api_gateway_resource" "dataset_id_widget_resource" {
   rest_api_id = var.api_gateway.id
-  parent_id   = data.aws_api_gateway_resource.dataset_id_resource.id
+  parent_id   = var.v1_dataset_id_resource.id
   path_part   = "widget"
 }
 
-// /api/v1/dataset/{datasetId}/widget/{widgetId}
+// /v1/dataset/{datasetId}/widget/{widgetId}
 resource "aws_api_gateway_resource" "dataset_id_widget_id_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.dataset_id_widget_resource.id
   path_part   = "{widgetId}"
 }
 
-// /api/v1/widget/{widgetId}/clone
-resource "aws_api_gateway_resource" "widget_clone_resource" {
-  rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.widget_id_resource.id
-  path_part   = "clone"
-}
-
-// /api/v1/dataset/{datasetId}/widget/{widgetId}/clone
-resource "aws_api_gateway_resource" "dataset_id_widget_id_clone_resource" {
+// /v1/dataset/{datasetId}/widget/{widgetId}/{proxy+}
+resource "aws_api_gateway_resource" "dataset_id_widget_id_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = aws_api_gateway_resource.dataset_id_widget_id_resource.id
-  path_part   = "clone"
+  path_part   = "{proxy+}"
 }
 
-module "widget_get" {
+module "widget_get_widget" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.widget_resource
   method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/widget"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30567/api/v1/widget"
+  vpc_link     = var.vpc_link
 }
 
-module "widget_get_for_dataset" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_widget_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
-}
-
-module "widget_get_for_dataset_by_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_widget_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget/{widgetId}"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
-}
-
-module "widget_get_by_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.widget_id_resource
-  method       = "GET"
-  uri          = "http://api.resourcewatch.org/api/v1/widget/{widgetId}"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
-}
-
-module "widget_post_for_dataset" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_widget_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
-}
-
-module "widget_post" {
+module "widget_post_widget" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.widget_resource
   method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/widget"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30567/api/v1/widget"
+  vpc_link     = var.vpc_link
 }
 
-module "widget_patch_by_id" {
+module "widget_any_widget_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.widget_id_resource
-  method       = "PATCH"
-  uri          = "http://api.resourcewatch.org/api/v1/widget/{widgetId}"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+  api_resource = aws_api_gateway_resource.widget_proxy_resource
+  method       = "ANY"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30567/api/v1/widget/{proxy}"
+  vpc_link     = var.vpc_link
 }
 
-module "widget_delete_by_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.widget_id_resource
-  method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/widget/{widgetId}"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+module "widget_get_dataset_id_widget" {
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_widget_resource
+  method                      = "GET"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30567/api/v1/dataset/{datasetId}/widget"
+  vpc_link                    = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
-module "widget_delete_for_dataset" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_widget_resource
-  method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+module "widget_post_dataset_id_widget" {
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_widget_resource
+  method                      = "POST"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30567/api/v1/dataset/{datasetId}/widget"
+  vpc_link                    = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
-module "widget_patch_for_dataset_by_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_widget_id_resource
-  method       = "PATCH"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget/{widgetId}"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+module "widget_delete_dataset_id_widget" {
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_widget_resource
+  method                      = "DELETE"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30567/api/v1/dataset/{datasetId}/widget"
+  vpc_link                    = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
-module "widget_change_environment_for_dataset_by_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.widget_env_resource
-  method       = "PATCH"
-  uri          = "http://api.resourcewatch.org/api/v1/widget/change-environment/{datasetId}/{env}"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+module "widget_get_dataset_id_widget_id" {
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_widget_id_resource
+  method                      = "GET"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30567/api/v1/dataset/{datasetId}/widget/{widgetId}"
+  vpc_link                    = var.vpc_link
+  endpoint_request_parameters = ["datasetId"]
 }
 
-module "widget_delete_for_dataset_by_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_widget_id_resource
-  method       = "DELETE"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget/{widgetId}"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
-}
-
-module "widget_post_find_by_ids" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.widget_find_by_ids_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/widget/find-by-ids"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
-}
-
-module "widget_clone" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.widget_clone_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/clone"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
-}
-
-module "widget_clone_for_dataset_id" {
-  source       = "../endpoint"
-  api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_widget_id_clone_resource
-  method       = "POST"
-  uri          = "http://api.resourcewatch.org/api/v1/dataset/{datasetId}/widget/{widgetId}/clone"
-  vpc_link     = aws_api_gateway_vpc_link.widget_lb_vpc_link
+module "widget_any_dataset_id_widget_id_proxy" {
+  source                      = "../endpoint"
+  api_gateway                 = var.api_gateway
+  api_resource                = aws_api_gateway_resource.dataset_id_widget_id_resource
+  method                      = "ANY"
+  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30567/api/v1/dataset/{datasetId}/widget/{widgetId}/{proxy}"
+  vpc_link                    = var.vpc_link
+  endpoint_request_parameters = ["datasetId", "widgetId"]
 }

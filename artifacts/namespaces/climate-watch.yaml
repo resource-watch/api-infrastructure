@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: climate-watch
-  labels:
-    name: climate-watch

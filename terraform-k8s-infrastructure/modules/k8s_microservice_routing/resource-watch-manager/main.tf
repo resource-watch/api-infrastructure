@@ -17,8 +17,12 @@ resource "kubernetes_service" "resource_watch_manager_service" {
   }
 }
 
+data "aws_lb" "load_balancer" {
+  arn  = var.vpc_link.target_arns[0]
+}
+
 resource "aws_lb_listener" "resource_watch_manager_nlb_listener" {
-  load_balancer_arn = var.load_balancer.arn
+  load_balancer_arn = data.aws_lb.load_balancer.arn
   port              = 30558
   protocol          = "TCP"
 
@@ -172,7 +176,7 @@ module "resource_watch_manager_get_v1_dashboard" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_dashboard_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/dashboards"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/dashboards"
   vpc_link     = var.vpc_link
 }
 
@@ -181,7 +185,7 @@ module "resource_watch_manager_post_v1_dashboard" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_dashboard_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/dashboards"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/dashboards"
   vpc_link     = var.vpc_link
 }
 
@@ -190,7 +194,7 @@ module "resource_watch_manager_any_v1_dashboard_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_dashboard_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/dashboards/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/dashboards/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -199,7 +203,7 @@ module "resource_watch_manager_get_v1_partner" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_partner_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/partners"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/partners"
   vpc_link     = var.vpc_link
 }
 
@@ -208,7 +212,7 @@ module "resource_watch_manager_post_v1_partner" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_partner_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/partners"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/partners"
   vpc_link     = var.vpc_link
 }
 
@@ -217,7 +221,7 @@ module "resource_watch_manager_get_v1_partner_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_partner_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/partners/{partnerId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/partners/{partnerId}"
   vpc_link     = var.vpc_link
 }
 
@@ -226,7 +230,7 @@ module "resource_watch_manager_patch_v1_partner_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_partner_id_resource
   method       = "PATCH"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/partners/{partnerId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/partners/{partnerId}"
   vpc_link     = var.vpc_link
 }
 
@@ -235,7 +239,7 @@ module "resource_watch_manager_put_v1_partner_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_partner_id_resource
   method       = "PUT"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/partners/{partnerId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/partners/{partnerId}"
   vpc_link     = var.vpc_link
 }
 
@@ -244,7 +248,7 @@ module "resource_watch_manager_delete_v1_partner_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_partner_id_resource
   method       = "DELETE"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/partners/{partnerId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/partners/{partnerId}"
   vpc_link     = var.vpc_link
 }
 
@@ -253,7 +257,7 @@ module "resource_watch_manager_get_v1_static_page" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_static_page_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/static_pages"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/static_pages"
   vpc_link     = var.vpc_link
 }
 
@@ -262,7 +266,7 @@ module "resource_watch_manager_post_v1_static_page" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_static_page_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/static_pages"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/static_pages"
   vpc_link     = var.vpc_link
 }
 
@@ -271,7 +275,7 @@ module "resource_watch_manager_get_v1_static_page_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_static_page_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/static_pages/{staticPageId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/static_pages/{staticPageId}"
   vpc_link     = var.vpc_link
 }
 
@@ -280,7 +284,7 @@ module "resource_watch_manager_patch_v1_static_page_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_static_page_id_resource
   method       = "PATCH"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/static_pages/{staticPageId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/static_pages/{staticPageId}"
   vpc_link     = var.vpc_link
 }
 
@@ -289,7 +293,7 @@ module "resource_watch_manager_put_v1_static_page_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_static_page_id_resource
   method       = "PUT"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/static_pages/{staticPageId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/static_pages/{staticPageId}"
   vpc_link     = var.vpc_link
 }
 
@@ -298,7 +302,7 @@ module "resource_watch_manager_delete_v1_static_page_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_static_page_id_resource
   method       = "DELETE"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/static_pages/{staticPageId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/static_pages/{staticPageId}"
   vpc_link     = var.vpc_link
 }
 
@@ -307,7 +311,7 @@ module "resource_watch_manager_get_v1_topic_page" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_topic_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/topics"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/topics"
   vpc_link     = var.vpc_link
 }
 
@@ -316,7 +320,7 @@ module "resource_watch_manager_any_v1_topic_id_proxy_page" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_topic_id_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/topics/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/topics/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -325,7 +329,7 @@ module "resource_watch_manager_post_v1_topic" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_topic_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/topics"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/topics"
   vpc_link     = var.vpc_link
 }
 
@@ -334,7 +338,7 @@ module "resource_watch_manager_get_v1_topic_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_topic_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/topics/{topicId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/topics/{topicId}"
   vpc_link     = var.vpc_link
 }
 
@@ -343,7 +347,7 @@ module "resource_watch_manager_patch_v1_topic_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_topic_id_resource
   method       = "PATCH"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/topics/{topicId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/topics/{topicId}"
   vpc_link     = var.vpc_link
 }
 
@@ -352,7 +356,7 @@ module "resource_watch_manager_put_v1_topic_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_topic_id_resource
   method       = "PUT"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/topics/{topicId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/topics/{topicId}"
   vpc_link     = var.vpc_link
 }
 
@@ -361,7 +365,7 @@ module "resource_watch_manager_delete_v1_topic_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_topic_id_resource
   method       = "DELETE"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/topics/{topicId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/topics/{topicId}"
   vpc_link     = var.vpc_link
 }
 
@@ -370,7 +374,7 @@ module "resource_watch_manager_get_v1_tool" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_tool_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/tools"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/tools"
   vpc_link     = var.vpc_link
 }
 
@@ -379,7 +383,7 @@ module "resource_watch_manager_post_v1_tool" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_tool_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/tools"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/tools"
   vpc_link     = var.vpc_link
 }
 
@@ -388,7 +392,7 @@ module "resource_watch_manager_get_v1_tool_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_tool_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/tools/{toolId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/tools/{toolId}"
   vpc_link     = var.vpc_link
 }
 
@@ -397,7 +401,7 @@ module "resource_watch_manager_patch_v1_tool_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_tool_id_resource
   method       = "PATCH"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/tools/{toolId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/tools/{toolId}"
   vpc_link     = var.vpc_link
 }
 
@@ -406,7 +410,7 @@ module "resource_watch_manager_put_v1_tool_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_tool_id_resource
   method       = "PUT"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/tools/{toolId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/tools/{toolId}"
   vpc_link     = var.vpc_link
 }
 
@@ -415,7 +419,7 @@ module "resource_watch_manager_delete_v1_tool_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_tool_id_resource
   method       = "DELETE"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/tools/{toolId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/tools/{toolId}"
   vpc_link     = var.vpc_link
 }
 
@@ -424,7 +428,7 @@ module "resource_watch_manager_post_v1_profile" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_profile_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/profiles"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/profiles"
   vpc_link     = var.vpc_link
 }
 
@@ -433,7 +437,7 @@ module "resource_watch_manager_get_v1_profile_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_profile_id_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/profiles/{profileId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/profiles/{profileId}"
   vpc_link     = var.vpc_link
 }
 
@@ -442,7 +446,7 @@ module "resource_watch_manager_patch_v1_profile_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_profile_id_resource
   method       = "PATCH"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/profiles/{profileId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/profiles/{profileId}"
   vpc_link     = var.vpc_link
 }
 
@@ -451,7 +455,7 @@ module "resource_watch_manager_put_v1_profile_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_profile_id_resource
   method       = "PUT"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/profiles/{profileId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/profiles/{profileId}"
   vpc_link     = var.vpc_link
 }
 
@@ -460,7 +464,7 @@ module "resource_watch_manager_delete_v1_profile_id" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_profile_id_resource
   method       = "DELETE"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/profiles/{profileId}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/profiles/{profileId}"
   vpc_link     = var.vpc_link
 }
 
@@ -469,7 +473,7 @@ module "resource_watch_manager_get_v1_faq" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_faq_resource
   method       = "GET"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/faqs"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/faqs"
   vpc_link     = var.vpc_link
 }
 
@@ -478,7 +482,7 @@ module "resource_watch_manager_post_v1_faq" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_faq_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/faqs"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/faqs"
   vpc_link     = var.vpc_link
 }
 
@@ -487,7 +491,7 @@ module "resource_watch_manager_any_v1_faq_proxy" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_faq_proxy_resource
   method       = "ANY"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/faqs/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/faqs/{proxy}"
   vpc_link     = var.vpc_link
 }
 
@@ -496,7 +500,7 @@ module "resource_watch_manager_post_v1_temporary_content_image" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_temporary_content_image_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/temporary_content_image"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/temporary_content_image"
   vpc_link     = var.vpc_link
 }
 
@@ -505,6 +509,6 @@ module "resource_watch_manager_post_v1_contact_us" {
   api_gateway  = var.api_gateway
   api_resource = aws_api_gateway_resource.v1_contact_us_resource
   method       = "POST"
-  uri          = "http://${var.load_balancer.dns_name}:30558/api/contact-us"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/contact-us"
   vpc_link     = var.vpc_link
 }
