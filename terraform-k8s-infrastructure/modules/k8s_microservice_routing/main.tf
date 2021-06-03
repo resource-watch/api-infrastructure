@@ -260,6 +260,7 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.quicc.endpoints),
       jsonencode(module.rw-lp),
       jsonencode(module.resource-watch-manager),
+      jsonencode(module.salesforce-connector),
       jsonencode(module.story),
       jsonencode(module.subscriptions),
       jsonencode(module.task-executor.endpoints),
@@ -1140,6 +1141,21 @@ module "resource-watch-manager" {
 
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
+  ]
+}
+
+module "salesforce-connector" {
+  source           = "./salesforce-connector"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  v1_resource      = module.v1_resource.aws_api_gateway_resource
+
+  eks_asg_names = [
+    data.aws_autoscaling_groups.gfw_autoscaling_group.names.0,
   ]
 }
 
