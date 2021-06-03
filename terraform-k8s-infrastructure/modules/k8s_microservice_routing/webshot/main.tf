@@ -54,23 +54,25 @@ resource "aws_autoscaling_attachment" "asg_attachment_webshot" {
 }
 
 // /v1/webshot
-resource "aws_api_gateway_resource" "webshot_resource" {
+module "webshot_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "webshot"
 }
 
 // /v1/webshot/{proxy+}
-resource "aws_api_gateway_resource" "webshot_proxy_resource" {
+module "webshot_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.webshot_resource.id
+  parent_id   = module.webshot_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "webshot_get_v1_webshot" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.webshot_resource
+  api_resource = module.webshot_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30566/api/v1/webshot"
   vpc_link     = var.vpc_link
@@ -79,7 +81,7 @@ module "webshot_get_v1_webshot" {
 module "webshot_any_v1_webshot_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.webshot_proxy_resource
+  api_resource = module.webshot_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30566/api/v1/webshot/{proxy}"
   vpc_link     = var.vpc_link

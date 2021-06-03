@@ -58,23 +58,25 @@ resource "aws_autoscaling_attachment" "asg_attachment_geostore" {
 
 
 // /v1/geostore
-resource "aws_api_gateway_resource" "v1_geostore_resource" {
+module "v1_geostore_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "geostore"
 }
 
 // /v1/geostore/{proxy+}
-resource "aws_api_gateway_resource" "v1_geostore_proxy_resource" {
+module "v1_geostore_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_geostore_resource.id
+  parent_id   = module.v1_geostore_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "geostore_post_v1_geostore" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_geostore_resource
+  api_resource = module.v1_geostore_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30532/api/v1/geostore"
   vpc_link     = var.vpc_link
@@ -83,7 +85,7 @@ module "geostore_post_v1_geostore" {
 module "geostore_any_v1_geostore_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_geostore_proxy_resource
+  api_resource = module.v1_geostore_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30532/api/v1/geostore/{proxy}"
   vpc_link     = var.vpc_link
@@ -94,23 +96,25 @@ module "geostore_any_v1_geostore_proxy" {
 #
 
 // /v1/coverage
-resource "aws_api_gateway_resource" "v1_coverage_resource" {
+module "v1_coverage_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "coverage"
 }
 
 // /v1/coverage/{proxy+}
-resource "aws_api_gateway_resource" "v1_coverage_proxy_resource" {
+module "v1_coverage_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_coverage_resource.id
+  parent_id   = module.v1_coverage_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "geostore_any_v1_coverage_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_coverage_proxy_resource
+  api_resource = module.v1_coverage_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30532/api/v1/coverage/{proxy}"
   vpc_link     = var.vpc_link
@@ -121,23 +125,25 @@ module "geostore_any_v1_coverage_proxy" {
 #
 
 // /v2/geostore
-resource "aws_api_gateway_resource" "v2_geostore_resource" {
+module "v2_geostore_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v2_resource.id
   path_part   = "geostore"
 }
 
 // /v2/geostore/{proxy+}
-resource "aws_api_gateway_resource" "v2_geostore_proxy_resource" {
+module "v2_geostore_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_geostore_resource.id
+  parent_id   = module.v2_geostore_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "geostore_post_v2_geostore" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_geostore_resource
+  api_resource = module.v2_geostore_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30532/api/v2/geostore"
   vpc_link     = var.vpc_link
@@ -146,7 +152,7 @@ module "geostore_post_v2_geostore" {
 module "geostore_any_v2_geostore_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_geostore_proxy_resource
+  api_resource = module.v2_geostore_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30532/api/v2/geostore/{proxy}"
   vpc_link     = var.vpc_link
@@ -157,23 +163,25 @@ module "geostore_any_v2_geostore_proxy" {
 #
 
 // /v2/coverage
-resource "aws_api_gateway_resource" "v2_coverage_resource" {
+module "v2_coverage_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v2_resource.id
   path_part   = "coverage"
 }
 
 // /v2/coverage/{proxy+}
-resource "aws_api_gateway_resource" "v2_coverage_proxy_resource" {
+module "v2_coverage_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_coverage_resource.id
+  parent_id   = module.v2_coverage_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "geostore_any_v2_coverage_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_coverage_proxy_resource
+  api_resource = module.v2_coverage_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30532/api/v2/coverage/{proxy}"
   vpc_link     = var.vpc_link

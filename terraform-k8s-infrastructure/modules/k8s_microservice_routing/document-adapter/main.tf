@@ -53,219 +53,249 @@ resource "aws_autoscaling_attachment" "asg_attachment_document_adapter" {
 }
 
 // /v1/query/csv
-resource "aws_api_gateway_resource" "query_csv_resource" {
+module "query_csv_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_query_resource.id
   path_part   = "csv"
 }
 
 // /v1/query/csv/{datasetId}
-resource "aws_api_gateway_resource" "query_csv_v1_dataset_id_resource" {
+module "query_csv_v1_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.query_csv_resource.id
+  parent_id   = module.query_csv_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/query/tsv
-resource "aws_api_gateway_resource" "query_tsv_resource" {
+module "query_tsv_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_query_resource.id
   path_part   = "tsv"
 }
 
 // /v1/query/tsv/{datasetId}
-resource "aws_api_gateway_resource" "query_tsv_v1_dataset_id_resource" {
+module "query_tsv_v1_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.query_tsv_resource.id
+  parent_id   = module.query_tsv_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/query/json
-resource "aws_api_gateway_resource" "query_json_resource" {
+module "query_json_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_query_resource.id
   path_part   = "json"
 }
 
 // /v1/query/json/{datasetId}
-resource "aws_api_gateway_resource" "query_json_v1_dataset_id_resource" {
+module "query_json_v1_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.query_json_resource.id
+  parent_id   = module.query_json_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/query/xml
-resource "aws_api_gateway_resource" "query_xml_resource" {
+module "query_xml_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_query_resource.id
   path_part   = "xml"
 }
 
 // /v1/query/xml/{datasetId}
-resource "aws_api_gateway_resource" "query_xml_v1_dataset_id_resource" {
+module "query_xml_v1_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.query_xml_resource.id
+  parent_id   = module.query_xml_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/download/csv
-resource "aws_api_gateway_resource" "download_csv_resource" {
+module "download_csv_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_download_resource.id
   path_part   = "csv"
 }
 
 // /v1/download/csv/{datasetId}
-resource "aws_api_gateway_resource" "download_csv_v1_dataset_id_resource" {
+module "download_csv_v1_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.download_csv_resource.id
+  parent_id   = module.download_csv_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/download/tsv
-resource "aws_api_gateway_resource" "download_tsv_resource" {
+module "download_tsv_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_download_resource.id
   path_part   = "tsv"
 }
 
 // /v1/download/tsv/{datasetId}
-resource "aws_api_gateway_resource" "download_tsv_v1_dataset_id_resource" {
+module "download_tsv_v1_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.download_tsv_resource.id
+  parent_id   = module.download_tsv_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/download/json
-resource "aws_api_gateway_resource" "download_json_resource" {
+module "download_json_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_download_resource.id
   path_part   = "json"
 }
 
 // /v1/download/json/{datasetId}
-resource "aws_api_gateway_resource" "download_json_v1_dataset_id_resource" {
+module "download_json_v1_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.download_json_resource.id
+  parent_id   = module.download_json_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/download/xml
-resource "aws_api_gateway_resource" "download_xml_resource" {
+module "download_xml_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_download_resource.id
   path_part   = "xml"
 }
 
 // /v1/download/xml/{datasetId}
-resource "aws_api_gateway_resource" "download_xml_v1_dataset_id_resource" {
+module "download_xml_v1_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.download_xml_resource.id
+  parent_id   = module.download_xml_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/fields/csv
-resource "aws_api_gateway_resource" "fields_csv_resource" {
+module "fields_csv_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_fields_resource.id
   path_part   = "csv"
 }
 
 // /v1/fields/csv/{datasetId}
-resource "aws_api_gateway_resource" "fields_csv_v1_dataset_id_resource" {
+module "fields_csv_v1_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.fields_csv_resource.id
+  parent_id   = module.fields_csv_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/fields/tsv
-resource "aws_api_gateway_resource" "fields_tsv_resource" {
+module "fields_tsv_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_fields_resource.id
   path_part   = "tsv"
 }
 
 // /v1/fields/tsv/{datasetId}
-resource "aws_api_gateway_resource" "fields_tsv_v1_dataset_id_resource" {
+module "fields_tsv_v1_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.fields_tsv_resource.id
+  parent_id   = module.fields_tsv_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/fields/json
-resource "aws_api_gateway_resource" "fields_json_resource" {
+module "fields_json_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_fields_resource.id
   path_part   = "json"
 }
 
 // /v1/fields/json/{datasetId}
-resource "aws_api_gateway_resource" "fields_json_v1_dataset_id_resource" {
+module "fields_json_v1_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.fields_json_resource.id
+  parent_id   = module.fields_json_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/fields/xml
-resource "aws_api_gateway_resource" "fields_xml_resource" {
+module "fields_xml_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_fields_resource.id
   path_part   = "xml"
 }
 
 // /v1/fields/xml/{datasetId}
-resource "aws_api_gateway_resource" "fields_xml_v1_dataset_id_resource" {
+module "fields_xml_v1_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.fields_xml_resource.id
+  parent_id   = module.fields_xml_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/dataset/{datasetId}/concat
-resource "aws_api_gateway_resource" "dataset_id_concat_resource" {
+module "dataset_id_concat_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_resource.id
   path_part   = "concat"
 }
 
 // /v1/dataset/{datasetId}/reindex
-resource "aws_api_gateway_resource" "dataset_id_reindex_resource" {
+module "dataset_id_reindex_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_resource.id
   path_part   = "reindex"
 }
 
 // /v1/dataset/{datasetId}/append
-resource "aws_api_gateway_resource" "dataset_id_append_resource" {
+module "dataset_id_append_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_resource.id
   path_part   = "append"
 }
 
 // /v1/dataset/{datasetId}/data-overwrite
-resource "aws_api_gateway_resource" "dataset_id_data_overwrite_resource" {
+module "dataset_id_data_overwrite_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_resource.id
   path_part   = "data-overwrite"
 }
 
 // /v1/doc-dataset
-resource "aws_api_gateway_resource" "doc_datasets_resource" {
+module "doc_datasets_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "doc-datasets"
 }
 
 // /v1/doc-dataset/{proxy+}
-resource "aws_api_gateway_resource" "doc_datasets_proxy_resource" {
+module "doc_datasets_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.doc_datasets_resource.id
+  parent_id   = module.doc_datasets_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "document_adapter_get_query_csv_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.query_csv_v1_dataset_id_resource
+  api_resource = module.query_csv_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/query/csv/{datasetId}"
   vpc_link     = var.vpc_link
@@ -274,7 +304,7 @@ module "document_adapter_get_query_csv_dataset_id" {
 module "document_adapter_post_query_csv_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.query_csv_v1_dataset_id_resource
+  api_resource = module.query_csv_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/query/csv/{datasetId}"
   vpc_link     = var.vpc_link
@@ -283,7 +313,7 @@ module "document_adapter_post_query_csv_dataset_id" {
 module "document_adapter_get_query_json_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.query_json_v1_dataset_id_resource
+  api_resource = module.query_json_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/query/json/{datasetId}"
   vpc_link     = var.vpc_link
@@ -292,7 +322,7 @@ module "document_adapter_get_query_json_dataset_id" {
 module "document_adapter_post_query_json_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.query_json_v1_dataset_id_resource
+  api_resource = module.query_json_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/query/json/{datasetId}"
   vpc_link     = var.vpc_link
@@ -301,7 +331,7 @@ module "document_adapter_post_query_json_dataset_id" {
 module "document_adapter_get_query_tsv_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.query_tsv_v1_dataset_id_resource
+  api_resource = module.query_tsv_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/query/tsv/{datasetId}"
   vpc_link     = var.vpc_link
@@ -310,7 +340,7 @@ module "document_adapter_get_query_tsv_dataset_id" {
 module "document_adapter_post_query_tsv_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.query_tsv_v1_dataset_id_resource
+  api_resource = module.query_tsv_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/query/tsv/{datasetId}"
   vpc_link     = var.vpc_link
@@ -319,7 +349,7 @@ module "document_adapter_post_query_tsv_dataset_id" {
 module "document_adapter_get_query_xml_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.query_xml_v1_dataset_id_resource
+  api_resource = module.query_xml_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/query/xml/{datasetId}"
   vpc_link     = var.vpc_link
@@ -328,7 +358,7 @@ module "document_adapter_get_query_xml_dataset_id" {
 module "document_adapter_post_query_xml_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.query_xml_v1_dataset_id_resource
+  api_resource = module.query_xml_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/query/xml/{datasetId}"
   vpc_link     = var.vpc_link
@@ -337,7 +367,7 @@ module "document_adapter_post_query_xml_dataset_id" {
 module "document_adapter_get_download_csv_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.download_csv_v1_dataset_id_resource
+  api_resource = module.download_csv_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/download/csv/{datasetId}"
   vpc_link     = var.vpc_link
@@ -346,7 +376,7 @@ module "document_adapter_get_download_csv_dataset_id" {
 module "document_adapter_post_download_csv_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.download_csv_v1_dataset_id_resource
+  api_resource = module.download_csv_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/download/csv/{datasetId}"
   vpc_link     = var.vpc_link
@@ -355,7 +385,7 @@ module "document_adapter_post_download_csv_dataset_id" {
 module "document_adapter_get_download_json_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.download_json_v1_dataset_id_resource
+  api_resource = module.download_json_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/download/json/{datasetId}"
   vpc_link     = var.vpc_link
@@ -364,7 +394,7 @@ module "document_adapter_get_download_json_dataset_id" {
 module "document_adapter_post_download_json_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.download_json_v1_dataset_id_resource
+  api_resource = module.download_json_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/download/json/{datasetId}"
   vpc_link     = var.vpc_link
@@ -373,7 +403,7 @@ module "document_adapter_post_download_json_dataset_id" {
 module "document_adapter_get_download_tsv_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.download_tsv_v1_dataset_id_resource
+  api_resource = module.download_tsv_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/download/tsv/{datasetId}"
   vpc_link     = var.vpc_link
@@ -382,7 +412,7 @@ module "document_adapter_get_download_tsv_dataset_id" {
 module "document_adapter_post_download_tsv_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.download_tsv_v1_dataset_id_resource
+  api_resource = module.download_tsv_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/download/tsv/{datasetId}"
   vpc_link     = var.vpc_link
@@ -391,7 +421,7 @@ module "document_adapter_post_download_tsv_dataset_id" {
 module "document_adapter_get_download_xml_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.download_xml_v1_dataset_id_resource
+  api_resource = module.download_xml_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/download/xml/{datasetId}"
   vpc_link     = var.vpc_link
@@ -400,7 +430,7 @@ module "document_adapter_get_download_xml_dataset_id" {
 module "document_adapter_post_download_xml_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.download_xml_v1_dataset_id_resource
+  api_resource = module.download_xml_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/download/xml/{datasetId}"
   vpc_link     = var.vpc_link
@@ -409,7 +439,7 @@ module "document_adapter_post_download_xml_dataset_id" {
 module "document_adapter_get_fields_csv_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.fields_csv_v1_dataset_id_resource
+  api_resource = module.fields_csv_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/fields/csv/{datasetId}"
   vpc_link     = var.vpc_link
@@ -418,7 +448,7 @@ module "document_adapter_get_fields_csv_dataset_id" {
 module "document_adapter_get_fields_json_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.fields_json_v1_dataset_id_resource
+  api_resource = module.fields_json_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/fields/json/{datasetId}"
   vpc_link     = var.vpc_link
@@ -427,7 +457,7 @@ module "document_adapter_get_fields_json_dataset_id" {
 module "document_adapter_get_fields_tsv_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.fields_tsv_v1_dataset_id_resource
+  api_resource = module.fields_tsv_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/fields/tsv/{datasetId}"
   vpc_link     = var.vpc_link
@@ -436,7 +466,7 @@ module "document_adapter_get_fields_tsv_dataset_id" {
 module "document_adapter_get_fields_xml_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.fields_xml_v1_dataset_id_resource
+  api_resource = module.fields_xml_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/fields/xml/{datasetId}"
   vpc_link     = var.vpc_link
@@ -445,7 +475,7 @@ module "document_adapter_get_fields_xml_dataset_id" {
 module "document_adapter_post_dataset_id_concat" {
   source                      = "../endpoint"
   api_gateway                 = var.api_gateway
-  api_resource                = aws_api_gateway_resource.dataset_id_concat_resource
+  api_resource                = module.dataset_id_concat_resource.aws_api_gateway_resource
   method                      = "POST"
   uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/{datasetId}/concat"
   vpc_link                    = var.vpc_link
@@ -455,7 +485,7 @@ module "document_adapter_post_dataset_id_concat" {
 module "document_adapter_post_dataset_id_reindex" {
   source                      = "../endpoint"
   api_gateway                 = var.api_gateway
-  api_resource                = aws_api_gateway_resource.dataset_id_reindex_resource
+  api_resource                = module.dataset_id_reindex_resource.aws_api_gateway_resource
   method                      = "POST"
   uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/{datasetId}/reindex"
   vpc_link                    = var.vpc_link
@@ -465,7 +495,7 @@ module "document_adapter_post_dataset_id_reindex" {
 module "document_adapter_post_dataset_id_append" {
   source                      = "../endpoint"
   api_gateway                 = var.api_gateway
-  api_resource                = aws_api_gateway_resource.dataset_id_append_resource
+  api_resource                = module.dataset_id_append_resource.aws_api_gateway_resource
   method                      = "POST"
   uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/{datasetId}/append"
   vpc_link                    = var.vpc_link
@@ -475,7 +505,7 @@ module "document_adapter_post_dataset_id_append" {
 module "document_adapter_post_dataset_id_data_overwrite" {
   source                      = "../endpoint"
   api_gateway                 = var.api_gateway
-  api_resource                = aws_api_gateway_resource.dataset_id_data_overwrite_resource
+  api_resource                = module.dataset_id_data_overwrite_resource.aws_api_gateway_resource
   method                      = "POST"
   uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/{datasetId}/data-overwrite"
   vpc_link                    = var.vpc_link
@@ -485,7 +515,7 @@ module "document_adapter_post_dataset_id_data_overwrite" {
 module "document_adapter_any_doc_datasets_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.doc_datasets_proxy_resource
+  api_resource = module.doc_datasets_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/doc-datasets/{proxy}"
   vpc_link     = var.vpc_link

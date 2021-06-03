@@ -53,23 +53,25 @@ resource "aws_autoscaling_attachment" "asg_attachment_arcgis_proxy" {
 }
 
 // /v1/arcgis-proxy
-resource "aws_api_gateway_resource" "v1_arcgis_proxy_resource" {
+module "v1_arcgis_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "arcgis-proxy"
 }
 
 // /v1/arcgis-proxy/{proxy+}
-resource "aws_api_gateway_resource" "v1_arcgis_proxy_proxy_resource" {
+module "v1_arcgis_proxy_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_arcgis_proxy_resource.id
+  parent_id   = module.v1_arcgis_proxy_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "arcgis_proxy_any_v1_arcgis_proxy_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_arcgis_proxy_proxy_resource
+  api_resource = module.v1_arcgis_proxy_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30503/api/v1/arcgis-proxy/{proxy}"
   vpc_link     = var.vpc_link

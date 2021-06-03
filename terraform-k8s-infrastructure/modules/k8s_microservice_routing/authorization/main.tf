@@ -54,22 +54,24 @@ resource "aws_autoscaling_attachment" "asg_attachment_authorization" {
 }
 
 // /auth
-resource "aws_api_gateway_resource" "authorization_resource" {
+module "authorization_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.root_resource_id
   path_part   = "auth"
 }
 // /auth/{proxy+}
-resource "aws_api_gateway_resource" "authorization_proxy_resource" {
+module "authorization_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.authorization_resource.id
+  parent_id   = module.authorization_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "authorization_any_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.authorization_proxy_resource
+  api_resource = module.authorization_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30505/auth/{proxy}"
   vpc_link     = var.vpc_link
@@ -78,7 +80,7 @@ module "authorization_any_proxy" {
 module "authorization_get" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.authorization_resource
+  api_resource = module.authorization_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30505/auth"
   vpc_link     = var.vpc_link

@@ -54,23 +54,25 @@ resource "aws_autoscaling_attachment" "asg_attachment_task_async" {
 }
 
 // /v1/task
-resource "aws_api_gateway_resource" "task_resource" {
+module "task_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "task"
 }
 
 // /v1/task/{proxy+}
-resource "aws_api_gateway_resource" "task_proxy_resource" {
+module "task_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.task_resource.id
+  parent_id   = module.task_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "task_async_get_task" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.task_resource
+  api_resource = module.task_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30562/api/v1/task"
   vpc_link     = var.vpc_link
@@ -79,7 +81,7 @@ module "task_async_get_task" {
 module "task_async_any_task_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.task_proxy_resource
+  api_resource = module.task_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30562/api/v1/task/{proxy}"
   vpc_link     = var.vpc_link

@@ -53,23 +53,25 @@ resource "aws_autoscaling_attachment" "asg_attachment_true_color_tiles" {
 }
 
 // /v1/true-color-tiles
-resource "aws_api_gateway_resource" "v1_true_color_tiles_resource" {
+module "v1_true_color_tiles_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "true-color-tiles"
 }
 
 // /v1/true-color-tiles/{proxy+}
-resource "aws_api_gateway_resource" "v1_true_color_tiles_proxy_resource" {
+module "v1_true_color_tiles_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_true_color_tiles_resource.id
+  parent_id   = module.v1_true_color_tiles_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "true_color_tiles_get_v1_true_color_tiles_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_true_color_tiles_proxy_resource
+  api_resource = module.v1_true_color_tiles_proxy_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30563/api/v1/true-color-tiles/{proxy}"
   vpc_link     = var.vpc_link

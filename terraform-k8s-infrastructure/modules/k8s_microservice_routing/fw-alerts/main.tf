@@ -53,23 +53,25 @@ resource "aws_autoscaling_attachment" "asg_attachment_fw_alerts" {
 }
 
 // /v1/fw-alerts
-resource "aws_api_gateway_resource" "v1_fw_alerts_resource" {
+module "v1_fw_alerts_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "fw-alerts"
 }
 
 // /v1/fw-alerts/{proxy+}
-resource "aws_api_gateway_resource" "v1_fw_alerts_proxy_resource" {
+module "v1_fw_alerts_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_fw_alerts_resource.id
+  parent_id   = module.v1_fw_alerts_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "fw_alerts_any_v1_form_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_fw_alerts_proxy_resource
+  api_resource = module.v1_fw_alerts_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30527/api/v1/fw-alerts/{proxy}"
   vpc_link     = var.vpc_link

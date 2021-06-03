@@ -53,23 +53,25 @@ resource "aws_autoscaling_attachment" "asg_attachment_subscriptions" {
 }
 
 // /v1/subscriptions
-resource "aws_api_gateway_resource" "v1_subscriptions_resource" {
+module "v1_subscriptions_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "subscriptions"
 }
 
 // /v1/subscriptions/{proxy+}
-resource "aws_api_gateway_resource" "v1_subscriptions_proxy_resource" {
+module "v1_subscriptions_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_subscriptions_resource.id
+  parent_id   = module.v1_subscriptions_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "subscriptions_get_v1_subscriptions" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_subscriptions_resource
+  api_resource = module.v1_subscriptions_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30561/api/v1/subscriptions"
   vpc_link     = var.vpc_link
@@ -78,7 +80,7 @@ module "subscriptions_get_v1_subscriptions" {
 module "subscriptions_post_v1_subscriptions" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_subscriptions_resource
+  api_resource = module.v1_subscriptions_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30561/api/v1/subscriptions"
   vpc_link     = var.vpc_link
@@ -87,7 +89,7 @@ module "subscriptions_post_v1_subscriptions" {
 module "subscriptions_any_v1_subscriptions_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_subscriptions_proxy_resource
+  api_resource = module.v1_subscriptions_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30561/api/v1/subscriptions/{proxy}"
   vpc_link     = var.vpc_link

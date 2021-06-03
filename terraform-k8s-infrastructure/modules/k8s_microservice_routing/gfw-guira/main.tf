@@ -54,37 +54,41 @@ resource "aws_autoscaling_attachment" "asg_attachment_gfw_guira" {
 
 
 // /v1/guira-loss
-resource "aws_api_gateway_resource" "v1_guira_loss_resource" {
+module "v1_guira_loss_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "guira-loss"
 }
 
 // /v1/guira-loss/{proxy+}
-resource "aws_api_gateway_resource" "v1_guira_loss_proxy_resource" {
+module "v1_guira_loss_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_guira_loss_resource.id
+  parent_id   = module.v1_guira_loss_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 // /v2/guira-loss
-resource "aws_api_gateway_resource" "v2_guira_loss_resource" {
+module "v2_guira_loss_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v2_resource.id
   path_part   = "guira-loss"
 }
 
 // /v2/guira-loss/{proxy+}
-resource "aws_api_gateway_resource" "v2_guira_loss_proxy_resource" {
+module "v2_guira_loss_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_guira_loss_resource.id
+  parent_id   = module.v2_guira_loss_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "gfw_guira_get_v2_guira_loss" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_guira_loss_resource
+  api_resource = module.v2_guira_loss_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30535/api/v2/guira-loss"
   vpc_link     = var.vpc_link
@@ -93,7 +97,7 @@ module "gfw_guira_get_v2_guira_loss" {
 module "gfw_guira_post_v2_guira_loss" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_guira_loss_resource
+  api_resource = module.v2_guira_loss_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30535/api/v2/guira-loss"
   vpc_link     = var.vpc_link
@@ -102,7 +106,7 @@ module "gfw_guira_post_v2_guira_loss" {
 module "gfw_guira_any_v2_guira_loss_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_guira_loss_proxy_resource
+  api_resource = module.v2_guira_loss_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30535/api/v2/guira-loss/{proxy}"
   vpc_link     = var.vpc_link
@@ -111,7 +115,7 @@ module "gfw_guira_any_v2_guira_loss_proxy" {
 module "gfw_guira_get_v1_guira_loss" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_guira_loss_resource
+  api_resource = module.v1_guira_loss_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30535/api/v1/guira-loss"
   vpc_link     = var.vpc_link
@@ -120,7 +124,7 @@ module "gfw_guira_get_v1_guira_loss" {
 module "gfw_guira_post_v1_guira_loss" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_guira_loss_resource
+  api_resource = module.v1_guira_loss_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30535/api/v1/guira-loss"
   vpc_link     = var.vpc_link
@@ -129,7 +133,7 @@ module "gfw_guira_post_v1_guira_loss" {
 module "gfw_guira_any_v1_guira_loss_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_guira_loss_proxy_resource
+  api_resource = module.v1_guira_loss_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30535/api/v1/guira-loss/{proxy}"
   vpc_link     = var.vpc_link

@@ -47,9 +47,9 @@ output "endpoints" {
 }
 
 output "v1_biomass_loss_resource" {
-  value = aws_api_gateway_resource.v1_biomass_loss_resource
+  value = module.v1_biomass_loss_resource.aws_api_gateway_resource
 }
 
 output "v1_umd_loss_gain_resource" {
-  value = aws_api_gateway_resource.v1_umd_loss_gain_resource
+  value = module.v1_umd_loss_gain_resource.aws_api_gateway_resource
 }

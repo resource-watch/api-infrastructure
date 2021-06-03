@@ -60,16 +60,18 @@ data "aws_api_gateway_resource" "root_resource" {
 }
 
 // /rw-lp
-resource "aws_api_gateway_resource" "rw_lp_resource" {
+module "rw_lp_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = data.aws_api_gateway_resource.root_resource.id
   path_part   = "rw-lp"
 }
 
 // /rw-lp/{proxy+}
-resource "aws_api_gateway_resource" "rw_lp_proxy_resource" {
+module "rw_lp_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.rw_lp_resource.id
+  parent_id   = module.rw_lp_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
@@ -85,7 +87,7 @@ module "rw_lp_get_home" {
 module "rw_lp_get_rw_lp_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.rw_lp_proxy_resource
+  api_resource = module.rw_lp_proxy_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30559/rw-lp/{proxy}"
   vpc_link     = var.vpc_link

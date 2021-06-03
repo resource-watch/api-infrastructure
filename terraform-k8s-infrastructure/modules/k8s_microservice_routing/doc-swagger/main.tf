@@ -53,23 +53,25 @@ resource "aws_autoscaling_attachment" "asg_attachment_doc_swagger" {
 }
 
 // /documentation
-resource "aws_api_gateway_resource" "documentation_resource" {
+module "documentation_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.root_resource_id
   path_part   = "documentation"
 }
 
 // /documentation/{proxy+}
-resource "aws_api_gateway_resource" "documentation_proxy_resource" {
+module "documentation_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.documentation_resource.id
+  parent_id   = module.documentation_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "doc_swagger_any" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.documentation_resource
+  api_resource = module.documentation_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30519/documentation"
   vpc_link     = var.vpc_link
@@ -78,7 +80,7 @@ module "doc_swagger_any" {
 module "doc_swagger_proxy_any" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.documentation_proxy_resource
+  api_resource = module.documentation_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30519/documentation/{proxy}"
   vpc_link     = var.vpc_link

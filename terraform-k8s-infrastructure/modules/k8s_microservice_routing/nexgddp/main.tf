@@ -54,184 +54,209 @@ resource "aws_autoscaling_attachment" "asg_attachment_nexgddp" {
 }
 
 // /v1/nexgddp
-resource "aws_api_gateway_resource" "nexgddp_v1_nexgddp_resource" {
+module "nexgddp_v1_nexgddp_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "nexgddp"
 }
 
 // /v1/nexgddp/{proxy+}
-resource "aws_api_gateway_resource" "nexgddp_v1_nexgddp_proxy_resource" {
+module "nexgddp_v1_nexgddp_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.nexgddp_v1_nexgddp_resource.id
+  parent_id   = module.nexgddp_v1_nexgddp_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 // /v1/query/nexgddp
-resource "aws_api_gateway_resource" "nexgddp_v1_query_nexgddp_resource" {
+module "nexgddp_v1_query_nexgddp_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_query_resource.id
   path_part   = "nexgddp"
 }
 
 // /v1/query/nexgddp/{datasetId}
-resource "aws_api_gateway_resource" "nexgddp_v1_query_nexgddp_dataset_id_resource" {
+module "nexgddp_v1_query_nexgddp_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.nexgddp_v1_query_nexgddp_resource.id
+  parent_id   = module.nexgddp_v1_query_nexgddp_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/download/nexgddp
-resource "aws_api_gateway_resource" "nexgddp_v1_download_nexgddp_resource" {
+module "nexgddp_v1_download_nexgddp_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_download_resource.id
   path_part   = "nexgddp"
 }
 
 // /v1/download/nexgddp/{datasetId}
-resource "aws_api_gateway_resource" "nexgddp_v1_download_nexgddp_dataset_id_resource" {
+module "nexgddp_v1_download_nexgddp_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.nexgddp_v1_download_nexgddp_resource.id
+  parent_id   = module.nexgddp_v1_download_nexgddp_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/fields/nexgddp
-resource "aws_api_gateway_resource" "nexgddp_v1_fields_nexgddp_resource" {
+module "nexgddp_v1_fields_nexgddp_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_fields_resource.id
   path_part   = "nexgddp"
 }
 
 // /v1/fields/nexgddp/{datasetId}
-resource "aws_api_gateway_resource" "nexgddp_v1_fields_nexgddp_dataset_id_resource" {
+module "nexgddp_v1_fields_nexgddp_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.nexgddp_v1_fields_nexgddp_resource.id
+  parent_id   = module.nexgddp_v1_fields_nexgddp_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/rest-datasets/nexgddp
-resource "aws_api_gateway_resource" "nexgddp_v1_rest_datasets_nexgddp_resource" {
+module "nexgddp_v1_rest_datasets_nexgddp_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_rest_datasets_resource.id
   path_part   = "nexgddp"
 }
 
 // /v1/rest-datasets/nexgddp/{datasetId}
-resource "aws_api_gateway_resource" "nexgddp_v1_rest_datasets_nexgddp_dataset_id_resource" {
+module "nexgddp_v1_rest_datasets_nexgddp_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.nexgddp_v1_rest_datasets_nexgddp_resource.id
+  parent_id   = module.nexgddp_v1_rest_datasets_nexgddp_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/layer/{layerId}/tile/nexgddp
-resource "aws_api_gateway_resource" "nexgddp_v1_layer_id_tile_nexgddp_resource" {
+module "nexgddp_v1_layer_id_tile_nexgddp_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_layer_id_tile_resource.id
   path_part   = "nexgddp"
 }
 
 // /v1/layer/{layerId}/tile/nexgddp/{proxy+}
-resource "aws_api_gateway_resource" "nexgddp_v1_layer_id_tile_nexgddp_proxy_resource" {
+module "nexgddp_v1_layer_id_tile_nexgddp_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.nexgddp_v1_layer_id_tile_nexgddp_resource.id
+  parent_id   = module.nexgddp_v1_layer_id_tile_nexgddp_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 // /v1/layer/{layerId}/tile/loca
-resource "aws_api_gateway_resource" "nexgddp_v1_layer_id_tile_loca_resource" {
+module "nexgddp_v1_layer_id_tile_loca_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_layer_id_tile_resource.id
   path_part   = "loca"
 }
 
 // /v1/layer/{layerId}/tile/loca/{proxy+}
-resource "aws_api_gateway_resource" "nexgddp_v1_layer_id_tile_loca_proxy_resource" {
+module "nexgddp_v1_layer_id_tile_loca_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.nexgddp_v1_layer_id_tile_loca_resource.id
+  parent_id   = module.nexgddp_v1_layer_id_tile_loca_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 // /v1/layer/nexgddp
-resource "aws_api_gateway_resource" "nexgddp_layer_nexgddp_resource" {
+module "nexgddp_layer_nexgddp_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_layer_resource.id
   path_part   = "nexgddp"
 }
 
 // /v1/layer/nexgddp/{proxy+}
-resource "aws_api_gateway_resource" "nexgddp_layer_nexgddp_proxy_resource" {
+module "nexgddp_layer_nexgddp_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.nexgddp_layer_nexgddp_resource.id
+  parent_id   = module.nexgddp_layer_nexgddp_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 // /v1/layer/loca
-resource "aws_api_gateway_resource" "loca_layer_loca_resource" {
+module "loca_layer_loca_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_layer_resource.id
   path_part   = "loca"
 }
 
 // /v1/layer/loca/{proxy+}
-resource "aws_api_gateway_resource" "nexgddp_layer_loca_proxy_resource" {
+module "nexgddp_layer_loca_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.loca_layer_loca_resource.id
+  parent_id   = module.loca_layer_loca_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 // /v1/query/loca
-resource "aws_api_gateway_resource" "nexgddp_v1_query_loca_resource" {
+module "nexgddp_v1_query_loca_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_query_resource.id
   path_part   = "loca"
 }
 
 // /v1/query/loca/{datasetId}
-resource "aws_api_gateway_resource" "nexgddp_v1_query_loca_dataset_id_resource" {
+module "nexgddp_v1_query_loca_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.nexgddp_v1_query_loca_resource.id
+  parent_id   = module.nexgddp_v1_query_loca_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/fields/loca
-resource "aws_api_gateway_resource" "nexgddp_v1_fields_loca_resource" {
+module "nexgddp_v1_fields_loca_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_fields_resource.id
   path_part   = "loca"
 }
 
 // /v1/fields/loca/{datasetId}
-resource "aws_api_gateway_resource" "nexgddp_v1_fields_loca_dataset_id_resource" {
+module "nexgddp_v1_fields_loca_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.nexgddp_v1_fields_loca_resource.id
+  parent_id   = module.nexgddp_v1_fields_loca_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/rest-datasets/loca
-resource "aws_api_gateway_resource" "nexgddp_v1_rest_datasets_loca_resource" {
+module "nexgddp_v1_rest_datasets_loca_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_rest_datasets_resource.id
   path_part   = "loca"
 }
 
 // /v1/loca
-resource "aws_api_gateway_resource" "nexgddp_v1_loca_resource" {
+module "nexgddp_v1_loca_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "loca"
 }
 
 // /v1/loca/{proxy+}
-resource "aws_api_gateway_resource" "nexgddp_v1_loca_proxy_resource" {
+module "nexgddp_v1_loca_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.nexgddp_v1_loca_resource.id
+  parent_id   = module.nexgddp_v1_loca_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "nexgddp_get_v1_query_nexgddp_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.nexgddp_v1_query_nexgddp_dataset_id_resource
+  api_resource = module.nexgddp_v1_query_nexgddp_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/query/{datasetId}"
   vpc_link     = var.vpc_link
@@ -240,7 +265,7 @@ module "nexgddp_get_v1_query_nexgddp_dataset_id" {
 module "nexgddp_post_v1_query_nexgddp_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.nexgddp_v1_query_nexgddp_dataset_id_resource
+  api_resource = module.nexgddp_v1_query_nexgddp_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/query/{datasetId}"
   vpc_link     = var.vpc_link
@@ -249,7 +274,7 @@ module "nexgddp_post_v1_query_nexgddp_dataset_id" {
 module "nexgddp_get_v1_fields_nexgddp_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.nexgddp_v1_fields_nexgddp_dataset_id_resource
+  api_resource = module.nexgddp_v1_fields_nexgddp_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/fields/{datasetId}"
   vpc_link     = var.vpc_link
@@ -258,7 +283,7 @@ module "nexgddp_get_v1_fields_nexgddp_dataset_id" {
 module "nexgddp_post_v1_rest_datasets_nexgddp" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.nexgddp_v1_rest_datasets_nexgddp_resource
+  api_resource = module.nexgddp_v1_rest_datasets_nexgddp_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/rest-datasets/nexgddp"
   vpc_link     = var.vpc_link
@@ -267,7 +292,7 @@ module "nexgddp_post_v1_rest_datasets_nexgddp" {
 module "nexgddp_delete_v1_rest_datasets_nexgddp_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.nexgddp_v1_rest_datasets_nexgddp_dataset_id_resource
+  api_resource = module.nexgddp_v1_rest_datasets_nexgddp_dataset_id_resource.aws_api_gateway_resource
   method       = "DELETE"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/rest-datasets/nexgddp/{datasetId}"
   vpc_link     = var.vpc_link
@@ -276,7 +301,7 @@ module "nexgddp_delete_v1_rest_datasets_nexgddp_dataset_id" {
 module "nexgddp_get_v1_query_loca_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.nexgddp_v1_query_loca_dataset_id_resource
+  api_resource = module.nexgddp_v1_query_loca_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/query/{datasetId}"
   vpc_link     = var.vpc_link
@@ -285,7 +310,7 @@ module "nexgddp_get_v1_query_loca_dataset_id" {
 module "nexgddp_post_v1_query_loca_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.nexgddp_v1_query_loca_dataset_id_resource
+  api_resource = module.nexgddp_v1_query_loca_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/query/{datasetId}"
   vpc_link     = var.vpc_link
@@ -294,7 +319,7 @@ module "nexgddp_post_v1_query_loca_dataset_id" {
 module "nexgddp_get_v1_fields_loca_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.nexgddp_v1_fields_loca_dataset_id_resource
+  api_resource = module.nexgddp_v1_fields_loca_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/fields/{datasetId}"
   vpc_link     = var.vpc_link
@@ -303,7 +328,7 @@ module "nexgddp_get_v1_fields_loca_dataset_id" {
 module "nexgddp_post_v1_rest_datasets_loca" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.nexgddp_v1_rest_datasets_loca_resource
+  api_resource = module.nexgddp_v1_rest_datasets_loca_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/rest-datasets/nexgddp"
   vpc_link     = var.vpc_link
@@ -312,7 +337,7 @@ module "nexgddp_post_v1_rest_datasets_loca" {
 module "nexgddp_any_v1_nexgddp_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.nexgddp_v1_nexgddp_proxy_resource
+  api_resource = module.nexgddp_v1_nexgddp_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/{proxy}"
   vpc_link     = var.vpc_link
@@ -321,7 +346,7 @@ module "nexgddp_any_v1_nexgddp_proxy" {
 module "nexgddp_any_v1_loca_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.nexgddp_v1_loca_proxy_resource
+  api_resource = module.nexgddp_v1_loca_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/{proxy}"
   vpc_link     = var.vpc_link
@@ -330,7 +355,7 @@ module "nexgddp_any_v1_loca_proxy" {
 module "gee_tiles_any_layer_id_tile_nexgddp_proxy_resource" {
   source                      = "../endpoint"
   api_gateway                 = var.api_gateway
-  api_resource                = aws_api_gateway_resource.nexgddp_v1_layer_id_tile_nexgddp_proxy_resource
+  api_resource                = module.nexgddp_v1_layer_id_tile_nexgddp_proxy_resource.aws_api_gateway_resource
   method                      = "ANY"
   uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/layer/{layerId}/tile/nexgddp/{proxy}"
   vpc_link                    = var.vpc_link
@@ -340,7 +365,7 @@ module "gee_tiles_any_layer_id_tile_nexgddp_proxy_resource" {
 module "gee_tiles_any_layer_id_tile_loca_proxy_resource" {
   source                      = "../endpoint"
   api_gateway                 = var.api_gateway
-  api_resource                = aws_api_gateway_resource.nexgddp_v1_layer_id_tile_loca_proxy_resource
+  api_resource                = module.nexgddp_v1_layer_id_tile_loca_proxy_resource.aws_api_gateway_resource
   method                      = "ANY"
   uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/layer/{layerId}/tile/nexgddp/{proxy}"
   vpc_link                    = var.vpc_link
@@ -350,7 +375,7 @@ module "gee_tiles_any_layer_id_tile_loca_proxy_resource" {
 module "gee_tiles_any_layer_nexgddp_proxy_resource" {
   source                      = "../endpoint"
   api_gateway                 = var.api_gateway
-  api_resource                = aws_api_gateway_resource.nexgddp_layer_nexgddp_proxy_resource
+  api_resource                = module.nexgddp_layer_nexgddp_proxy_resource.aws_api_gateway_resource
   method                      = "ANY"
   uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/layer/nexgddp/{proxy}"
   vpc_link                    = var.vpc_link
@@ -360,7 +385,7 @@ module "gee_tiles_any_layer_nexgddp_proxy_resource" {
 module "gee_tiles_any_layer_loca_proxy_resource" {
   source                      = "../endpoint"
   api_gateway                 = var.api_gateway
-  api_resource                = aws_api_gateway_resource.nexgddp_layer_loca_proxy_resource
+  api_resource                = module.nexgddp_layer_loca_proxy_resource.aws_api_gateway_resource
   method                      = "ANY"
   uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30549/api/v1/nexgddp/layer/nexgddp/{proxy}"
   vpc_link                    = var.vpc_link

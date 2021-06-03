@@ -54,37 +54,41 @@ resource "aws_autoscaling_attachment" "asg_attachment_imazon" {
 
 
 // /v1/imazon-alerts
-resource "aws_api_gateway_resource" "v1_imazon_alerts_resource" {
+module "v1_imazon_alerts_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "imazon-alerts"
 }
 
 // /v1/imazon-alerts/{proxy+}
-resource "aws_api_gateway_resource" "v1_imazon_alerts_proxy_resource" {
+module "v1_imazon_alerts_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_imazon_alerts_resource.id
+  parent_id   = module.v1_imazon_alerts_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 // /v2/imazon-alerts
-resource "aws_api_gateway_resource" "v2_imazon_alerts_resource" {
+module "v2_imazon_alerts_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v2_resource.id
   path_part   = "imazon-alerts"
 }
 
 // /v2/imazon-alerts/{proxy+}
-resource "aws_api_gateway_resource" "v2_imazon_alerts_proxy_resource" {
+module "v2_imazon_alerts_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_imazon_alerts_resource.id
+  parent_id   = module.v2_imazon_alerts_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "imazon_get_v1_imazon_alerts" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_imazon_alerts_resource
+  api_resource = module.v1_imazon_alerts_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30545/api/v1/imazon-alerts"
   vpc_link     = var.vpc_link
@@ -93,7 +97,7 @@ module "imazon_get_v1_imazon_alerts" {
 module "imazon_post_v1_imazon_alerts" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_imazon_alerts_resource
+  api_resource = module.v1_imazon_alerts_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30545/api/v1/imazon-alerts"
   vpc_link     = var.vpc_link
@@ -102,7 +106,7 @@ module "imazon_post_v1_imazon_alerts" {
 module "imazon_any_v1_imazon_alerts_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_imazon_alerts_proxy_resource
+  api_resource = module.v1_imazon_alerts_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30545/api/v1/imazon-alerts/{proxy}"
   vpc_link     = var.vpc_link
@@ -111,7 +115,7 @@ module "imazon_any_v1_imazon_alerts_proxy" {
 module "imazon_get_v2_imazon_alerts" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_imazon_alerts_resource
+  api_resource = module.v2_imazon_alerts_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30545/api/v2/imazon-alerts"
   vpc_link     = var.vpc_link
@@ -120,7 +124,7 @@ module "imazon_get_v2_imazon_alerts" {
 module "imazon_post_v2_imazon_alerts" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_imazon_alerts_resource
+  api_resource = module.v2_imazon_alerts_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30545/api/v2/imazon-alerts"
   vpc_link     = var.vpc_link
@@ -129,7 +133,7 @@ module "imazon_post_v2_imazon_alerts" {
 module "imazon_any_v2_imazon_alerts_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_imazon_alerts_proxy_resource
+  api_resource = module.v2_imazon_alerts_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30545/api/v2/imazon-alerts/{proxy}"
   vpc_link     = var.vpc_link

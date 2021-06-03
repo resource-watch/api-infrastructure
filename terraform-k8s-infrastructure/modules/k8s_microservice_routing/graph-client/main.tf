@@ -54,23 +54,25 @@ resource "aws_autoscaling_attachment" "asg_attachment_graph_client" {
 }
 
 // /v1/graph
-resource "aws_api_gateway_resource" "graph_resource" {
+module "graph_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "graph"
 }
 
 // /v1/graph/{proxy+}
-resource "aws_api_gateway_resource" "graph_proxy_resource" {
+module "graph_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.graph_resource.id
+  parent_id   = module.graph_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "graph_client_any_graph_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.graph_proxy_resource
+  api_resource = module.graph_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30542/api/v1/graph/{proxy}"
   vpc_link     = var.vpc_link

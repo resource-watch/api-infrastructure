@@ -54,23 +54,25 @@ resource "aws_autoscaling_attachment" "asg_attachment_proxy" {
 }
 
 // /v1/proxy
-resource "aws_api_gateway_resource" "proxy_v1_proxy_resource" {
+module "proxy_v1_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "proxy"
 }
 
 // /v1/proxy/{proxy+}
-resource "aws_api_gateway_resource" "proxy_v1_proxy_proxy_resource" {
+module "proxy_v1_proxy_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.proxy_v1_proxy_resource.id
+  parent_id   = module.proxy_v1_proxy_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "gee_tiles_any_proxy_v1_proxy_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.proxy_v1_proxy_proxy_resource
+  api_resource = module.proxy_v1_proxy_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30554/api/v1/proxy/{proxy}"
   vpc_link     = var.vpc_link

@@ -53,44 +53,49 @@ resource "aws_autoscaling_attachment" "asg_attachment_fires_summary_stats" {
 }
 
 // /v1/fire-alerts
-resource "aws_api_gateway_resource" "fire_alerts_resource" {
+module "fire_alerts_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "fire-alerts"
 }
 
 // /v1/fire-alerts/{proxy+}
-resource "aws_api_gateway_resource" "fire_alerts_proxy_resource" {
+module "fire_alerts_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.fire_alerts_resource.id
+  parent_id   = module.fire_alerts_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 // /v1/glad-alerts
-resource "aws_api_gateway_resource" "glad_alerts_resource" {
+module "glad_alerts_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "glad-alerts"
 }
 
 // /v1/glad-alerts/summary-stats
-resource "aws_api_gateway_resource" "glad_alerts_summary_stats_resource" {
+module "glad_alerts_summary_stats_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.glad_alerts_resource.id
+  parent_id   = module.glad_alerts_resource.aws_api_gateway_resource.id
   path_part   = "summary-stats"
 }
 
 // /v1/glad-alerts/summary-stats/{proxy+}
-resource "aws_api_gateway_resource" "glad_alerts_summary_stats_proxy_resource" {
+module "glad_alerts_summary_stats_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.glad_alerts_summary_stats_resource.id
+  parent_id   = module.glad_alerts_summary_stats_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "fires_summary_stats_any_fire_alerts_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.fire_alerts_proxy_resource
+  api_resource = module.fire_alerts_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30523/api/v1/fire-alerts/{proxy}"
   vpc_link     = var.vpc_link
@@ -99,7 +104,7 @@ module "fires_summary_stats_any_fire_alerts_proxy" {
 module "fires_summary_stats_any_glad_alerts_summary_stats_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.glad_alerts_summary_stats_proxy_resource
+  api_resource = module.glad_alerts_summary_stats_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30523/api/v1/glad-alerts/summary-stats/{proxy}"
   vpc_link     = var.vpc_link

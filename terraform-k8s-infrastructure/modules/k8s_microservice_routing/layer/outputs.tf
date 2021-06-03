@@ -15,17 +15,17 @@ output "endpoints" {
 }
 
 output "v1_layer_resource" {
-  value = aws_api_gateway_resource.layer_resource
+  value = module.layer_resource.aws_api_gateway_resource
 }
 
 output "v1_layer_id_resource" {
-  value = aws_api_gateway_resource.layer_id_resource
+  value = module.layer_id_resource.aws_api_gateway_resource
 }
 
 output "v1_dataset_id_layer_resource" {
-  value = aws_api_gateway_resource.dataset_id_layer_resource
+  value = module.dataset_id_layer_resource.aws_api_gateway_resource
 }
 
 output "v1_dataset_id_layer_id_resource" {
-  value = aws_api_gateway_resource.dataset_id_layer_id_resource
+  value = module.dataset_id_layer_id_resource.aws_api_gateway_resource
 }

@@ -55,37 +55,41 @@ resource "aws_autoscaling_attachment" "asg_attachment_viirs_active_fires" {
 
 
 // /v1/viirs-active-fires
-resource "aws_api_gateway_resource" "v1_viirs_active_fires_resource" {
+module "v1_viirs_active_fires_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "viirs-active-fires"
 }
 
 // /v1/viirs-active-fires/{proxy+}
-resource "aws_api_gateway_resource" "v1_viirs_active_fires_proxy_resource" {
+module "v1_viirs_active_fires_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_viirs_active_fires_resource.id
+  parent_id   = module.v1_viirs_active_fires_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 // /v2/viirs-active-fires
-resource "aws_api_gateway_resource" "v2_viirs_active_fires_resource" {
+module "v2_viirs_active_fires_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v2_resource.id
   path_part   = "viirs-active-fires"
 }
 
 // /v2/viirs-active-fires/{proxy+}
-resource "aws_api_gateway_resource" "v2_viirs_active_fires_proxy_resource" {
+module "v2_viirs_active_fires_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_viirs_active_fires_resource.id
+  parent_id   = module.v2_viirs_active_fires_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "viirs_fires_get_v1_viirs_active_fires" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_viirs_active_fires_resource
+  api_resource = module.v1_viirs_active_fires_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30564/api/v1/viirs-active-fires"
   vpc_link     = var.vpc_link
@@ -94,7 +98,7 @@ module "viirs_fires_get_v1_viirs_active_fires" {
 module "viirs_fires_post_v1_viirs_active_fires" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_viirs_active_fires_resource
+  api_resource = module.v1_viirs_active_fires_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30564/api/v1/viirs-active-fires"
   vpc_link     = var.vpc_link
@@ -103,7 +107,7 @@ module "viirs_fires_post_v1_viirs_active_fires" {
 module "viirs_fires_any_v1_viirs_active_fires_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_viirs_active_fires_proxy_resource
+  api_resource = module.v1_viirs_active_fires_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30564/api/v1/viirs-active-fires/{proxy}"
   vpc_link     = var.vpc_link
@@ -112,7 +116,7 @@ module "viirs_fires_any_v1_viirs_active_fires_proxy" {
 module "viirs_fires_get_v2_viirs_active_fires" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_viirs_active_fires_resource
+  api_resource = module.v2_viirs_active_fires_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30564/api/v2/viirs-active-fires"
   vpc_link     = var.vpc_link
@@ -121,7 +125,7 @@ module "viirs_fires_get_v2_viirs_active_fires" {
 module "viirs_fires_post_v2_viirs_active_fires" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_viirs_active_fires_resource
+  api_resource = module.v2_viirs_active_fires_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30564/api/v2/viirs-active-fires"
   vpc_link     = var.vpc_link
@@ -130,7 +134,7 @@ module "viirs_fires_post_v2_viirs_active_fires" {
 module "viirs_fires_any_v2_viirs_active_fires_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_viirs_active_fires_proxy_resource
+  api_resource = module.v2_viirs_active_fires_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30564/api/v2/viirs-active-fires/{proxy}"
   vpc_link     = var.vpc_link

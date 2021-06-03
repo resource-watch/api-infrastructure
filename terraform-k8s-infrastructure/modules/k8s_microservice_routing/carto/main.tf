@@ -53,65 +53,73 @@ resource "aws_autoscaling_attachment" "asg_attachment_cartodb" {
 }
 
 // /v1/query/cartodb
-resource "aws_api_gateway_resource" "v1_query_cartodb_resource" {
+module "v1_query_cartodb_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_query_resource.id
   path_part   = "cartodb"
 }
 
 // /v1/query/cartodb/{datasetId}
-resource "aws_api_gateway_resource" "v1_query_cartodb_dataset_id_resource" {
+module "v1_query_cartodb_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_query_cartodb_resource.id
+  parent_id   = module.v1_query_cartodb_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/download/cartodb
-resource "aws_api_gateway_resource" "v1_download_cartodb_resource" {
+module "v1_download_cartodb_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_download_resource.id
   path_part   = "cartodb"
 }
 
 // /v1/download/cartodb/{datasetId}
-resource "aws_api_gateway_resource" "v1_download_cartodb_dataset_id_resource" {
+module "v1_download_cartodb_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_download_cartodb_resource.id
+  parent_id   = module.v1_download_cartodb_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/fields/cartodb
-resource "aws_api_gateway_resource" "v1_fields_cartodb_resource" {
+module "v1_fields_cartodb_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_fields_resource.id
   path_part   = "cartodb"
 }
 
 // /v1/fields/cartodb/{datasetId}
-resource "aws_api_gateway_resource" "v1_fields_cartodb_dataset_id_resource" {
+module "v1_fields_cartodb_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_fields_cartodb_resource.id
+  parent_id   = module.v1_fields_cartodb_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/rest-datasets/cartodb
-resource "aws_api_gateway_resource" "v1_rest_datasets_cartodb_resource" {
+module "v1_rest_datasets_cartodb_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_rest_datasets_resource.id
   path_part   = "cartodb"
 }
 
 // /v1/rest-datasets/cartodb/{datasetId}
-resource "aws_api_gateway_resource" "v1_rest_datasets_cartodb_dataset_id_resource" {
+module "v1_rest_datasets_cartodb_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_rest_datasets_cartodb_resource.id
+  parent_id   = module.v1_rest_datasets_cartodb_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 module "carto_get_v1_query_cartodb_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_query_cartodb_dataset_id_resource
+  api_resource = module.v1_query_cartodb_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30507/api/v1/carto/query/{datasetId}"
   vpc_link     = var.vpc_link
@@ -120,7 +128,7 @@ module "carto_get_v1_query_cartodb_dataset_id" {
 module "carto_post_v1_query_cartodb_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_query_cartodb_dataset_id_resource
+  api_resource = module.v1_query_cartodb_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30507/api/v1/carto/query/{datasetId}"
   vpc_link     = var.vpc_link
@@ -129,7 +137,7 @@ module "carto_post_v1_query_cartodb_dataset_id" {
 module "carto_get_v1_download_cartodb_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_download_cartodb_dataset_id_resource
+  api_resource = module.v1_download_cartodb_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30507/api/v1/carto/download/{datasetId}"
   vpc_link     = var.vpc_link
@@ -138,7 +146,7 @@ module "carto_get_v1_download_cartodb_dataset_id" {
 module "carto_post_v1_download_cartodb_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_download_cartodb_dataset_id_resource
+  api_resource = module.v1_download_cartodb_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30507/api/v1/carto/download/{datasetId}"
   vpc_link     = var.vpc_link
@@ -147,7 +155,7 @@ module "carto_post_v1_download_cartodb_dataset_id" {
 module "carto_get_v1_fields_cartodb_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_fields_cartodb_dataset_id_resource
+  api_resource = module.v1_fields_cartodb_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30507/api/v1/carto/fields/{datasetId}"
   vpc_link     = var.vpc_link
@@ -156,7 +164,7 @@ module "carto_get_v1_fields_cartodb_dataset_id" {
 module "carto_post_v1_rest_datasets_cartodb" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_rest_datasets_cartodb_resource
+  api_resource = module.v1_rest_datasets_cartodb_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30507/api/v1/carto/rest-datasets/cartodb"
   vpc_link     = var.vpc_link
@@ -165,7 +173,7 @@ module "carto_post_v1_rest_datasets_cartodb" {
 module "carto_delete_v1_rest_datasets_cartodb_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_rest_datasets_cartodb_dataset_id_resource
+  api_resource = module.v1_rest_datasets_cartodb_dataset_id_resource.aws_api_gateway_resource
   method       = "DELETE"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30507/api/v1/carto/rest-datasets/cartodb/{datasetId}"
   vpc_link     = var.vpc_link

@@ -53,51 +53,57 @@ resource "aws_autoscaling_attachment" "asg_attachment_gfw_umd" {
 }
 
 // /v1/umd-loss-gain/admin
-resource "aws_api_gateway_resource" "v1_umd_loss_gain_admin_resource" {
+module "v1_umd_loss_gain_admin_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_umd_loss_gain_resource.id
   path_part   = "umd-loss-gain"
 }
 
 // /v1/umd-loss-gain/admin/{proxy+}
-resource "aws_api_gateway_resource" "v1_umd_loss_gain_admin_proxy_resource" {
+module "v1_umd_loss_gain_admin_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_umd_loss_gain_admin_resource.id
+  parent_id   = module.v1_umd_loss_gain_admin_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 // /v2/umd-loss-gain
-resource "aws_api_gateway_resource" "v2_umd_loss_resource" {
+module "v2_umd_loss_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v2_resource.id
   path_part   = "umd-loss-gain"
 }
 
 // /v2/umd-loss-gain/{proxy+}
-resource "aws_api_gateway_resource" "v2_umd_loss_proxy_resource" {
+module "v2_umd_loss_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_umd_loss_resource.id
+  parent_id   = module.v2_umd_loss_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 // /v3/umd-loss-gain
-resource "aws_api_gateway_resource" "v3_umd_loss_resource" {
+module "v3_umd_loss_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v3_resource.id
   path_part   = "umd-loss-gain"
 }
 
 // /v3/umd-loss-gain/{proxy+}
-resource "aws_api_gateway_resource" "v3_umd_loss_proxy_resource" {
+module "v3_umd_loss_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v3_umd_loss_resource.id
+  parent_id   = module.v3_umd_loss_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "gfw_umd_loss_any_v1_umd_loss_gain_admin_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_umd_loss_gain_admin_proxy_resource
+  api_resource = module.v1_umd_loss_gain_admin_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30539/api/v1/umd-loss-gain/admin/{proxy}"
   vpc_link     = var.vpc_link
@@ -106,7 +112,7 @@ module "gfw_umd_loss_any_v1_umd_loss_gain_admin_proxy" {
 module "gfw_umd_loss_any_v2_umd_loss_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_umd_loss_proxy_resource
+  api_resource = module.v2_umd_loss_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30539/api/v2/umd-loss-gain/{proxy}"
   vpc_link     = var.vpc_link
@@ -115,7 +121,7 @@ module "gfw_umd_loss_any_v2_umd_loss_proxy" {
 module "gfw_umd_loss_any_v3_umd_loss_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v3_umd_loss_proxy_resource
+  api_resource = module.v3_umd_loss_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30539/api/v3/umd-loss-gain/{proxy}"
   vpc_link     = var.vpc_link

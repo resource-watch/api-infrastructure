@@ -53,23 +53,25 @@ resource "aws_autoscaling_attachment" "asg_attachment_story" {
 }
 
 // /v1/story
-resource "aws_api_gateway_resource" "v1_story_resource" {
+module "v1_story_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "story"
 }
 
 // /v1/story/{proxy+}
-resource "aws_api_gateway_resource" "v1_story_proxy_resource" {
+module "v1_story_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_story_resource.id
+  parent_id   = module.v1_story_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "story_get_v1_story" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_story_resource
+  api_resource = module.v1_story_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30560/api/v1/story"
   vpc_link     = var.vpc_link
@@ -78,7 +80,7 @@ module "story_get_v1_story" {
 module "story_post_v1_story" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_story_resource
+  api_resource = module.v1_story_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30560/api/v1/story"
   vpc_link     = var.vpc_link
@@ -87,7 +89,7 @@ module "story_post_v1_story" {
 module "story_any_v1_story_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_story_proxy_resource
+  api_resource = module.v1_story_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30560/api/v1/story/{proxy}"
   vpc_link     = var.vpc_link

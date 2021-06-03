@@ -53,51 +53,57 @@ resource "aws_autoscaling_attachment" "asg_attachment_forms" {
 }
 
 // /v1/form
-resource "aws_api_gateway_resource" "v1_form_resource" {
+module "v1_form_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "form"
 }
 
 // /v1/form/{proxy+}
-resource "aws_api_gateway_resource" "v1_form_proxy_resource" {
+module "v1_form_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_form_resource.id
+  parent_id   = module.v1_form_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 // /v1/questionnaire
-resource "aws_api_gateway_resource" "v1_questionnaire_resource" {
+module "v1_questionnaire_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "questionnaire"
 }
 
 // /v1/questionnaire/{proxy+}
-resource "aws_api_gateway_resource" "v1_questionnaire_proxy_resource" {
+module "v1_questionnaire_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_questionnaire_resource.id
+  parent_id   = module.v1_questionnaire_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 // /v1/reports
-resource "aws_api_gateway_resource" "v1_reports_resource" {
+module "v1_reports_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "reports"
 }
 
 // /v1/reports/{proxy+}
-resource "aws_api_gateway_resource" "v1_reports_proxy_resource" {
+module "v1_reports_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_reports_resource.id
+  parent_id   = module.v1_reports_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "forms_any_v1_form_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_form_proxy_resource
+  api_resource = module.v1_form_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30526/api/v1/form/{proxy}"
   vpc_link     = var.vpc_link
@@ -106,7 +112,7 @@ module "forms_any_v1_form_proxy" {
 module "forms_any_v1_questionnaire" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_questionnaire_resource
+  api_resource = module.v1_questionnaire_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30526/api/v1/questionnaire"
   vpc_link     = var.vpc_link
@@ -115,7 +121,7 @@ module "forms_any_v1_questionnaire" {
 module "forms_any_v1_questionnaire_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_questionnaire_proxy_resource
+  api_resource = module.v1_questionnaire_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30526/api/v1/questionnaire/{proxy}"
   vpc_link     = var.vpc_link
@@ -124,7 +130,7 @@ module "forms_any_v1_questionnaire_proxy" {
 module "forms_any_v1_reports" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_reports_resource
+  api_resource = module.v1_reports_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30526/api/v1/reports"
   vpc_link     = var.vpc_link
@@ -133,7 +139,7 @@ module "forms_any_v1_reports" {
 module "forms_any_v1_reports_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_reports_proxy_resource
+  api_resource = module.v1_reports_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30526/api/v1/reports/{proxy}"
   vpc_link     = var.vpc_link

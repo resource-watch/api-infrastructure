@@ -54,58 +54,65 @@ resource "aws_autoscaling_attachment" "asg_attachment_query" {
 }
 
 // /v1/query
-resource "aws_api_gateway_resource" "query_resource" {
+module "query_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "query"
 }
 
 // /v1/download
-resource "aws_api_gateway_resource" "download_resource" {
+module "download_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "download"
 }
 
 // /v1/jiminy
-resource "aws_api_gateway_resource" "jiminy_resource" {
+module "jiminy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "jiminy"
 }
 
 // /v1/fields
-resource "aws_api_gateway_resource" "fields_resource" {
+module "fields_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "fields"
 }
 
 // /v1/query/{datasetId}
-resource "aws_api_gateway_resource" "query_dataset_id_resource" {
+module "query_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.query_resource.id
+  parent_id   = module.query_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/download/{datasetId}
-resource "aws_api_gateway_resource" "download_dataset_id_resource" {
+module "download_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.download_resource.id
+  parent_id   = module.download_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/fields/{datasetId}
-resource "aws_api_gateway_resource" "fields_dataset_id_resource" {
+module "fields_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.fields_resource.id
+  parent_id   = module.fields_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 module "query_get_query" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.query_resource
+  api_resource = module.query_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/query"
   vpc_link     = var.vpc_link
@@ -114,7 +121,7 @@ module "query_get_query" {
 module "query_post_query" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.query_resource
+  api_resource = module.query_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/query"
   vpc_link     = var.vpc_link
@@ -123,7 +130,7 @@ module "query_post_query" {
 module "query_get_query_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.query_dataset_id_resource
+  api_resource = module.query_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/query/{datasetId}"
   vpc_link     = var.vpc_link
@@ -132,7 +139,7 @@ module "query_get_query_id" {
 module "query_post_query_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.query_dataset_id_resource
+  api_resource = module.query_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/query/{datasetId}"
   vpc_link     = var.vpc_link
@@ -141,7 +148,7 @@ module "query_post_query_id" {
 module "download_get_download" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.download_resource
+  api_resource = module.download_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/download"
   vpc_link     = var.vpc_link
@@ -150,7 +157,7 @@ module "download_get_download" {
 module "download_post_download" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.download_resource
+  api_resource = module.download_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/download"
   vpc_link     = var.vpc_link
@@ -159,7 +166,7 @@ module "download_post_download" {
 module "download_get_download_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.download_dataset_id_resource
+  api_resource = module.download_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/download/{datasetId}"
   vpc_link     = var.vpc_link
@@ -168,7 +175,7 @@ module "download_get_download_id" {
 module "download_post_download_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.download_dataset_id_resource
+  api_resource = module.download_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/download/{datasetId}"
   vpc_link     = var.vpc_link
@@ -177,7 +184,7 @@ module "download_post_download_id" {
 module "jiminy_get_jiminy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.jiminy_resource
+  api_resource = module.jiminy_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/jiminy"
   vpc_link     = var.vpc_link
@@ -186,7 +193,7 @@ module "jiminy_get_jiminy" {
 module "jiminy_post_jiminy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.jiminy_resource
+  api_resource = module.jiminy_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/jiminy"
   vpc_link     = var.vpc_link
@@ -195,7 +202,7 @@ module "jiminy_post_jiminy" {
 module "fields_get_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.fields_dataset_id_resource
+  api_resource = module.fields_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30555/api/v1/fields/{datasetId}"
   vpc_link     = var.vpc_link

@@ -6,5 +6,5 @@ output "endpoints" {
 }
 
 output "v1_glad_alerts_resource" {
-  value = aws_api_gateway_resource.glad_alerts_resource
+  value = module.glad_alerts_resource.aws_api_gateway_resource
 }

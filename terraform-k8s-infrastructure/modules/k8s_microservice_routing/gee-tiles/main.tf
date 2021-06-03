@@ -53,44 +53,49 @@ resource "aws_autoscaling_attachment" "asg_attachment_gee_tiles" {
 }
 
 // /v1/layer/{layerId}/tile
-resource "aws_api_gateway_resource" "gee_tiles_layer_id_tile_resource" {
+module "gee_tiles_layer_id_tile_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_layer_id_resource.id
   path_part   = "tile"
 }
 
 // /v1/layer/{layerId}/tile/gee
-resource "aws_api_gateway_resource" "gee_tiles_layer_id_tile_gee_resource" {
+module "gee_tiles_layer_id_tile_gee_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.gee_tiles_layer_id_tile_resource.id
+  parent_id   = module.gee_tiles_layer_id_tile_resource.aws_api_gateway_resource.id
   path_part   = "gee"
 }
 
 // /v1/layer/{layerId}/tile/gee/{proxy+}
-resource "aws_api_gateway_resource" "gee_tiles_layer_id_tile_gee_proxy_resource" {
+module "gee_tiles_layer_id_tile_gee_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.gee_tiles_layer_id_tile_gee_resource.id
+  parent_id   = module.gee_tiles_layer_id_tile_gee_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 // /v1/layer/gee
-resource "aws_api_gateway_resource" "gee_layer_gee_resource" {
+module "gee_layer_gee_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_layer_resource.id
   path_part   = "gee"
 }
 
 // /v1/layer/gee/{proxy+}
-resource "aws_api_gateway_resource" "gee_layer_gee_proxy_resource" {
+module "gee_layer_gee_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.gee_layer_gee_resource.id
+  parent_id   = module.gee_layer_gee_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "gee_tiles_any_layer_id_tile_gee_proxy" {
   source                      = "../endpoint"
   api_gateway                 = var.api_gateway
-  api_resource                = aws_api_gateway_resource.gee_tiles_layer_id_tile_gee_proxy_resource
+  api_resource                = module.gee_tiles_layer_id_tile_gee_proxy_resource.aws_api_gateway_resource
   method                      = "ANY"
   uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30531/api/v1/layer/{layerId}/tile/gee/{proxy}"
   vpc_link                    = var.vpc_link
@@ -100,7 +105,7 @@ module "gee_tiles_any_layer_id_tile_gee_proxy" {
 module "gee_tiles_any_gee_layer_gee_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.gee_layer_gee_proxy_resource
+  api_resource = module.gee_layer_gee_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30531/api/v1/layer/gee/{proxy}"
   vpc_link     = var.vpc_link

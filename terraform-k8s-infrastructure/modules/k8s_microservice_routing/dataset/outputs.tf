@@ -12,13 +12,13 @@ output "endpoints" {
 }
 
 output "v1_dataset_resource" {
-  value = aws_api_gateway_resource.dataset_resource
+  value = module.dataset_resource.aws_api_gateway_resource
 }
 
 output "v1_dataset_id_resource" {
-  value = aws_api_gateway_resource.dataset_id_resource
+  value = module.dataset_id_resource.aws_api_gateway_resource
 }
 
 output "v1_rest_datasets_resource" {
-  value = aws_api_gateway_resource.rest_datasets_resource
+  value = module.rest_datasets_resource.aws_api_gateway_resource
 }

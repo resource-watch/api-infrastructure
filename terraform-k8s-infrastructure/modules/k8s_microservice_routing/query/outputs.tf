@@ -15,13 +15,13 @@ output "endpoints" {
 }
 
 output "v1_query_resource" {
-  value = aws_api_gateway_resource.query_resource
+  value = module.query_resource.aws_api_gateway_resource
 }
 
 output "v1_download_resource" {
-  value = aws_api_gateway_resource.download_resource
+  value = module.download_resource.aws_api_gateway_resource
 }
 
 output "v1_fields_resource" {
-  value = aws_api_gateway_resource.fields_resource
+  value = module.fields_resource.aws_api_gateway_resource
 }

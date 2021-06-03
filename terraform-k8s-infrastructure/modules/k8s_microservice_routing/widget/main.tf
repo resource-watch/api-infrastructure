@@ -54,44 +54,49 @@ resource "aws_autoscaling_attachment" "asg_attachment_widget" {
 }
 
 // /v1/widget
-resource "aws_api_gateway_resource" "widget_resource" {
+module "widget_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "widget"
 }
 
 // /v1/widget/{proxy+}
-resource "aws_api_gateway_resource" "widget_proxy_resource" {
+module "widget_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.widget_resource.id
+  parent_id   = module.widget_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 // /v1/dataset/{datasetId}/widget
-resource "aws_api_gateway_resource" "dataset_id_widget_resource" {
+module "dataset_id_widget_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_resource.id
   path_part   = "widget"
 }
 
 // /v1/dataset/{datasetId}/widget/{widgetId}
-resource "aws_api_gateway_resource" "dataset_id_widget_id_resource" {
+module "dataset_id_widget_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.dataset_id_widget_resource.id
+  parent_id   = module.dataset_id_widget_resource.aws_api_gateway_resource.id
   path_part   = "{widgetId}"
 }
 
 // /v1/dataset/{datasetId}/widget/{widgetId}/{proxy+}
-resource "aws_api_gateway_resource" "dataset_id_widget_id_proxy_resource" {
+module "dataset_id_widget_id_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.dataset_id_widget_id_resource.id
+  parent_id   = module.dataset_id_widget_id_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "widget_get_widget" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.widget_resource
+  api_resource = module.widget_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30567/api/v1/widget"
   vpc_link     = var.vpc_link
@@ -100,7 +105,7 @@ module "widget_get_widget" {
 module "widget_post_widget" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.widget_resource
+  api_resource = module.widget_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30567/api/v1/widget"
   vpc_link     = var.vpc_link
@@ -109,7 +114,7 @@ module "widget_post_widget" {
 module "widget_any_widget_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.widget_proxy_resource
+  api_resource = module.widget_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30567/api/v1/widget/{proxy}"
   vpc_link     = var.vpc_link
@@ -118,7 +123,7 @@ module "widget_any_widget_proxy" {
 module "widget_any_dataset_id_widget" {
   source                      = "../endpoint"
   api_gateway                 = var.api_gateway
-  api_resource                = aws_api_gateway_resource.dataset_id_widget_resource
+  api_resource                = module.dataset_id_widget_resource.aws_api_gateway_resource
   method                      = "ANY"
   uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30567/api/v1/dataset/{datasetId}/widget"
   vpc_link                    = var.vpc_link
@@ -128,7 +133,7 @@ module "widget_any_dataset_id_widget" {
 module "widget_any_dataset_id_widget_id" {
   source                      = "../endpoint"
   api_gateway                 = var.api_gateway
-  api_resource                = aws_api_gateway_resource.dataset_id_widget_id_resource
+  api_resource                = module.dataset_id_widget_id_resource.aws_api_gateway_resource
   method                      = "ANY"
   uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30567/api/v1/dataset/{datasetId}/widget/{widgetId}"
   vpc_link                    = var.vpc_link
@@ -138,7 +143,7 @@ module "widget_any_dataset_id_widget_id" {
 module "widget_any_dataset_id_widget_id_proxy" {
   source                      = "../endpoint"
   api_gateway                 = var.api_gateway
-  api_resource                = aws_api_gateway_resource.dataset_id_widget_id_proxy_resource
+  api_resource                = module.dataset_id_widget_id_proxy_resource.aws_api_gateway_resource
   method                      = "ANY"
   uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30567/api/v1/dataset/{datasetId}/widget/{widgetId}/{proxy}"
   vpc_link                    = var.vpc_link

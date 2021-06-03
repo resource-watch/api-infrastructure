@@ -53,51 +53,57 @@ resource "aws_autoscaling_attachment" "asg_attachment_dataset" {
 }
 
 // /v1/dataset
-resource "aws_api_gateway_resource" "dataset_resource" {
+module "dataset_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "dataset"
 }
 
 // /v1/rest-datasets
-resource "aws_api_gateway_resource" "rest_datasets_resource" {
+module "rest_datasets_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "rest-datasets"
 }
 
 // /v1/dataset/{datasetId}
-resource "aws_api_gateway_resource" "dataset_id_resource" {
+module "dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.dataset_resource.id
+  parent_id   = module.dataset_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/dataset/find-by-ids
-resource "aws_api_gateway_resource" "dataset_find_by_ids_resource" {
+module "dataset_find_by_ids_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.dataset_resource.id
+  parent_id   = module.dataset_resource.aws_api_gateway_resource.id
   path_part   = "find-by-ids"
 }
 
 // /v1/dataset/upload
-resource "aws_api_gateway_resource" "dataset_upload_resource" {
+module "dataset_upload_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.dataset_resource.id
+  parent_id   = module.dataset_resource.aws_api_gateway_resource.id
   path_part   = "upload"
 }
 
 // /v1/dataset/{datasetId}/{proxy+}
-resource "aws_api_gateway_resource" "dataset_id_proxy_resource" {
+module "dataset_id_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.dataset_id_resource.id
+  parent_id   = module.dataset_id_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "dataset_get_dataset" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_resource
+  api_resource = module.dataset_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30516/api/v1/dataset"
   vpc_link     = var.vpc_link
@@ -106,7 +112,7 @@ module "dataset_get_dataset" {
 module "dataset_get_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_resource
+  api_resource = module.dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30516/api/v1/dataset/{datasetId}"
   vpc_link     = var.vpc_link
@@ -115,7 +121,7 @@ module "dataset_get_dataset_id" {
 module "dataset_update_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_resource
+  api_resource = module.dataset_id_resource.aws_api_gateway_resource
   method       = "PATCH"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30516/api/v1/dataset/{datasetId}"
   vpc_link     = var.vpc_link
@@ -124,7 +130,7 @@ module "dataset_update_dataset_id" {
 module "dataset_delete_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_id_resource
+  api_resource = module.dataset_id_resource.aws_api_gateway_resource
   method       = "DELETE"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30516/api/v1/dataset/{datasetId}"
   vpc_link     = var.vpc_link
@@ -133,7 +139,7 @@ module "dataset_delete_dataset_id" {
 module "dataset_post_dataset" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_resource
+  api_resource = module.dataset_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30516/api/v1/dataset"
   vpc_link     = var.vpc_link
@@ -142,7 +148,7 @@ module "dataset_post_dataset" {
 module "dataset_any_dataset_id_proxy" {
   source                      = "../endpoint"
   api_gateway                 = var.api_gateway
-  api_resource                = aws_api_gateway_resource.dataset_id_proxy_resource
+  api_resource                = module.dataset_id_proxy_resource.aws_api_gateway_resource
   method                      = "ANY"
   uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30516/api/v1/dataset/{datasetId}/{proxy}"
   vpc_link                    = var.vpc_link
@@ -152,7 +158,7 @@ module "dataset_any_dataset_id_proxy" {
 module "dataset_post_dataset_find_by_ids" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_find_by_ids_resource
+  api_resource = module.dataset_find_by_ids_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30516/api/v1/dataset/find-by-ids"
   vpc_link     = var.vpc_link
@@ -161,7 +167,7 @@ module "dataset_post_dataset_find_by_ids" {
 module "dataset_post_dataset_upload" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.dataset_upload_resource
+  api_resource = module.dataset_upload_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30516/api/v1/dataset/upload"
   vpc_link     = var.vpc_link

@@ -6,5 +6,5 @@ output "endpoints" {
 }
 
 output "v1_gee_tiles_layer_id_tile_resource" {
-  value = aws_api_gateway_resource.gee_tiles_layer_id_tile_resource
+  value = module.gee_tiles_layer_id_tile_resource.aws_api_gateway_resource
 }

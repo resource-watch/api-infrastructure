@@ -53,65 +53,73 @@ resource "aws_autoscaling_attachment" "asg_attachment_gee" {
 }
 
 // /v1/query/gee
-resource "aws_api_gateway_resource" "query_gee_resource" {
+module "query_gee_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_query_resource.id
   path_part   = "gee"
 }
 
 // /v1/query/gee/{datasetId}
-resource "aws_api_gateway_resource" "query_gee_dataset_id_resource" {
+module "query_gee_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.query_gee_resource.id
+  parent_id   = module.query_gee_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/download/gee
-resource "aws_api_gateway_resource" "download_gee_resource" {
+module "download_gee_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_download_resource.id
   path_part   = "gee"
 }
 
 // /v1/download/gee/{datasetId}
-resource "aws_api_gateway_resource" "download_gee_dataset_id_resource" {
+module "download_gee_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.download_gee_resource.id
+  parent_id   = module.download_gee_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/fields/gee
-resource "aws_api_gateway_resource" "fields_gee_resource" {
+module "fields_gee_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_fields_resource.id
   path_part   = "gee"
 }
 
 // /v1/fields/gee/{datasetId}
-resource "aws_api_gateway_resource" "fields_gee_dataset_id_resource" {
+module "fields_gee_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.fields_gee_resource.id
+  parent_id   = module.fields_gee_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 // /v1/rest-datasets/gee
-resource "aws_api_gateway_resource" "rest_datasets_gee_resource" {
+module "rest_datasets_gee_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_rest_datasets_resource.id
   path_part   = "gee"
 }
 
 // /v1/rest-datasets/gee/{datasetId}
-resource "aws_api_gateway_resource" "rest_datasets_gee_dataset_id_resource" {
+module "rest_datasets_gee_dataset_id_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.rest_datasets_gee_resource.id
+  parent_id   = module.rest_datasets_gee_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
 }
 
 module "gee_get_query_gee_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.query_gee_dataset_id_resource
+  api_resource = module.query_gee_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30530/api/v1/earthengine/query/{datasetId}"
   vpc_link     = var.vpc_link
@@ -120,7 +128,7 @@ module "gee_get_query_gee_dataset_id" {
 module "gee_post_query_gee_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.query_gee_dataset_id_resource
+  api_resource = module.query_gee_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30530/api/v1/earthengine/query/{datasetId}"
   vpc_link     = var.vpc_link
@@ -129,7 +137,7 @@ module "gee_post_query_gee_dataset_id" {
 module "gee_get_download_gee_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.download_gee_dataset_id_resource
+  api_resource = module.download_gee_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30530/api/v1/earthengine/download/{datasetId}"
   vpc_link     = var.vpc_link
@@ -138,7 +146,7 @@ module "gee_get_download_gee_dataset_id" {
 module "gee_post_download_gee_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.download_gee_dataset_id_resource
+  api_resource = module.download_gee_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30530/api/v1/earthengine/download/{datasetId}"
   vpc_link     = var.vpc_link
@@ -147,7 +155,7 @@ module "gee_post_download_gee_dataset_id" {
 module "gee_get_fields_gee_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.fields_gee_dataset_id_resource
+  api_resource = module.fields_gee_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30530/api/v1/earthengine/fields/{datasetId}"
   vpc_link     = var.vpc_link
@@ -156,7 +164,7 @@ module "gee_get_fields_gee_dataset_id" {
 module "gee_get_rest_datasets_gee" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.rest_datasets_gee_resource
+  api_resource = module.rest_datasets_gee_resource.aws_api_gateway_resource
   method       = "POST"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30530/api/v1/earthengine/rest-datasets/gee"
   vpc_link     = var.vpc_link
@@ -165,7 +173,7 @@ module "gee_get_rest_datasets_gee" {
 module "gee_delete_rest_datasets_gee_dataset_id" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.rest_datasets_gee_dataset_id_resource
+  api_resource = module.rest_datasets_gee_dataset_id_resource.aws_api_gateway_resource
   method       = "DELETE"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30530/api/v1/earthengine/rest-datasets/gee/{datasetId}"
   vpc_link     = var.vpc_link

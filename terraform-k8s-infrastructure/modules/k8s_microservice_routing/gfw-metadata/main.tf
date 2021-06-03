@@ -3,22 +3,24 @@
 #
 
 // /gfw-metadata
-resource "aws_api_gateway_resource" "v1_gfw_metadata_resource" {
+module "v1_gfw_metadata_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.root_resource_id
   path_part   = "gfw-metadata"
 }
 
 // /gfw-metadata/{proxy+}
-resource "aws_api_gateway_resource" "v1_gfw_metadata_proxy_resource" {
+module "v1_gfw_metadata_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_gfw_metadata_resource.id
+  parent_id   = module.v1_gfw_metadata_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 resource "aws_api_gateway_method" "v1_gfw_metadata_proxy_method" {
   rest_api_id        = var.api_gateway.id
-  resource_id        = aws_api_gateway_resource.v1_gfw_metadata_proxy_resource.id
+  resource_id        = module.v1_gfw_metadata_proxy_resource.aws_api_gateway_resource.id
   http_method        = "ANY"
   authorization      = "NONE"
   request_parameters = { "method.request.path.proxy" = true }
@@ -26,7 +28,7 @@ resource "aws_api_gateway_method" "v1_gfw_metadata_proxy_method" {
 
 resource "aws_api_gateway_integration" "gfw_metadata_proxy_integration" {
   rest_api_id = var.api_gateway.id
-  resource_id = aws_api_gateway_resource.v1_gfw_metadata_proxy_resource.id
+  resource_id = module.v1_gfw_metadata_proxy_resource.aws_api_gateway_resource.id
   http_method = aws_api_gateway_method.v1_gfw_metadata_proxy_method.http_method
 
   type                    = "HTTP_PROXY"

@@ -54,37 +54,41 @@ resource "aws_autoscaling_attachment" "asg_attachment_gfw_ogr" {
 
 
 // /v1/ogr
-resource "aws_api_gateway_resource" "v1_ogr_resource" {
+module "v1_ogr_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "ogr"
 }
 
 // /v1/ogr/{proxy+}
-resource "aws_api_gateway_resource" "v1_ogr_proxy_resource" {
+module "v1_ogr_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v1_ogr_resource.id
+  parent_id   = module.v1_ogr_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 // /v2/ogr
-resource "aws_api_gateway_resource" "v2_ogr_resource" {
+module "v2_ogr_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v2_resource.id
   path_part   = "ogr"
 }
 
 // /v2/ogr/{proxy+}
-resource "aws_api_gateway_resource" "v2_ogr_proxy_resource" {
+module "v2_ogr_proxy_resource" {
+  source       = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = aws_api_gateway_resource.v2_ogr_resource.id
+  parent_id   = module.v2_ogr_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
 module "gfw_ogr_any_v2_ogr_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v2_ogr_proxy_resource
+  api_resource = module.v2_ogr_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30536/api/v2/ogr/{proxy}"
   vpc_link     = var.vpc_link
@@ -93,7 +97,7 @@ module "gfw_ogr_any_v2_ogr_proxy" {
 module "gfw_ogr_any_v1_ogr_proxy" {
   source       = "../endpoint"
   api_gateway  = var.api_gateway
-  api_resource = aws_api_gateway_resource.v1_ogr_proxy_resource
+  api_resource = module.v1_ogr_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:30536/api/v1/ogr/{proxy}"
   vpc_link     = var.vpc_link
