@@ -209,8 +209,13 @@ variable "db_instance_count" {
   description = "Number of DocumentDB instances"
 }
 
-
 variable "db_logs_exports" {
   type        = list(string)
   description = "List of log types to export to cloudwatch. The following log types are supported: `audit`, `error`, `general`, `slowquery`"
+}
+
+variable "deploy_canaries" {
+  type        = bool
+  default     = false
+  description = "If canaries should be deployed"
 }

@@ -200,7 +200,6 @@ module "documentdb" {
   }]
 }
 
-
 module "postgresql" {
   source                      = "./modules/postgresql"
   availability_zone_names     = [module.vpc.private_subnets[0].availability_zone, module.vpc.private_subnets[1].availability_zone, module.vpc.private_subnets[3].availability_zone]
@@ -218,7 +217,6 @@ module "postgresql" {
   vpc_cidr_block              = module.vpc.cidr_block
 }
 
-
 module "jenkins" {
   source                    = "./modules/jenkins"
   jenkins_ami               = data.aws_ami.latest-ubuntu-lts.id
@@ -228,6 +226,11 @@ module "jenkins" {
   security_group_ids        = [aws_security_group.default.id]
   user_data                 = data.template_file.jenkins_config_on_ubuntu.rendered
   iam_instance_profile_role = module.vpc.eks_manager_role
+}
+
+module "canaries" {
+  count  = var.deploy_canaries ? 1 : 0
+  source = "./modules/canaries"
 }
 
 data "cloudflare_zones" "resourcewatch" {
