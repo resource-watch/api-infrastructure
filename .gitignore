@@ -41,3 +41,8 @@ override.tf.json
 # example: *tfplan*
 
 venv/*
+
+terraform/modules/canaries/api-endpoint-canary/tmp/*
+!terraform/modules/canaries/api-endpoint-canary/tmp/.gitkeep
+terraform/modules/canaries/url-canary/tmp/*
+!terraform/modules/canaries/url-canary/tmp/.gitkeep
