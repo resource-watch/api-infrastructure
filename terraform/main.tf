@@ -178,7 +178,6 @@ module "documentdb" {
   }]
 }
 
-
 module "postgresql" {
   source                      = "./modules/postgresql"
   availability_zone_names     = [module.vpc.private_subnets[0].availability_zone, module.vpc.private_subnets[1].availability_zone, module.vpc.private_subnets[3].availability_zone]
@@ -195,7 +194,6 @@ module "postgresql" {
   rds_port                    = 5432
   vpc_cidr_block              = module.vpc.cidr_block
 }
-
 
 module "jenkins" {
   source                    = "./modules/jenkins"
@@ -220,6 +218,11 @@ module "jenkins" {
 #   gfw_node_group_desired_size       = var.gfw_node_group_max_size
 #   gfw_node_group_min_size_upscaled  = var.gfw_node_group_min_size_upscaled
 # }
+
+module "canaries" {
+  count  = var.deploy_canaries ? 1 : 0
+  source = "./modules/canaries"
+}
 
 data "cloudflare_zones" "resourcewatch" {
   filter {
