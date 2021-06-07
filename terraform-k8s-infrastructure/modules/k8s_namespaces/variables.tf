@@ -22,7 +22,7 @@ variable "aws_region" {
 variable "namespaces" {
   description = "Namespace list"
   type        = list(string)
-  default     = ["core", "aqueduct", "rw", "gfw", "fw", "prep", "climate-watch"]
+  default     = ["core", "aqueduct", "rw", "gfw", "fw", "prep", "climate-watch", "gateway"]
 }
 
 variable "kubectl_context" {
