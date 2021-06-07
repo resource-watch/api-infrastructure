@@ -4,6 +4,7 @@ dns_prefix               = "aws-dev"
 backups_bucket           = "wri-api-dev-backups"
 log_retention_period     = 7
 backup_retention_period  = 1
+rds_engine_version       = "11.9"
 rds_instance_class       = "db.t3.medium"
 rds_instance_count       = 1
 db_instance_class        = "db.t3.medium"

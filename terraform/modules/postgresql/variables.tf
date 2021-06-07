@@ -7,12 +7,6 @@ variable "project" {
   description = "Project name, used for naming resources"
 }
 
-variable "rds_db_name" {
-  type        = string
-  description = "RDS Database Name"
-}
-
-
 variable "vpc_id" {
   type        = string
   description = "The ID of the VPC that the RDS cluster will be created in"
@@ -21,6 +15,16 @@ variable "vpc_id" {
 variable "private_subnet_ids" {
   type        = list(string)
   description = "The ID's of the VPC subnets that the RDS cluster instances will be created in"
+}
+
+variable "rds_engine_version" {
+  type        = string
+  description = "RDS Database Version"
+}
+
+variable "rds_db_name" {
+  type        = string
+  description = "RDS Database Name"
 }
 
 variable "rds_user_name" {

@@ -4,6 +4,7 @@ dns_prefix               = "aws-prod"
 backups_bucket           = "wri-api-production-backups"
 log_retention_period     = 30
 backup_retention_period  = 7
+rds_engine_version       = "11.9"
 rds_instance_class       = "db.r5.large"
 rds_instance_count       = 1
 db_instance_class        = "db.r5.large"
