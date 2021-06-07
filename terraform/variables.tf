@@ -197,6 +197,11 @@ variable "log_retention_period" {
   description = "Time in days to keep log files in cloud watch"
 }
 
+variable "rds_engine_version" {
+  type        = string
+  description = "Engine version of Aurora PostgreSQL server"
+}
+
 variable "rds_instance_class" {
   type        = string
   description = "Instance type of Aurora PostgreSQL server"

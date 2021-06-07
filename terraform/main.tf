@@ -185,6 +185,7 @@ module "postgresql" {
   private_subnet_ids          = [module.vpc.private_subnets[0].id, module.vpc.private_subnets[1].id, module.vpc.private_subnets[3].id]
   project                     = local.project
   rds_backup_retention_period = var.backup_retention_period
+  rds_engine_version          = var.rds_engine_version
   rds_db_name                 = "wri"      # default database, create app specific database at project level
   rds_user_name               = "postgres" # superuser, create app specific users at project level
   rds_instance_class          = var.rds_instance_class
