@@ -232,3 +232,13 @@ variable "deploy_canaries" {
   default     = false
   description = "If canaries should be deployed"
 }
+
+variable "eks_version" {
+  type        = string
+  description = "Version of EKS (kubernetes) to deploy"
+}
+
+variable "eks_node_release_version" {
+  type        = string
+  description = "Version of EKS (kubernetes) node AMI to deploy"
+}

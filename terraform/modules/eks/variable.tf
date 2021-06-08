@@ -15,6 +15,11 @@ variable "vpc_id" {
   description = "ID of the VPC."
 }
 
+variable "eks_version" {
+  type        = string
+  description = "Version of EKS (kubernetes) to deploy"
+}
+
 variable "backups_bucket" {
   type        = string
   description = "S3 bucket to which backups will be performed"

@@ -43,6 +43,7 @@ module "eks" {
   vpc_id         = module.vpc.id
   environment    = var.environment
   backups_bucket = var.backups_bucket
+  eks_version    = var.eks_version
   subnet_ids = [
     module.vpc.private_subnets[0].id,
     module.vpc.private_subnets[1].id,
@@ -53,15 +54,16 @@ module "eks" {
 }
 
 module "mongodb-apps-node-group" {
-  source          = "./modules/node_group"
-  cluster         = module.eks.cluster
-  cluster_name    = module.eks.cluster_name
-  node_group_name = "mongodb-apps-node-group"
-  instance_types  = var.mongodb_apps_node_group_instance_types
-  min_size        = var.mongodb_apps_node_group_min_size
-  max_size        = var.mongodb_apps_node_group_max_size
-  desired_size    = var.mongodb_apps_node_group_desired_size
-  node_role_arn   = module.eks.node_role_arn
+  source                   = "./modules/node_group"
+  cluster                  = module.eks.cluster
+  cluster_name             = module.eks.cluster_name
+  node_group_name          = "mongodb-apps-node-group"
+  instance_types           = var.mongodb_apps_node_group_instance_types
+  min_size                 = var.mongodb_apps_node_group_min_size
+  max_size                 = var.mongodb_apps_node_group_max_size
+  desired_size             = var.mongodb_apps_node_group_desired_size
+  node_role_arn            = module.eks.node_role_arn
+  eks_node_release_version = var.eks_node_release_version
   subnet_ids = [
     module.vpc.private_subnets[0].id,
     module.vpc.private_subnets[1].id,
@@ -73,15 +75,16 @@ module "mongodb-apps-node-group" {
 }
 
 module "apps-node-group" {
-  source          = "./modules/node_group"
-  cluster         = module.eks.cluster
-  cluster_name    = module.eks.cluster_name
-  node_group_name = "apps-node-group"
-  instance_types  = var.apps_node_group_instance_types
-  min_size        = var.apps_node_group_min_size
-  max_size        = var.apps_node_group_max_size
-  desired_size    = var.apps_node_group_desired_size
-  node_role_arn   = module.eks.node_role_arn
+  source                   = "./modules/node_group"
+  cluster                  = module.eks.cluster
+  cluster_name             = module.eks.cluster_name
+  node_group_name          = "apps-node-group"
+  instance_types           = var.apps_node_group_instance_types
+  min_size                 = var.apps_node_group_min_size
+  max_size                 = var.apps_node_group_max_size
+  desired_size             = var.apps_node_group_desired_size
+  node_role_arn            = module.eks.node_role_arn
+  eks_node_release_version = var.eks_node_release_version
   subnet_ids = [
     module.vpc.private_subnets[0].id,
     module.vpc.private_subnets[1].id,
@@ -95,15 +98,16 @@ module "apps-node-group" {
 }
 
 module "webapps-node-group" {
-  source          = "./modules/node_group"
-  cluster         = module.eks.cluster
-  cluster_name    = module.eks.cluster_name
-  node_group_name = "webapps-node-group"
-  instance_types  = var.webapps_node_group_instance_types
-  min_size        = var.webapps_node_group_min_size
-  max_size        = var.webapps_node_group_max_size
-  desired_size    = var.webapps_node_group_desired_size
-  node_role_arn   = module.eks.node_role_arn
+  source                   = "./modules/node_group"
+  cluster                  = module.eks.cluster
+  cluster_name             = module.eks.cluster_name
+  node_group_name          = "webapps-node-group"
+  instance_types           = var.webapps_node_group_instance_types
+  min_size                 = var.webapps_node_group_min_size
+  max_size                 = var.webapps_node_group_max_size
+  desired_size             = var.webapps_node_group_desired_size
+  node_role_arn            = module.eks.node_role_arn
+  eks_node_release_version = var.eks_node_release_version
   subnet_ids = [
     module.vpc.private_subnets[0].id,
     module.vpc.private_subnets[1].id,
@@ -117,15 +121,16 @@ module "webapps-node-group" {
 }
 
 module "core-node-group" {
-  source          = "./modules/node_group"
-  cluster         = module.eks.cluster
-  cluster_name    = module.eks.cluster_name
-  node_group_name = "core-node-group"
-  instance_types  = var.core_node_group_instance_types
-  min_size        = var.core_node_group_min_size
-  max_size        = var.core_node_group_max_size
-  desired_size    = var.core_node_group_desired_size
-  node_role_arn   = module.eks.node_role_arn
+  source                   = "./modules/node_group"
+  cluster                  = module.eks.cluster
+  cluster_name             = module.eks.cluster_name
+  node_group_name          = "core-node-group"
+  instance_types           = var.core_node_group_instance_types
+  min_size                 = var.core_node_group_min_size
+  max_size                 = var.core_node_group_max_size
+  desired_size             = var.core_node_group_desired_size
+  node_role_arn            = module.eks.node_role_arn
+  eks_node_release_version = var.eks_node_release_version
   subnet_ids = [
     module.vpc.private_subnets[5].id
   ]
@@ -135,15 +140,16 @@ module "core-node-group" {
 }
 
 module "gfw-node-group" {
-  source          = "./modules/node_group"
-  cluster         = module.eks.cluster
-  cluster_name    = module.eks.cluster_name
-  node_group_name = "gfw-node-group"
-  instance_types  = var.gfw_node_group_instance_types
-  min_size        = var.gfw_node_group_min_size
-  max_size        = var.gfw_node_group_max_size
-  desired_size    = var.gfw_node_group_desired_size
-  node_role_arn   = module.eks.node_role_arn
+  source                   = "./modules/node_group"
+  cluster                  = module.eks.cluster
+  cluster_name             = module.eks.cluster_name
+  node_group_name          = "gfw-node-group"
+  instance_types           = var.gfw_node_group_instance_types
+  min_size                 = var.gfw_node_group_min_size
+  max_size                 = var.gfw_node_group_max_size
+  desired_size             = var.gfw_node_group_desired_size
+  node_role_arn            = module.eks.node_role_arn
+  eks_node_release_version = var.eks_node_release_version
   subnet_ids = [
     module.vpc.private_subnets[0].id,
     module.vpc.private_subnets[1].id,

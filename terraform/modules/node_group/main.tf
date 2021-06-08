@@ -14,6 +14,7 @@ resource "aws_eks_node_group" "eks-node-group" {
   node_group_name = "${var.node_group_name}-${random_id.eks-node-group.hex}"
   node_role_arn   = var.node_role_arn
   subnet_ids      = var.subnet_ids
+  release_version = var.eks_node_release_version
 
   scaling_config {
     desired_size = var.desired_size
