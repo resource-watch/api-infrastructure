@@ -220,7 +220,7 @@ resource "aws_api_gateway_deployment" "prod" {
 //      jsonencode(module.arcgis-proxy.endpoints),
 //      jsonencode(module.arcgis.endpoints),
 //      jsonencode(module.area.endpoints),
-//      jsonencode(module.auth.endpoints),
+      jsonencode(module.auth.endpoints),
 //      jsonencode(module.bigquery.endpoints),
 //      jsonencode(module.biomass.endpoints),
 //      jsonencode(module.carto.endpoints),
@@ -475,23 +475,23 @@ module "analysis-gee" {
 //    module.v2_resource
 //  ]
 //}
-//
-//module "auth" {
-//  source           = "./authorization"
-//  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-//  cluster_ca       = var.cluster_ca
-//  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
-//  vpc              = var.vpc
-//  vpc_link         = aws_api_gateway_vpc_link.rw_api_core_lb_vpc_link
-//  v1_resource      = module.v1_resource.aws_api_gateway_resource
-//  root_resource_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
-//
-//  eks_asg_names = [
-//    data.aws_autoscaling_groups.core_autoscaling_group.names.0
-//  ]
-//}
-//
+
+module "auth" {
+  source           = "./authorization"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_core_lb_vpc_link
+  v1_resource      = module.v1_resource.aws_api_gateway_resource
+  root_resource_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
+
+  eks_asg_names = [
+    data.aws_autoscaling_groups.core_autoscaling_group.names.0
+  ]
+}
+
 //module "bigquery" {
 //  source                    = "./bigquery"
 //  api_gateway               = aws_api_gateway_rest_api.rw_api_gateway

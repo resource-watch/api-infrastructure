@@ -53,6 +53,22 @@ resource "aws_autoscaling_attachment" "asg_attachment_control_tower" {
   alb_target_group_arn   = aws_lb_target_group.control_tower_lb_target_group.arn
 }
 
+// /api
+module "control_tower_api_resource" {
+  source       = "../resource"
+  rest_api_id = var.api_gateway.id
+  parent_id   = var.api_gateway.root_resource_id
+  path_part   = "api"
+}
+
+// /api/{proxy+}
+module "control_tower_api_proxy_resource" {
+  source       = "../resource"
+  rest_api_id = var.api_gateway.id
+  parent_id   = module.control_tower_api_resource.aws_api_gateway_resource.id
+  path_part   = "{proxy+}"
+}
+
 // /v1/{proxy+}
 module "control_tower_proxy_v1_resource" {
   source       = "../resource"
@@ -103,6 +119,15 @@ module "control_tower_v3_any" {
   api_resource = module.control_tower_proxy_v3_resource.aws_api_gateway_resource
   method       = "ANY"
   uri          = "http://${data.aws_lb.load_balancer.dns_name}:31000/v3/{proxy}"
+  vpc_link     = var.vpc_link
+}
+
+module "control_tower_api_any" {
+  source       = "../endpoint"
+  api_gateway  = var.api_gateway
+  api_resource = module.control_tower_api_proxy_resource.aws_api_gateway_resource
+  method       = "ANY"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:31000/api/{proxy}"
   vpc_link     = var.vpc_link
 }
 
