@@ -19,7 +19,7 @@ resource "kubernetes_service" "rw_lp_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "rw_lp_nlb_listener" {
@@ -61,7 +61,7 @@ data "aws_api_gateway_resource" "root_resource" {
 
 // /rw-lp
 module "rw_lp_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = data.aws_api_gateway_resource.root_resource.id
   path_part   = "rw-lp"
@@ -69,7 +69,7 @@ module "rw_lp_resource" {
 
 // /rw-lp/{proxy+}
 module "rw_lp_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.rw_lp_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

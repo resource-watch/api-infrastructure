@@ -18,7 +18,7 @@ resource "kubernetes_service" "salesforce_connector_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "salesforce_connector_nlb_listener" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_salesforce_connector" {
 
 // /v1/salesforce
 module "v1_salesforce_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "salesforce"
@@ -62,7 +62,7 @@ module "v1_salesforce_resource" {
 
 // /v1/salesforce/{proxy+}
 module "v1_salesforce_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_salesforce_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

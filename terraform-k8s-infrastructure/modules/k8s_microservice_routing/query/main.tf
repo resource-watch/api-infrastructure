@@ -19,7 +19,7 @@ resource "kubernetes_service" "query_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "query_nlb_listener" {
@@ -55,7 +55,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_query" {
 
 // /v1/query
 module "query_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "query"
@@ -63,7 +63,7 @@ module "query_resource" {
 
 // /v1/download
 module "download_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "download"
@@ -71,7 +71,7 @@ module "download_resource" {
 
 // /v1/jiminy
 module "jiminy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "jiminy"
@@ -79,7 +79,7 @@ module "jiminy_resource" {
 
 // /v1/fields
 module "fields_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "fields"
@@ -87,7 +87,7 @@ module "fields_resource" {
 
 // /v1/query/{datasetId}
 module "query_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.query_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -95,7 +95,7 @@ module "query_dataset_id_resource" {
 
 // /v1/download/{datasetId}
 module "download_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.download_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -103,7 +103,7 @@ module "download_dataset_id_resource" {
 
 // /v1/fields/{datasetId}
 module "fields_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.fields_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"

@@ -18,7 +18,7 @@ resource "kubernetes_service" "fw_contextual_layers_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "fw_contextual_layers_nlb_listener" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_fw_contextual_layers" {
 
 // /v1/contextual-layer
 module "v1_contextual_layer_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "contextual-layer"
@@ -62,7 +62,7 @@ module "v1_contextual_layer_resource" {
 
 // /v1/contextual-layer/{proxy+}
 module "v1_contextual_layer_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_contextual_layer_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

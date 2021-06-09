@@ -18,7 +18,7 @@ resource "kubernetes_service" "gfw_ogr_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "gfw_ogr_nlb_listener" {
@@ -55,7 +55,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_gfw_ogr" {
 
 // /v1/ogr
 module "v1_ogr_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "ogr"
@@ -63,7 +63,7 @@ module "v1_ogr_resource" {
 
 // /v1/ogr/{proxy+}
 module "v1_ogr_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_ogr_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -71,7 +71,7 @@ module "v1_ogr_proxy_resource" {
 
 // /v2/ogr
 module "v2_ogr_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v2_resource.id
   path_part   = "ogr"
@@ -79,7 +79,7 @@ module "v2_ogr_resource" {
 
 // /v2/ogr/{proxy+}
 module "v2_ogr_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v2_ogr_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

@@ -18,7 +18,7 @@ resource "kubernetes_service" "imazon_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "imazon_nlb_listener" {
@@ -55,7 +55,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_imazon" {
 
 // /v1/imazon-alerts
 module "v1_imazon_alerts_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "imazon-alerts"
@@ -63,7 +63,7 @@ module "v1_imazon_alerts_resource" {
 
 // /v1/imazon-alerts/{proxy+}
 module "v1_imazon_alerts_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_imazon_alerts_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -71,7 +71,7 @@ module "v1_imazon_alerts_proxy_resource" {
 
 // /v2/imazon-alerts
 module "v2_imazon_alerts_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v2_resource.id
   path_part   = "imazon-alerts"
@@ -79,7 +79,7 @@ module "v2_imazon_alerts_resource" {
 
 // /v2/imazon-alerts/{proxy+}
 module "v2_imazon_alerts_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v2_imazon_alerts_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

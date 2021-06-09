@@ -19,7 +19,7 @@ resource "kubernetes_service" "area_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "area_nlb_listener" {
@@ -56,7 +56,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_area" {
 
 // /v2/area
 module "v2_area_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v2_resource.id
   path_part   = "area"
@@ -64,7 +64,7 @@ module "v2_area_resource" {
 
 // /v2/area/{proxy+}
 module "v2_area_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v2_area_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -72,7 +72,7 @@ module "v2_area_proxy_resource" {
 
 // /v2/download-tiles
 module "v2_download_tiles_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v2_resource.id
   path_part   = "download-tiles"
@@ -80,7 +80,7 @@ module "v2_download_tiles_resource" {
 
 // /v2/download-tiles/{proxy+}
 module "v2_download_tiles_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v2_download_tiles_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -88,7 +88,7 @@ module "v2_download_tiles_proxy_resource" {
 
 // /v1/area
 module "v1_area_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "area"
@@ -96,7 +96,7 @@ module "v1_area_resource" {
 
 // /v1/area/{proxy+}
 module "v1_area_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_area_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -104,7 +104,7 @@ module "v1_area_proxy_resource" {
 
 // /v1/download-tiles
 module "v1_download_tiles_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "download-tiles"
@@ -112,7 +112,7 @@ module "v1_download_tiles_resource" {
 
 // /v1/download-tiles/{proxy+}
 module "v1_download_tiles_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_download_tiles_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

@@ -18,7 +18,7 @@ resource "kubernetes_service" "glad_analysis_tiled_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "glad_analysis_tiled_nlb_listener" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_glad_analysis_tiled" {
 
 // /v1/glad-alerts/admin
 module "v1_glad_alerts_admin_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_glad_alerts_resource.id
   path_part   = "admin"
@@ -62,7 +62,7 @@ module "v1_glad_alerts_admin_resource" {
 
 // /v1/glad-alerts/admin/{proxy+}
 module "v1_glad_alerts_admin_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_glad_alerts_admin_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -70,7 +70,7 @@ module "v1_glad_alerts_admin_proxy_resource" {
 
 // /v1/glad-alerts/download
 module "v1_glad_alerts_download_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_glad_alerts_resource.id
   path_part   = "download"
@@ -78,7 +78,7 @@ module "v1_glad_alerts_download_resource" {
 
 // /v1/glad-alerts/latest
 module "v1_glad_alerts_latest_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_glad_alerts_resource.id
   path_part   = "latest"
@@ -86,7 +86,7 @@ module "v1_glad_alerts_latest_resource" {
 
 // /v1/glad-alerts/wdpa
 module "v1_glad_alerts_wdpa_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_glad_alerts_resource.id
   path_part   = "wdpa"
@@ -94,7 +94,7 @@ module "v1_glad_alerts_wdpa_resource" {
 
 // /v1/glad-alerts/wdpa/{proxy+}
 module "v1_glad_alerts_wdpa_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_glad_alerts_wdpa_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -102,7 +102,7 @@ module "v1_glad_alerts_wdpa_proxy_resource" {
 
 // /v1/glad-alerts/use
 module "v1_glad_alerts_use_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_glad_alerts_resource.id
   path_part   = "use"
@@ -110,7 +110,7 @@ module "v1_glad_alerts_use_resource" {
 
 // /v1/glad-alerts/use/{proxy+}
 module "v1_glad_alerts_use_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_glad_alerts_use_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

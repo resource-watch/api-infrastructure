@@ -18,7 +18,7 @@ resource "kubernetes_service" "fires_summary_stats_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "fires_summary_stats_nlb_listener" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_fires_summary_stats" {
 
 // /v1/fire-alerts
 module "fire_alerts_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "fire-alerts"
@@ -62,7 +62,7 @@ module "fire_alerts_resource" {
 
 // /v1/fire-alerts/{proxy+}
 module "fire_alerts_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.fire_alerts_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -70,7 +70,7 @@ module "fire_alerts_proxy_resource" {
 
 // /v1/glad-alerts
 module "glad_alerts_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "glad-alerts"
@@ -78,7 +78,7 @@ module "glad_alerts_resource" {
 
 // /v1/glad-alerts/summary-stats
 module "glad_alerts_summary_stats_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.glad_alerts_resource.aws_api_gateway_resource.id
   path_part   = "summary-stats"
@@ -86,7 +86,7 @@ module "glad_alerts_summary_stats_resource" {
 
 // /v1/glad-alerts/summary-stats/{proxy+}
 module "glad_alerts_summary_stats_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.glad_alerts_summary_stats_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

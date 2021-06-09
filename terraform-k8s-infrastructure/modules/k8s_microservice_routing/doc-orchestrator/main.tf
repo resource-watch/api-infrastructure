@@ -18,7 +18,7 @@ resource "kubernetes_service" "doc_orchestrator_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "doc_orchestrator_nlb_listener" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_doc_orchestrator" {
 
 // /v1/doc-importer
 module "doc_importer_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "doc-importer"
@@ -62,7 +62,7 @@ module "doc_importer_resource" {
 
 // /v1/doc-importer/{proxy+}
 module "doc_importer_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.doc_importer_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

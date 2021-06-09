@@ -18,7 +18,7 @@ resource "kubernetes_service" "gs_pro_config_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "gs_pro_config_nlb_listener" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_gs_pro_config" {
 
 // /v1/pro-config
 module "v1_pro_config_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "pro-config"
@@ -62,7 +62,7 @@ module "v1_pro_config_resource" {
 
 // /v1/pro-config/{techTitle}
 module "v1_pro_config_tech_title_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_pro_config_resource.aws_api_gateway_resource.id
   path_part   = "{techTitle}"

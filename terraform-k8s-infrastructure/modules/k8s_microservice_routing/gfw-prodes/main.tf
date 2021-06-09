@@ -18,7 +18,7 @@ resource "kubernetes_service" "gfw_prodes_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "gfw_prodes_nlb_listener" {
@@ -55,7 +55,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_gfw_prodes" {
 
 // /v1/prodes-loss
 module "v1_prodes_loss_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "prodes-loss"
@@ -63,7 +63,7 @@ module "v1_prodes_loss_resource" {
 
 // /v1/prodes-loss/{proxy+}
 module "v1_prodes_loss_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_prodes_loss_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -71,7 +71,7 @@ module "v1_prodes_loss_proxy_resource" {
 
 // /v2/prodes-loss
 module "v2_prodes_loss_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v2_resource.id
   path_part   = "prodes-loss"
@@ -79,7 +79,7 @@ module "v2_prodes_loss_resource" {
 
 // /v2/prodes-loss/{proxy+}
 module "v2_prodes_loss_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v2_prodes_loss_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

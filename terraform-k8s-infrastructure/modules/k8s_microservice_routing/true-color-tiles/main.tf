@@ -18,7 +18,7 @@ resource "kubernetes_service" "true_color_tiles_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "true_color_tiles_nlb_listener" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_true_color_tiles" {
 
 // /v1/true-color-tiles
 module "v1_true_color_tiles_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "true-color-tiles"
@@ -62,7 +62,7 @@ module "v1_true_color_tiles_resource" {
 
 // /v1/true-color-tiles/{proxy+}
 module "v1_true_color_tiles_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_true_color_tiles_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

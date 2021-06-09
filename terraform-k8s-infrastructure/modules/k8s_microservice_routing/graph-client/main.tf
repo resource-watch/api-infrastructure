@@ -19,7 +19,7 @@ resource "kubernetes_service" "graph_client_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "graph_client_nlb_listener" {
@@ -55,7 +55,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_graph_client" {
 
 // /v1/graph
 module "graph_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "graph"
@@ -63,7 +63,7 @@ module "graph_resource" {
 
 // /v1/graph/{proxy+}
 module "graph_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.graph_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

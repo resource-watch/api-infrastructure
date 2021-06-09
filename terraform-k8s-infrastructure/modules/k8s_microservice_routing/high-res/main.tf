@@ -18,7 +18,7 @@ resource "kubernetes_service" "high_res_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "high_res_nlb_listener" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_high_res" {
 
 // /v1/high-res
 module "v1_high_res_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "high-res"
@@ -62,7 +62,7 @@ module "v1_high_res_resource" {
 
 // /v1/high-res/{sensor}
 module "v1_high_res_sensor_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_high_res_resource.aws_api_gateway_resource.id
   path_part   = "{sensor}"

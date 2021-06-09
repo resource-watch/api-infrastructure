@@ -18,7 +18,7 @@ resource "kubernetes_service" "gee_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "gee_nlb_listener" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_gee" {
 
 // /v1/query/gee
 module "query_gee_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_query_resource.id
   path_part   = "gee"
@@ -62,7 +62,7 @@ module "query_gee_resource" {
 
 // /v1/query/gee/{datasetId}
 module "query_gee_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.query_gee_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -70,7 +70,7 @@ module "query_gee_dataset_id_resource" {
 
 // /v1/download/gee
 module "download_gee_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_download_resource.id
   path_part   = "gee"
@@ -78,7 +78,7 @@ module "download_gee_resource" {
 
 // /v1/download/gee/{datasetId}
 module "download_gee_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.download_gee_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -86,7 +86,7 @@ module "download_gee_dataset_id_resource" {
 
 // /v1/fields/gee
 module "fields_gee_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_fields_resource.id
   path_part   = "gee"
@@ -94,7 +94,7 @@ module "fields_gee_resource" {
 
 // /v1/fields/gee/{datasetId}
 module "fields_gee_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.fields_gee_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -102,7 +102,7 @@ module "fields_gee_dataset_id_resource" {
 
 // /v1/rest-datasets/gee
 module "rest_datasets_gee_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_rest_datasets_resource.id
   path_part   = "gee"
@@ -110,7 +110,7 @@ module "rest_datasets_gee_resource" {
 
 // /v1/rest-datasets/gee/{datasetId}
 module "rest_datasets_gee_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.rest_datasets_gee_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"

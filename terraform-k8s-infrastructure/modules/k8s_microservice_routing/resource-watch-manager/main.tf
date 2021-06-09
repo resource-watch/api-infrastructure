@@ -18,7 +18,7 @@ resource "kubernetes_service" "resource_watch_manager_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "resource_watch_manager_nlb_listener" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_resource_watch_manager" {
 
 // /v1/dashboard
 module "v1_dashboard_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "dashboard"
@@ -62,7 +62,7 @@ module "v1_dashboard_resource" {
 
 // /v1/dashboard/{proxy+}
 module "v1_dashboard_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_dashboard_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -70,7 +70,7 @@ module "v1_dashboard_proxy_resource" {
 
 // /v1/partner
 module "v1_partner_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "partner"
@@ -78,7 +78,7 @@ module "v1_partner_resource" {
 
 // /v1/partner/{partnerId}
 module "v1_partner_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_partner_resource.aws_api_gateway_resource.id
   path_part   = "{partnerId}"
@@ -86,7 +86,7 @@ module "v1_partner_id_resource" {
 
 // /v1/static_page
 module "v1_static_page_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "static_page"
@@ -94,7 +94,7 @@ module "v1_static_page_resource" {
 
 // /v1/static_page/{staticPageId}
 module "v1_static_page_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_static_page_resource.aws_api_gateway_resource.id
   path_part   = "{staticPageId}"
@@ -102,7 +102,7 @@ module "v1_static_page_id_resource" {
 
 // /v1/topic
 module "v1_topic_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "topic"
@@ -110,7 +110,7 @@ module "v1_topic_resource" {
 
 // /v1/topic/{topicId}
 module "v1_topic_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_topic_resource.aws_api_gateway_resource.id
   path_part   = "{topicId}"
@@ -118,7 +118,7 @@ module "v1_topic_id_resource" {
 
 // /v1/topic/{proxy+}
 module "v1_topic_id_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_topic_id_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -126,7 +126,7 @@ module "v1_topic_id_proxy_resource" {
 
 // /v1/tool
 module "v1_tool_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "tool"
@@ -134,7 +134,7 @@ module "v1_tool_resource" {
 
 // /v1/tool/{toolId}
 module "v1_tool_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_tool_resource.aws_api_gateway_resource.id
   path_part   = "{toolId}"
@@ -142,7 +142,7 @@ module "v1_tool_id_resource" {
 
 // /v1/profile
 module "v1_profile_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "profile"
@@ -150,7 +150,7 @@ module "v1_profile_resource" {
 
 // /v1/profile/{profileId}
 module "v1_profile_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_profile_resource.aws_api_gateway_resource.id
   path_part   = "{profileId}"
@@ -158,7 +158,7 @@ module "v1_profile_id_resource" {
 
 // /v1/faq
 module "v1_faq_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "faq"
@@ -166,7 +166,7 @@ module "v1_faq_resource" {
 
 // /v1/faq/{proxy+}
 module "v1_faq_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_faq_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -174,7 +174,7 @@ module "v1_faq_proxy_resource" {
 
 // /v1/temporary_content_image
 module "v1_temporary_content_image_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "temporary_content_image"
@@ -182,7 +182,7 @@ module "v1_temporary_content_image_resource" {
 
 // /v1/contact-us
 module "v1_contact_us_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "contact-us"

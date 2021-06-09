@@ -19,7 +19,7 @@ resource "kubernetes_service" "layer_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "layer_nlb_listener" {
@@ -55,7 +55,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_layer" {
 
 // /v1/layer
 module "layer_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "layer"
@@ -63,7 +63,7 @@ module "layer_resource" {
 
 // /v1/layer/{layerId}
 module "layer_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.layer_resource.aws_api_gateway_resource.id
   path_part   = "{layerId}"
@@ -71,7 +71,7 @@ module "layer_id_resource" {
 
 // /v1/layer/find-by-ids
 module "layer_find_by_ids_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.layer_resource.aws_api_gateway_resource.id
   path_part   = "find-by-ids"
@@ -79,7 +79,7 @@ module "layer_find_by_ids_resource" {
 
 // /v1/layer/change-environment
 module "layer_change_environment_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.layer_resource.aws_api_gateway_resource.id
   path_part   = "change-environment"
@@ -87,7 +87,7 @@ module "layer_change_environment_resource" {
 
 // /v1/layer/change-environment/{proxy+}
 module "layer_change_environment_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.layer_change_environment_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -95,7 +95,7 @@ module "layer_change_environment_proxy_resource" {
 
 // /v1/dataset/{datasetId}/layer/
 module "dataset_id_layer_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_resource.id
   path_part   = "layer"
@@ -103,7 +103,7 @@ module "dataset_id_layer_resource" {
 
 // /v1/dataset/{datasetId}/layer/{layerId}
 module "dataset_id_layer_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.dataset_id_layer_resource.aws_api_gateway_resource.id
   path_part   = "{layerId}"
@@ -111,7 +111,7 @@ module "dataset_id_layer_id_resource" {
 
 // /v1/layer/{layerId}/expire-cache
 module "layer_id_expire_cache_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.layer_id_resource.aws_api_gateway_resource.id
   path_part   = "expire-cache"

@@ -18,7 +18,7 @@ resource "kubernetes_service" "carto_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "carto_nlb_listener" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_cartodb" {
 
 // /v1/query/cartodb
 module "v1_query_cartodb_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_query_resource.id
   path_part   = "cartodb"
@@ -62,7 +62,7 @@ module "v1_query_cartodb_resource" {
 
 // /v1/query/cartodb/{datasetId}
 module "v1_query_cartodb_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_query_cartodb_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -70,7 +70,7 @@ module "v1_query_cartodb_dataset_id_resource" {
 
 // /v1/download/cartodb
 module "v1_download_cartodb_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_download_resource.id
   path_part   = "cartodb"
@@ -78,7 +78,7 @@ module "v1_download_cartodb_resource" {
 
 // /v1/download/cartodb/{datasetId}
 module "v1_download_cartodb_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_download_cartodb_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -86,7 +86,7 @@ module "v1_download_cartodb_dataset_id_resource" {
 
 // /v1/fields/cartodb
 module "v1_fields_cartodb_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_fields_resource.id
   path_part   = "cartodb"
@@ -94,7 +94,7 @@ module "v1_fields_cartodb_resource" {
 
 // /v1/fields/cartodb/{datasetId}
 module "v1_fields_cartodb_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_fields_cartodb_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -102,7 +102,7 @@ module "v1_fields_cartodb_dataset_id_resource" {
 
 // /v1/rest-datasets/cartodb
 module "v1_rest_datasets_cartodb_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_rest_datasets_resource.id
   path_part   = "cartodb"
@@ -110,7 +110,7 @@ module "v1_rest_datasets_cartodb_resource" {
 
 // /v1/rest-datasets/cartodb/{datasetId}
 module "v1_rest_datasets_cartodb_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_rest_datasets_cartodb_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"

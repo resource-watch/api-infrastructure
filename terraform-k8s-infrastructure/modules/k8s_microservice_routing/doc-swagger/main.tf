@@ -18,7 +18,7 @@ resource "kubernetes_service" "doc_swagger_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "doc_swagger_nlb_listener" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_doc_swagger" {
 
 // /documentation
 module "documentation_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.root_resource_id
   path_part   = "documentation"
@@ -62,7 +62,7 @@ module "documentation_resource" {
 
 // /documentation/{proxy+}
 module "documentation_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.documentation_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

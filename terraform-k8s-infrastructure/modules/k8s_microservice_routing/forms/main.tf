@@ -18,7 +18,7 @@ resource "kubernetes_service" "forms_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "forms_nlb_listener" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_forms" {
 
 // /v1/form
 module "v1_form_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "form"
@@ -62,7 +62,7 @@ module "v1_form_resource" {
 
 // /v1/form/{proxy+}
 module "v1_form_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_form_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -70,7 +70,7 @@ module "v1_form_proxy_resource" {
 
 // /v1/questionnaire
 module "v1_questionnaire_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "questionnaire"
@@ -78,7 +78,7 @@ module "v1_questionnaire_resource" {
 
 // /v1/questionnaire/{proxy+}
 module "v1_questionnaire_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_questionnaire_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -86,7 +86,7 @@ module "v1_questionnaire_proxy_resource" {
 
 // /v1/reports
 module "v1_reports_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "reports"
@@ -94,7 +94,7 @@ module "v1_reports_resource" {
 
 // /v1/reports/{proxy+}
 module "v1_reports_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_reports_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

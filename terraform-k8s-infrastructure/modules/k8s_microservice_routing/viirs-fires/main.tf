@@ -19,7 +19,7 @@ resource "kubernetes_service" "viirs_active_fires_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "viirs_active_fires_nlb_listener" {
@@ -56,7 +56,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_viirs_active_fires" {
 
 // /v1/viirs-active-fires
 module "v1_viirs_active_fires_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "viirs-active-fires"
@@ -64,7 +64,7 @@ module "v1_viirs_active_fires_resource" {
 
 // /v1/viirs-active-fires/{proxy+}
 module "v1_viirs_active_fires_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_viirs_active_fires_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -72,7 +72,7 @@ module "v1_viirs_active_fires_proxy_resource" {
 
 // /v2/viirs-active-fires
 module "v2_viirs_active_fires_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v2_resource.id
   path_part   = "viirs-active-fires"
@@ -80,7 +80,7 @@ module "v2_viirs_active_fires_resource" {
 
 // /v2/viirs-active-fires/{proxy+}
 module "v2_viirs_active_fires_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v2_viirs_active_fires_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

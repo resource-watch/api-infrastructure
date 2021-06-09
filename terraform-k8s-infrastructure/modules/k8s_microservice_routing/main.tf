@@ -150,10 +150,10 @@ data "aws_autoscaling_groups" "gfw_autoscaling_group" {
 }
 
 resource "aws_lb" "api_gateway_apps_nlb" {
-  name               = "rw-api-apps-nlb"
-  internal           = true
-  load_balancer_type = "network"
-  subnets            = data.aws_subnet_ids.private_subnets.ids
+  name                             = "rw-api-apps-nlb"
+  internal                         = true
+  load_balancer_type               = "network"
+  subnets                          = data.aws_subnet_ids.private_subnets.ids
   enable_cross_zone_load_balancing = true
 
   enable_deletion_protection = false
@@ -170,10 +170,10 @@ resource "aws_api_gateway_vpc_link" "rw_api_apps_lb_vpc_link" {
 }
 
 resource "aws_lb" "api_gateway_core_nlb" {
-  name               = "rw-api-core-nlb"
-  internal           = true
-  load_balancer_type = "network"
-  subnets            = data.aws_subnet_ids.private_subnets.ids
+  name                             = "rw-api-core-nlb"
+  internal                         = true
+  load_balancer_type               = "network"
+  subnets                          = data.aws_subnet_ids.private_subnets.ids
   enable_cross_zone_load_balancing = true
 
   enable_deletion_protection = false
@@ -190,10 +190,10 @@ resource "aws_api_gateway_vpc_link" "rw_api_core_lb_vpc_link" {
 }
 
 resource "aws_lb" "api_gateway_gfw_nlb" {
-  name               = "rw-api-gfw-nlb"
-  internal           = true
-  load_balancer_type = "network"
-  subnets            = data.aws_subnet_ids.private_subnets.ids
+  name                             = "rw-api-gfw-nlb"
+  internal                         = true
+  load_balancer_type               = "network"
+  subnets                          = data.aws_subnet_ids.private_subnets.ids
   enable_cross_zone_load_balancing = true
 
   enable_deletion_protection = false
@@ -284,21 +284,21 @@ resource "aws_api_gateway_deployment" "prod" {
 
 // Base API Gateway resources
 module "v1_resource" {
-  source       = "./resource"
+  source      = "./resource"
   rest_api_id = aws_api_gateway_rest_api.rw_api_gateway.id
   parent_id   = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
   path_part   = "v1"
 }
 
 module "v2_resource" {
-  source       = "./resource"
+  source      = "./resource"
   rest_api_id = aws_api_gateway_rest_api.rw_api_gateway.id
   parent_id   = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
   path_part   = "v2"
 }
 
 module "v3_resource" {
-  source       = "./resource"
+  source      = "./resource"
   rest_api_id = aws_api_gateway_rest_api.rw_api_gateway.id
   parent_id   = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
   path_part   = "v3"

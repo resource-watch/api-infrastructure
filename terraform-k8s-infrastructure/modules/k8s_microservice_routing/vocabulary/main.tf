@@ -19,7 +19,7 @@ resource "kubernetes_service" "vocabulary_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "vocabulary_nlb_listener" {
@@ -59,7 +59,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_vocabulary" {
 
 // /v1/vocabulary
 module "vocabulary_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "vocabulary"
@@ -67,7 +67,7 @@ module "vocabulary_resource" {
 
 // /v1/vocabulary/{proxy+}
 module "vocabulary_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.vocabulary_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -106,7 +106,7 @@ module "vocabulary_any_vocabulary_proxy" {
 
 // /v1/dataset/{datasetId}/vocabulary
 module "dataset_id_vocabulary_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_resource.id
   path_part   = "vocabulary"
@@ -114,7 +114,7 @@ module "dataset_id_vocabulary_resource" {
 
 // /v1/dataset/{datasetId}/vocabulary/{proxy+}
 module "dataset_id_vocabulary_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.dataset_id_vocabulary_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -122,7 +122,7 @@ module "dataset_id_vocabulary_proxy_resource" {
 
 // /v1/dataset/vocabulary
 module "dataset_vocabulary_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_resource.id
   path_part   = "vocabulary"
@@ -130,7 +130,7 @@ module "dataset_vocabulary_resource" {
 
 // /v1/dataset/vocabulary/{proxy+}
 module "dataset_vocabulary_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.dataset_vocabulary_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -201,7 +201,7 @@ module "vocabulary_any_dataset_vocabulary_proxy" {
 
 // /v1/dataset/{datasetId}/widget/{widgetId}/vocabulary
 module "dataset_id_widget_id_vocabulary_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_widget_id_resource.id
   path_part   = "vocabulary"
@@ -209,7 +209,7 @@ module "dataset_id_widget_id_vocabulary_resource" {
 
 // /v1/dataset/{datasetId}/widget/{widgetId}/vocabulary/{vocabularyId}
 module "dataset_id_widget_id_vocabulary_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.dataset_id_widget_id_vocabulary_resource.aws_api_gateway_resource.id
   path_part   = "{vocabularyId}"
@@ -217,7 +217,7 @@ module "dataset_id_widget_id_vocabulary_id_resource" {
 
 // /v1/dataset/{datasetId}/widget/vocabulary
 module "dataset_id_widget_vocabulary_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_widget_resource.id
   path_part   = "vocabulary"
@@ -225,7 +225,7 @@ module "dataset_id_widget_vocabulary_resource" {
 
 // /v1/dataset/{datasetId}/widget/vocabulary/{proxy+}
 module "dataset_id_widget_vocabulary_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.dataset_id_widget_vocabulary_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -317,7 +317,7 @@ module "vocabulary_any_dataset_id_widget_vocabulary_proxy" {
 
 // /v1/dataset/{datasetId}/layer/{layerId}/vocabulary
 module "dataset_id_layer_id_vocabulary_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_layer_id_resource.id
   path_part   = "vocabulary"
@@ -325,7 +325,7 @@ module "dataset_id_layer_id_vocabulary_resource" {
 
 // /v1/dataset/{datasetId}/layer/{layerId}/vocabulary/{vocabularyId}
 module "dataset_id_layer_id_vocabulary_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.dataset_id_layer_id_vocabulary_resource.aws_api_gateway_resource.id
   path_part   = "{vocabularyId}"
@@ -333,7 +333,7 @@ module "dataset_id_layer_id_vocabulary_id_resource" {
 
 // /v1/dataset/{datasetId}/layer/vocabulary
 module "dataset_id_layer_vocabulary_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_layer_resource.id
   path_part   = "vocabulary"
@@ -341,7 +341,7 @@ module "dataset_id_layer_vocabulary_resource" {
 
 // /v1/dataset/{datasetId}/layer/vocabulary/{proxy+}
 module "dataset_id_layer_vocabulary_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.dataset_id_layer_vocabulary_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -433,7 +433,7 @@ module "vocabulary_any_dataset_id_layer_vocabulary_proxy" {
 
 // /v1/favourite
 module "favourite_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "favourite"
@@ -441,7 +441,7 @@ module "favourite_resource" {
 
 // /v1/favourite/{proxy+}
 module "favourite_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.favourite_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -480,7 +480,7 @@ module "vocabulary_any_favourite_proxy" {
 
 // /v1/collection
 module "collection_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "collection"
@@ -488,7 +488,7 @@ module "collection_resource" {
 
 // /v1/collection/{proxy+}
 module "collection_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.collection_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

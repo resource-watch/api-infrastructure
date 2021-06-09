@@ -19,7 +19,7 @@ resource "kubernetes_service" "metadata_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "metadata_nlb_listener" {
@@ -55,7 +55,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_metadata" {
 
 // /v1/metadata
 module "metadata_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "metadata"
@@ -63,7 +63,7 @@ module "metadata_resource" {
 
 // /v1/dataset/metadata
 module "metadata_dataset_metadata_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_resource.id
   path_part   = "metadata"
@@ -71,7 +71,7 @@ module "metadata_dataset_metadata_resource" {
 
 // /v1/dataset/metadata/find-by-ids
 module "metadata_dataset_metadata_find_by_ids_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.metadata_dataset_metadata_resource.aws_api_gateway_resource.id
   path_part   = "find-by-ids"
@@ -79,7 +79,7 @@ module "metadata_dataset_metadata_find_by_ids_resource" {
 
 // /v1/dataset/{datasetId}/metadata
 module "metadata_dataset_id_metadata_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_resource.id
   path_part   = "metadata"
@@ -87,7 +87,7 @@ module "metadata_dataset_id_metadata_resource" {
 
 // /v1/dataset/{datasetId}/metadata/clone
 module "metadata_dataset_metadata_clone_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.metadata_dataset_id_metadata_resource.aws_api_gateway_resource.id
   path_part   = "clone"
@@ -95,7 +95,7 @@ module "metadata_dataset_metadata_clone_resource" {
 
 // /v1/dataset/{datasetId}/widget/metadata
 module "metadata_dataset_id_widget_metadata_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_widget_resource.id
   path_part   = "metadata"
@@ -103,7 +103,7 @@ module "metadata_dataset_id_widget_metadata_resource" {
 
 // /v1/dataset/{datasetId}/widget/metadata/find-by-ids
 module "metadata_dataset_id_widget_metadata_find_by_ids_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.metadata_dataset_id_widget_metadata_resource.aws_api_gateway_resource.id
   path_part   = "find-by-ids"
@@ -111,7 +111,7 @@ module "metadata_dataset_id_widget_metadata_find_by_ids_resource" {
 
 // /v1/dataset/{datasetId}/widget/{widgetId}/metadata
 module "metadata_dataset_id_widget_id_metadata_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_widget_id_resource.id
   path_part   = "metadata"
@@ -119,7 +119,7 @@ module "metadata_dataset_id_widget_id_metadata_resource" {
 
 // /v1/dataset/{datasetId}/layer/metadata
 module "metadata_dataset_id_layer_metadata_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_layer_resource.id
   path_part   = "metadata"
@@ -127,7 +127,7 @@ module "metadata_dataset_id_layer_metadata_resource" {
 
 // /v1/dataset/{datasetId}/layer/metadata/find-by-ids
 module "metadata_dataset_id_layer_metadata_find_by_ids_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.metadata_dataset_id_layer_metadata_resource.aws_api_gateway_resource.id
   path_part   = "find-by-ids"
@@ -135,7 +135,7 @@ module "metadata_dataset_id_layer_metadata_find_by_ids_resource" {
 
 // /v1/dataset/{datasetId}/layer/{layerId}/metadata
 module "metadata_dataset_id_layer_id_metadata_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_layer_id_resource.id
   path_part   = "metadata"

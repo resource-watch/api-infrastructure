@@ -18,7 +18,7 @@ resource "kubernetes_service" "quicc_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "quicc_nlb_listener" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_quicc" {
 
 // /v1/quicc-alerts
 module "v1_quicc_alerts_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "quicc-alerts"
@@ -62,7 +62,7 @@ module "v1_quicc_alerts_resource" {
 
 // /v1/quicc-alerts/{proxy+}
 module "v1_quicc_alerts_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_quicc_alerts_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

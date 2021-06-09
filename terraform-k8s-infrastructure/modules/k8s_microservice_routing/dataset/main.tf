@@ -18,7 +18,7 @@ resource "kubernetes_service" "dataset_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "dataset_nlb_listener" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_dataset" {
 
 // /v1/dataset
 module "dataset_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "dataset"
@@ -62,7 +62,7 @@ module "dataset_resource" {
 
 // /v1/rest-datasets
 module "rest_datasets_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "rest-datasets"
@@ -70,7 +70,7 @@ module "rest_datasets_resource" {
 
 // /v1/dataset/{datasetId}
 module "dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.dataset_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -78,7 +78,7 @@ module "dataset_id_resource" {
 
 // /v1/dataset/find-by-ids
 module "dataset_find_by_ids_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.dataset_resource.aws_api_gateway_resource.id
   path_part   = "find-by-ids"
@@ -86,7 +86,7 @@ module "dataset_find_by_ids_resource" {
 
 // /v1/dataset/upload
 module "dataset_upload_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.dataset_resource.aws_api_gateway_resource.id
   path_part   = "upload"
@@ -94,7 +94,7 @@ module "dataset_upload_resource" {
 
 // /v1/dataset/{datasetId}/{proxy+}
 module "dataset_id_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.dataset_id_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

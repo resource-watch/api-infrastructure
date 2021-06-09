@@ -18,7 +18,7 @@ resource "kubernetes_service" "story_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "story_nlb_listener" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_story" {
 
 // /v1/story
 module "v1_story_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "story"
@@ -62,7 +62,7 @@ module "v1_story_resource" {
 
 // /v1/story/{proxy+}
 module "v1_story_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_story_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

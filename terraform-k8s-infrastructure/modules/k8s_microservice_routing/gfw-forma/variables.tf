@@ -31,7 +31,7 @@ variable "vpc" {
 
 variable "vpc_link" {
   type = object({
-    id = string
+    id          = string
     target_arns = list(string)
   })
   description = "VPC Link to the LB"

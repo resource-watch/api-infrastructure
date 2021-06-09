@@ -19,7 +19,7 @@ resource "kubernetes_service" "analysis_gee_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "analysis_gee_nlb_listener" {
@@ -56,7 +56,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_analysis_gee" {
 
 // /v1/recent-tiles-classifier
 module "v1_recent_tiles_classifier_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "recent-tiles-classifier"
@@ -64,7 +64,7 @@ module "v1_recent_tiles_classifier_resource" {
 
 // /v1/composite-service
 module "v1_composite_service_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "composite-service"
@@ -72,7 +72,7 @@ module "v1_composite_service_resource" {
 
 // /v1/composite-service/geom
 module "v1_composite_service_geom_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_composite_service_resource.aws_api_gateway_resource.id
   path_part   = "geom"
@@ -80,7 +80,7 @@ module "v1_composite_service_geom_resource" {
 
 // /v1/mc-analysis
 module "v1_mc_analysis_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "mc-analysis"
@@ -88,7 +88,7 @@ module "v1_mc_analysis_resource" {
 
 // /v1/geodescriber
 module "v1_geodescriber_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "geodescriber"
@@ -96,7 +96,7 @@ module "v1_geodescriber_resource" {
 
 // /v1/geodescriber/geom
 module "v1_geodescriber_geom_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_geodescriber_resource.aws_api_gateway_resource.id
   path_part   = "geom"
@@ -104,7 +104,7 @@ module "v1_geodescriber_geom_resource" {
 
 // /v1/umd-loss-gain
 module "v1_umd_loss_gain_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "umd-loss-gain"
@@ -112,7 +112,7 @@ module "v1_umd_loss_gain_resource" {
 
 // /v1/umd-loss-gain/{proxy+}
 module "v1_umd_loss_gain_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_umd_loss_gain_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -120,7 +120,7 @@ module "v1_umd_loss_gain_proxy_resource" {
 
 // /v1/whrc-biomass
 module "v1_whrc_biomass_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "whrc-biomass"
@@ -128,7 +128,7 @@ module "v1_whrc_biomass_resource" {
 
 // /v1/whrc-biomass/{proxy+}
 module "v1_whrc_biomass_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_whrc_biomass_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -136,7 +136,7 @@ module "v1_whrc_biomass_proxy_resource" {
 
 // /v1/mangrove-biomass
 module "v1_mangrove_biomass_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "mangrove-biomass"
@@ -144,7 +144,7 @@ module "v1_mangrove_biomass_resource" {
 
 // /v1/mangrove-biomass/{proxy+}
 module "v1_mangrove_biomass_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_mangrove_biomass_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -152,7 +152,7 @@ module "v1_mangrove_biomass_proxy_resource" {
 
 // /v1/population
 module "v1_population_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "population"
@@ -160,7 +160,7 @@ module "v1_population_resource" {
 
 // /v1/population/{proxy+}
 module "v1_population_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_population_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -168,7 +168,7 @@ module "v1_population_proxy_resource" {
 
 // /v1/soil-carbon
 module "v1_soil_carbon_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "soil-carbon"
@@ -176,7 +176,7 @@ module "v1_soil_carbon_resource" {
 
 // /v1/soil-carbon/{proxy+}
 module "v1_soil_carbon_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_soil_carbon_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -184,7 +184,7 @@ module "v1_soil_carbon_proxy_resource" {
 
 // /v1/forma250gfw
 module "v1_forma250gfw_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "forma250gfw"
@@ -192,7 +192,7 @@ module "v1_forma250gfw_resource" {
 
 // /v1/forma250gfw/{proxy+}
 module "v1_forma250gfw_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_forma250gfw_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -200,7 +200,7 @@ module "v1_forma250gfw_proxy_resource" {
 
 // /v1/biomass-loss
 module "v1_biomass_loss_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "biomass-loss"
@@ -208,7 +208,7 @@ module "v1_biomass_loss_resource" {
 
 // /v1/biomass-loss/{proxy+}
 module "v1_biomass_loss_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_biomass_loss_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -216,7 +216,7 @@ module "v1_biomass_loss_proxy_resource" {
 
 // /v1/loss-by-landcover
 module "v1_loss_by_landcover_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "loss-by-landcover"
@@ -224,7 +224,7 @@ module "v1_loss_by_landcover_resource" {
 
 // /v1/landcover
 module "v1_landcover_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "landcover"
@@ -232,7 +232,7 @@ module "v1_landcover_resource" {
 
 // /v1/landsat-tiles
 module "v1_landsat_tiles_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "landsat-tiles"
@@ -240,7 +240,7 @@ module "v1_landsat_tiles_resource" {
 
 // /v1/landsat-tiles/{proxy+}
 module "v1_landsat_tiles_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_landsat_tiles_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -248,7 +248,7 @@ module "v1_landsat_tiles_proxy_resource" {
 
 // /v1/sentinel-tiles
 module "v1_sentinel_tiles_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "sentinel-tiles"
@@ -256,7 +256,7 @@ module "v1_sentinel_tiles_resource" {
 
 // /v1/recent-tiles
 module "v1_recent_tiles_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "recent-tiles"
@@ -264,7 +264,7 @@ module "v1_recent_tiles_resource" {
 
 // /v1/recent-tiles/{proxy+}
 module "v1_recent_tiles_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_recent_tiles_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -273,7 +273,7 @@ module "v1_recent_tiles_proxy_resource" {
 // v2
 // /v2/nlcd-landcover
 module "v2_nlcd_landcover_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v2_resource.id
   path_part   = "nlcd-landcover"
@@ -281,7 +281,7 @@ module "v2_nlcd_landcover_resource" {
 
 // /v2/nlcd-landcover/{proxy+}
 module "v2_nlcd_landcover_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v2_nlcd_landcover_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -289,7 +289,7 @@ module "v2_nlcd_landcover_proxy_resource" {
 
 // /v2/biomass-loss
 module "v2_biomass_loss_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v2_resource.id
   path_part   = "biomass-loss"
@@ -297,7 +297,7 @@ module "v2_biomass_loss_resource" {
 
 // /v2/biomass-loss/{proxy+}
 module "v2_biomass_loss_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v2_biomass_loss_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -305,7 +305,7 @@ module "v2_biomass_loss_proxy_resource" {
 
 // /v2/landsat-tiles
 module "v2_landsat_tiles_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v2_resource.id
   path_part   = "landsat-tiles"
@@ -313,7 +313,7 @@ module "v2_landsat_tiles_resource" {
 
 // /v2/landsat-tiles/{proxy+}
 module "v2_landsat_tiles_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v2_landsat_tiles_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

@@ -18,7 +18,7 @@ resource "kubernetes_service" "document_adapter_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "document_adapter_nlb_listener" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_document_adapter" {
 
 // /v1/query/csv
 module "query_csv_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_query_resource.id
   path_part   = "csv"
@@ -62,7 +62,7 @@ module "query_csv_resource" {
 
 // /v1/query/csv/{datasetId}
 module "query_csv_v1_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.query_csv_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -70,7 +70,7 @@ module "query_csv_v1_dataset_id_resource" {
 
 // /v1/query/tsv
 module "query_tsv_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_query_resource.id
   path_part   = "tsv"
@@ -78,7 +78,7 @@ module "query_tsv_resource" {
 
 // /v1/query/tsv/{datasetId}
 module "query_tsv_v1_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.query_tsv_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -86,7 +86,7 @@ module "query_tsv_v1_dataset_id_resource" {
 
 // /v1/query/json
 module "query_json_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_query_resource.id
   path_part   = "json"
@@ -94,7 +94,7 @@ module "query_json_resource" {
 
 // /v1/query/json/{datasetId}
 module "query_json_v1_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.query_json_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -102,7 +102,7 @@ module "query_json_v1_dataset_id_resource" {
 
 // /v1/query/xml
 module "query_xml_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_query_resource.id
   path_part   = "xml"
@@ -110,7 +110,7 @@ module "query_xml_resource" {
 
 // /v1/query/xml/{datasetId}
 module "query_xml_v1_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.query_xml_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -118,7 +118,7 @@ module "query_xml_v1_dataset_id_resource" {
 
 // /v1/download/csv
 module "download_csv_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_download_resource.id
   path_part   = "csv"
@@ -126,7 +126,7 @@ module "download_csv_resource" {
 
 // /v1/download/csv/{datasetId}
 module "download_csv_v1_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.download_csv_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -134,7 +134,7 @@ module "download_csv_v1_dataset_id_resource" {
 
 // /v1/download/tsv
 module "download_tsv_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_download_resource.id
   path_part   = "tsv"
@@ -142,7 +142,7 @@ module "download_tsv_resource" {
 
 // /v1/download/tsv/{datasetId}
 module "download_tsv_v1_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.download_tsv_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -150,7 +150,7 @@ module "download_tsv_v1_dataset_id_resource" {
 
 // /v1/download/json
 module "download_json_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_download_resource.id
   path_part   = "json"
@@ -158,7 +158,7 @@ module "download_json_resource" {
 
 // /v1/download/json/{datasetId}
 module "download_json_v1_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.download_json_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -166,7 +166,7 @@ module "download_json_v1_dataset_id_resource" {
 
 // /v1/download/xml
 module "download_xml_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_download_resource.id
   path_part   = "xml"
@@ -174,7 +174,7 @@ module "download_xml_resource" {
 
 // /v1/download/xml/{datasetId}
 module "download_xml_v1_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.download_xml_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -182,7 +182,7 @@ module "download_xml_v1_dataset_id_resource" {
 
 // /v1/fields/csv
 module "fields_csv_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_fields_resource.id
   path_part   = "csv"
@@ -190,7 +190,7 @@ module "fields_csv_resource" {
 
 // /v1/fields/csv/{datasetId}
 module "fields_csv_v1_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.fields_csv_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -198,7 +198,7 @@ module "fields_csv_v1_dataset_id_resource" {
 
 // /v1/fields/tsv
 module "fields_tsv_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_fields_resource.id
   path_part   = "tsv"
@@ -206,7 +206,7 @@ module "fields_tsv_resource" {
 
 // /v1/fields/tsv/{datasetId}
 module "fields_tsv_v1_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.fields_tsv_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -214,7 +214,7 @@ module "fields_tsv_v1_dataset_id_resource" {
 
 // /v1/fields/json
 module "fields_json_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_fields_resource.id
   path_part   = "json"
@@ -222,7 +222,7 @@ module "fields_json_resource" {
 
 // /v1/fields/json/{datasetId}
 module "fields_json_v1_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.fields_json_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -230,7 +230,7 @@ module "fields_json_v1_dataset_id_resource" {
 
 // /v1/fields/xml
 module "fields_xml_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_fields_resource.id
   path_part   = "xml"
@@ -238,7 +238,7 @@ module "fields_xml_resource" {
 
 // /v1/fields/xml/{datasetId}
 module "fields_xml_v1_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.fields_xml_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -246,7 +246,7 @@ module "fields_xml_v1_dataset_id_resource" {
 
 // /v1/dataset/{datasetId}/concat
 module "dataset_id_concat_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_resource.id
   path_part   = "concat"
@@ -254,7 +254,7 @@ module "dataset_id_concat_resource" {
 
 // /v1/dataset/{datasetId}/reindex
 module "dataset_id_reindex_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_resource.id
   path_part   = "reindex"
@@ -262,7 +262,7 @@ module "dataset_id_reindex_resource" {
 
 // /v1/dataset/{datasetId}/append
 module "dataset_id_append_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_resource.id
   path_part   = "append"
@@ -270,7 +270,7 @@ module "dataset_id_append_resource" {
 
 // /v1/dataset/{datasetId}/data-overwrite
 module "dataset_id_data_overwrite_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_resource.id
   path_part   = "data-overwrite"
@@ -278,7 +278,7 @@ module "dataset_id_data_overwrite_resource" {
 
 // /v1/doc-dataset
 module "doc_datasets_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "doc-datasets"
@@ -286,7 +286,7 @@ module "doc_datasets_resource" {
 
 // /v1/doc-dataset/{proxy+}
 module "doc_datasets_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.doc_datasets_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

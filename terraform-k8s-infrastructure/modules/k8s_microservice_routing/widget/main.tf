@@ -19,7 +19,7 @@ resource "kubernetes_service" "widget_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "widget_nlb_listener" {
@@ -55,7 +55,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_widget" {
 
 // /v1/widget
 module "widget_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_resource.id
   path_part   = "widget"
@@ -63,7 +63,7 @@ module "widget_resource" {
 
 // /v1/widget/{proxy+}
 module "widget_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.widget_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -71,7 +71,7 @@ module "widget_proxy_resource" {
 
 // /v1/dataset/{datasetId}/widget
 module "dataset_id_widget_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_dataset_id_resource.id
   path_part   = "widget"
@@ -79,7 +79,7 @@ module "dataset_id_widget_resource" {
 
 // /v1/dataset/{datasetId}/widget/{widgetId}
 module "dataset_id_widget_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.dataset_id_widget_resource.aws_api_gateway_resource.id
   path_part   = "{widgetId}"
@@ -87,7 +87,7 @@ module "dataset_id_widget_id_resource" {
 
 // /v1/dataset/{datasetId}/widget/{widgetId}/{proxy+}
 module "dataset_id_widget_id_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.dataset_id_widget_id_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

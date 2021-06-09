@@ -18,7 +18,7 @@ resource "kubernetes_service" "bigquery_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "bigquery_nlb_listener" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_bigquery" {
 
 // /v1/query/bigquery
 module "v1_query_bigquery_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_query_resource.id
   path_part   = "bigquery"
@@ -62,7 +62,7 @@ module "v1_query_bigquery_resource" {
 
 // /v1/query/bigquery/{datasetId}
 module "v1_query_bigquery_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_query_bigquery_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -70,7 +70,7 @@ module "v1_query_bigquery_dataset_id_resource" {
 
 // /v1/download/bigquery
 module "v1_download_bigquery_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_download_resource.id
   path_part   = "bigquery"
@@ -78,7 +78,7 @@ module "v1_download_bigquery_resource" {
 
 // /v1/download/bigquery/{datasetId}
 module "v1_download_bigquery_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_download_bigquery_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -86,7 +86,7 @@ module "v1_download_bigquery_dataset_id_resource" {
 
 // /v1/fields/bigquery
 module "v1_fields_bigquery_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_fields_resource.id
   path_part   = "bigquery"
@@ -94,7 +94,7 @@ module "v1_fields_bigquery_resource" {
 
 // /v1/fields/bigquery/{datasetId}
 module "v1_fields_bigquery_dataset_id_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_fields_bigquery_resource.aws_api_gateway_resource.id
   path_part   = "{datasetId}"
@@ -102,7 +102,7 @@ module "v1_fields_bigquery_dataset_id_resource" {
 
 // /v1/rest-datasets/bigquery
 module "v1_rest_datasets_bigquery_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_rest_datasets_resource.id
   path_part   = "bigquery"

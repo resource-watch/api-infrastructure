@@ -18,7 +18,7 @@ resource "kubernetes_service" "biomass_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "biomass_nlb_listener" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_biomass" {
 
 // /v1/biomass-loss/admin
 module "biomass_loss_admin_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_biomass_loss_resource.id
   path_part   = "admin"
@@ -62,7 +62,7 @@ module "biomass_loss_admin_resource" {
 
 // /v1/biomass-loss/admin/{proxy+}
 module "biomass_loss_admin_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.biomass_loss_admin_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

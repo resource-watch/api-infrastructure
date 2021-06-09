@@ -18,7 +18,7 @@ resource "kubernetes_service" "gee_tiles_service" {
 }
 
 data "aws_lb" "load_balancer" {
-  arn  = var.vpc_link.target_arns[0]
+  arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "gee_tiles_nlb_listener" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_gee_tiles" {
 
 // /v1/layer/{layerId}/tile
 module "gee_tiles_layer_id_tile_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_layer_id_resource.id
   path_part   = "tile"
@@ -62,7 +62,7 @@ module "gee_tiles_layer_id_tile_resource" {
 
 // /v1/layer/{layerId}/tile/gee
 module "gee_tiles_layer_id_tile_gee_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.gee_tiles_layer_id_tile_resource.aws_api_gateway_resource.id
   path_part   = "gee"
@@ -70,7 +70,7 @@ module "gee_tiles_layer_id_tile_gee_resource" {
 
 // /v1/layer/{layerId}/tile/gee/{proxy+}
 module "gee_tiles_layer_id_tile_gee_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.gee_tiles_layer_id_tile_gee_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
@@ -78,7 +78,7 @@ module "gee_tiles_layer_id_tile_gee_proxy_resource" {
 
 // /v1/layer/gee
 module "gee_layer_gee_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = var.v1_layer_resource.id
   path_part   = "gee"
@@ -86,7 +86,7 @@ module "gee_layer_gee_resource" {
 
 // /v1/layer/gee/{proxy+}
 module "gee_layer_gee_proxy_resource" {
-  source       = "../resource"
+  source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.gee_layer_gee_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"

@@ -1,11 +1,11 @@
 variable "rest_api_id" {
-  type        =  string
+  type = string
 }
 
 variable "parent_id" {
-  type        =  string
+  type = string
 }
 
 variable "path_part" {
-  type        =  string
+  type = string
 }
