@@ -87,6 +87,7 @@ module "v2_ogr_proxy_resource" {
 
 module "gfw_ogr_any_v2_ogr_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_ogr_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -96,6 +97,7 @@ module "gfw_ogr_any_v2_ogr_proxy" {
 
 module "gfw_ogr_any_v1_ogr_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_ogr_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

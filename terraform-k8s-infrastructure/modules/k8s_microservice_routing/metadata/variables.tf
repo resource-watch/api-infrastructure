@@ -13,6 +13,11 @@ variable "cluster_name" {
   description = "The k8s cluster name"
 }
 
+variable "x_rw_domain" {
+  type        = string
+  description = "Value to be passed as the x-rw-domain header"
+}
+
 variable "api_gateway" {
   type = object({
     id               = string

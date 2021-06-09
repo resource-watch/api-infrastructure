@@ -71,6 +71,7 @@ module "webshot_proxy_resource" {
 
 module "webshot_get_v1_webshot" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.webshot_resource.aws_api_gateway_resource
   method       = "GET"
@@ -80,6 +81,7 @@ module "webshot_get_v1_webshot" {
 
 module "webshot_any_v1_webshot_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.webshot_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

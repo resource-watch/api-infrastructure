@@ -87,6 +87,7 @@ module "v2_guira_loss_proxy_resource" {
 
 module "gfw_guira_get_v2_guira_loss" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_guira_loss_resource.aws_api_gateway_resource
   method       = "GET"
@@ -96,6 +97,7 @@ module "gfw_guira_get_v2_guira_loss" {
 
 module "gfw_guira_post_v2_guira_loss" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_guira_loss_resource.aws_api_gateway_resource
   method       = "POST"
@@ -105,6 +107,7 @@ module "gfw_guira_post_v2_guira_loss" {
 
 module "gfw_guira_any_v2_guira_loss_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_guira_loss_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -114,6 +117,7 @@ module "gfw_guira_any_v2_guira_loss_proxy" {
 
 module "gfw_guira_get_v1_guira_loss" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_guira_loss_resource.aws_api_gateway_resource
   method       = "GET"
@@ -123,6 +127,7 @@ module "gfw_guira_get_v1_guira_loss" {
 
 module "gfw_guira_post_v1_guira_loss" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_guira_loss_resource.aws_api_gateway_resource
   method       = "POST"
@@ -132,6 +137,7 @@ module "gfw_guira_post_v1_guira_loss" {
 
 module "gfw_guira_any_v1_guira_loss_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_guira_loss_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

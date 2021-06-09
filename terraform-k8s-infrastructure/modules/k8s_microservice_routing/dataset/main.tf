@@ -102,6 +102,7 @@ module "dataset_id_proxy_resource" {
 
 module "dataset_get_dataset" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.dataset_resource.aws_api_gateway_resource
   method       = "GET"
@@ -111,6 +112,7 @@ module "dataset_get_dataset" {
 
 module "dataset_get_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -120,6 +122,7 @@ module "dataset_get_dataset_id" {
 
 module "dataset_update_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.dataset_id_resource.aws_api_gateway_resource
   method       = "PATCH"
@@ -129,6 +132,7 @@ module "dataset_update_dataset_id" {
 
 module "dataset_delete_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.dataset_id_resource.aws_api_gateway_resource
   method       = "DELETE"
@@ -138,6 +142,7 @@ module "dataset_delete_dataset_id" {
 
 module "dataset_post_dataset" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.dataset_resource.aws_api_gateway_resource
   method       = "POST"
@@ -157,6 +162,7 @@ module "dataset_any_dataset_id_proxy" {
 
 module "dataset_post_dataset_find_by_ids" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.dataset_find_by_ids_resource.aws_api_gateway_resource
   method       = "POST"
@@ -166,6 +172,7 @@ module "dataset_post_dataset_find_by_ids" {
 
 module "dataset_post_dataset_upload" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.dataset_upload_resource.aws_api_gateway_resource
   method       = "POST"

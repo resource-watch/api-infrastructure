@@ -70,6 +70,7 @@ module "v1_user_proxy_resource" {
 
 module "gfw_user_get_v1_user" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_user_resource.aws_api_gateway_resource
   method       = "GET"
@@ -79,6 +80,7 @@ module "gfw_user_get_v1_user" {
 
 module "gfw_user_post_v1_user" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_user_resource.aws_api_gateway_resource
   method       = "POST"
@@ -88,6 +90,7 @@ module "gfw_user_post_v1_user" {
 
 module "gfw_user_any_v1_user_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_user_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

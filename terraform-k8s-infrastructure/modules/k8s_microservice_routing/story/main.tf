@@ -70,6 +70,7 @@ module "v1_story_proxy_resource" {
 
 module "story_get_v1_story" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_story_resource.aws_api_gateway_resource
   method       = "GET"
@@ -79,6 +80,7 @@ module "story_get_v1_story" {
 
 module "story_post_v1_story" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_story_resource.aws_api_gateway_resource
   method       = "POST"
@@ -88,6 +90,7 @@ module "story_post_v1_story" {
 
 module "story_any_v1_story_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_story_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

@@ -119,6 +119,7 @@ module "layer_id_expire_cache_resource" {
 
 module "layer_get" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.layer_resource.aws_api_gateway_resource
   method       = "GET"
@@ -148,6 +149,7 @@ module "layer_get_dataset_id" {
 
 module "layer_get_layer_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.layer_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -207,6 +209,7 @@ module "layer_delete_dataset_id_layer_id" {
 
 module "layer_post_layer_find_by_ids" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.layer_find_by_ids_resource.aws_api_gateway_resource
   method       = "POST"

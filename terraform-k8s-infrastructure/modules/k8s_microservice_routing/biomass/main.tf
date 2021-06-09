@@ -71,6 +71,7 @@ module "biomass_loss_admin_proxy_resource" {
 # Modules
 module "biomass_v1_any_biomass_loss_admin_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.biomass_loss_admin_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

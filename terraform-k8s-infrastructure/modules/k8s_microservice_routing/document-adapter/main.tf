@@ -294,6 +294,7 @@ module "doc_datasets_proxy_resource" {
 
 module "document_adapter_get_query_csv_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.query_csv_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -303,6 +304,7 @@ module "document_adapter_get_query_csv_dataset_id" {
 
 module "document_adapter_post_query_csv_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.query_csv_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
@@ -312,6 +314,7 @@ module "document_adapter_post_query_csv_dataset_id" {
 
 module "document_adapter_get_query_json_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.query_json_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -321,6 +324,7 @@ module "document_adapter_get_query_json_dataset_id" {
 
 module "document_adapter_post_query_json_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.query_json_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
@@ -330,6 +334,7 @@ module "document_adapter_post_query_json_dataset_id" {
 
 module "document_adapter_get_query_tsv_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.query_tsv_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -339,6 +344,7 @@ module "document_adapter_get_query_tsv_dataset_id" {
 
 module "document_adapter_post_query_tsv_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.query_tsv_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
@@ -348,6 +354,7 @@ module "document_adapter_post_query_tsv_dataset_id" {
 
 module "document_adapter_get_query_xml_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.query_xml_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -357,6 +364,7 @@ module "document_adapter_get_query_xml_dataset_id" {
 
 module "document_adapter_post_query_xml_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.query_xml_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
@@ -366,6 +374,7 @@ module "document_adapter_post_query_xml_dataset_id" {
 
 module "document_adapter_get_download_csv_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.download_csv_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -375,6 +384,7 @@ module "document_adapter_get_download_csv_dataset_id" {
 
 module "document_adapter_post_download_csv_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.download_csv_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
@@ -384,6 +394,7 @@ module "document_adapter_post_download_csv_dataset_id" {
 
 module "document_adapter_get_download_json_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.download_json_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -393,6 +404,7 @@ module "document_adapter_get_download_json_dataset_id" {
 
 module "document_adapter_post_download_json_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.download_json_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
@@ -402,6 +414,7 @@ module "document_adapter_post_download_json_dataset_id" {
 
 module "document_adapter_get_download_tsv_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.download_tsv_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -411,6 +424,7 @@ module "document_adapter_get_download_tsv_dataset_id" {
 
 module "document_adapter_post_download_tsv_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.download_tsv_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
@@ -420,6 +434,7 @@ module "document_adapter_post_download_tsv_dataset_id" {
 
 module "document_adapter_get_download_xml_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.download_xml_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -429,6 +444,7 @@ module "document_adapter_get_download_xml_dataset_id" {
 
 module "document_adapter_post_download_xml_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.download_xml_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
@@ -438,6 +454,7 @@ module "document_adapter_post_download_xml_dataset_id" {
 
 module "document_adapter_get_fields_csv_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.fields_csv_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -447,6 +464,7 @@ module "document_adapter_get_fields_csv_dataset_id" {
 
 module "document_adapter_get_fields_json_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.fields_json_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -456,6 +474,7 @@ module "document_adapter_get_fields_json_dataset_id" {
 
 module "document_adapter_get_fields_tsv_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.fields_tsv_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -465,6 +484,7 @@ module "document_adapter_get_fields_tsv_dataset_id" {
 
 module "document_adapter_get_fields_xml_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.fields_xml_v1_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -514,6 +534,7 @@ module "document_adapter_post_dataset_id_data_overwrite" {
 
 module "document_adapter_any_doc_datasets_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.doc_datasets_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

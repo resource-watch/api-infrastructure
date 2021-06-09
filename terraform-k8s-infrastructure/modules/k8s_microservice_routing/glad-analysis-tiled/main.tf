@@ -118,6 +118,7 @@ module "v1_glad_alerts_use_proxy_resource" {
 
 module "glad_analysis_tiled_any_v1_glad_alerts_admin_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_glad_alerts_admin_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -127,6 +128,7 @@ module "glad_analysis_tiled_any_v1_glad_alerts_admin_proxy" {
 
 module "glad_analysis_tiled_get_v1_glad_alerts_download" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_glad_alerts_download_resource.aws_api_gateway_resource
   method       = "GET"
@@ -136,6 +138,7 @@ module "glad_analysis_tiled_get_v1_glad_alerts_download" {
 
 module "glad_analysis_tiled_post_v1_glad_alerts_download" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_glad_alerts_download_resource.aws_api_gateway_resource
   method       = "POST"
@@ -145,6 +148,7 @@ module "glad_analysis_tiled_post_v1_glad_alerts_download" {
 
 module "glad_analysis_tiled_get_v1_glad_alerts" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = var.v1_glad_alerts_resource
   method       = "GET"
@@ -154,6 +158,7 @@ module "glad_analysis_tiled_get_v1_glad_alerts" {
 
 module "glad_analysis_tiled_post_v1_glad_alerts" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = var.v1_glad_alerts_resource
   method       = "POST"
@@ -163,6 +168,7 @@ module "glad_analysis_tiled_post_v1_glad_alerts" {
 
 module "glad_analysis_tiled_get_v1_glad_alerts_latest" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_glad_alerts_latest_resource.aws_api_gateway_resource
   method       = "GET"
@@ -172,6 +178,7 @@ module "glad_analysis_tiled_get_v1_glad_alerts_latest" {
 
 module "glad_analysis_tiled_any_v1_glad_alerts_wdpa_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_glad_alerts_wdpa_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -181,6 +188,7 @@ module "glad_analysis_tiled_any_v1_glad_alerts_wdpa_proxy" {
 
 module "glad_analysis_tiled_any_v1_glad_alerts_use_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_glad_alerts_use_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

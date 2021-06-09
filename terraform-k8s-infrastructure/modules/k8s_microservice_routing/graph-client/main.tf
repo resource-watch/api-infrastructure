@@ -71,6 +71,7 @@ module "graph_proxy_resource" {
 
 module "graph_client_any_graph_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.graph_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

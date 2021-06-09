@@ -36,3 +36,8 @@ variable "endpoint_request_parameters" {
   description = "Additional request_parameters values to add to the API Gateway endpoint_integration and endpoint_method"
   default     = []
 }
+
+variable "x_rw_domain" {
+  type        = string
+  description = "Value to be passed as the x-rw-domain header"
+}

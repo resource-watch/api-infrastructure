@@ -104,6 +104,7 @@ module "gee_tiles_any_layer_id_tile_gee_proxy" {
 
 module "gee_tiles_any_gee_layer_gee_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.gee_layer_gee_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

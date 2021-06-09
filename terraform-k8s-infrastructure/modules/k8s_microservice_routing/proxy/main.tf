@@ -71,6 +71,7 @@ module "proxy_v1_proxy_proxy_resource" {
 
 module "gee_tiles_any_proxy_v1_proxy_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.proxy_v1_proxy_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

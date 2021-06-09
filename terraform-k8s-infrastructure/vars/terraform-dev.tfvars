@@ -7,3 +7,4 @@ dns_prefix                               = "dev"
 tf_core_state_bucket                     = "wri-api-terraform-dev"
 deploy_metrics_server                    = false
 elasticsearch_data_nodes_type            = "m5.xlarge.elasticsearch"
+x_rw_domain                              = "dev-api.resourcewatch.org"

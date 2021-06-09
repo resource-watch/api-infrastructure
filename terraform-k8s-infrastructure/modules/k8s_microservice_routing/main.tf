@@ -216,59 +216,59 @@ resource "aws_api_gateway_deployment" "prod" {
   triggers = {
     redeployment = sha1(join(",", list(
       jsonencode(module.analysis-gee.endpoints),
-//      jsonencode(module.aqueduct-analysis.endpoints),
-//      jsonencode(module.arcgis-proxy.endpoints),
-//      jsonencode(module.arcgis.endpoints),
-//      jsonencode(module.area.endpoints),
+      //      jsonencode(module.aqueduct-analysis.endpoints),
+      //      jsonencode(module.arcgis-proxy.endpoints),
+      //      jsonencode(module.arcgis.endpoints),
+      //      jsonencode(module.area.endpoints),
       jsonencode(module.auth.endpoints),
-//      jsonencode(module.bigquery.endpoints),
-//      jsonencode(module.biomass.endpoints),
-//      jsonencode(module.carto.endpoints),
-//      jsonencode(module.converter.endpoints),
-//      jsonencode(module.dataset.endpoints),
-//      jsonencode(module.doc-orchestrator.endpoints),
+      //      jsonencode(module.bigquery.endpoints),
+      //      jsonencode(module.biomass.endpoints),
+      //      jsonencode(module.carto.endpoints),
+      //      jsonencode(module.converter.endpoints),
+      //      jsonencode(module.dataset.endpoints),
+      //      jsonencode(module.doc-orchestrator.endpoints),
       jsonencode(module.doc-swagger.endpoints),
-//      jsonencode(module.document-adapter.endpoints),
-//      jsonencode(module.fires-summary-stats.endpoints),
-//      jsonencode(module.forest-change.endpoints),
-//      jsonencode(module.forest-watcher-api.endpoints),
-//      jsonencode(module.forms.endpoints),
-//      jsonencode(module.fw-alerts.endpoints),
-//      jsonencode(module.fw-contextual-layers.endpoints),
-//      jsonencode(module.fw-teams.endpoints),
-//      jsonencode(module.gee-tiles.endpoints),
-//      jsonencode(module.gee.endpoints),
-//      jsonencode(module.geostore.endpoints),
-//      jsonencode(module.gfw-guira.endpoints),
-//      jsonencode(module.gfw-forma.endpoints),
-//      jsonencode(module.gfw-ogr.endpoints),
-//      jsonencode(module.gfw-ogr-gfw-ogr.endpoints),
-//      jsonencode(module.gfw-prodes.endpoints),
-//      jsonencode(module.gfw-umd.endpoints),
+      //      jsonencode(module.document-adapter.endpoints),
+      //      jsonencode(module.fires-summary-stats.endpoints),
+      //      jsonencode(module.forest-change.endpoints),
+      //      jsonencode(module.forest-watcher-api.endpoints),
+      //      jsonencode(module.forms.endpoints),
+      //      jsonencode(module.fw-alerts.endpoints),
+      //      jsonencode(module.fw-contextual-layers.endpoints),
+      //      jsonencode(module.fw-teams.endpoints),
+      //      jsonencode(module.gee-tiles.endpoints),
+      //      jsonencode(module.gee.endpoints),
+      //      jsonencode(module.geostore.endpoints),
+      //      jsonencode(module.gfw-guira.endpoints),
+      //      jsonencode(module.gfw-forma.endpoints),
+      //      jsonencode(module.gfw-ogr.endpoints),
+      //      jsonencode(module.gfw-ogr-gfw-ogr.endpoints),
+      //      jsonencode(module.gfw-prodes.endpoints),
+      //      jsonencode(module.gfw-umd.endpoints),
       jsonencode(module.gfw-user.endpoints),
       jsonencode(module.gfw-metadata.endpoints),
-//      jsonencode(module.glad-analysis-tiled.endpoints),
-//      jsonencode(module.graph-client.endpoints),
-//      jsonencode(module.gs-pro-config.endpoints),
-//      jsonencode(module.high-res.endpoints),
-//      jsonencode(module.imazon.endpoints),
-//      jsonencode(module.layer.endpoints),
-//      jsonencode(module.metadata.endpoints),
-//      jsonencode(module.nexgddp.endpoints),
-//      jsonencode(module.proxy.endpoints),
-//      jsonencode(module.query.endpoints),
-//      jsonencode(module.quicc.endpoints),
+      //      jsonencode(module.glad-analysis-tiled.endpoints),
+      //      jsonencode(module.graph-client.endpoints),
+      //      jsonencode(module.gs-pro-config.endpoints),
+      //      jsonencode(module.high-res.endpoints),
+      //      jsonencode(module.imazon.endpoints),
+      //      jsonencode(module.layer.endpoints),
+      //      jsonencode(module.metadata.endpoints),
+      //      jsonencode(module.nexgddp.endpoints),
+      //      jsonencode(module.proxy.endpoints),
+      //      jsonencode(module.query.endpoints),
+      //      jsonencode(module.quicc.endpoints),
       jsonencode(module.rw-lp),
       jsonencode(module.resource-watch-manager),
-//      jsonencode(module.salesforce-connector),
-//      jsonencode(module.story),
-//      jsonencode(module.subscriptions),
-//      jsonencode(module.task-executor.endpoints),
-//      jsonencode(module.true-color-tiles.endpoints),
-//      jsonencode(module.viirs-fires.endpoints),
-//      jsonencode(module.vocabulary.endpoints),
-//      jsonencode(module.webshot.endpoints),
-//      jsonencode(module.widget.endpoints),
+      //      jsonencode(module.salesforce-connector),
+      //      jsonencode(module.story),
+      //      jsonencode(module.subscriptions),
+      //      jsonencode(module.task-executor.endpoints),
+      //      jsonencode(module.true-color-tiles.endpoints),
+      //      jsonencode(module.viirs-fires.endpoints),
+      //      jsonencode(module.vocabulary.endpoints),
+      //      jsonencode(module.webshot.endpoints),
+      //      jsonencode(module.widget.endpoints),
       jsonencode(module.v1_redirect.endpoints),
       jsonencode(module.control-tower.endpoints),
     )))
@@ -371,6 +371,7 @@ module "doc-swagger" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
+  x_rw_domain      = var.x_rw_domain
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -387,6 +388,7 @@ module "analysis-gee" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
+  x_rw_domain      = var.x_rw_domain
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -407,7 +409,8 @@ module "analysis-gee" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -445,7 +448,8 @@ module "analysis-gee" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -460,7 +464,8 @@ module "analysis-gee" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -482,6 +487,7 @@ module "auth" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
+  x_rw_domain      = var.x_rw_domain
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_core_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -566,6 +572,7 @@ module "control-tower" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
+  x_rw_domain      = var.x_rw_domain
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -582,7 +589,8 @@ module "control-tower" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -596,7 +604,8 @@ module "control-tower" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -612,7 +621,8 @@ module "control-tower" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -651,7 +661,8 @@ module "control-tower" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -666,7 +677,8 @@ module "control-tower" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -681,7 +693,8 @@ module "control-tower" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -696,7 +709,8 @@ module "control-tower" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -711,7 +725,8 @@ module "control-tower" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -726,7 +741,8 @@ module "control-tower" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -741,7 +757,8 @@ module "control-tower" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -800,7 +817,8 @@ module "control-tower" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -816,7 +834,8 @@ module "control-tower" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -831,7 +850,8 @@ module "control-tower" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -847,7 +867,8 @@ module "control-tower" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -863,7 +884,8 @@ module "control-tower" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -878,7 +900,8 @@ module "control-tower" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -913,6 +936,7 @@ module "gfw-user" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
+  x_rw_domain      = var.x_rw_domain
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -946,7 +970,8 @@ module "gfw-user" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -961,7 +986,8 @@ module "gfw-user" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -976,7 +1002,8 @@ module "gfw-user" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -991,7 +1018,8 @@ module "gfw-user" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -1081,7 +1109,8 @@ module "gfw-user" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -1100,7 +1129,8 @@ module "gfw-user" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -1119,7 +1149,8 @@ module "gfw-user" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -1139,6 +1170,7 @@ module "rw-lp" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
+  x_rw_domain      = var.x_rw_domain
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 
@@ -1153,6 +1185,7 @@ module "resource-watch-manager" {
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
   cluster_name     = var.cluster_name
+  x_rw_domain      = var.x_rw_domain
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -1167,7 +1200,8 @@ module "resource-watch-manager" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -1182,7 +1216,8 @@ module "resource-watch-manager" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -1197,7 +1232,8 @@ module "resource-watch-manager" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -1212,7 +1248,8 @@ module "resource-watch-manager" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -1227,7 +1264,8 @@ module "resource-watch-manager" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -1242,7 +1280,8 @@ module "resource-watch-manager" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -1279,7 +1318,8 @@ module "resource-watch-manager" {
 //  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
 //  cluster_ca       = var.cluster_ca
 //  cluster_endpoint = var.cluster_endpoint
-//  cluster_name     = var.cluster_name
+// cluster_name     = var.cluster_name
+//  x_rw_domain    = var.x_rw_domain
 //  vpc              = var.vpc
 //  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
 //  v1_resource      = module.v1_resource.aws_api_gateway_resource
@@ -1358,6 +1398,7 @@ resource "aws_acm_certificate_validation" "aws_env_resourcewatch_org_domain_cert
 resource "aws_api_gateway_domain_name" "aws_env_resourcewatch_org_gateway_domain_name" {
   certificate_arn = aws_acm_certificate_validation.aws_env_resourcewatch_org_domain_cert_validation.certificate_arn
   domain_name     = "aws-${var.dns_prefix}.${data.cloudflare_zones.resourcewatch.zones[0].name}"
+  security_policy = "TLS_1_2"
 
   depends_on = [
   aws_acm_certificate_validation.aws_env_resourcewatch_org_domain_cert_validation]
@@ -1406,6 +1447,7 @@ resource "aws_acm_certificate_validation" "env_api_resourcewatch_org_domain_cert
 resource "aws_api_gateway_domain_name" "env_api_resourcewatch_org_gateway_domain_name" {
   certificate_arn = aws_acm_certificate_validation.env_api_resourcewatch_org_domain_cert_validation.certificate_arn
   domain_name     = "${var.dns_prefix}-api.${data.cloudflare_zones.resourcewatch.zones[0].name}"
+  security_policy = "TLS_1_2"
 
   depends_on = [
   aws_acm_certificate_validation.env_api_resourcewatch_org_domain_cert_validation]

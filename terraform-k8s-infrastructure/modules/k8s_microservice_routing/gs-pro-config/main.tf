@@ -70,6 +70,7 @@ module "v1_pro_config_tech_title_resource" {
 
 module "gs_pro_config_get_v1_pro_config_tech_title" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_pro_config_tech_title_resource.aws_api_gateway_resource
   method       = "GET"

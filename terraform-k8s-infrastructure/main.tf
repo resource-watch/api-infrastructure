@@ -49,6 +49,7 @@ module "k8s_microservice_routing" {
   cluster_ca           = data.aws_eks_cluster.rw_api.certificate_authority.0.data
   cluster_name         = data.aws_eks_cluster.rw_api.name
   tf_core_state_bucket = var.tf_core_state_bucket
+  x_rw_domain          = var.x_rw_domain
 }
 
 module "k8s_namespaces" {

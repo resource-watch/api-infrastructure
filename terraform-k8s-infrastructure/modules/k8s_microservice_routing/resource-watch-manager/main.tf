@@ -190,6 +190,7 @@ module "v1_contact_us_resource" {
 
 module "resource_watch_manager_get_v1_dashboard" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_dashboard_resource.aws_api_gateway_resource
   method       = "GET"
@@ -199,6 +200,7 @@ module "resource_watch_manager_get_v1_dashboard" {
 
 module "resource_watch_manager_post_v1_dashboard" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_dashboard_resource.aws_api_gateway_resource
   method       = "POST"
@@ -208,6 +210,7 @@ module "resource_watch_manager_post_v1_dashboard" {
 
 module "resource_watch_manager_any_v1_dashboard_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_dashboard_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -217,6 +220,7 @@ module "resource_watch_manager_any_v1_dashboard_proxy" {
 
 module "resource_watch_manager_get_v1_partner" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_partner_resource.aws_api_gateway_resource
   method       = "GET"
@@ -226,6 +230,7 @@ module "resource_watch_manager_get_v1_partner" {
 
 module "resource_watch_manager_post_v1_partner" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_partner_resource.aws_api_gateway_resource
   method       = "POST"
@@ -235,6 +240,7 @@ module "resource_watch_manager_post_v1_partner" {
 
 module "resource_watch_manager_get_v1_partner_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_partner_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -244,6 +250,7 @@ module "resource_watch_manager_get_v1_partner_id" {
 
 module "resource_watch_manager_patch_v1_partner_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_partner_id_resource.aws_api_gateway_resource
   method       = "PATCH"
@@ -253,6 +260,7 @@ module "resource_watch_manager_patch_v1_partner_id" {
 
 module "resource_watch_manager_put_v1_partner_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_partner_id_resource.aws_api_gateway_resource
   method       = "PUT"
@@ -262,6 +270,7 @@ module "resource_watch_manager_put_v1_partner_id" {
 
 module "resource_watch_manager_delete_v1_partner_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_partner_id_resource.aws_api_gateway_resource
   method       = "DELETE"
@@ -271,6 +280,7 @@ module "resource_watch_manager_delete_v1_partner_id" {
 
 module "resource_watch_manager_get_v1_static_page" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_static_page_resource.aws_api_gateway_resource
   method       = "GET"
@@ -280,6 +290,7 @@ module "resource_watch_manager_get_v1_static_page" {
 
 module "resource_watch_manager_post_v1_static_page" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_static_page_resource.aws_api_gateway_resource
   method       = "POST"
@@ -289,6 +300,7 @@ module "resource_watch_manager_post_v1_static_page" {
 
 module "resource_watch_manager_get_v1_static_page_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_static_page_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -298,6 +310,7 @@ module "resource_watch_manager_get_v1_static_page_id" {
 
 module "resource_watch_manager_patch_v1_static_page_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_static_page_id_resource.aws_api_gateway_resource
   method       = "PATCH"
@@ -307,6 +320,7 @@ module "resource_watch_manager_patch_v1_static_page_id" {
 
 module "resource_watch_manager_put_v1_static_page_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_static_page_id_resource.aws_api_gateway_resource
   method       = "PUT"
@@ -316,6 +330,7 @@ module "resource_watch_manager_put_v1_static_page_id" {
 
 module "resource_watch_manager_delete_v1_static_page_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_static_page_id_resource.aws_api_gateway_resource
   method       = "DELETE"
@@ -325,6 +340,7 @@ module "resource_watch_manager_delete_v1_static_page_id" {
 
 module "resource_watch_manager_get_v1_topic_page" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_topic_resource.aws_api_gateway_resource
   method       = "GET"
@@ -334,6 +350,7 @@ module "resource_watch_manager_get_v1_topic_page" {
 
 module "resource_watch_manager_any_v1_topic_id_proxy_page" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_topic_id_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -343,6 +360,7 @@ module "resource_watch_manager_any_v1_topic_id_proxy_page" {
 
 module "resource_watch_manager_post_v1_topic" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_topic_resource.aws_api_gateway_resource
   method       = "POST"
@@ -352,6 +370,7 @@ module "resource_watch_manager_post_v1_topic" {
 
 module "resource_watch_manager_get_v1_topic_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_topic_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -361,6 +380,7 @@ module "resource_watch_manager_get_v1_topic_id" {
 
 module "resource_watch_manager_patch_v1_topic_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_topic_id_resource.aws_api_gateway_resource
   method       = "PATCH"
@@ -370,6 +390,7 @@ module "resource_watch_manager_patch_v1_topic_id" {
 
 module "resource_watch_manager_put_v1_topic_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_topic_id_resource.aws_api_gateway_resource
   method       = "PUT"
@@ -379,6 +400,7 @@ module "resource_watch_manager_put_v1_topic_id" {
 
 module "resource_watch_manager_delete_v1_topic_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_topic_id_resource.aws_api_gateway_resource
   method       = "DELETE"
@@ -388,6 +410,7 @@ module "resource_watch_manager_delete_v1_topic_id" {
 
 module "resource_watch_manager_get_v1_tool" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_tool_resource.aws_api_gateway_resource
   method       = "GET"
@@ -397,6 +420,7 @@ module "resource_watch_manager_get_v1_tool" {
 
 module "resource_watch_manager_post_v1_tool" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_tool_resource.aws_api_gateway_resource
   method       = "POST"
@@ -406,6 +430,7 @@ module "resource_watch_manager_post_v1_tool" {
 
 module "resource_watch_manager_get_v1_tool_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_tool_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -415,6 +440,7 @@ module "resource_watch_manager_get_v1_tool_id" {
 
 module "resource_watch_manager_patch_v1_tool_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_tool_id_resource.aws_api_gateway_resource
   method       = "PATCH"
@@ -424,6 +450,7 @@ module "resource_watch_manager_patch_v1_tool_id" {
 
 module "resource_watch_manager_put_v1_tool_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_tool_id_resource.aws_api_gateway_resource
   method       = "PUT"
@@ -433,6 +460,7 @@ module "resource_watch_manager_put_v1_tool_id" {
 
 module "resource_watch_manager_delete_v1_tool_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_tool_id_resource.aws_api_gateway_resource
   method       = "DELETE"
@@ -442,6 +470,7 @@ module "resource_watch_manager_delete_v1_tool_id" {
 
 module "resource_watch_manager_post_v1_profile" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_profile_resource.aws_api_gateway_resource
   method       = "POST"
@@ -451,6 +480,7 @@ module "resource_watch_manager_post_v1_profile" {
 
 module "resource_watch_manager_get_v1_profile_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_profile_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -460,6 +490,7 @@ module "resource_watch_manager_get_v1_profile_id" {
 
 module "resource_watch_manager_patch_v1_profile_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_profile_id_resource.aws_api_gateway_resource
   method       = "PATCH"
@@ -469,6 +500,7 @@ module "resource_watch_manager_patch_v1_profile_id" {
 
 module "resource_watch_manager_put_v1_profile_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_profile_id_resource.aws_api_gateway_resource
   method       = "PUT"
@@ -478,6 +510,7 @@ module "resource_watch_manager_put_v1_profile_id" {
 
 module "resource_watch_manager_delete_v1_profile_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_profile_id_resource.aws_api_gateway_resource
   method       = "DELETE"
@@ -487,6 +520,7 @@ module "resource_watch_manager_delete_v1_profile_id" {
 
 module "resource_watch_manager_get_v1_faq" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_faq_resource.aws_api_gateway_resource
   method       = "GET"
@@ -496,6 +530,7 @@ module "resource_watch_manager_get_v1_faq" {
 
 module "resource_watch_manager_post_v1_faq" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_faq_resource.aws_api_gateway_resource
   method       = "POST"
@@ -505,6 +540,7 @@ module "resource_watch_manager_post_v1_faq" {
 
 module "resource_watch_manager_any_v1_faq_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_faq_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -514,6 +550,7 @@ module "resource_watch_manager_any_v1_faq_proxy" {
 
 module "resource_watch_manager_post_v1_temporary_content_image" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_temporary_content_image_resource.aws_api_gateway_resource
   method       = "POST"
@@ -523,6 +560,7 @@ module "resource_watch_manager_post_v1_temporary_content_image" {
 
 module "resource_watch_manager_post_v1_contact_us" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_contact_us_resource.aws_api_gateway_resource
   method       = "POST"

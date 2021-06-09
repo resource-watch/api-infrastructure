@@ -13,6 +13,11 @@ variable "cluster_name" {
   description = "The k8s cluster name"
 }
 
+variable "x_rw_domain" {
+  type        = string
+  description = "Value to be passed as the x-rw-domain header"
+}
+
 variable "api_gateway" {
   type = object({
     id               = string
@@ -31,7 +36,7 @@ variable "vpc" {
 
 variable "vpc_link" {
   type = object({
-    id = string
+    id          = string
     target_arns = list(string)
   })
   description = "VPC Link to the LB"

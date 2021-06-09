@@ -102,6 +102,7 @@ module "v1_reports_proxy_resource" {
 
 module "forms_any_v1_form_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_form_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -111,6 +112,7 @@ module "forms_any_v1_form_proxy" {
 
 module "forms_any_v1_questionnaire" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_questionnaire_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -120,6 +122,7 @@ module "forms_any_v1_questionnaire" {
 
 module "forms_any_v1_questionnaire_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_questionnaire_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -129,6 +132,7 @@ module "forms_any_v1_questionnaire_proxy" {
 
 module "forms_any_v1_reports" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_reports_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -138,6 +142,7 @@ module "forms_any_v1_reports" {
 
 module "forms_any_v1_reports_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_reports_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

@@ -110,6 +110,7 @@ module "v1_rest_datasets_bigquery_resource" {
 
 module "bigquery_get_v1_query_bigquery_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_query_bigquery_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -119,6 +120,7 @@ module "bigquery_get_v1_query_bigquery_dataset_id" {
 
 module "bigquery_post_v1_query_bigquery_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_query_bigquery_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
@@ -128,6 +130,7 @@ module "bigquery_post_v1_query_bigquery_dataset_id" {
 
 module "bigquery_get_v1_download_bigquery_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_download_bigquery_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -137,6 +140,7 @@ module "bigquery_get_v1_download_bigquery_dataset_id" {
 
 module "bigquery_post_v1_download_bigquery_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_download_bigquery_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
@@ -146,6 +150,7 @@ module "bigquery_post_v1_download_bigquery_dataset_id" {
 
 module "bigquery_get_v1_fields_bigquery_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_fields_bigquery_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -155,6 +160,7 @@ module "bigquery_get_v1_fields_bigquery_dataset_id" {
 
 module "bigquery_post_v1_rest_datasets_bigquery" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_rest_datasets_bigquery_resource.aws_api_gateway_resource
   method       = "POST"

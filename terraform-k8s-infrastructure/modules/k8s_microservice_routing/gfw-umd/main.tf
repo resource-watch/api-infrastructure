@@ -102,6 +102,7 @@ module "v3_umd_loss_proxy_resource" {
 
 module "gfw_umd_loss_any_v1_umd_loss_gain_admin_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_umd_loss_gain_admin_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -111,6 +112,7 @@ module "gfw_umd_loss_any_v1_umd_loss_gain_admin_proxy" {
 
 module "gfw_umd_loss_any_v2_umd_loss_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_umd_loss_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -120,6 +122,7 @@ module "gfw_umd_loss_any_v2_umd_loss_proxy" {
 
 module "gfw_umd_loss_any_v3_umd_loss_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v3_umd_loss_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

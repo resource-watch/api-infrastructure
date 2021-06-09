@@ -70,6 +70,7 @@ module "authorization_proxy_resource" {
 
 module "authorization_any_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.authorization_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -79,6 +80,7 @@ module "authorization_any_proxy" {
 
 module "authorization_get" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.authorization_resource.aws_api_gateway_resource
   method       = "GET"

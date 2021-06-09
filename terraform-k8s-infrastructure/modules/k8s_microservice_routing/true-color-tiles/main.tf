@@ -70,6 +70,7 @@ module "v1_true_color_tiles_proxy_resource" {
 
 module "true_color_tiles_get_v1_true_color_tiles_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_true_color_tiles_proxy_resource.aws_api_gateway_resource
   method       = "GET"

@@ -255,6 +255,7 @@ module "nexgddp_v1_loca_proxy_resource" {
 
 module "nexgddp_get_v1_query_nexgddp_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.nexgddp_v1_query_nexgddp_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -264,6 +265,7 @@ module "nexgddp_get_v1_query_nexgddp_dataset_id" {
 
 module "nexgddp_post_v1_query_nexgddp_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.nexgddp_v1_query_nexgddp_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
@@ -273,6 +275,7 @@ module "nexgddp_post_v1_query_nexgddp_dataset_id" {
 
 module "nexgddp_get_v1_fields_nexgddp_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.nexgddp_v1_fields_nexgddp_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -282,6 +285,7 @@ module "nexgddp_get_v1_fields_nexgddp_dataset_id" {
 
 module "nexgddp_post_v1_rest_datasets_nexgddp" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.nexgddp_v1_rest_datasets_nexgddp_resource.aws_api_gateway_resource
   method       = "POST"
@@ -291,6 +295,7 @@ module "nexgddp_post_v1_rest_datasets_nexgddp" {
 
 module "nexgddp_delete_v1_rest_datasets_nexgddp_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.nexgddp_v1_rest_datasets_nexgddp_dataset_id_resource.aws_api_gateway_resource
   method       = "DELETE"
@@ -300,6 +305,7 @@ module "nexgddp_delete_v1_rest_datasets_nexgddp_dataset_id" {
 
 module "nexgddp_get_v1_query_loca_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.nexgddp_v1_query_loca_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -309,6 +315,7 @@ module "nexgddp_get_v1_query_loca_dataset_id" {
 
 module "nexgddp_post_v1_query_loca_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.nexgddp_v1_query_loca_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
@@ -318,6 +325,7 @@ module "nexgddp_post_v1_query_loca_dataset_id" {
 
 module "nexgddp_get_v1_fields_loca_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.nexgddp_v1_fields_loca_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -327,6 +335,7 @@ module "nexgddp_get_v1_fields_loca_dataset_id" {
 
 module "nexgddp_post_v1_rest_datasets_loca" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.nexgddp_v1_rest_datasets_loca_resource.aws_api_gateway_resource
   method       = "POST"
@@ -336,6 +345,7 @@ module "nexgddp_post_v1_rest_datasets_loca" {
 
 module "nexgddp_any_v1_nexgddp_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.nexgddp_v1_nexgddp_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -345,6 +355,7 @@ module "nexgddp_any_v1_nexgddp_proxy" {
 
 module "nexgddp_any_v1_loca_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.nexgddp_v1_loca_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

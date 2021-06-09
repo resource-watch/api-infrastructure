@@ -70,6 +70,7 @@ module "documentation_proxy_resource" {
 
 module "doc_swagger_any" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.documentation_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -79,6 +80,7 @@ module "doc_swagger_any" {
 
 module "doc_swagger_proxy_any" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.documentation_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

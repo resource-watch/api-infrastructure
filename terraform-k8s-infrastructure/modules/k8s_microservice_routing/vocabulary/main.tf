@@ -75,6 +75,7 @@ module "vocabulary_proxy_resource" {
 
 module "vocabulary_get_vocabulary" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.vocabulary_resource.aws_api_gateway_resource
   method       = "GET"
@@ -84,6 +85,7 @@ module "vocabulary_get_vocabulary" {
 
 module "vocabulary_post_vocabulary" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.vocabulary_resource.aws_api_gateway_resource
   method       = "POST"
@@ -93,6 +95,7 @@ module "vocabulary_post_vocabulary" {
 
 module "vocabulary_any_vocabulary_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.vocabulary_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -188,6 +191,7 @@ module "vocabulary_delete_dataset_id_vocabulary" {
 
 module "vocabulary_any_dataset_vocabulary_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.dataset_vocabulary_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -449,6 +453,7 @@ module "favourite_proxy_resource" {
 
 module "vocabulary_get_favourite" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.favourite_resource.aws_api_gateway_resource
   method       = "GET"
@@ -458,6 +463,7 @@ module "vocabulary_get_favourite" {
 
 module "vocabulary_post_favourite" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.favourite_resource.aws_api_gateway_resource
   method       = "POST"
@@ -467,6 +473,7 @@ module "vocabulary_post_favourite" {
 
 module "vocabulary_any_favourite_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.favourite_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -496,6 +503,7 @@ module "collection_proxy_resource" {
 
 module "vocabulary_get_collection" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.collection_resource.aws_api_gateway_resource
   method       = "GET"
@@ -505,6 +513,7 @@ module "vocabulary_get_collection" {
 
 module "vocabulary_any_collection_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.collection_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -514,6 +523,7 @@ module "vocabulary_any_collection_proxy" {
 
 module "vocabulary_post_collection" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.collection_resource.aws_api_gateway_resource
   method       = "POST"

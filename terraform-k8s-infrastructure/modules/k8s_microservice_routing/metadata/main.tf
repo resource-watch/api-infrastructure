@@ -143,6 +143,7 @@ module "metadata_dataset_id_layer_id_metadata_resource" {
 
 module "metadata_get" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.metadata_resource.aws_api_gateway_resource
   method       = "GET"
@@ -286,6 +287,7 @@ module "metadata_patch_for_dataset_layer" {
 // Find by ids
 module "metadata_dataset_post_find_by_ids" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.metadata_dataset_metadata_find_by_ids_resource.aws_api_gateway_resource
   method       = "POST"

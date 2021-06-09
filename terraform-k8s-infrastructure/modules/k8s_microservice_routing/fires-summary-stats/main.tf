@@ -94,6 +94,7 @@ module "glad_alerts_summary_stats_proxy_resource" {
 
 module "fires_summary_stats_any_fire_alerts_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.fire_alerts_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -103,6 +104,7 @@ module "fires_summary_stats_any_fire_alerts_proxy" {
 
 module "fires_summary_stats_any_glad_alerts_summary_stats_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.glad_alerts_summary_stats_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

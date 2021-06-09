@@ -70,6 +70,7 @@ module "v1_gfw_pro_proxy_resource" {
 
 module "gfw_ogr_any_v1_gfw_pro_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_gfw_pro_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

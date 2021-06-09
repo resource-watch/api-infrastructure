@@ -118,6 +118,7 @@ module "rest_datasets_gee_dataset_id_resource" {
 
 module "gee_get_query_gee_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.query_gee_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -127,6 +128,7 @@ module "gee_get_query_gee_dataset_id" {
 
 module "gee_post_query_gee_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.query_gee_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
@@ -136,6 +138,7 @@ module "gee_post_query_gee_dataset_id" {
 
 module "gee_get_download_gee_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.download_gee_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -145,6 +148,7 @@ module "gee_get_download_gee_dataset_id" {
 
 module "gee_post_download_gee_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.download_gee_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
@@ -154,6 +158,7 @@ module "gee_post_download_gee_dataset_id" {
 
 module "gee_get_fields_gee_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.fields_gee_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -163,6 +168,7 @@ module "gee_get_fields_gee_dataset_id" {
 
 module "gee_get_rest_datasets_gee" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.rest_datasets_gee_resource.aws_api_gateway_resource
   method       = "POST"
@@ -172,6 +178,7 @@ module "gee_get_rest_datasets_gee" {
 
 module "gee_delete_rest_datasets_gee_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.rest_datasets_gee_dataset_id_resource.aws_api_gateway_resource
   method       = "DELETE"

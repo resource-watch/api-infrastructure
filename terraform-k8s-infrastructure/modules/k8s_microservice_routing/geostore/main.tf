@@ -75,6 +75,7 @@ module "v1_geostore_proxy_resource" {
 
 module "geostore_post_v1_geostore" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_geostore_resource.aws_api_gateway_resource
   method       = "POST"
@@ -84,6 +85,7 @@ module "geostore_post_v1_geostore" {
 
 module "geostore_any_v1_geostore_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_geostore_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -113,6 +115,7 @@ module "v1_coverage_proxy_resource" {
 
 module "geostore_any_v1_coverage_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_coverage_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -142,6 +145,7 @@ module "v2_geostore_proxy_resource" {
 
 module "geostore_post_v2_geostore" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_geostore_resource.aws_api_gateway_resource
   method       = "POST"
@@ -151,6 +155,7 @@ module "geostore_post_v2_geostore" {
 
 module "geostore_any_v2_geostore_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_geostore_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -180,6 +185,7 @@ module "v2_coverage_proxy_resource" {
 
 module "geostore_any_v2_coverage_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_coverage_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

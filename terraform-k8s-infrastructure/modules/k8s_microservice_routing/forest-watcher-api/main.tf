@@ -70,6 +70,7 @@ module "v1_forest_watcher_area_resource" {
 
 module "forest_watcher_api_get_v1_forest_watcher_area_resource" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_forest_watcher_area_resource.aws_api_gateway_resource
   method       = "GET"
@@ -79,6 +80,7 @@ module "forest_watcher_api_get_v1_forest_watcher_area_resource" {
 
 module "forest_watcher_api_post_v1_forest_watcher_area_resource" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_forest_watcher_area_resource.aws_api_gateway_resource
   method       = "POST"

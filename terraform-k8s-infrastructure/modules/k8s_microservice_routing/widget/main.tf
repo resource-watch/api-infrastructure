@@ -95,6 +95,7 @@ module "dataset_id_widget_id_proxy_resource" {
 
 module "widget_get_widget" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.widget_resource.aws_api_gateway_resource
   method       = "GET"
@@ -104,6 +105,7 @@ module "widget_get_widget" {
 
 module "widget_post_widget" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.widget_resource.aws_api_gateway_resource
   method       = "POST"
@@ -113,6 +115,7 @@ module "widget_post_widget" {
 
 module "widget_any_widget_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.widget_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

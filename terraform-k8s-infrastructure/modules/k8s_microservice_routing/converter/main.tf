@@ -70,6 +70,7 @@ module "convert_proxy_resource" {
 
 module "converter_any_convert_fs2sql" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.convert_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

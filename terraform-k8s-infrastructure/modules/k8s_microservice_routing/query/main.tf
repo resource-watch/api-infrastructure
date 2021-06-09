@@ -111,6 +111,7 @@ module "fields_dataset_id_resource" {
 
 module "query_get_query" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.query_resource.aws_api_gateway_resource
   method       = "GET"
@@ -120,6 +121,7 @@ module "query_get_query" {
 
 module "query_post_query" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.query_resource.aws_api_gateway_resource
   method       = "POST"
@@ -129,6 +131,7 @@ module "query_post_query" {
 
 module "query_get_query_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.query_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -138,6 +141,7 @@ module "query_get_query_id" {
 
 module "query_post_query_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.query_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
@@ -147,6 +151,7 @@ module "query_post_query_id" {
 
 module "download_get_download" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.download_resource.aws_api_gateway_resource
   method       = "GET"
@@ -156,6 +161,7 @@ module "download_get_download" {
 
 module "download_post_download" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.download_resource.aws_api_gateway_resource
   method       = "POST"
@@ -165,6 +171,7 @@ module "download_post_download" {
 
 module "download_get_download_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.download_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -174,6 +181,7 @@ module "download_get_download_id" {
 
 module "download_post_download_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.download_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
@@ -183,6 +191,7 @@ module "download_post_download_id" {
 
 module "jiminy_get_jiminy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.jiminy_resource.aws_api_gateway_resource
   method       = "GET"
@@ -192,6 +201,7 @@ module "jiminy_get_jiminy" {
 
 module "jiminy_post_jiminy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.jiminy_resource.aws_api_gateway_resource
   method       = "POST"
@@ -201,6 +211,7 @@ module "jiminy_post_jiminy" {
 
 module "fields_get_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.fields_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"

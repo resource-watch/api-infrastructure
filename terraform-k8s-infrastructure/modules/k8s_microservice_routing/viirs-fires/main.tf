@@ -88,6 +88,7 @@ module "v2_viirs_active_fires_proxy_resource" {
 
 module "viirs_fires_get_v1_viirs_active_fires" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_viirs_active_fires_resource.aws_api_gateway_resource
   method       = "GET"
@@ -97,6 +98,7 @@ module "viirs_fires_get_v1_viirs_active_fires" {
 
 module "viirs_fires_post_v1_viirs_active_fires" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_viirs_active_fires_resource.aws_api_gateway_resource
   method       = "POST"
@@ -106,6 +108,7 @@ module "viirs_fires_post_v1_viirs_active_fires" {
 
 module "viirs_fires_any_v1_viirs_active_fires_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_viirs_active_fires_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -115,6 +118,7 @@ module "viirs_fires_any_v1_viirs_active_fires_proxy" {
 
 module "viirs_fires_get_v2_viirs_active_fires" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_viirs_active_fires_resource.aws_api_gateway_resource
   method       = "GET"
@@ -124,6 +128,7 @@ module "viirs_fires_get_v2_viirs_active_fires" {
 
 module "viirs_fires_post_v2_viirs_active_fires" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_viirs_active_fires_resource.aws_api_gateway_resource
   method       = "POST"
@@ -133,6 +138,7 @@ module "viirs_fires_post_v2_viirs_active_fires" {
 
 module "viirs_fires_any_v2_viirs_active_fires_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_viirs_active_fires_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

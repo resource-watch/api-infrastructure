@@ -321,6 +321,7 @@ module "v2_landsat_tiles_proxy_resource" {
 
 module "analysis_gee_get_v1_recent_tiles_classifier" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_recent_tiles_classifier_resource.aws_api_gateway_resource
   method       = "GET"
@@ -330,6 +331,7 @@ module "analysis_gee_get_v1_recent_tiles_classifier" {
 
 module "analysis_gee_get_v1_composite_service" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_composite_service_resource.aws_api_gateway_resource
   method       = "GET"
@@ -339,6 +341,7 @@ module "analysis_gee_get_v1_composite_service" {
 
 module "analysis_gee_post_v1_mc_analysis" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_mc_analysis_resource.aws_api_gateway_resource
   method       = "POST"
@@ -348,6 +351,7 @@ module "analysis_gee_post_v1_mc_analysis" {
 
 module "analysis_gee_get_v1_composite_service_geom" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_composite_service_geom_resource.aws_api_gateway_resource
   method       = "GET"
@@ -357,6 +361,7 @@ module "analysis_gee_get_v1_composite_service_geom" {
 
 module "analysis_gee_post_v1_composite_service_geom" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_composite_service_geom_resource.aws_api_gateway_resource
   method       = "POST"
@@ -366,6 +371,7 @@ module "analysis_gee_post_v1_composite_service_geom" {
 
 module "analysis_gee_get_v1_geodescriber" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_geodescriber_resource.aws_api_gateway_resource
   method       = "GET"
@@ -375,6 +381,7 @@ module "analysis_gee_get_v1_geodescriber" {
 
 module "analysis_gee_get_v1_geodescriber_geom" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_geodescriber_geom_resource.aws_api_gateway_resource
   method       = "GET"
@@ -384,6 +391,7 @@ module "analysis_gee_get_v1_geodescriber_geom" {
 
 module "analysis_gee_post_v1_geodescriber_geom" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_geodescriber_geom_resource.aws_api_gateway_resource
   method       = "POST"
@@ -393,6 +401,7 @@ module "analysis_gee_post_v1_geodescriber_geom" {
 
 module "analysis_gee_get_v1_umd_loss_gain" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_umd_loss_gain_resource.aws_api_gateway_resource
   method       = "GET"
@@ -402,6 +411,7 @@ module "analysis_gee_get_v1_umd_loss_gain" {
 
 module "analysis_gee_post_v1_umd_loss_gain" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_umd_loss_gain_resource.aws_api_gateway_resource
   method       = "POST"
@@ -411,6 +421,7 @@ module "analysis_gee_post_v1_umd_loss_gain" {
 
 module "analysis_gee_any_v1_umd_loss_gain_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_umd_loss_gain_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -420,6 +431,7 @@ module "analysis_gee_any_v1_umd_loss_gain_proxy" {
 
 module "analysis_gee_get_v1_whrc_biomass" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_whrc_biomass_resource.aws_api_gateway_resource
   method       = "GET"
@@ -429,6 +441,7 @@ module "analysis_gee_get_v1_whrc_biomass" {
 
 module "analysis_gee_post_v1_whrc_biomass" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_whrc_biomass_resource.aws_api_gateway_resource
   method       = "POST"
@@ -438,6 +451,7 @@ module "analysis_gee_post_v1_whrc_biomass" {
 
 module "analysis_gee_any_v1_whrc_biomass_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_whrc_biomass_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -447,6 +461,7 @@ module "analysis_gee_any_v1_whrc_biomass_proxy" {
 
 module "analysis_gee_post_v1_mangrove_biomass" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_mangrove_biomass_resource.aws_api_gateway_resource
   method       = "POST"
@@ -456,6 +471,7 @@ module "analysis_gee_post_v1_mangrove_biomass" {
 
 module "analysis_gee_get_v1_mangrove_biomass" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_mangrove_biomass_resource.aws_api_gateway_resource
   method       = "GET"
@@ -465,6 +481,7 @@ module "analysis_gee_get_v1_mangrove_biomass" {
 
 module "analysis_gee_any_v1_mangrove_biomass_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_mangrove_biomass_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -474,6 +491,7 @@ module "analysis_gee_any_v1_mangrove_biomass_proxy" {
 
 module "analysis_gee_get_v1_population" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_population_resource.aws_api_gateway_resource
   method       = "GET"
@@ -483,6 +501,7 @@ module "analysis_gee_get_v1_population" {
 
 module "analysis_gee_post_v1_population" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_population_resource.aws_api_gateway_resource
   method       = "POST"
@@ -492,6 +511,7 @@ module "analysis_gee_post_v1_population" {
 
 module "analysis_gee_any_v1_population_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_population_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -501,6 +521,7 @@ module "analysis_gee_any_v1_population_proxy" {
 
 module "analysis_gee_get_v1_soil_carbon" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_soil_carbon_resource.aws_api_gateway_resource
   method       = "GET"
@@ -510,6 +531,7 @@ module "analysis_gee_get_v1_soil_carbon" {
 
 module "analysis_gee_any_v1_soil_carbon_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_soil_carbon_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -519,6 +541,7 @@ module "analysis_gee_any_v1_soil_carbon_proxy" {
 
 module "analysis_gee_post_v1_forma250gfw" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_forma250gfw_resource.aws_api_gateway_resource
   method       = "POST"
@@ -528,6 +551,7 @@ module "analysis_gee_post_v1_forma250gfw" {
 
 module "analysis_gee_get_v1_forma250gfw" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_forma250gfw_resource.aws_api_gateway_resource
   method       = "GET"
@@ -537,6 +561,7 @@ module "analysis_gee_get_v1_forma250gfw" {
 
 module "analysis_gee_any_v1_forma250gfw_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_forma250gfw_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -546,6 +571,7 @@ module "analysis_gee_any_v1_forma250gfw_proxy" {
 
 module "analysis_gee_get_v1_biomass_loss" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_biomass_loss_resource.aws_api_gateway_resource
   method       = "GET"
@@ -555,6 +581,7 @@ module "analysis_gee_get_v1_biomass_loss" {
 
 module "analysis_gee_post_v1_biomass_loss" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_biomass_loss_resource.aws_api_gateway_resource
   method       = "POST"
@@ -564,6 +591,7 @@ module "analysis_gee_post_v1_biomass_loss" {
 
 module "analysis_gee_any_v1_biomass_loss_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_biomass_loss_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -573,6 +601,7 @@ module "analysis_gee_any_v1_biomass_loss_proxy" {
 
 module "analysis_gee_get_v1_loss_by_landcover" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_loss_by_landcover_resource.aws_api_gateway_resource
   method       = "GET"
@@ -582,6 +611,7 @@ module "analysis_gee_get_v1_loss_by_landcover" {
 
 module "analysis_gee_post_v1_loss_by_landcover" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_loss_by_landcover_resource.aws_api_gateway_resource
   method       = "POST"
@@ -591,6 +621,7 @@ module "analysis_gee_post_v1_loss_by_landcover" {
 
 module "analysis_gee_get_v1_landcover" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_landcover_resource.aws_api_gateway_resource
   method       = "GET"
@@ -600,6 +631,7 @@ module "analysis_gee_get_v1_landcover" {
 
 module "analysis_gee_post_v1_landcover" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_landcover_resource.aws_api_gateway_resource
   method       = "POST"
@@ -609,6 +641,7 @@ module "analysis_gee_post_v1_landcover" {
 
 module "analysis_gee_any_v1_landsat_tiles_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_landsat_tiles_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -618,6 +651,7 @@ module "analysis_gee_any_v1_landsat_tiles_proxy" {
 
 module "analysis_gee_get_v1_sentinel_tiles" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_sentinel_tiles_resource.aws_api_gateway_resource
   method       = "GET"
@@ -627,6 +661,7 @@ module "analysis_gee_get_v1_sentinel_tiles" {
 
 module "analysis_gee_get_v1_recent_tiles" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_recent_tiles_resource.aws_api_gateway_resource
   method       = "GET"
@@ -636,6 +671,7 @@ module "analysis_gee_get_v1_recent_tiles" {
 
 module "analysis_gee_any_v1_recent_tiles_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_recent_tiles_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -645,6 +681,7 @@ module "analysis_gee_any_v1_recent_tiles_proxy" {
 
 module "analysis_gee_any_v2_landsat_tiles_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_landsat_tiles_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -654,6 +691,7 @@ module "analysis_gee_any_v2_landsat_tiles_proxy" {
 
 module "analysis_gee_get_v2_nlcd_landcover" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_nlcd_landcover_resource.aws_api_gateway_resource
   method       = "GET"
@@ -663,6 +701,7 @@ module "analysis_gee_get_v2_nlcd_landcover" {
 
 module "analysis_gee_post_v2_nlcd_landcover" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_nlcd_landcover_resource.aws_api_gateway_resource
   method       = "POST"
@@ -672,6 +711,7 @@ module "analysis_gee_post_v2_nlcd_landcover" {
 
 module "analysis_gee_any_v2_nlcd_landcover_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_nlcd_landcover_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -681,6 +721,7 @@ module "analysis_gee_any_v2_nlcd_landcover_proxy" {
 
 module "analysis_gee_get_v2_biomass_loss" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_biomass_loss_resource.aws_api_gateway_resource
   method       = "GET"
@@ -690,6 +731,7 @@ module "analysis_gee_get_v2_biomass_loss" {
 
 module "analysis_gee_post_v2_biomass_loss" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_biomass_loss_resource.aws_api_gateway_resource
   method       = "POST"
@@ -699,6 +741,7 @@ module "analysis_gee_post_v2_biomass_loss" {
 
 module "analysis_gee_any_v2_biomass_loss_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_biomass_loss_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

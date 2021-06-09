@@ -118,6 +118,7 @@ module "v1_rest_datasets_featureservice_dataset_id_resource" {
 
 module "arcgis_get_v1_query_featureservice_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_query_featureservice_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -127,6 +128,7 @@ module "arcgis_get_v1_query_featureservice_dataset_id" {
 
 module "arcgis_post_v1_query_featureservice_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_query_featureservice_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
@@ -136,6 +138,7 @@ module "arcgis_post_v1_query_featureservice_dataset_id" {
 
 module "arcgis_get_v1_download_featureservice_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_download_featureservice_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -145,6 +148,7 @@ module "arcgis_get_v1_download_featureservice_dataset_id" {
 
 module "arcgis_post_v1_download_featureservice_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_download_featureservice_dataset_id_resource.aws_api_gateway_resource
   method       = "POST"
@@ -154,6 +158,7 @@ module "arcgis_post_v1_download_featureservice_dataset_id" {
 
 module "arcgis_get_v1_fields_featureservice_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_fields_featureservice_dataset_id_resource.aws_api_gateway_resource
   method       = "GET"
@@ -163,6 +168,7 @@ module "arcgis_get_v1_fields_featureservice_dataset_id" {
 
 module "arcgis_post_v1_rest_datasets_featureservice" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_rest_datasets_featureservice_resource.aws_api_gateway_resource
   method       = "POST"
@@ -172,6 +178,7 @@ module "arcgis_post_v1_rest_datasets_featureservice" {
 
 module "arcgis_delete_v1_rest_datasets_featureservice_dataset_id" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_rest_datasets_featureservice_dataset_id_resource.aws_api_gateway_resource
   method       = "DELETE"

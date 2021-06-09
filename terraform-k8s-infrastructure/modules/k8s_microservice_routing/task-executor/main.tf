@@ -71,6 +71,7 @@ module "task_proxy_resource" {
 
 module "task_async_get_task" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.task_resource.aws_api_gateway_resource
   method       = "GET"
@@ -80,6 +81,7 @@ module "task_async_get_task" {
 
 module "task_async_any_task_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.task_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

@@ -77,6 +77,7 @@ module "rw_lp_proxy_resource" {
 
 module "rw_lp_get_home" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = data.aws_api_gateway_resource.root_resource
   method       = "GET"
@@ -86,6 +87,7 @@ module "rw_lp_get_home" {
 
 module "rw_lp_get_rw_lp_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.rw_lp_proxy_resource.aws_api_gateway_resource
   method       = "GET"

@@ -70,6 +70,7 @@ module "v1_terrai_alerts_proxy_resource" {
 
 module "forest_change_get_v1_terrai_alerts" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_terrai_alerts_resource.aws_api_gateway_resource
   method       = "GET"
@@ -79,6 +80,7 @@ module "forest_change_get_v1_terrai_alerts" {
 
 module "forest_change_post_v1_terrai_alerts" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_terrai_alerts_resource.aws_api_gateway_resource
   method       = "POST"
@@ -88,6 +90,7 @@ module "forest_change_post_v1_terrai_alerts" {
 
 module "forest_change_any_v1_terrai_alerts_admin_iso_code" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_terrai_alerts_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

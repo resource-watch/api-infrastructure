@@ -120,6 +120,7 @@ module "v1_download_tiles_proxy_resource" {
 
 module "area_get_area_v2" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_area_resource.aws_api_gateway_resource
   method       = "GET"
@@ -129,6 +130,7 @@ module "area_get_area_v2" {
 
 module "area_post_area_v2" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_area_resource.aws_api_gateway_resource
   method       = "POST"
@@ -138,6 +140,7 @@ module "area_post_area_v2" {
 
 module "area_any_area_v2_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_area_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -147,6 +150,7 @@ module "area_any_area_v2_proxy" {
 
 module "area_get_v1_area" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_area_resource.aws_api_gateway_resource
   method       = "GET"
@@ -156,6 +160,7 @@ module "area_get_v1_area" {
 
 module "area_post_v1_area" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_area_resource.aws_api_gateway_resource
   method       = "POST"
@@ -165,6 +170,7 @@ module "area_post_v1_area" {
 
 module "area_any_v1_area_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_area_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -174,6 +180,7 @@ module "area_any_v1_area_proxy" {
 
 module "area_any_v1_download_tiles_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v1_download_tiles_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
@@ -183,6 +190,7 @@ module "area_any_v1_download_tiles_proxy" {
 
 module "area_any_v2_download_tiles_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.v2_download_tiles_proxy_resource.aws_api_gateway_resource
   method       = "ANY"

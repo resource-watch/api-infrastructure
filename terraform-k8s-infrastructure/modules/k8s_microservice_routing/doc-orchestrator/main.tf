@@ -70,6 +70,7 @@ module "doc_importer_proxy_resource" {
 
 module "doc_orchestrator_any_doc_importer_proxy" {
   source       = "../endpoint"
+  x_rw_domain  = var.x_rw_domain
   api_gateway  = var.api_gateway
   api_resource = module.doc_importer_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
