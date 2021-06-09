@@ -2,15 +2,15 @@
 # /v1/gfw-metadata/(.*)$ proxies to http://gis-gfw.wri.org/metadata/$1
 #
 
-// /gfw-metadata
+// /v1/gfw-metadata
 module "v1_gfw_metadata_resource" {
   source      = "../resource"
   rest_api_id = var.api_gateway.id
-  parent_id   = var.root_resource_id
+  parent_id   = var.v1_resource.id
   path_part   = "gfw-metadata"
 }
 
-// /gfw-metadata/{proxy+}
+// /v1/gfw-metadata/{proxy+}
 module "v1_gfw_metadata_proxy_resource" {
   source      = "../resource"
   rest_api_id = var.api_gateway.id

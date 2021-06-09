@@ -361,7 +361,7 @@ module "v1_redirect" {
 module "gfw-metadata" {
   source           = "./gfw-metadata"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  root_resource_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
+  v1_resource      = module.v1_resource.aws_api_gateway_resource
 }
 
 // /documentation uses doc-swagger MS (no CT)
