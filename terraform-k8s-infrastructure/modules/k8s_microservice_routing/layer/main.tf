@@ -129,6 +129,7 @@ module "layer_get" {
 
 module "layer_get_dataset_id_layer" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_layer_resource.aws_api_gateway_resource
   method                      = "GET"
@@ -139,6 +140,7 @@ module "layer_get_dataset_id_layer" {
 
 module "layer_get_dataset_id" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_layer_id_resource.aws_api_gateway_resource
   method                      = "GET"
@@ -159,6 +161,7 @@ module "layer_get_layer_id" {
 
 module "layer_post_dataset_id_layer" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_layer_resource.aws_api_gateway_resource
   method                      = "POST"
@@ -169,6 +172,7 @@ module "layer_post_dataset_id_layer" {
 
 module "layer_delete_dataset_id_layer" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_layer_resource.aws_api_gateway_resource
   method                      = "DELETE"
@@ -179,6 +183,7 @@ module "layer_delete_dataset_id_layer" {
 
 module "layer_patch_dataset_id_layer_id" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_layer_id_resource.aws_api_gateway_resource
   method                      = "PATCH"
@@ -189,6 +194,7 @@ module "layer_patch_dataset_id_layer_id" {
 
 module "layer_any_layer_change_environment_proxy" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.layer_change_environment_proxy_resource.aws_api_gateway_resource
   method                      = "ANY"
@@ -199,6 +205,7 @@ module "layer_any_layer_change_environment_proxy" {
 
 module "layer_delete_dataset_id_layer_id" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_layer_id_resource.aws_api_gateway_resource
   method                      = "DELETE"
@@ -219,6 +226,7 @@ module "layer_post_layer_find_by_ids" {
 
 module "layer_delete_layer_id_expire_cache" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.layer_id_expire_cache_resource.aws_api_gateway_resource
   method                      = "DELETE"

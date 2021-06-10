@@ -141,6 +141,7 @@ module "dataset_vocabulary_proxy_resource" {
 
 module "vocabulary_get_dataset_id_vocabulary" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_vocabulary_resource.aws_api_gateway_resource
   method                      = "GET"
@@ -151,6 +152,7 @@ module "vocabulary_get_dataset_id_vocabulary" {
 
 module "vocabulary_post_dataset_id_vocabulary" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_vocabulary_resource.aws_api_gateway_resource
   method                      = "POST"
@@ -161,6 +163,7 @@ module "vocabulary_post_dataset_id_vocabulary" {
 
 module "vocabulary_put_dataset_id_vocabulary" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_vocabulary_resource.aws_api_gateway_resource
   method                      = "PUT"
@@ -171,6 +174,7 @@ module "vocabulary_put_dataset_id_vocabulary" {
 
 module "vocabulary_any_dataset_id_vocabulary_proxy" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_vocabulary_proxy_resource.aws_api_gateway_resource
   method                      = "ANY"
@@ -181,6 +185,7 @@ module "vocabulary_any_dataset_id_vocabulary_proxy" {
 
 module "vocabulary_delete_dataset_id_vocabulary" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_vocabulary_resource.aws_api_gateway_resource
   method                      = "DELETE"
@@ -237,6 +242,7 @@ module "dataset_id_widget_vocabulary_proxy_resource" {
 
 module "vocabulary_get_dataset_id_widget_id_vocabulary" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_widget_id_vocabulary_resource.aws_api_gateway_resource
   method                      = "GET"
@@ -247,6 +253,7 @@ module "vocabulary_get_dataset_id_widget_id_vocabulary" {
 
 module "vocabulary_get_dataset_id_widget_id_vocabulary_id" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_widget_id_vocabulary_id_resource.aws_api_gateway_resource
   method                      = "GET"
@@ -257,6 +264,7 @@ module "vocabulary_get_dataset_id_widget_id_vocabulary_id" {
 
 module "vocabulary_post_dataset_id_widget_id_vocabulary" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_widget_id_vocabulary_resource.aws_api_gateway_resource
   method                      = "POST"
@@ -267,6 +275,7 @@ module "vocabulary_post_dataset_id_widget_id_vocabulary" {
 
 module "vocabulary_post_dataset_id_widget_id_vocabulary_id" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_widget_id_vocabulary_id_resource.aws_api_gateway_resource
   method                      = "POST"
@@ -277,6 +286,7 @@ module "vocabulary_post_dataset_id_widget_id_vocabulary_id" {
 
 module "vocabulary_patch_dataset_id_widget_id_vocabulary_id" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_widget_id_vocabulary_id_resource.aws_api_gateway_resource
   method                      = "PATCH"
@@ -287,6 +297,7 @@ module "vocabulary_patch_dataset_id_widget_id_vocabulary_id" {
 
 module "vocabulary_delete_dataset_id_widget_id_vocabulary" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_widget_id_vocabulary_resource.aws_api_gateway_resource
   method                      = "DELETE"
@@ -297,6 +308,7 @@ module "vocabulary_delete_dataset_id_widget_id_vocabulary" {
 
 module "vocabulary_delete_dataset_id_widget_id_vocabulary_id" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_widget_id_vocabulary_id_resource.aws_api_gateway_resource
   method                      = "DELETE"
@@ -307,6 +319,7 @@ module "vocabulary_delete_dataset_id_widget_id_vocabulary_id" {
 
 module "vocabulary_any_dataset_id_widget_vocabulary_proxy" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_widget_vocabulary_proxy_resource.aws_api_gateway_resource
   method                      = "ANY"
@@ -353,6 +366,7 @@ module "dataset_id_layer_vocabulary_proxy_resource" {
 
 module "vocabulary_get_dataset_id_layer_id_vocabulary" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_layer_id_vocabulary_resource.aws_api_gateway_resource
   method                      = "GET"
@@ -363,6 +377,7 @@ module "vocabulary_get_dataset_id_layer_id_vocabulary" {
 
 module "vocabulary_get_dataset_id_layer_id_vocabulary_id" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_layer_id_vocabulary_id_resource.aws_api_gateway_resource
   method                      = "GET"
@@ -373,6 +388,7 @@ module "vocabulary_get_dataset_id_layer_id_vocabulary_id" {
 
 module "vocabulary_post_dataset_id_layer_id_vocabulary" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_layer_id_vocabulary_resource.aws_api_gateway_resource
   method                      = "POST"
@@ -383,6 +399,7 @@ module "vocabulary_post_dataset_id_layer_id_vocabulary" {
 
 module "vocabulary_post_dataset_id_layer_id_vocabulary_id" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_layer_id_vocabulary_id_resource.aws_api_gateway_resource
   method                      = "POST"
@@ -393,6 +410,7 @@ module "vocabulary_post_dataset_id_layer_id_vocabulary_id" {
 
 module "vocabulary_patch_dataset_id_layer_id_vocabulary_id" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_layer_id_vocabulary_id_resource.aws_api_gateway_resource
   method                      = "PATCH"
@@ -403,6 +421,7 @@ module "vocabulary_patch_dataset_id_layer_id_vocabulary_id" {
 
 module "vocabulary_delete_dataset_id_layer_id_vocabulary" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_layer_id_vocabulary_resource.aws_api_gateway_resource
   method                      = "DELETE"
@@ -413,6 +432,7 @@ module "vocabulary_delete_dataset_id_layer_id_vocabulary" {
 
 module "vocabulary_delete_dataset_id_layer_id_vocabulary_id" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_layer_id_vocabulary_id_resource.aws_api_gateway_resource
   method                      = "DELETE"
@@ -423,6 +443,7 @@ module "vocabulary_delete_dataset_id_layer_id_vocabulary_id" {
 
 module "vocabulary_any_dataset_id_layer_vocabulary_proxy" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_layer_vocabulary_proxy_resource.aws_api_gateway_resource
   method                      = "ANY"

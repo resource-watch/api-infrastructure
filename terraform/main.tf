@@ -163,15 +163,16 @@ module "gfw-node-group" {
 }
 
 module "gateway-node-group" {
-  source          = "./modules/node_group"
-  cluster         = module.eks.cluster
-  cluster_name    = module.eks.cluster_name
-  node_group_name = "gateway-node-group"
-  instance_types  = var.gateway_node_group_instance_types
-  min_size        = var.gateway_node_group_min_size
-  max_size        = var.gateway_node_group_max_size
-  desired_size    = var.gateway_node_group_desired_size
-  node_role_arn   = module.eks.node_role_arn
+  source                   = "./modules/node_group"
+  cluster                  = module.eks.cluster
+  cluster_name             = module.eks.cluster_name
+  node_group_name          = "gateway-node-group"
+  instance_types           = var.gateway_node_group_instance_types
+  min_size                 = var.gateway_node_group_min_size
+  max_size                 = var.gateway_node_group_max_size
+  desired_size             = var.gateway_node_group_desired_size
+  node_role_arn            = module.eks.node_role_arn
+  eks_node_release_version = var.eks_node_release_version
   subnet_ids = [
     module.vpc.private_subnets[0].id,
     module.vpc.private_subnets[1].id,

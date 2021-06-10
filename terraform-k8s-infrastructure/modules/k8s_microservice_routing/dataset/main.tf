@@ -152,6 +152,7 @@ module "dataset_post_dataset" {
 
 module "dataset_any_dataset_id_proxy" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_proxy_resource.aws_api_gateway_resource
   method                      = "ANY"

@@ -154,6 +154,7 @@ module "metadata_get" {
 // Dataset
 module "metadata_get_for_dataset" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.metadata_dataset_id_metadata_resource.aws_api_gateway_resource
   method                      = "GET"
@@ -164,6 +165,7 @@ module "metadata_get_for_dataset" {
 
 module "metadata_post_for_dataset" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.metadata_dataset_id_metadata_resource.aws_api_gateway_resource
   method                      = "POST"
@@ -174,6 +176,7 @@ module "metadata_post_for_dataset" {
 
 module "metadata_delete_for_dataset" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.metadata_dataset_id_metadata_resource.aws_api_gateway_resource
   method                      = "DELETE"
@@ -184,6 +187,7 @@ module "metadata_delete_for_dataset" {
 
 module "metadata_post_for_dataset_clone" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.metadata_dataset_metadata_clone_resource.aws_api_gateway_resource
   method                      = "POST"
@@ -194,6 +198,7 @@ module "metadata_post_for_dataset_clone" {
 
 module "metadata_patch_for_dataset" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.metadata_dataset_id_metadata_resource.aws_api_gateway_resource
   method                      = "PATCH"
@@ -205,6 +210,7 @@ module "metadata_patch_for_dataset" {
 // Widget
 module "metadata_get_for_dataset_widget" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.metadata_dataset_id_widget_id_metadata_resource.aws_api_gateway_resource
   method                      = "GET"
@@ -215,6 +221,7 @@ module "metadata_get_for_dataset_widget" {
 
 module "metadata_post_for_dataset_widget" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.metadata_dataset_id_widget_id_metadata_resource.aws_api_gateway_resource
   method                      = "POST"
@@ -225,6 +232,7 @@ module "metadata_post_for_dataset_widget" {
 
 module "metadata_delete_for_dataset_widget" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.metadata_dataset_id_widget_id_metadata_resource.aws_api_gateway_resource
   method                      = "DELETE"
@@ -235,6 +243,7 @@ module "metadata_delete_for_dataset_widget" {
 
 module "metadata_patch_for_dataset_widget" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.metadata_dataset_id_widget_id_metadata_resource.aws_api_gateway_resource
   method                      = "PATCH"
@@ -246,6 +255,7 @@ module "metadata_patch_for_dataset_widget" {
 // Layer
 module "metadata_get_for_dataset_layer" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.metadata_dataset_id_layer_id_metadata_resource.aws_api_gateway_resource
   method                      = "GET"
@@ -256,6 +266,7 @@ module "metadata_get_for_dataset_layer" {
 
 module "metadata_post_for_dataset_layer" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.metadata_dataset_id_layer_id_metadata_resource.aws_api_gateway_resource
   method                      = "POST"
@@ -266,6 +277,7 @@ module "metadata_post_for_dataset_layer" {
 
 module "metadata_delete_for_dataset_layer" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.metadata_dataset_id_layer_id_metadata_resource.aws_api_gateway_resource
   method                      = "DELETE"
@@ -276,6 +288,7 @@ module "metadata_delete_for_dataset_layer" {
 
 module "metadata_patch_for_dataset_layer" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.metadata_dataset_id_layer_id_metadata_resource.aws_api_gateway_resource
   method                      = "PATCH"
@@ -297,6 +310,7 @@ module "metadata_dataset_post_find_by_ids" {
 
 module "metadata_layer_post_find_by_ids" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.metadata_dataset_id_layer_metadata_find_by_ids_resource.aws_api_gateway_resource
   method                      = "POST"
@@ -307,6 +321,7 @@ module "metadata_layer_post_find_by_ids" {
 
 module "metadata_widget_post_find_by_ids" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.metadata_dataset_id_widget_metadata_find_by_ids_resource.aws_api_gateway_resource
   method                      = "POST"

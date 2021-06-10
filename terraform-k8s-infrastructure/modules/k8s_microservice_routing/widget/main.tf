@@ -125,6 +125,7 @@ module "widget_any_widget_proxy" {
 
 module "widget_any_dataset_id_widget" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_widget_resource.aws_api_gateway_resource
   method                      = "ANY"
@@ -135,6 +136,7 @@ module "widget_any_dataset_id_widget" {
 
 module "widget_any_dataset_id_widget_id" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_widget_id_resource.aws_api_gateway_resource
   method                      = "ANY"
@@ -145,6 +147,7 @@ module "widget_any_dataset_id_widget_id" {
 
 module "widget_any_dataset_id_widget_id_proxy" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_widget_id_proxy_resource.aws_api_gateway_resource
   method                      = "ANY"

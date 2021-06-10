@@ -365,6 +365,7 @@ module "nexgddp_any_v1_loca_proxy" {
 
 module "gee_tiles_any_layer_id_tile_nexgddp_proxy_resource" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.nexgddp_v1_layer_id_tile_nexgddp_proxy_resource.aws_api_gateway_resource
   method                      = "ANY"
@@ -375,6 +376,7 @@ module "gee_tiles_any_layer_id_tile_nexgddp_proxy_resource" {
 
 module "gee_tiles_any_layer_id_tile_loca_proxy_resource" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.nexgddp_v1_layer_id_tile_loca_proxy_resource.aws_api_gateway_resource
   method                      = "ANY"
@@ -385,6 +387,7 @@ module "gee_tiles_any_layer_id_tile_loca_proxy_resource" {
 
 module "gee_tiles_any_layer_nexgddp_proxy_resource" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.nexgddp_layer_nexgddp_proxy_resource.aws_api_gateway_resource
   method                      = "ANY"
@@ -395,6 +398,7 @@ module "gee_tiles_any_layer_nexgddp_proxy_resource" {
 
 module "gee_tiles_any_layer_loca_proxy_resource" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.nexgddp_layer_loca_proxy_resource.aws_api_gateway_resource
   method                      = "ANY"

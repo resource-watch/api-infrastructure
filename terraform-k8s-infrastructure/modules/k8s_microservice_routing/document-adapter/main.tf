@@ -494,6 +494,7 @@ module "document_adapter_get_fields_xml_dataset_id" {
 
 module "document_adapter_post_dataset_id_concat" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_concat_resource.aws_api_gateway_resource
   method                      = "POST"
@@ -504,6 +505,7 @@ module "document_adapter_post_dataset_id_concat" {
 
 module "document_adapter_post_dataset_id_reindex" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_reindex_resource.aws_api_gateway_resource
   method                      = "POST"
@@ -514,6 +516,7 @@ module "document_adapter_post_dataset_id_reindex" {
 
 module "document_adapter_post_dataset_id_append" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_append_resource.aws_api_gateway_resource
   method                      = "POST"
@@ -524,6 +527,7 @@ module "document_adapter_post_dataset_id_append" {
 
 module "document_adapter_post_dataset_id_data_overwrite" {
   source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_data_overwrite_resource.aws_api_gateway_resource
   method                      = "POST"
