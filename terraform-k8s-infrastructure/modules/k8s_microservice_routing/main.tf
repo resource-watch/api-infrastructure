@@ -1456,14 +1456,14 @@ resource "aws_api_gateway_base_path_mapping" "env_api_resourcewatch_org_base_pat
 
 // TODO: if we don't move the globalforestwatch.org DNS into TF, this will have to stay a manual thing
 // {env}-api.globalforestwatch.org
-resource "aws_acm_certificate" "env_api_globalforestwatch_org_domain_cert" {
-  domain_name       = "${var.dns_prefix}-api.globalforestwatch.org"
-  validation_method = "DNS"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
+//resource "aws_acm_certificate" "env_api_globalforestwatch_org_domain_cert" {
+//  domain_name       = "${var.dns_prefix}-api.globalforestwatch.org"
+//  validation_method = "DNS"
+//
+//  lifecycle {
+//    create_before_destroy = true
+//  }
+//}
 
 //resource "aws_acm_certificate_validation" "env_api_globalforestwatch_org_domain_cert_validation" {
 //  certificate_arn = aws_acm_certificate.env_api_globalforestwatch_org_domain_cert.arn

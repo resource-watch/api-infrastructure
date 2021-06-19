@@ -276,7 +276,7 @@ module "dataset_id_data_overwrite_resource" {
   path_part   = "data-overwrite"
 }
 
-// /v1/doc-dataset
+// /v1/doc-datasets
 module "doc_datasets_resource" {
   source      = "../resource"
   rest_api_id = var.api_gateway.id
@@ -284,7 +284,7 @@ module "doc_datasets_resource" {
   path_part   = "doc-datasets"
 }
 
-// /v1/doc-dataset/{proxy+}
+// /v1/doc-datasets/{proxy+}
 module "doc_datasets_proxy_resource" {
   source      = "../resource"
   rest_api_id = var.api_gateway.id
@@ -542,6 +542,6 @@ module "document_adapter_any_doc_datasets_proxy" {
   api_gateway  = var.api_gateway
   api_resource = module.doc_datasets_proxy_resource.aws_api_gateway_resource
   method       = "ANY"
-  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/doc-datasets/{proxy}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30521/api/v1/document/{proxy}"
   vpc_link     = var.vpc_link
 }
