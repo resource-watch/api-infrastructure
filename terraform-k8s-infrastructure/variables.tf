@@ -15,6 +15,11 @@ variable "aws_region" {
   description = "A valid AWS region to configure the underlying AWS SDK."
 }
 
+variable "dns_prefix" {
+  type        = string
+  description = "DNS prefix for public URLs created in this project."
+}
+
 variable "application" {
   default     = "wri-api-aws-core-infrastructure"
   type        = string
@@ -62,4 +67,14 @@ variable "tf_core_state_bucket" {
 variable "deploy_metrics_server" {
   type        = bool
   description = "If AWS Metrics server should be deployed"
+}
+
+variable "x_rw_domain" {
+  type        = string
+  description = "Value to be passed as the x-rw-domain header"
+}
+
+variable "namespaces" {
+  description = "Namespace list"
+  type        = list(string)
 }

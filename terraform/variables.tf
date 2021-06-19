@@ -95,8 +95,9 @@ variable "mongodb_apps_node_group_desired_size" {
 
 variable "apps_node_group_instance_types" {
   type    = string
-  default = "r5a.large"
+  default = "c5a.xlarge"
 }
+
 variable "apps_node_group_min_size" {
   type    = number
   default = 1
@@ -109,10 +110,14 @@ variable "apps_node_group_desired_size" {
   type    = number
   default = 3
 }
+variable "apps_node_group_min_size_upscaled" {
+  type    = number
+  default = 1
+}
 
 variable "webapps_node_group_instance_types" {
   type    = string
-  default = "r5a.large"
+  default = "c5a.xlarge"
 }
 variable "webapps_node_group_min_size" {
   type    = number
@@ -129,7 +134,7 @@ variable "webapps_node_group_desired_size" {
 
 variable "gfw_node_group_instance_types" {
   type    = string
-  default = "r5a.large"
+  default = "c5a.xlarge"
 }
 variable "gfw_node_group_min_size" {
   type    = number
@@ -142,6 +147,10 @@ variable "gfw_node_group_max_size" {
 variable "gfw_node_group_desired_size" {
   type    = number
   default = 4
+}
+variable "gfw_node_group_min_size_upscaled" {
+  type    = number
+  default = 1
 }
 
 variable "gfw_pro_node_group_instance_types" {
@@ -163,7 +172,7 @@ variable "gfw_pro_node_group_desired_size" {
 
 variable "core_node_group_instance_types" {
   type    = string
-  default = "r5a.large"
+  default = "c5.xlarge" # core node group has to run in a specific AZ due to its persistent storage. The AZ we initially chose does not have c5a instances.
 }
 variable "core_node_group_min_size" {
   type    = number
@@ -203,7 +212,6 @@ variable "rds_instance_count" {
   description = "Number of Aurora PostgreSQL instances before autoscaling"
 }
 
-
 variable "db_instance_class" {
   type        = string
   description = "Instance type of DocumentDB server"
@@ -223,4 +231,14 @@ variable "deploy_canaries" {
   type        = bool
   default     = false
   description = "If canaries should be deployed"
+}
+
+variable "eks_version" {
+  type        = string
+  description = "Version of EKS (kubernetes) to deploy"
+}
+
+variable "eks_node_release_version" {
+  type        = string
+  description = "Version of EKS (kubernetes) node AMI to deploy"
 }

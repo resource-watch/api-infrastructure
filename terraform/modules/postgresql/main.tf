@@ -81,7 +81,7 @@ resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
 }
 
-data template_file "rds_enhanced_monitoring" {
+data "template_file" "rds_enhanced_monitoring" {
 
   template = file("${path.root}/policies/trust_service.json.tpl")
   vars = {

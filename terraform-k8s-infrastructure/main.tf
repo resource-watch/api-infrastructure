@@ -40,6 +40,23 @@ module "k8s_data_layer" {
   elasticsearch_data_nodes_type            = var.elasticsearch_data_nodes_type
 }
 
+module "k8s_microservice_routing" {
+  source               = "./modules/k8s_microservice_routing"
+  environment          = var.environment
+  dns_prefix           = var.dns_prefix
+  vpc                  = data.aws_vpc.eks_vpc
+  cluster_endpoint     = "${data.aws_eks_cluster.rw_api.endpoint}:4433"
+  cluster_ca           = data.aws_eks_cluster.rw_api.certificate_authority.0.data
+  cluster_name         = data.aws_eks_cluster.rw_api.name
+  tf_core_state_bucket = var.tf_core_state_bucket
+  x_rw_domain          = var.x_rw_domain
+}
+
 module "k8s_namespaces" {
-  source = "./modules/k8s_namespaces"
+  source           = "./modules/k8s_namespaces"
+  cluster_endpoint = "${data.aws_eks_cluster.rw_api.endpoint}:4433"
+  cluster_ca       = data.aws_eks_cluster.rw_api.certificate_authority.0.data
+  cluster_name     = data.aws_eks_cluster.rw_api.name
+  kubectl_context  = "aws-rw-${var.environment}"
+  namespaces       = var.namespaces
 }

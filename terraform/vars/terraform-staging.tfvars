@@ -10,3 +10,5 @@ rds_instance_count       = 1
 db_instance_class        = "db.r5.large"
 db_instance_count        = 2
 db_logs_exports          = ["audit", "profiler"]
+eks_version              = "1.15"
+eks_node_release_version = "1.15.12-20201211"

@@ -59,3 +59,8 @@ variable "instance_disk_size" {
   description = "Disk size of the EC2 instances to use"
 }
 
+variable "eks_node_release_version" {
+  type        = string
+  description = "Version of EKS (kubernetes) node AMI to deploy"
+}
+

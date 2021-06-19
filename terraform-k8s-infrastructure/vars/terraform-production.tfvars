@@ -7,3 +7,5 @@ dns_prefix                               = "prod"
 tf_core_state_bucket                     = "wri-api-terraform"
 deploy_metrics_server                    = true
 elasticsearch_data_nodes_type            = "m5.xlarge.elasticsearch"
+x_rw_domain                              = "api.resourcewatch.org"
+namespaces                               = ["core", "aqueduct", "rw", "gfw", "fw", "prep", "climate-watch", "gateway"]

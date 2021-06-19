@@ -126,3 +126,13 @@ output "public_subnet_ids" {
 output "private_subnet_ids" {
   value = module.vpc.private_subnet_ids
 }
+
+output "node_group_names" {
+  value = {
+    apps         = module.apps-node-group.node_group_name
+    gfw          = module.gfw-node-group.node_group_name
+    mongodb-apps = module.mongodb-apps-node-group.node_group_name
+    webapps      = module.webapps-node-group.node_group_name
+    core         = module.core-node-group.node_group_name
+  }
+}
