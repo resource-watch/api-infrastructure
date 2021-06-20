@@ -163,6 +163,7 @@ module "gfw-node-group" {
 }
 
 module "gateway-node-group" {
+  count                    = var.gateway_node_group_desired_size > 0 ? 1 : 0
   source                   = "./modules/node_group"
   cluster                  = module.eks.cluster
   cluster_name             = module.eks.cluster_name

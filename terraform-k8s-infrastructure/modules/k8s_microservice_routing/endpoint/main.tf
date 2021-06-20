@@ -6,7 +6,7 @@ resource "aws_api_gateway_method" "endpoint_method" {
   request_parameters = merge(
     (length(regexall("\\{(.*)\\}", var.api_resource.path_part)) > 0 ? { "method.request.path.${replace(var.api_resource.path_part, "/\\{|\\}|\\+/", "")}" = true } : {}),
     { for s in var.endpoint_request_parameters : "method.request.path.${s}" => true },
-    { "method.request.header.Accept": false }
+    { "method.request.header.Accept" : false }
   )
 }
 
@@ -25,7 +25,7 @@ resource "aws_api_gateway_integration" "endpoint_integration" {
   request_parameters = merge(
     {
       "integration.request.header.x-rw-domain" = "'${var.x_rw_domain}'"
-      "integration.request.header.Accept" = "method.request.header.Accept"
+      "integration.request.header.Accept"      = "method.request.header.Accept"
     },
     (length(regexall("\\{(.*)\\}", var.api_resource.path_part)) > 0 ? { "integration.request.path.${replace(var.api_resource.path_part, "/\\{|\\}|\\+/", "")}" = "method.request.path.${replace(var.api_resource.path_part, "/\\{|\\}|\\+/", "")}" } : {}),
     { for s in var.endpoint_request_parameters : "integration.request.path.${s}" => "method.request.path.${s}" }
