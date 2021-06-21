@@ -683,19 +683,6 @@ module "dataset-get-by-id" {
   schedule_expression  = "rate(1 hour)"
 }
 
-module "doc-swagger-get" {
-  source               = "./api-endpoint-canary"
-  name                 = "doc-swagger-get"
-  s3_artifact_location = "cw-syn-results-534760749991-us-east-1/canary/doc-swagger-get-419-649c22589927"
-  execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
-  hostname             = "api.resourcewatch.org"
-  path                 = "/api/v1/doc/swagger"
-  verb                 = "GET"
-  hostname_secret_id   = "wri-api/smoke-tests-host"
-  token_secret_id      = "gfw-api/token"
-  schedule_expression  = "rate(1 hour)"
-}
-
 module "glad-alerts-admin-get" {
   source               = "./api-endpoint-canary"
   name                 = "glad-alerts-admin-get"
