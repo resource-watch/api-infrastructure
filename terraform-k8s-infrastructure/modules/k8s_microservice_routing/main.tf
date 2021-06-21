@@ -227,7 +227,6 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.converter.endpoints),
       jsonencode(module.dataset.endpoints),
       jsonencode(module.doc-orchestrator.endpoints),
-      jsonencode(module.doc-swagger.endpoints),
       jsonencode(module.document-adapter.endpoints),
       jsonencode(module.fires-summary-stats.endpoints),
       jsonencode(module.forest-change.endpoints),
@@ -361,24 +360,6 @@ module "gfw-metadata" {
   source      = "./gfw-metadata"
   api_gateway = aws_api_gateway_rest_api.rw_api_gateway
   v1_resource = module.v1_resource.aws_api_gateway_resource
-}
-
-// /documentation uses doc-swagger MS (no CT)
-module "doc-swagger" {
-  source           = "./doc-swagger"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  x_rw_domain      = var.x_rw_domain
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
-  v1_resource      = module.v1_resource.aws_api_gateway_resource
-  root_resource_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
-
-  eks_asg_names = [
-    data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
-  ]
 }
 
 module "analysis-gee" {
@@ -1453,32 +1434,3 @@ resource "aws_api_gateway_base_path_mapping" "env_api_resourcewatch_org_base_pat
   stage_name  = aws_api_gateway_deployment.prod.stage_name
   domain_name = aws_api_gateway_domain_name.env_api_resourcewatch_org_gateway_domain_name.domain_name
 }
-
-// TODO: if we don't move the globalforestwatch.org DNS into TF, this will have to stay a manual thing
-// {env}-api.globalforestwatch.org
-//resource "aws_acm_certificate" "env_api_globalforestwatch_org_domain_cert" {
-//  domain_name       = "${var.dns_prefix}-api.globalforestwatch.org"
-//  validation_method = "DNS"
-//
-//  lifecycle {
-//    create_before_destroy = true
-//  }
-//}
-
-//resource "aws_acm_certificate_validation" "env_api_globalforestwatch_org_domain_cert_validation" {
-//  certificate_arn = aws_acm_certificate.env_api_globalforestwatch_org_domain_cert.arn
-//}
-//
-//resource "aws_api_gateway_domain_name" "env_api_globalforestwatch_org_gateway_domain_name" {
-//  certificate_arn = aws_acm_certificate_validation.env_api_globalforestwatch_org_domain_cert_validation.certificate_arn
-//  domain_name     = "${var.dns_prefix}-api.globalforestwatch.org"
-//
-//  depends_on = [
-//    aws_acm_certificate_validation.env_api_globalforestwatch_org_domain_cert_validation]
-//}
-//
-//resource "aws_api_gateway_base_path_mapping" "env_api_globalforestwatch_org_base_path_mapping" {
-//  api_id      = aws_api_gateway_rest_api.rw_api_gateway.id
-//  stage_name  = aws_api_gateway_deployment.prod.stage_name
-//  domain_name = aws_api_gateway_domain_name.env_api_globalforestwatch_org_gateway_domain_name.domain_name
-//}
