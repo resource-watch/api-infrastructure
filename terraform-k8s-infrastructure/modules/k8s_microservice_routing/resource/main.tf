@@ -19,7 +19,10 @@ resource "aws_api_gateway_integration" "get_v1_endpoint_integration" {
   type        = "MOCK"
 
   request_templates = {
-    "application/json" : "{'statusCode': 200}"
+    "application/json" : <<EOT
+    {'statusCode': 200}
+    #set($context.responseOverride.header.Access-Control-Allow-Origin = $input.params('origin'))
+    EOT
   }
   depends_on = [
   aws_api_gateway_method.get_v1_endpoint_method]
@@ -35,6 +38,7 @@ resource "aws_api_gateway_method_response" "get_v1_endpoint_method_response" {
     "method.response.header.Access-Control-Allow-Headers" : true
     "method.response.header.Access-Control-Allow-Methods" : true
     "method.response.header.Access-Control-Allow-Origin" : true
+    "method.response.header.Access-Control-Allow-Credentials" : true
   }
 }
 
@@ -47,6 +51,6 @@ resource "aws_api_gateway_integration_response" "get_v1_endpoint_integration_res
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,upgrade-insecure-requests'"
     "method.response.header.Access-Control-Allow-Methods" : "'OPTIONS,GET,PUT,POST,PATCH,DELETE'"
-    "method.response.header.Access-Control-Allow-Origin" : "'*'"
+    "method.response.header.Access-Control-Allow-Credentials" : "'true'"
   }
 }
