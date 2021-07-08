@@ -21,4 +21,4 @@ eks_node_release_version = "1.20.4-20210628"
 # gfw_node_group_desired_size       = 4
 # gfw_node_group_min_size_upscaled  = 2
 gateway_node_group_desired_size = 0
-
+hibernate                       = true

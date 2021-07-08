@@ -242,3 +242,9 @@ variable "eks_node_release_version" {
   type        = string
   description = "Version of EKS (kubernetes) node AMI to deploy"
 }
+
+variable "hibernate" {
+  description = "If set to true, the EKS cluster will be scaled down and its services unavailable"
+  type        = bool
+  default     = false
+}

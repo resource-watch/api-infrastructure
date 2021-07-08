@@ -129,10 +129,10 @@ output "private_subnet_ids" {
 
 output "node_group_names" {
   value = {
-    apps         = module.apps-node-group.node_group_name
-    gfw          = module.gfw-node-group.node_group_name
-    mongodb-apps = module.mongodb-apps-node-group.node_group_name
-    webapps      = module.webapps-node-group.node_group_name
-    core         = module.core-node-group.node_group_name
+    apps         = var.hibernate ? "" : module.apps-node-group[0].node_group_name
+    gfw          = var.hibernate ? "" : module.gfw-node-group[0].node_group_name
+    mongodb-apps = var.hibernate ? "" : module.mongodb-apps-node-group[0].node_group_name
+    webapps      = var.hibernate ? "" : module.webapps-node-group[0].node_group_name
+    core         = var.hibernate ? "" : module.core-node-group[0].node_group_name
   }
 }

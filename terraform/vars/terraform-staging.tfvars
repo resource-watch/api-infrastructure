@@ -13,3 +13,4 @@ db_logs_exports                 = ["audit", "profiler"]
 eks_version                     = "1.20"
 eks_node_release_version        = "1.20.4-20210628"
 gateway_node_group_desired_size = 0
+hibernate                       = false

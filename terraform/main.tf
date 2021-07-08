@@ -54,6 +54,7 @@ module "eks" {
 }
 
 module "mongodb-apps-node-group" {
+  count                    = var.hibernate ? 0 : 1
   source                   = "./modules/node_group"
   cluster                  = module.eks.cluster
   cluster_name             = module.eks.cluster_name
@@ -75,6 +76,7 @@ module "mongodb-apps-node-group" {
 }
 
 module "apps-node-group" {
+  count                    = var.hibernate ? 0 : 1
   source                   = "./modules/node_group"
   cluster                  = module.eks.cluster
   cluster_name             = module.eks.cluster_name
@@ -98,6 +100,7 @@ module "apps-node-group" {
 }
 
 module "webapps-node-group" {
+  count                    = var.hibernate ? 0 : 1
   source                   = "./modules/node_group"
   cluster                  = module.eks.cluster
   cluster_name             = module.eks.cluster_name
@@ -121,6 +124,7 @@ module "webapps-node-group" {
 }
 
 module "core-node-group" {
+  count                    = var.hibernate ? 0 : 1
   source                   = "./modules/node_group"
   cluster                  = module.eks.cluster
   cluster_name             = module.eks.cluster_name
@@ -140,6 +144,7 @@ module "core-node-group" {
 }
 
 module "gfw-node-group" {
+  count                    = var.hibernate ? 0 : 1
   source                   = "./modules/node_group"
   cluster                  = module.eks.cluster
   cluster_name             = module.eks.cluster_name
@@ -163,7 +168,7 @@ module "gfw-node-group" {
 }
 
 module "gateway-node-group" {
-  count                    = var.gateway_node_group_desired_size > 0 ? 1 : 0
+  count                    = (var.gateway_node_group_desired_size == 0 || var.hibernate) ? 0 : 1
   source                   = "./modules/node_group"
   cluster                  = module.eks.cluster
   cluster_name             = module.eks.cluster_name
