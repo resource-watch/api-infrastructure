@@ -74,7 +74,7 @@ module "gs_pro_config_get_v1_pro_config_tech_title" {
   api_gateway  = var.api_gateway
   api_resource = module.v1_pro_config_tech_title_resource.aws_api_gateway_resource
   method       = "GET"
-  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30543/api/v1/proconfig/{techTitle}"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30543/api/v1/pro-config/{techTitle}"
   vpc_link     = var.vpc_link
 }
 
