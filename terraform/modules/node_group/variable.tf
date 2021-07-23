@@ -47,9 +47,15 @@ variable "labels" {
 }
 
 variable "instance_types" {
+  type        = list(string)
+  default     = ["t3.medium"]
+  description = "Name of the EC2 instance types to use"
+}
+
+variable "capacity_type" {
   type        = string
-  default     = "t3.medium"
-  description = "Name of the EC2 instance type to use"
+  default     = "ON_DEMAND"
+  description = "Capacity type of EC2 instance to use. Can be ON_DEMAND or SPOT"
 }
 
 

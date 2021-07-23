@@ -43,8 +43,8 @@ variable "backups_bucket" {
 }
 
 variable "gateway_node_group_instance_types" {
-  type    = string
-  default = "m5a.large"
+  type    = list(string)
+  default = ["m5a.large"]
 }
 variable "gateway_node_group_min_size" {
   type    = number
@@ -59,26 +59,9 @@ variable "gateway_node_group_desired_size" {
   default = 2
 }
 
-variable "elasticsearch_node_group_instance_types" {
-  type    = string
-  default = "m5a.xlarge"
-}
-variable "elasticsearch_node_group_min_size" {
-  type    = number
-  default = 3
-}
-variable "elasticsearch_node_group_max_size" {
-  type    = number
-  default = 3
-}
-variable "elasticsearch_node_group_desired_size" {
-  type    = number
-  default = 3
-}
-
 variable "mongodb_apps_node_group_instance_types" {
-  type    = string
-  default = "r5a.large"
+  type    = list(string)
+  default = ["r5a.large"]
 }
 variable "mongodb_apps_node_group_min_size" {
   type    = number
@@ -93,9 +76,14 @@ variable "mongodb_apps_node_group_desired_size" {
   default = 3
 }
 
-variable "apps_node_group_instance_types" {
+variable "mongodb_apps_node_group_capacity_type" {
   type    = string
-  default = "c5a.xlarge"
+  default = "ON_DEMAND"
+}
+
+variable "apps_node_group_instance_types" {
+  type    = list(string)
+  default = ["c5a.xlarge"]
 }
 
 variable "apps_node_group_min_size" {
@@ -115,9 +103,14 @@ variable "apps_node_group_min_size_upscaled" {
   default = 1
 }
 
-variable "webapps_node_group_instance_types" {
+variable "apps_node_group_capacity_type" {
   type    = string
-  default = "c5a.xlarge"
+  default = "ON_DEMAND"
+}
+
+variable "webapps_node_group_instance_types" {
+  type    = list(string)
+  default = ["c5a.xlarge"]
 }
 variable "webapps_node_group_min_size" {
   type    = number
@@ -132,9 +125,14 @@ variable "webapps_node_group_desired_size" {
   default = 2
 }
 
-variable "gfw_node_group_instance_types" {
+variable "webapps_node_group_capacity_type" {
   type    = string
-  default = "c5a.xlarge"
+  default = "ON_DEMAND"
+}
+
+variable "gfw_node_group_instance_types" {
+  type    = list(string)
+  default = ["c5a.xlarge"]
 }
 variable "gfw_node_group_min_size" {
   type    = number
@@ -153,26 +151,14 @@ variable "gfw_node_group_min_size_upscaled" {
   default = 1
 }
 
-variable "gfw_pro_node_group_instance_types" {
+variable "gfw_node_group_capacity_type" {
   type    = string
-  default = "m5a.large"
-}
-variable "gfw_pro_node_group_min_size" {
-  type    = number
-  default = 1
-}
-variable "gfw_pro_node_group_max_size" {
-  type    = number
-  default = 1
-}
-variable "gfw_pro_node_group_desired_size" {
-  type    = number
-  default = 1
+  default = "ON_DEMAND"
 }
 
 variable "core_node_group_instance_types" {
-  type    = string
-  default = "c5.xlarge" # core node group has to run in a specific AZ due to its persistent storage. The AZ we initially chose does not have c5a instances.
+  type    = list(string)
+  default = ["c5.xlarge"] # core node group has to run in a specific AZ due to its persistent storage. The AZ we initially chose does not have c5a instances.
 }
 variable "core_node_group_min_size" {
   type    = number
@@ -185,6 +171,11 @@ variable "core_node_group_max_size" {
 variable "core_node_group_desired_size" {
   type    = number
   default = 2
+}
+
+variable "core_node_group_capacity_type" {
+  type    = string
+  default = "ON_DEMAND"
 }
 
 variable "backup_retention_period" {
