@@ -23,7 +23,6 @@ provider "aws" {
 }
 
 provider "kubernetes" {
-  version                = "~> 2.1"
   host                   = var.cluster_endpoint
   config_path            = "~/.kube/config"
   cluster_ca_certificate = base64decode(var.cluster_ca)
@@ -42,8 +41,6 @@ provider "kubectl" {
 }
 
 provider "helm" {
-  version = "~> 2.0.2"
-
   kubernetes {
     host                   = var.cluster_endpoint
     cluster_ca_certificate = base64decode(var.cluster_ca)

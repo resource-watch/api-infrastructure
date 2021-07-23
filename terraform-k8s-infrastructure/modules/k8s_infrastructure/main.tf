@@ -84,3 +84,7 @@ resource "kubectl_manifest" "cni_plugin" {
   count     = length(data.kubectl_path_documents.cni_plugin_manifests.documents)
   yaml_body = element(data.kubectl_path_documents.cni_plugin_manifests.documents, count.index)
 }
+
+module "node_termination_handler" {
+  source = "./node_termination_handler"
+}
