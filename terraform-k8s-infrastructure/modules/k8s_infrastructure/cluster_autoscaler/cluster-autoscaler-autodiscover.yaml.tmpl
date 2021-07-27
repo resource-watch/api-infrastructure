@@ -159,6 +159,7 @@ spec:
             - --node-group-auto-discovery=asg:tag=k8s.io/cluster-autoscaler/enabled,k8s.io/cluster-autoscaler/${cluster_name}
             - --balance-similar-node-groups
             - --skip-nodes-with-system-pods=false
+            - --aws-use-static-instance-list=true
           volumeMounts:
             - name: ssl-certs
               mountPath: /etc/ssl/certs/ca-certificates.crt
