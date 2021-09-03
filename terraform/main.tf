@@ -213,6 +213,16 @@ module "documentdb" {
   enabled_cloudwatch_logs_exports = var.db_logs_exports
   cluster_parameters = [
     {
+      apply_method = "immediate"
+      name         = "profiler"
+      value        = "disabled"
+    },
+    {
+      apply_method = "immediate"
+      name         = "profiler_threshold_ms"
+      value        = "50"
+    },
+    {
       apply_method = "pending-reboot"
       name         = "tls"
       value        = "disabled"
