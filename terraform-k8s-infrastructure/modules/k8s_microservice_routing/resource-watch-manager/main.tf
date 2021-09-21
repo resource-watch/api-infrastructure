@@ -554,7 +554,7 @@ module "resource_watch_manager_post_v1_temporary_content_image" {
   api_gateway  = var.api_gateway
   api_resource = module.v1_temporary_content_image_resource.aws_api_gateway_resource
   method       = "POST"
-  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/temporary_content_image"
+  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30558/api/temporary_content_images"
   vpc_link     = var.vpc_link
 }
 
