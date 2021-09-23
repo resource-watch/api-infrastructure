@@ -191,7 +191,7 @@ module "analysis-gee" {
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   v2_resource     = module.v2_resource.aws_api_gateway_resource
 
@@ -207,7 +207,7 @@ module "aqueduct-analysis" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "arcgis" {
@@ -215,7 +215,7 @@ module "arcgis" {
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain               = var.x_rw_domain
   connection_type           = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v1_resource               = module.v1_resource.aws_api_gateway_resource
   v1_query_resource         = module.query.v1_query_resource
   v1_download_resource      = module.query.v1_download_resource
@@ -232,7 +232,7 @@ module "arcgis-proxy" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "area" {
@@ -241,7 +241,7 @@ module "area" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v2_resource     = module.v2_resource.aws_api_gateway_resource
 
   depends_on = [
@@ -257,7 +257,7 @@ module "auth" {
 
   v1_resource      = module.v1_resource.aws_api_gateway_resource
   connection_type  = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   root_resource_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
 }
 
@@ -266,7 +266,7 @@ module "bigquery" {
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain               = var.x_rw_domain
   connection_type           = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v1_resource               = module.v1_resource.aws_api_gateway_resource
   v1_query_resource         = module.query.v1_query_resource
   v1_download_resource      = module.query.v1_download_resource
@@ -283,7 +283,7 @@ module "biomass" {
   api_gateway              = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain              = var.x_rw_domain
   connection_type          = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v1_resource              = module.v1_resource.aws_api_gateway_resource
   v1_biomass_loss_resource = module.analysis-gee.v1_biomass_loss_resource
   depends_on = [
@@ -296,7 +296,7 @@ module "carto" {
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain               = var.x_rw_domain
   connection_type           = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v1_resource               = module.v1_resource.aws_api_gateway_resource
   v1_query_resource         = module.query.v1_query_resource
   v1_download_resource      = module.query.v1_download_resource
@@ -314,7 +314,7 @@ module "converter" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "dataset" {
@@ -323,7 +323,7 @@ module "dataset" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 
 }
 
@@ -333,7 +333,7 @@ module "doc-orchestrator" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "document-adapter" {
@@ -341,7 +341,7 @@ module "document-adapter" {
   api_gateway            = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain            = var.x_rw_domain
   connection_type        = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v1_resource            = module.v1_resource.aws_api_gateway_resource
   v1_dataset_id_resource = module.dataset.v1_dataset_id_resource
   v1_query_resource      = module.query.v1_query_resource
@@ -360,7 +360,7 @@ module "fires-summary-stats" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "forest-watcher-api" {
@@ -369,7 +369,7 @@ module "forest-watcher-api" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "forest-change" {
@@ -378,7 +378,7 @@ module "forest-change" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "forms" {
@@ -388,7 +388,7 @@ module "forms" {
 
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "fw-alerts" {
@@ -397,7 +397,7 @@ module "fw-alerts" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "fw-contextual-layers" {
@@ -406,7 +406,7 @@ module "fw-contextual-layers" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "fw-teams" {
@@ -415,7 +415,7 @@ module "fw-teams" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "gee" {
@@ -423,7 +423,7 @@ module "gee" {
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain               = var.x_rw_domain
   connection_type           = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v1_resource               = module.v1_resource.aws_api_gateway_resource
   v1_query_resource         = module.query.v1_query_resource
   v1_download_resource      = module.query.v1_download_resource
@@ -440,7 +440,7 @@ module "gee-tiles" {
   api_gateway          = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain          = var.x_rw_domain
   connection_type      = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v1_resource          = module.v1_resource.aws_api_gateway_resource
   v1_layer_resource    = module.layer.v1_layer_resource
   v1_layer_id_resource = module.layer.v1_layer_id_resource
@@ -456,7 +456,7 @@ module "geostore" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v2_resource     = module.v2_resource.aws_api_gateway_resource
 }
 
@@ -466,7 +466,7 @@ module "gfw-forma" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "gfw-guira" {
@@ -475,7 +475,7 @@ module "gfw-guira" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v2_resource     = module.v2_resource.aws_api_gateway_resource
 }
 
@@ -485,7 +485,7 @@ module "gfw-ogr" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v2_resource     = module.v2_resource.aws_api_gateway_resource
 }
 
@@ -495,7 +495,7 @@ module "gfw-ogr-gfw-pro" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "gfw-prodes" {
@@ -504,7 +504,7 @@ module "gfw-prodes" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v2_resource     = module.v2_resource.aws_api_gateway_resource
 }
 
@@ -513,7 +513,7 @@ module "gfw-umd" {
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain               = var.x_rw_domain
   connection_type           = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v1_resource               = module.v1_resource.aws_api_gateway_resource
   v2_resource               = module.v2_resource.aws_api_gateway_resource
   v3_resource               = module.v3_resource.aws_api_gateway_resource
@@ -526,7 +526,7 @@ module "gfw-user" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "glad-analysis-tiled" {
@@ -534,7 +534,7 @@ module "glad-analysis-tiled" {
   api_gateway             = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain             = var.x_rw_domain
   connection_type         = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v1_resource             = module.v1_resource.aws_api_gateway_resource
   v1_glad_alerts_resource = module.fires-summary-stats.v1_glad_alerts_resource
   depends_on = [
@@ -547,7 +547,7 @@ module "graph-client" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "gs-pro-config" {
@@ -556,7 +556,7 @@ module "gs-pro-config" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "high-res" {
@@ -565,7 +565,7 @@ module "high-res" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "imazon" {
@@ -574,7 +574,7 @@ module "imazon" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v2_resource     = module.v2_resource.aws_api_gateway_resource
   depends_on = [
     module.v1_resource,
@@ -587,7 +587,7 @@ module "layer" {
   api_gateway            = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain            = var.x_rw_domain
   connection_type        = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v1_resource            = module.v1_resource.aws_api_gateway_resource
   v1_dataset_id_resource = module.dataset.v1_dataset_id_resource
 
@@ -602,7 +602,7 @@ module "metadata" {
   api_gateway                      = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain                      = var.x_rw_domain
   connection_type                  = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v1_resource                      = module.v1_resource.aws_api_gateway_resource
   v1_dataset_resource              = module.dataset.v1_dataset_resource
   v1_dataset_id_resource           = module.dataset.v1_dataset_id_resource
@@ -617,7 +617,7 @@ module "nexgddp" {
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain               = var.x_rw_domain
   connection_type           = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v1_resource               = module.v1_resource.aws_api_gateway_resource
   v1_query_resource         = module.query.v1_query_resource
   v1_download_resource      = module.query.v1_download_resource
@@ -638,7 +638,7 @@ module "proxy" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 
   depends_on = [
     module.v1_resource,
@@ -651,7 +651,7 @@ module "query" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   depends_on = [
     module.v1_resource
   ]
@@ -662,7 +662,7 @@ module "quicc" {
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   depends_on = [
     module.v1_resource
@@ -674,7 +674,7 @@ module "rw-lp" {
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "resource-watch-manager" {
@@ -683,7 +683,7 @@ module "resource-watch-manager" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "salesforce-connector" {
@@ -692,7 +692,7 @@ module "salesforce-connector" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "story" {
@@ -701,7 +701,7 @@ module "story" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "subscriptions" {
@@ -710,7 +710,7 @@ module "subscriptions" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "task-executor" {
@@ -719,7 +719,7 @@ module "task-executor" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "true-color-tiles" {
@@ -728,7 +728,7 @@ module "true-color-tiles" {
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
 }
 
 module "viirs-fires" {
@@ -736,7 +736,7 @@ module "viirs-fires" {
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   v2_resource     = module.v2_resource.aws_api_gateway_resource
 }
@@ -746,7 +746,7 @@ module "vocabulary" {
   api_gateway                      = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain                      = var.x_rw_domain
   connection_type                  = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v1_resource                      = module.v1_resource.aws_api_gateway_resource
   v1_dataset_resource              = module.dataset.v1_dataset_resource
   v1_dataset_id_resource           = module.dataset.v1_dataset_id_resource
@@ -761,7 +761,7 @@ module "webshot" {
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   connection_type = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v1_resource     = module.v1_resource.aws_api_gateway_resource
 }
 
@@ -770,7 +770,7 @@ module "widget" {
   api_gateway            = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain            = var.x_rw_domain
   connection_type        = "INTERNET"
-  target_url      = "localhost"
+  target_url      = var.microservice_host
   v1_resource            = module.v1_resource.aws_api_gateway_resource
   v1_dataset_id_resource = module.dataset.v1_dataset_id_resource
 
