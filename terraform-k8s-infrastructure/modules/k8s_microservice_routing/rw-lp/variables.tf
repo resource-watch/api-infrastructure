@@ -1,16 +1,19 @@
 variable "cluster_endpoint" {
   type        = string
   description = "The k8s cluster endpoint. Must be accessible from localhost"
+  default     = null
 }
 
 variable "cluster_ca" {
   type        = string
   description = "The k8s CA string"
+  default     = null
 }
 
 variable "cluster_name" {
   type        = string
   description = "The k8s cluster name"
+  default     = null
 }
 
 variable "x_rw_domain" {
@@ -32,6 +35,7 @@ variable "vpc" {
     cidr_block = string
   })
   description = "The id of the VPC"
+  default     = null
 }
 
 variable "vpc_link" {
@@ -40,9 +44,22 @@ variable "vpc_link" {
     target_arns = list(string)
   })
   description = "VPC Link to the LB"
+  default     = { id : null, target_arns : [] }
+}
+
+variable "connection_type" {
+  type        = string
+  description = "API Gateway integration type"
 }
 
 variable "eks_asg_names" {
   type        = list(any)
   description = "List of the EKS ASG names"
+  default     = []
+}
+
+variable "target_url" {
+  type        = string
+  description = "Target URL"
+  default     = null
 }

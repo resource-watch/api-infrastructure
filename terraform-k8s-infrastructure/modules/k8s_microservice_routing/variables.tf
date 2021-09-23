@@ -1,16 +1,19 @@
 variable "cluster_endpoint" {
   type        = string
   description = "The k8s cluster endpoint. Must be accessible from localhost"
+  default     = null
 }
 
 variable "cluster_ca" {
   type        = string
   description = "The k8s CA string"
+  default     = null
 }
 
 variable "cluster_name" {
   type        = string
   description = "The k8s cluster name"
+  default     = null
 }
 
 variable "x_rw_domain" {
@@ -24,6 +27,7 @@ variable "vpc" {
     cidr_block = string
   })
   description = "The id of the VPC"
+  default     = null
 }
 
 variable "environment" {

@@ -1,4 +1,6 @@
 resource "kubernetes_service" "layer_service" {
+  count = var.connection_type == "VPC_LINK" ? 1 : 0
+
   metadata {
     name      = "layer"
     namespace = "default"
@@ -18,22 +20,32 @@ resource "kubernetes_service" "layer_service" {
   }
 }
 
+locals {
+  api_gateway_target_url = var.connection_type == "VPC_LINK" ? data.aws_lb.load_balancer[0].dns_name : var.target_url
+}
+
 data "aws_lb" "load_balancer" {
+  count = var.connection_type == "VPC_LINK" ? 1 : 0
+
   arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "layer_nlb_listener" {
-  load_balancer_arn = data.aws_lb.load_balancer.arn
+  count = var.connection_type == "VPC_LINK" ? 1 : 0
+
+  load_balancer_arn = data.aws_lb.load_balancer[0].arn
   port              = 30546
   protocol          = "TCP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.layer_lb_target_group.arn
+    target_group_arn = aws_lb_target_group.layer_lb_target_group[0].arn
   }
 }
 
 resource "aws_lb_target_group" "layer_lb_target_group" {
+  count = var.connection_type == "VPC_LINK" ? 1 : 0
+
   name        = "layer-lb-tg"
   port        = 30546
   protocol    = "TCP"
@@ -47,10 +59,10 @@ resource "aws_lb_target_group" "layer_lb_target_group" {
 }
 
 resource "aws_autoscaling_attachment" "asg_attachment_layer" {
-  count = length(var.eks_asg_names)
+  count = var.connection_type == "VPC_LINK" ? length(var.eks_asg_names) : 0
 
   autoscaling_group_name = var.eks_asg_names[count.index]
-  alb_target_group_arn   = aws_lb_target_group.layer_lb_target_group.arn
+  alb_target_group_arn   = aws_lb_target_group.layer_lb_target_group[0].arn
 }
 
 // /v1/layer
@@ -118,13 +130,14 @@ module "layer_id_expire_cache_resource" {
 }
 
 module "layer_get" {
-  source       = "../endpoint"
-  x_rw_domain  = var.x_rw_domain
-  api_gateway  = var.api_gateway
-  api_resource = module.layer_resource.aws_api_gateway_resource
-  method       = "GET"
-  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/layer"
-  vpc_link     = var.vpc_link
+  source          = "../endpoint"
+  x_rw_domain     = var.x_rw_domain
+  api_gateway     = var.api_gateway
+  api_resource    = module.layer_resource.aws_api_gateway_resource
+  method          = "GET"
+  uri             = "http://${local.api_gateway_target_url}:30546/api/v1/layer"
+  vpc_link        = var.vpc_link
+  connection_type = var.connection_type
 }
 
 module "layer_get_dataset_id_layer" {
@@ -133,8 +146,9 @@ module "layer_get_dataset_id_layer" {
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_layer_resource.aws_api_gateway_resource
   method                      = "GET"
-  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer"
+  uri                         = "http://${local.api_gateway_target_url}:30546/api/v1/dataset/{datasetId}/layer"
   vpc_link                    = var.vpc_link
+  connection_type             = var.connection_type
   endpoint_request_parameters = ["datasetId"]
 }
 
@@ -144,19 +158,21 @@ module "layer_get_dataset_id" {
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_layer_id_resource.aws_api_gateway_resource
   method                      = "GET"
-  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
+  uri                         = "http://${local.api_gateway_target_url}:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
   vpc_link                    = var.vpc_link
+  connection_type             = var.connection_type
   endpoint_request_parameters = ["datasetId"]
 }
 
 module "layer_get_layer_id" {
-  source       = "../endpoint"
-  x_rw_domain  = var.x_rw_domain
-  api_gateway  = var.api_gateway
-  api_resource = module.layer_id_resource.aws_api_gateway_resource
-  method       = "GET"
-  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/layer/{layerId}"
-  vpc_link     = var.vpc_link
+  source          = "../endpoint"
+  x_rw_domain     = var.x_rw_domain
+  api_gateway     = var.api_gateway
+  api_resource    = module.layer_id_resource.aws_api_gateway_resource
+  method          = "GET"
+  uri             = "http://${local.api_gateway_target_url}:30546/api/v1/layer/{layerId}"
+  vpc_link        = var.vpc_link
+  connection_type = var.connection_type
 }
 
 module "layer_post_dataset_id_layer" {
@@ -165,8 +181,9 @@ module "layer_post_dataset_id_layer" {
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_layer_resource.aws_api_gateway_resource
   method                      = "POST"
-  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer"
+  uri                         = "http://${local.api_gateway_target_url}:30546/api/v1/dataset/{datasetId}/layer"
   vpc_link                    = var.vpc_link
+  connection_type             = var.connection_type
   endpoint_request_parameters = ["datasetId"]
 }
 
@@ -176,8 +193,9 @@ module "layer_delete_dataset_id_layer" {
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_layer_resource.aws_api_gateway_resource
   method                      = "DELETE"
-  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer"
+  uri                         = "http://${local.api_gateway_target_url}:30546/api/v1/dataset/{datasetId}/layer"
   vpc_link                    = var.vpc_link
+  connection_type             = var.connection_type
   endpoint_request_parameters = ["datasetId"]
 }
 
@@ -187,8 +205,9 @@ module "layer_patch_dataset_id_layer_id" {
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_layer_id_resource.aws_api_gateway_resource
   method                      = "PATCH"
-  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
+  uri                         = "http://${local.api_gateway_target_url}:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
   vpc_link                    = var.vpc_link
+  connection_type             = var.connection_type
   endpoint_request_parameters = ["datasetId"]
 }
 
@@ -198,8 +217,9 @@ module "layer_any_layer_change_environment_proxy" {
   api_gateway                 = var.api_gateway
   api_resource                = module.layer_change_environment_proxy_resource.aws_api_gateway_resource
   method                      = "ANY"
-  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/layer/change-environment/{proxy}"
+  uri                         = "http://${local.api_gateway_target_url}:30546/api/v1/layer/change-environment/{proxy}"
   vpc_link                    = var.vpc_link
+  connection_type             = var.connection_type
   endpoint_request_parameters = ["datasetId"]
 }
 
@@ -209,19 +229,21 @@ module "layer_delete_dataset_id_layer_id" {
   api_gateway                 = var.api_gateway
   api_resource                = module.dataset_id_layer_id_resource.aws_api_gateway_resource
   method                      = "DELETE"
-  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
+  uri                         = "http://${local.api_gateway_target_url}:30546/api/v1/dataset/{datasetId}/layer/{layerId}"
   vpc_link                    = var.vpc_link
+  connection_type             = var.connection_type
   endpoint_request_parameters = ["datasetId"]
 }
 
 module "layer_post_layer_find_by_ids" {
-  source       = "../endpoint"
-  x_rw_domain  = var.x_rw_domain
-  api_gateway  = var.api_gateway
-  api_resource = module.layer_find_by_ids_resource.aws_api_gateway_resource
-  method       = "POST"
-  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/layer/find-by-ids"
-  vpc_link     = var.vpc_link
+  source          = "../endpoint"
+  x_rw_domain     = var.x_rw_domain
+  api_gateway     = var.api_gateway
+  api_resource    = module.layer_find_by_ids_resource.aws_api_gateway_resource
+  method          = "POST"
+  uri             = "http://${local.api_gateway_target_url}:30546/api/v1/layer/find-by-ids"
+  vpc_link        = var.vpc_link
+  connection_type = var.connection_type
 }
 
 module "layer_delete_layer_id_expire_cache" {
@@ -230,7 +252,8 @@ module "layer_delete_layer_id_expire_cache" {
   api_gateway                 = var.api_gateway
   api_resource                = module.layer_id_expire_cache_resource.aws_api_gateway_resource
   method                      = "DELETE"
-  uri                         = "http://${data.aws_lb.load_balancer.dns_name}:30546/api/v1/layer/{layerId}/expire-cache"
+  uri                         = "http://${local.api_gateway_target_url}:30546/api/v1/layer/{layerId}/expire-cache"
   vpc_link                    = var.vpc_link
+  connection_type             = var.connection_type
   endpoint_request_parameters = ["layerId"]
 }

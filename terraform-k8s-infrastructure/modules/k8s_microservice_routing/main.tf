@@ -372,6 +372,7 @@ module "analysis-gee" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
   v2_resource      = module.v2_resource.aws_api_gateway_resource
 
   eks_asg_names = [
@@ -394,6 +395,7 @@ module "aqueduct-analysis" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.gfw_autoscaling_group.names.0
@@ -409,6 +411,7 @@ module "arcgis" {
   x_rw_domain               = var.x_rw_domain
   vpc                       = var.vpc
   vpc_link                  = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  connection_type           = "VPC_LINK"
   v1_resource               = module.v1_resource.aws_api_gateway_resource
   v1_query_resource         = module.query.v1_query_resource
   v1_download_resource      = module.query.v1_download_resource
@@ -434,6 +437,7 @@ module "arcgis-proxy" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
@@ -450,6 +454,7 @@ module "area" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
   v2_resource      = module.v2_resource.aws_api_gateway_resource
 
   eks_asg_names = [
@@ -472,6 +477,7 @@ module "auth" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_core_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
   root_resource_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
 
   eks_asg_names = [
@@ -488,6 +494,7 @@ module "bigquery" {
   x_rw_domain               = var.x_rw_domain
   vpc                       = var.vpc
   vpc_link                  = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  connection_type           = "VPC_LINK"
   v1_resource               = module.v1_resource.aws_api_gateway_resource
   v1_query_resource         = module.query.v1_query_resource
   v1_download_resource      = module.query.v1_download_resource
@@ -513,6 +520,7 @@ module "biomass" {
   x_rw_domain              = var.x_rw_domain
   vpc                      = var.vpc
   vpc_link                 = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  connection_type          = "VPC_LINK"
   v1_resource              = module.v1_resource.aws_api_gateway_resource
   v1_biomass_loss_resource = module.analysis-gee.v1_biomass_loss_resource
 
@@ -534,6 +542,7 @@ module "carto" {
   x_rw_domain               = var.x_rw_domain
   vpc                       = var.vpc
   vpc_link                  = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  connection_type           = "VPC_LINK"
   v1_resource               = module.v1_resource.aws_api_gateway_resource
   v1_query_resource         = module.query.v1_query_resource
   v1_download_resource      = module.query.v1_download_resource
@@ -560,6 +569,7 @@ module "converter" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
@@ -575,6 +585,7 @@ module "dataset" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
@@ -592,6 +603,7 @@ module "doc-orchestrator" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
@@ -607,6 +619,7 @@ module "document-adapter" {
   x_rw_domain            = var.x_rw_domain
   vpc                    = var.vpc
   vpc_link               = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  connection_type        = "VPC_LINK"
   v1_resource            = module.v1_resource.aws_api_gateway_resource
   v1_dataset_id_resource = module.dataset.v1_dataset_id_resource
   v1_query_resource      = module.query.v1_query_resource
@@ -633,6 +646,7 @@ module "fires-summary-stats" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
@@ -649,6 +663,7 @@ module "forest-watcher-api" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
@@ -665,6 +680,7 @@ module "forest-change" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.gfw_autoscaling_group.names.0
@@ -681,6 +697,7 @@ module "forms" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.gfw_autoscaling_group.names.0
@@ -697,6 +714,7 @@ module "fw-alerts" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.gfw_autoscaling_group.names.0,
@@ -713,6 +731,7 @@ module "fw-contextual-layers" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.gfw_autoscaling_group.names.0,
@@ -729,6 +748,7 @@ module "fw-teams" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.gfw_autoscaling_group.names.0
@@ -744,6 +764,7 @@ module "gee" {
   x_rw_domain               = var.x_rw_domain
   vpc                       = var.vpc
   vpc_link                  = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  connection_type           = "VPC_LINK"
   v1_resource               = module.v1_resource.aws_api_gateway_resource
   v1_query_resource         = module.query.v1_query_resource
   v1_download_resource      = module.query.v1_download_resource
@@ -768,6 +789,7 @@ module "gee-tiles" {
   x_rw_domain          = var.x_rw_domain
   vpc                  = var.vpc
   vpc_link             = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  connection_type      = "VPC_LINK"
   v1_resource          = module.v1_resource.aws_api_gateway_resource
   v1_layer_resource    = module.layer.v1_layer_resource
   v1_layer_id_resource = module.layer.v1_layer_id_resource
@@ -791,6 +813,7 @@ module "geostore" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
   v2_resource      = module.v2_resource.aws_api_gateway_resource
 
   eks_asg_names = [
@@ -808,6 +831,7 @@ module "gfw-forma" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
@@ -824,6 +848,7 @@ module "gfw-guira" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
   v2_resource      = module.v2_resource.aws_api_gateway_resource
 
   eks_asg_names = [
@@ -841,6 +866,7 @@ module "gfw-ogr" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
   v2_resource      = module.v2_resource.aws_api_gateway_resource
 
   eks_asg_names = [
@@ -858,6 +884,7 @@ module "gfw-ogr-gfw-pro" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.gfw_autoscaling_group.names.0
@@ -874,6 +901,7 @@ module "gfw-prodes" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
   v2_resource      = module.v2_resource.aws_api_gateway_resource
 
   eks_asg_names = [
@@ -890,6 +918,7 @@ module "gfw-umd" {
   x_rw_domain               = var.x_rw_domain
   vpc                       = var.vpc
   vpc_link                  = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  connection_type           = "VPC_LINK"
   v1_resource               = module.v1_resource.aws_api_gateway_resource
   v2_resource               = module.v2_resource.aws_api_gateway_resource
   v3_resource               = module.v3_resource.aws_api_gateway_resource
@@ -910,6 +939,7 @@ module "gfw-user" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.gfw_autoscaling_group.names.0,
@@ -925,6 +955,7 @@ module "glad-analysis-tiled" {
   x_rw_domain             = var.x_rw_domain
   vpc                     = var.vpc
   vpc_link                = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  connection_type         = "VPC_LINK"
   v1_resource             = module.v1_resource.aws_api_gateway_resource
   v1_glad_alerts_resource = module.fires-summary-stats.v1_glad_alerts_resource
 
@@ -946,6 +977,7 @@ module "graph-client" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
@@ -962,6 +994,7 @@ module "gs-pro-config" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
@@ -978,6 +1011,7 @@ module "high-res" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.gfw_autoscaling_group.names.0
@@ -994,6 +1028,7 @@ module "imazon" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
   v2_resource      = module.v2_resource.aws_api_gateway_resource
 
   eks_asg_names = [
@@ -1015,6 +1050,7 @@ module "layer" {
   x_rw_domain            = var.x_rw_domain
   vpc                    = var.vpc
   vpc_link               = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  connection_type        = "VPC_LINK"
   v1_resource            = module.v1_resource.aws_api_gateway_resource
   v1_dataset_id_resource = module.dataset.v1_dataset_id_resource
 
@@ -1037,6 +1073,7 @@ module "metadata" {
   x_rw_domain                      = var.x_rw_domain
   vpc                              = var.vpc
   vpc_link                         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  connection_type                  = "VPC_LINK"
   v1_resource                      = module.v1_resource.aws_api_gateway_resource
   v1_dataset_resource              = module.dataset.v1_dataset_resource
   v1_dataset_id_resource           = module.dataset.v1_dataset_id_resource
@@ -1059,6 +1096,7 @@ module "nexgddp" {
   x_rw_domain               = var.x_rw_domain
   vpc                       = var.vpc
   vpc_link                  = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  connection_type           = "VPC_LINK"
   v1_resource               = module.v1_resource.aws_api_gateway_resource
   v1_query_resource         = module.query.v1_query_resource
   v1_download_resource      = module.query.v1_download_resource
@@ -1088,6 +1126,7 @@ module "proxy" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
@@ -1108,6 +1147,7 @@ module "query" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
@@ -1127,6 +1167,7 @@ module "quicc" {
   x_rw_domain      = var.x_rw_domain
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  connection_type  = "VPC_LINK"
   v1_resource      = module.v1_resource.aws_api_gateway_resource
 
   eks_asg_names = [
@@ -1147,6 +1188,7 @@ module "rw-lp" {
   x_rw_domain      = var.x_rw_domain
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
@@ -1163,6 +1205,7 @@ module "resource-watch-manager" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
@@ -1179,6 +1222,7 @@ module "salesforce-connector" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.gfw_autoscaling_group.names.0,
@@ -1195,6 +1239,7 @@ module "story" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
@@ -1211,6 +1256,7 @@ module "subscriptions" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
@@ -1227,6 +1273,7 @@ module "task-executor" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
@@ -1243,6 +1290,7 @@ module "true-color-tiles" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.gfw_autoscaling_group.names.0
@@ -1258,6 +1306,7 @@ module "viirs-fires" {
   x_rw_domain      = var.x_rw_domain
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  connection_type  = "VPC_LINK"
   v1_resource      = module.v1_resource.aws_api_gateway_resource
   v2_resource      = module.v2_resource.aws_api_gateway_resource
 
@@ -1275,6 +1324,7 @@ module "vocabulary" {
   x_rw_domain                      = var.x_rw_domain
   vpc                              = var.vpc
   vpc_link                         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  connection_type                  = "VPC_LINK"
   v1_resource                      = module.v1_resource.aws_api_gateway_resource
   v1_dataset_resource              = module.dataset.v1_dataset_resource
   v1_dataset_id_resource           = module.dataset.v1_dataset_id_resource
@@ -1297,6 +1347,7 @@ module "webshot" {
   x_rw_domain      = var.x_rw_domain
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  connection_type  = "VPC_LINK"
   v1_resource      = module.v1_resource.aws_api_gateway_resource
 
   eks_asg_names = [
@@ -1313,6 +1364,7 @@ module "widget" {
   x_rw_domain            = var.x_rw_domain
   vpc                    = var.vpc
   vpc_link               = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  connection_type        = "VPC_LINK"
   v1_resource            = module.v1_resource.aws_api_gateway_resource
   v1_dataset_id_resource = module.dataset.v1_dataset_id_resource
 

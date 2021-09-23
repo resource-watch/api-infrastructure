@@ -19,7 +19,7 @@ resource "aws_api_gateway_integration" "endpoint_integration" {
   uri                     = var.uri
   integration_http_method = var.method
 
-  connection_type = "VPC_LINK"
+  connection_type = var.connection_type
   connection_id   = var.vpc_link.id
 
   request_parameters = merge(

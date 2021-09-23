@@ -1,4 +1,6 @@
 resource "kubernetes_service" "imazon_service" {
+  count = var.connection_type == "VPC_LINK" ? 1 : 0
+
   metadata {
     name      = "imazon"
     namespace = "gfw"
@@ -17,22 +19,32 @@ resource "kubernetes_service" "imazon_service" {
   }
 }
 
+locals {
+  api_gateway_target_url = var.connection_type == "VPC_LINK" ? data.aws_lb.load_balancer[0].dns_name : var.target_url
+}
+
 data "aws_lb" "load_balancer" {
+  count = var.connection_type == "VPC_LINK" ? 1 : 0
+
   arn = var.vpc_link.target_arns[0]
 }
 
 resource "aws_lb_listener" "imazon_nlb_listener" {
-  load_balancer_arn = data.aws_lb.load_balancer.arn
+  count = var.connection_type == "VPC_LINK" ? 1 : 0
+
+  load_balancer_arn = data.aws_lb.load_balancer[0].arn
   port              = 30545
   protocol          = "TCP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.imazon_lb_target_group.arn
+    target_group_arn = aws_lb_target_group.imazon_lb_target_group[0].arn
   }
 }
 
 resource "aws_lb_target_group" "imazon_lb_target_group" {
+  count = var.connection_type == "VPC_LINK" ? 1 : 0
+
   name        = "imazon-lb-tg"
   port        = 30545
   protocol    = "TCP"
@@ -46,10 +58,10 @@ resource "aws_lb_target_group" "imazon_lb_target_group" {
 }
 
 resource "aws_autoscaling_attachment" "asg_attachment_imazon" {
-  count = length(var.eks_asg_names)
+  count = var.connection_type == "VPC_LINK" ? length(var.eks_asg_names) : 0
 
   autoscaling_group_name = var.eks_asg_names[count.index]
-  alb_target_group_arn   = aws_lb_target_group.imazon_lb_target_group.arn
+  alb_target_group_arn   = aws_lb_target_group.imazon_lb_target_group[0].arn
 }
 
 
@@ -86,61 +98,67 @@ module "v2_imazon_alerts_proxy_resource" {
 }
 
 module "imazon_get_v1_imazon_alerts" {
-  source       = "../endpoint"
-  x_rw_domain  = var.x_rw_domain
-  api_gateway  = var.api_gateway
-  api_resource = module.v1_imazon_alerts_resource.aws_api_gateway_resource
-  method       = "GET"
-  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30545/api/v1/imazon-alerts"
-  vpc_link     = var.vpc_link
+  source          = "../endpoint"
+  x_rw_domain     = var.x_rw_domain
+  api_gateway     = var.api_gateway
+  api_resource    = module.v1_imazon_alerts_resource.aws_api_gateway_resource
+  method          = "GET"
+  uri             = "http://${local.api_gateway_target_url}:30545/api/v1/imazon-alerts"
+  vpc_link        = var.vpc_link
+  connection_type = var.connection_type
 }
 
 module "imazon_post_v1_imazon_alerts" {
-  source       = "../endpoint"
-  x_rw_domain  = var.x_rw_domain
-  api_gateway  = var.api_gateway
-  api_resource = module.v1_imazon_alerts_resource.aws_api_gateway_resource
-  method       = "POST"
-  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30545/api/v1/imazon-alerts"
-  vpc_link     = var.vpc_link
+  source          = "../endpoint"
+  x_rw_domain     = var.x_rw_domain
+  api_gateway     = var.api_gateway
+  api_resource    = module.v1_imazon_alerts_resource.aws_api_gateway_resource
+  method          = "POST"
+  uri             = "http://${local.api_gateway_target_url}:30545/api/v1/imazon-alerts"
+  vpc_link        = var.vpc_link
+  connection_type = var.connection_type
 }
 
 module "imazon_any_v1_imazon_alerts_proxy" {
-  source       = "../endpoint"
-  x_rw_domain  = var.x_rw_domain
-  api_gateway  = var.api_gateway
-  api_resource = module.v1_imazon_alerts_proxy_resource.aws_api_gateway_resource
-  method       = "ANY"
-  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30545/api/v1/imazon-alerts/{proxy}"
-  vpc_link     = var.vpc_link
+  source          = "../endpoint"
+  x_rw_domain     = var.x_rw_domain
+  api_gateway     = var.api_gateway
+  api_resource    = module.v1_imazon_alerts_proxy_resource.aws_api_gateway_resource
+  method          = "ANY"
+  uri             = "http://${local.api_gateway_target_url}:30545/api/v1/imazon-alerts/{proxy}"
+  vpc_link        = var.vpc_link
+  connection_type = var.connection_type
 }
 
 module "imazon_get_v2_imazon_alerts" {
-  source       = "../endpoint"
-  x_rw_domain  = var.x_rw_domain
-  api_gateway  = var.api_gateway
-  api_resource = module.v2_imazon_alerts_resource.aws_api_gateway_resource
-  method       = "GET"
-  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30545/api/v2/imazon-alerts"
-  vpc_link     = var.vpc_link
+  source          = "../endpoint"
+  x_rw_domain     = var.x_rw_domain
+  api_gateway     = var.api_gateway
+  api_resource    = module.v2_imazon_alerts_resource.aws_api_gateway_resource
+  method          = "GET"
+  uri             = "http://${local.api_gateway_target_url}:30545/api/v2/imazon-alerts"
+  vpc_link        = var.vpc_link
+  connection_type = var.connection_type
 }
 
 module "imazon_post_v2_imazon_alerts" {
-  source       = "../endpoint"
-  x_rw_domain  = var.x_rw_domain
-  api_gateway  = var.api_gateway
-  api_resource = module.v2_imazon_alerts_resource.aws_api_gateway_resource
-  method       = "POST"
-  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30545/api/v2/imazon-alerts"
-  vpc_link     = var.vpc_link
+  source          = "../endpoint"
+  x_rw_domain     = var.x_rw_domain
+  api_gateway     = var.api_gateway
+  api_resource    = module.v2_imazon_alerts_resource.aws_api_gateway_resource
+  method          = "POST"
+  uri             = "http://${local.api_gateway_target_url}:30545/api/v2/imazon-alerts"
+  vpc_link        = var.vpc_link
+  connection_type = var.connection_type
 }
 
 module "imazon_any_v2_imazon_alerts_proxy" {
-  source       = "../endpoint"
-  x_rw_domain  = var.x_rw_domain
-  api_gateway  = var.api_gateway
-  api_resource = module.v2_imazon_alerts_proxy_resource.aws_api_gateway_resource
-  method       = "ANY"
-  uri          = "http://${data.aws_lb.load_balancer.dns_name}:30545/api/v2/imazon-alerts/{proxy}"
-  vpc_link     = var.vpc_link
+  source          = "../endpoint"
+  x_rw_domain     = var.x_rw_domain
+  api_gateway     = var.api_gateway
+  api_resource    = module.v2_imazon_alerts_proxy_resource.aws_api_gateway_resource
+  method          = "ANY"
+  uri             = "http://${local.api_gateway_target_url}:30545/api/v2/imazon-alerts/{proxy}"
+  vpc_link        = var.vpc_link
+  connection_type = var.connection_type
 }

@@ -40,7 +40,3 @@ output "endpoints" {
     module.resource_watch_manager_post_v1_contact_us.endpoint_gateway_integration,
   ]
 }
-
-output "service_ip" {
-  value = kubernetes_service.resource_watch_manager_service.spec[0].cluster_ip
-}
