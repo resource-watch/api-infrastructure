@@ -238,6 +238,7 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.gee-tiles.endpoints),
       jsonencode(module.gee.endpoints),
       jsonencode(module.geostore.endpoints),
+      jsonencode(module.gfw-contact.endpoints),
       jsonencode(module.gfw-guira.endpoints),
       jsonencode(module.gfw-forma.endpoints),
       jsonencode(module.gfw-ogr.endpoints),
@@ -818,6 +819,23 @@ module "geostore" {
 
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
+  ]
+}
+
+module "gfw-contact" {
+  source           = "./gfw-contact"
+  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca       = var.cluster_ca
+  cluster_endpoint = var.cluster_endpoint
+  cluster_name     = var.cluster_name
+  x_rw_domain      = var.x_rw_domain
+  vpc              = var.vpc
+  vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
+  v1_resource      = module.v1_resource.aws_api_gateway_resource
+  connection_type  = "VPC_LINK"
+
+  eks_asg_names = [
+    data.aws_autoscaling_groups.gfw_autoscaling_group.names.0
   ]
 }
 

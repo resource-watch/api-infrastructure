@@ -64,22 +64,6 @@ resource "aws_autoscaling_attachment" "asg_attachment_forms" {
   alb_target_group_arn   = aws_lb_target_group.forms_lb_target_group[0].arn
 }
 
-// /v1/form
-module "v1_form_resource" {
-  source      = "../resource"
-  rest_api_id = var.api_gateway.id
-  parent_id   = var.v1_resource.id
-  path_part   = "form"
-}
-
-// /v1/form/{proxy+}
-module "v1_form_proxy_resource" {
-  source      = "../resource"
-  rest_api_id = var.api_gateway.id
-  parent_id   = module.v1_form_resource.aws_api_gateway_resource.id
-  path_part   = "{proxy+}"
-}
-
 // /v1/questionnaire
 module "v1_questionnaire_resource" {
   source      = "../resource"
@@ -110,17 +94,6 @@ module "v1_reports_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_reports_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
-}
-
-module "forms_any_v1_form_proxy" {
-  source          = "../endpoint"
-  x_rw_domain     = var.x_rw_domain
-  api_gateway     = var.api_gateway
-  api_resource    = module.v1_form_proxy_resource.aws_api_gateway_resource
-  method          = "ANY"
-  uri             = "http://${local.api_gateway_target_url}:30526/api/v1/form/{proxy}"
-  vpc_link        = var.vpc_link
-  connection_type = var.connection_type
 }
 
 module "forms_any_v1_questionnaire" {
