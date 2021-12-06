@@ -244,6 +244,7 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.gfw-ogr.endpoints),
       jsonencode(module.gfw-ogr-gfw-pro.endpoints),
       jsonencode(module.gfw-prodes.endpoints),
+      jsonencode(module.gfw-proxy.endpoints),
       jsonencode(module.gfw-umd.endpoints),
       jsonencode(module.gfw-user.endpoints),
       jsonencode(module.gfw-metadata.endpoints),
@@ -924,6 +925,32 @@ module "gfw-prodes" {
 
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
+  ]
+}
+
+module "gfw-proxy" {
+  source                    = "./gfw-proxy"
+  api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
+  cluster_ca                = var.cluster_ca
+  cluster_endpoint          = var.cluster_endpoint
+  cluster_name              = var.cluster_name
+  x_rw_domain               = var.x_rw_domain
+  vpc                       = var.vpc
+  vpc_link                  = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
+  connection_type           = "VPC_LINK"
+  v1_resource               = module.v1_resource.aws_api_gateway_resource
+  v1_query_resource         = module.query.v1_query_resource
+  v1_download_resource      = module.query.v1_download_resource
+  v1_fields_resource        = module.query.v1_fields_resource
+  v1_rest_datasets_resource = module.dataset.v1_rest_datasets_resource
+
+  eks_asg_names = [
+    data.aws_autoscaling_groups.apps_autoscaling_group.names.0,
+  ]
+
+  depends_on = [
+    module.dataset,
+    module.query,
   ]
 }
 
