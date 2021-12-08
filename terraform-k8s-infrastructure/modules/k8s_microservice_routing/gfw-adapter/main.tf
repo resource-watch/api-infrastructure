@@ -17,6 +17,7 @@ resource "kubernetes_service" "gfw_adapter_service" {
     port {
       port        = local.port
       node_port   = local.port
+      target_port = 3025
     }
 
     type = "NodePort"
