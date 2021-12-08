@@ -69,3 +69,9 @@ variable "v1_resource" {
     id = string
   })
 }
+
+variable "v2_resource" {
+  type = object({
+    id = string
+  })
+}
