@@ -460,6 +460,23 @@ module "geostore" {
   v2_resource     = module.v2_resource.aws_api_gateway_resource
 }
 
+module "gfw-adapter" {
+  source                    = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/gfw-adapter"
+  api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
+  x_rw_domain               = var.x_rw_domain
+  connection_type           = "INTERNET"
+  target_url                = var.microservice_host
+  v1_resource               = module.v1_resource.aws_api_gateway_resource
+  v1_query_resource         = module.query.v1_query_resource
+  v1_download_resource      = module.query.v1_download_resource
+  v1_fields_resource        = module.query.v1_fields_resource
+  v1_rest_datasets_resource = module.dataset.v1_rest_datasets_resource
+  depends_on = [
+    module.dataset,
+    module.query,
+  ]
+}
+
 module "gfw-forma" {
   source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/gfw-forma"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
@@ -506,23 +523,6 @@ module "gfw-prodes" {
   connection_type = "INTERNET"
   target_url      = "localhost"
   v2_resource     = module.v2_resource.aws_api_gateway_resource
-}
-
-module "gfw-proxy" {
-  source                    = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/gfw-proxy"
-  api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
-  x_rw_domain               = var.x_rw_domain
-  connection_type           = "INTERNET"
-  target_url      = var.microservice_host
-  v1_resource               = module.v1_resource.aws_api_gateway_resource
-  v1_query_resource         = module.query.v1_query_resource
-  v1_download_resource      = module.query.v1_download_resource
-  v1_fields_resource        = module.query.v1_fields_resource
-  v1_rest_datasets_resource = module.dataset.v1_rest_datasets_resource
-  depends_on = [
-    module.dataset,
-    module.query,
-  ]
 }
 
 module "gfw-umd" {
