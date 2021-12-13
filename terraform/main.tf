@@ -271,6 +271,11 @@ module "jenkins" {
 #   gfw_node_group_min_size_upscaled  = var.gfw_node_group_min_size_upscaled
 # }
 
+module "aq_bucket" {
+  source      = "./modules/aq_bucket"
+  environment = var.environment
+}
+
 module "canaries" {
   count  = var.deploy_canaries ? 1 : 0
   source = "./modules/canaries"
