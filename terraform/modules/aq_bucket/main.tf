@@ -10,6 +10,14 @@ resource "aws_s3_bucket" "aq_bucket" {
     }
   }
 
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["PUT", "POST"]
+    allowed_origins = [var.cors_allowed_origin]
+    expose_headers  = ["ETag"]
+    max_age_seconds = 3000
+  }
+
   lifecycle_rule {
     id      = "expiration_period"
     enabled = true
@@ -53,12 +61,12 @@ resource "aws_iam_user_policy" "aq_s3_admin_policy" {
     Version : "2012-10-17",
     Statement : [
       {
-        Effect: "Allow",
-        Action: [
+        Effect : "Allow",
+        Action : [
           "s3:GetBucketLocation",
           "s3:ListAllMyBuckets"
         ],
-        Resource: "arn:aws:s3:::*"
+        Resource : "arn:aws:s3:::*"
       },
       {
         Action : [

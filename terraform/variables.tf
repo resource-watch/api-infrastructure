@@ -239,3 +239,7 @@ variable "hibernate" {
   type        = bool
   default     = false
 }
+
+variable "aq_bucket_cors_allowed_origin" {
+  type = string
+}

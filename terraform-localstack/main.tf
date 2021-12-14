@@ -215,7 +215,7 @@ module "arcgis" {
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain               = var.x_rw_domain
   connection_type           = "INTERNET"
-  target_url      = "localhost"
+  target_url                = "localhost"
   v1_resource               = module.v1_resource.aws_api_gateway_resource
   v1_query_resource         = module.query.v1_query_resource
   v1_download_resource      = module.query.v1_download_resource
@@ -257,7 +257,7 @@ module "auth" {
 
   v1_resource      = module.v1_resource.aws_api_gateway_resource
   connection_type  = "INTERNET"
-  target_url      = "localhost"
+  target_url       = "localhost"
   root_resource_id = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
 }
 
@@ -266,7 +266,7 @@ module "bigquery" {
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain               = var.x_rw_domain
   connection_type           = "INTERNET"
-  target_url      = "localhost"
+  target_url                = "localhost"
   v1_resource               = module.v1_resource.aws_api_gateway_resource
   v1_query_resource         = module.query.v1_query_resource
   v1_download_resource      = module.query.v1_download_resource
@@ -283,7 +283,7 @@ module "biomass" {
   api_gateway              = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain              = var.x_rw_domain
   connection_type          = "INTERNET"
-  target_url      = "localhost"
+  target_url               = "localhost"
   v1_resource              = module.v1_resource.aws_api_gateway_resource
   v1_biomass_loss_resource = module.analysis-gee.v1_biomass_loss_resource
   depends_on = [
@@ -296,7 +296,7 @@ module "carto" {
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain               = var.x_rw_domain
   connection_type           = "INTERNET"
-  target_url      = "localhost"
+  target_url                = "localhost"
   v1_resource               = module.v1_resource.aws_api_gateway_resource
   v1_query_resource         = module.query.v1_query_resource
   v1_download_resource      = module.query.v1_download_resource
@@ -341,7 +341,7 @@ module "document-adapter" {
   api_gateway            = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain            = var.x_rw_domain
   connection_type        = "INTERNET"
-  target_url      = "localhost"
+  target_url             = "localhost"
   v1_resource            = module.v1_resource.aws_api_gateway_resource
   v1_dataset_id_resource = module.dataset.v1_dataset_id_resource
   v1_query_resource      = module.query.v1_query_resource
@@ -423,7 +423,7 @@ module "gee" {
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain               = var.x_rw_domain
   connection_type           = "INTERNET"
-  target_url      = "localhost"
+  target_url                = "localhost"
   v1_resource               = module.v1_resource.aws_api_gateway_resource
   v1_query_resource         = module.query.v1_query_resource
   v1_download_resource      = module.query.v1_download_resource
@@ -440,7 +440,7 @@ module "gee-tiles" {
   api_gateway          = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain          = var.x_rw_domain
   connection_type      = "INTERNET"
-  target_url      = "localhost"
+  target_url           = "localhost"
   v1_resource          = module.v1_resource.aws_api_gateway_resource
   v1_layer_resource    = module.layer.v1_layer_resource
   v1_layer_id_resource = module.layer.v1_layer_id_resource
@@ -513,7 +513,7 @@ module "gfw-umd" {
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain               = var.x_rw_domain
   connection_type           = "INTERNET"
-  target_url      = "localhost"
+  target_url                = "localhost"
   v1_resource               = module.v1_resource.aws_api_gateway_resource
   v2_resource               = module.v2_resource.aws_api_gateway_resource
   v3_resource               = module.v3_resource.aws_api_gateway_resource
@@ -534,7 +534,7 @@ module "glad-analysis-tiled" {
   api_gateway             = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain             = var.x_rw_domain
   connection_type         = "INTERNET"
-  target_url      = "localhost"
+  target_url              = "localhost"
   v1_resource             = module.v1_resource.aws_api_gateway_resource
   v1_glad_alerts_resource = module.fires-summary-stats.v1_glad_alerts_resource
   depends_on = [
@@ -587,7 +587,7 @@ module "layer" {
   api_gateway            = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain            = var.x_rw_domain
   connection_type        = "INTERNET"
-  target_url      = "localhost"
+  target_url             = "localhost"
   v1_resource            = module.v1_resource.aws_api_gateway_resource
   v1_dataset_id_resource = module.dataset.v1_dataset_id_resource
 
@@ -602,7 +602,7 @@ module "metadata" {
   api_gateway                      = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain                      = var.x_rw_domain
   connection_type                  = "INTERNET"
-  target_url      = "localhost"
+  target_url                       = "localhost"
   v1_resource                      = module.v1_resource.aws_api_gateway_resource
   v1_dataset_resource              = module.dataset.v1_dataset_resource
   v1_dataset_id_resource           = module.dataset.v1_dataset_id_resource
@@ -617,7 +617,7 @@ module "nexgddp" {
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain               = var.x_rw_domain
   connection_type           = "INTERNET"
-  target_url      = "localhost"
+  target_url                = "localhost"
   v1_resource               = module.v1_resource.aws_api_gateway_resource
   v1_query_resource         = module.query.v1_query_resource
   v1_download_resource      = module.query.v1_download_resource
@@ -746,7 +746,7 @@ module "vocabulary" {
   api_gateway                      = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain                      = var.x_rw_domain
   connection_type                  = "INTERNET"
-  target_url      = "localhost"
+  target_url                       = "localhost"
   v1_resource                      = module.v1_resource.aws_api_gateway_resource
   v1_dataset_resource              = module.dataset.v1_dataset_resource
   v1_dataset_id_resource           = module.dataset.v1_dataset_id_resource
@@ -770,7 +770,7 @@ module "widget" {
   api_gateway            = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain            = var.x_rw_domain
   connection_type        = "INTERNET"
-  target_url      = "localhost"
+  target_url             = "localhost"
   v1_resource            = module.v1_resource.aws_api_gateway_resource
   v1_dataset_id_resource = module.dataset.v1_dataset_id_resource
 
