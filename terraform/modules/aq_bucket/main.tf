@@ -14,6 +14,8 @@ resource "aws_s3_bucket" "aq_bucket" {
     id      = "expiration_period"
     enabled = true
 
+    prefix = "food-supply-chain/"
+
     expiration {
       days = var.retention_period
     }
@@ -25,6 +27,13 @@ resource "aws_s3_bucket" "aq_bucket" {
   }
 
   tags = merge({ Resource = "Aqueduct" }, var.tags)
+}
+
+resource "aws_s3_bucket_object" "object" {
+  bucket       = aws_s3_bucket.aq_bucket.id
+  acl          = "private"
+  key          = "food-supply-chain/"
+  content_type = "application/x-directory"
 }
 
 resource "aws_iam_user" "aq_s3_user" {
@@ -44,11 +53,22 @@ resource "aws_iam_user_policy" "aq_s3_admin_policy" {
     Version : "2012-10-17",
     Statement : [
       {
+        Effect: "Allow",
+        Action: [
+          "s3:GetBucketLocation",
+          "s3:ListAllMyBuckets"
+        ],
+        Resource: "arn:aws:s3:::*"
+      },
+      {
         Action : [
-          "*"
+          "s3:*"
         ],
         Effect : "Allow",
-        Resource : aws_s3_bucket.aq_bucket.arn
+        Resource : [
+          aws_s3_bucket.aq_bucket.arn,
+          "${aws_s3_bucket.aq_bucket.arn}/*"
+        ]
       }
     ]
   })

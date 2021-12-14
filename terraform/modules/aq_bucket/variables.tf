@@ -1,6 +1,6 @@
 variable "retention_period" {
   type = number
-  default = 30
+  default = 1
 }
 
 variable "environment" {
