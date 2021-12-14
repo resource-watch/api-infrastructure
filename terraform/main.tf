@@ -272,8 +272,9 @@ module "jenkins" {
 # }
 
 module "aq_bucket" {
-  source      = "./modules/aq_bucket"
-  environment = var.environment
+  source              = "./modules/aq_bucket"
+  environment         = var.environment
+  cors_allowed_origin = var.aq_bucket_cors_allowed_origin
 }
 
 module "canaries" {

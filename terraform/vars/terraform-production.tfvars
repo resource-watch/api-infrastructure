@@ -15,3 +15,4 @@ eks_node_release_version        = "1.20.4-20210628"
 deploy_canaries                 = true
 gateway_node_group_desired_size = 2
 hibernate                       = false
+aq_bucket_cors_allowed_origin   = "https://wri.org/"
