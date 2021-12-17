@@ -984,6 +984,7 @@ module "gfw-user" {
   vpc              = var.vpc
   vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
+  v2_resource      = module.v2_resource.aws_api_gateway_resource
   connection_type  = "VPC_LINK"
 
   eks_asg_names = [

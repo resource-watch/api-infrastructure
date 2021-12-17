@@ -271,6 +271,12 @@ module "jenkins" {
 #   gfw_node_group_min_size_upscaled  = var.gfw_node_group_min_size_upscaled
 # }
 
+module "aq_bucket" {
+  source              = "./modules/aq_bucket"
+  environment         = var.environment
+  cors_allowed_origin = var.aq_bucket_cors_allowed_origin
+}
+
 module "canaries" {
   count  = var.deploy_canaries ? 1 : 0
   source = "./modules/canaries"
