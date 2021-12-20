@@ -2,15 +2,25 @@
 
 **Important**: this repo uses [git lfs](https://git-lfs.github.com/).
 
+For a description of the setup, see the infrastructure [section](https://resource-watch.github.io/doc-api/developer.html#infrastructure-configuration) of the developer documentation.
+
 ## Setting up the AWS resources
 
 To setup the cluster cloud resources, use the following command:
 
 ```shell script
 cd ./terraform
-terraform init
-terraform plan
-CLOUDFLARE_API_KEY=<cloudflare api key> CLOUDFLARE_EMAIL=<cloudflare api key> terraform apply  -var-file=vars/core-dev.tfvarsemail
+export CLOUDFLARE_API_KEY=<cloudflare api key> CLOUDFLARE_EMAIL=<cloudflare api key>
+terraform init -backend-config=vars/backend-<env>.tfvars
+terraform plan -var-file=vars/terraform-<env>.tfvars
+```
+
+Set `<env>` to dev, staging or production - the environment that you're deploying to. Each environment has separate AWS account isolating resources including bastion server, jenkins server, EKS kubernetes cluster, etc.
+
+If configuring `dev` environment resources and you'll be modifying kubernetes infrastructure, you may want to bring the cluster up from hibernation by setting `hibernate = false` in `./vars/terraform-dev.tfvars`. Finally apply your changes:
+
+```shell script
+terraform apply -var-file=vars/terraform-<env>.tfvars
 ```
 
 On the last step, you'll be asked to confirm your action, as this is the step that "does stuff".
@@ -102,23 +112,22 @@ Assuming your public key was sent to the bastion host during the setup process, 
 
 From here, there are multiple ways to proceed.
 
-### SSH tunnel 
+### SSH tunnel
 
 Perhaps the most practical way to connect to the cluster is by creating an SSH tunnel that connects a local port to the cluster's API port, through the bastion. For this to work, a few things are needed:
 
 - Copy the `kubectl_config` settings from above into your local `~/.kube/config`
 - Modify the `server: https://<random string>.gr7.us-east-1.eks.amazonaws.com` line by adding `:4433` at the end, so it looks like this: `server: https://<random string>.gr7.us-east-1.eks.amazonaws.com:4433` (you can pick a different port if you want)
-- Modify your local `/etc/hosts` to include the following line: `127.0.0.1  https://<random string>.gr7.us-east-1.eks.amazonaws.com`
-  
+- Modify your local `/etc/hosts` to include the following line: `127.0.0.1 <random string>.gr7.us-east-1.eks.amazonaws.com`
 
 ```shell script
-ssh -N -L 4433:DA387DC6CA64435B70B143F167D2E3C7.gr7.us-east-1.eks.amazonaws.com:443 ubuntu@ec2-3-92-73-248.compute-1.amazonaws.com
+ssh -N -L 4433:<random string>.gr7.us-east-1.eks.amazonaws.com:443 ubuntu@<bastion_hostname>
 
 ```
 
 ### Access from bastion
 
-Another way to connect to the cluster is doing so from a bash shell running on the bastion. However, this will require the actual bastion host to have access to the cluster. That is done using `kubectl` config - which is automatically taken care of during the cluster setup phase - and through IAM roles, which you need to configure using these steps. 
+Another way to connect to the cluster is doing so from a bash shell running on the bastion. However, this will require the actual bastion host to have access to the cluster. That is done using `kubectl` config - which is automatically taken care of during the cluster setup phase - and through IAM roles, which you need to configure using these steps.
 
 **Disclaimer**: the next steps will see you add AWS credentials to the AWS CLI in the bastion host. This is a VERY BAD IDEA, and it's done here as a temporary workaround. Be sure to remove the `~/.aws/credentials` file once you're done.
 
@@ -136,7 +145,7 @@ KUBE_EDITOR="nano" kubectl edit configmap aws-auth -n kube-system
 ```
 
 You'll need to replace the `data` section in this document with the one from the `terraform apply` command `kube_configmap`. Saving your changes and exiting the editor will push the new configuration to the cluster.
- 
+
 Next, delete your local `~/.aws/credentials` file - this will ensure that no authentication information remains inside the cluster, and that all access management is done using IAM Roles, which is the recommended way.
 
 You should now have access to the cluster from the bastion host.
