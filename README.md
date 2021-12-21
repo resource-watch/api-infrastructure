@@ -10,7 +10,7 @@ To setup the cluster cloud resources, use the following command:
 
 ```shell script
 cd ./terraform
-export CLOUDFLARE_API_KEY=<cloudflare api key> CLOUDFLARE_EMAIL=<cloudflare api key>
+export CLOUDFLARE_API_KEY=<cloudflare api key> CLOUDFLARE_EMAIL=<cloudflare account email address>
 terraform init -backend-config=vars/backend-<env>.tfvars
 terraform plan -var-file=vars/terraform-<env>.tfvars
 ```
@@ -118,10 +118,10 @@ Perhaps the most practical way to connect to the cluster is by creating an SSH t
 
 - Copy the `kubectl_config` settings from above into your local `~/.kube/config`
 - Modify the `server: https://<random string>.gr7.us-east-1.eks.amazonaws.com` line by adding `:4433` at the end, so it looks like this: `server: https://<random string>.gr7.us-east-1.eks.amazonaws.com:4433` (you can pick a different port if you want)
-- Modify your local `/etc/hosts` to include the following line: `127.0.0.1 <random string>.gr7.us-east-1.eks.amazonaws.com`
+- Modify your local `/etc/hosts` to include the following line: `127.0.0.1 <eks api endpoint url>`
 
 ```shell script
-ssh -N -L 4433:<random string>.gr7.us-east-1.eks.amazonaws.com:443 ubuntu@<bastion_hostname>
+ssh -N -L 4433:<eks api endpoint url>:443 <bastion user>@<bastion hostname>
 
 ```
 
