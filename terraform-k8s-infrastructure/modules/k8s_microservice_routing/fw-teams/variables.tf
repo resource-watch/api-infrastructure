@@ -69,3 +69,8 @@ variable "v1_resource" {
     id = string
   })
 }
+
+variable "backend_url" {
+  type        = string
+  description = "The URL of the backend server to which the request is proxied"
+}

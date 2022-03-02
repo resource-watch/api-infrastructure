@@ -9,3 +9,4 @@ deploy_metrics_server                    = true
 elasticsearch_data_nodes_type            = "m5.large.elasticsearch"
 x_rw_domain                              = "api.resourcewatch.org"
 namespaces                               = ["core", "aqueduct", "rw", "gfw", "fw", "prep", "climate-watch", "gateway"]
+fw_backend_url                           = null

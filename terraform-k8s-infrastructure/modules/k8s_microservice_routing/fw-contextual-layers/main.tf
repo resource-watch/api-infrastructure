@@ -81,34 +81,25 @@ module "v1_contextual_layer_proxy_resource" {
 }
 
 module "fw_contextual_layers_get_v1_contextual_layer" {
-  source          = "../endpoint"
-  x_rw_domain     = var.x_rw_domain
-  api_gateway     = var.api_gateway
-  api_resource    = module.v1_contextual_layer_resource.aws_api_gateway_resource
-  method          = "GET"
-  uri             = "http://${local.api_gateway_target_url}:30528/api/v1/contextual-layer"
-  vpc_link        = var.vpc_link
-  connection_type = var.connection_type
+  source       = "../endpoint-proxy"
+  api_gateway  = var.api_gateway
+  backend_url  = "${var.backend_url}/api/v1/contextual-layer"
+  method       = "GET"
+  api_resource = module.v1_contextual_layer_resource.aws_api_gateway_resource
 }
 
 module "fw_contextual_layers_post_v1_contextual_layer" {
-  source          = "../endpoint"
-  x_rw_domain     = var.x_rw_domain
-  api_gateway     = var.api_gateway
-  api_resource    = module.v1_contextual_layer_resource.aws_api_gateway_resource
-  method          = "POST"
-  uri             = "http://${local.api_gateway_target_url}:30528/api/v1/contextual-layer"
-  vpc_link        = var.vpc_link
-  connection_type = var.connection_type
+  source       = "../endpoint-proxy"
+  api_gateway  = var.api_gateway
+  backend_url  = "${var.backend_url}/api/v1/contextual-layer"
+  method       = "POST"
+  api_resource = module.v1_contextual_layer_resource.aws_api_gateway_resource
 }
 
 module "fw_contextual_layers_any_v1_contextual_layer_proxy" {
-  source          = "../endpoint"
-  x_rw_domain     = var.x_rw_domain
-  api_gateway     = var.api_gateway
-  api_resource    = module.v1_contextual_layer_proxy_resource.aws_api_gateway_resource
-  method          = "ANY"
-  uri             = "http://${local.api_gateway_target_url}:30528/api/v1/contextual-layer/{proxy}"
-  vpc_link        = var.vpc_link
-  connection_type = var.connection_type
+  source       = "../endpoint-proxy"
+  api_gateway  = var.api_gateway
+  backend_url  = "${var.backend_url}/api/v1/contextual-layer/{proxy}"
+  method       = "ANY"
+  api_resource = module.v1_contextual_layer_proxy_resource.aws_api_gateway_resource
 }

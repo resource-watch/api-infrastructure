@@ -56,3 +56,8 @@ variable "tf_core_state_bucket" {
   type        = string
   description = "S3 bucket that holds the core TF state"
 }
+
+variable "fw_backend_url" {
+  type        = string
+  description = "The URL of the backend server to which the request is proxied"
+}

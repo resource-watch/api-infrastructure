@@ -700,6 +700,7 @@ module "forms" {
   vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
   connection_type  = "VPC_LINK"
+  backend_url      = var.fw_backend_url
 
   eks_asg_names = [
     data.aws_autoscaling_groups.gfw_autoscaling_group.names.0
@@ -734,6 +735,7 @@ module "fw-contextual-layers" {
   vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
   connection_type  = "VPC_LINK"
+  backend_url      = var.fw_backend_url
 
   eks_asg_names = [
     data.aws_autoscaling_groups.gfw_autoscaling_group.names.0,
@@ -751,6 +753,7 @@ module "fw-teams" {
   vpc_link         = aws_api_gateway_vpc_link.rw_api_gfw_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
   connection_type  = "VPC_LINK"
+  backend_url      = var.fw_backend_url
 
   eks_asg_names = [
     data.aws_autoscaling_groups.gfw_autoscaling_group.names.0
