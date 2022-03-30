@@ -5,6 +5,6 @@ variable "x_rw_domain" {
 }
 
 variable "microservice_host" {
-  type = string
+  type        = string
   description = "Host in which the microservices will be available"
 }
