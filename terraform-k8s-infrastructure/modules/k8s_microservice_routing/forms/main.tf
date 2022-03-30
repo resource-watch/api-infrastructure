@@ -96,78 +96,34 @@ module "v1_reports_proxy_resource" {
   path_part   = "{proxy+}"
 }
 
-#module "forms_any_v1_questionnaire" {
-#  source          = "../endpoint"
-#  x_rw_domain     = var.x_rw_domain
-#  api_gateway     = var.api_gateway
-#  api_resource    = module.v1_questionnaire_resource.aws_api_gateway_resource
-#  method          = "ANY"
-#  uri             = "http://${local.api_gateway_target_url}:30526/api/v1/questionnaire"
-#  vpc_link        = var.vpc_link
-#  connection_type = var.connection_type
-#}
-
 module "forms_any_v1_questionnaire" {
   source       = "../endpoint-proxy"
   api_gateway  = var.api_gateway
-  backend_url  = "${var.backend_url}/api/v1/questionnaire"
+  backend_url  = "${var.backend_url}/v1/questionnaire"
   method       = "ANY"
   api_resource = module.v1_questionnaire_resource.aws_api_gateway_resource
 }
 
-#module "forms_any_v1_questionnaire_proxy" {
-#  source          = "../endpoint"
-#  x_rw_domain     = var.x_rw_domain
-#  api_gateway     = var.api_gateway
-#  api_resource    = module.v1_questionnaire_proxy_resource.aws_api_gateway_resource
-#  method          = "ANY"
-#  uri             = "http://${local.api_gateway_target_url}:30526/api/v1/questionnaire/{proxy}"
-#  vpc_link        = var.vpc_link
-#  connection_type = var.connection_type
-#}
-
 module "forms_any_v1_questionnaire_proxy" {
   source       = "../endpoint-proxy"
   api_gateway  = var.api_gateway
-  backend_url  = "${var.backend_url}/api/v1/questionnaire/{proxy}"
+  backend_url  = "${var.backend_url}/v1/questionnaire/{proxy}"
   method       = "ANY"
   api_resource = module.v1_questionnaire_proxy_resource.aws_api_gateway_resource
 }
 
-#module "forms_any_v1_reports" {
-#  source          = "../endpoint"
-#  x_rw_domain     = var.x_rw_domain
-#  api_gateway     = var.api_gateway
-#  api_resource    = module.v1_reports_resource.aws_api_gateway_resource
-#  method          = "ANY"
-#  uri             = "http://${local.api_gateway_target_url}:30526/api/v1/reports"
-#  vpc_link        = var.vpc_link
-#  connection_type = var.connection_type
-#}
-
 module "forms_any_v1_reports" {
   source       = "../endpoint-proxy"
   api_gateway  = var.api_gateway
-  backend_url  = "${var.backend_url}/api/v1/reports"
+  backend_url  = "${var.backend_url}/v1/reports"
   method       = "ANY"
   api_resource = module.v1_reports_resource.aws_api_gateway_resource
 }
 
-#module "forms_any_v1_reports_proxy" {
-#  source          = "../endpoint"
-#  x_rw_domain     = var.x_rw_domain
-#  api_gateway     = var.api_gateway
-#  api_resource    = module.v1_reports_proxy_resource.aws_api_gateway_resource
-#  method          = "ANY"
-#  uri             = "http://${local.api_gateway_target_url}:30526/api/v1/reports/{proxy}"
-#  vpc_link        = var.vpc_link
-#  connection_type = var.connection_type
-#}
-
 module "forms_any_v1_reports_proxy" {
   source       = "../endpoint-proxy"
   api_gateway  = var.api_gateway
-  backend_url  = "${var.backend_url}/api/v1/reports/{proxy}"
+  backend_url  = "${var.backend_url}/v1/reports/{proxy}"
   method       = "ANY"
   api_resource = module.v1_reports_proxy_resource.aws_api_gateway_resource
 }

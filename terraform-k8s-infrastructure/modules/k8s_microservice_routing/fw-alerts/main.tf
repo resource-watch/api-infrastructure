@@ -81,12 +81,9 @@ module "v1_fw_alerts_proxy_resource" {
 }
 
 module "fw_alerts_any_v1_form_proxy" {
-  source          = "../endpoint"
-  x_rw_domain     = var.x_rw_domain
-  api_gateway     = var.api_gateway
-  api_resource    = module.v1_fw_alerts_proxy_resource.aws_api_gateway_resource
-  method          = "ANY"
-  uri             = "http://${local.api_gateway_target_url}:30527/api/v1/fw-alerts/{proxy}"
-  vpc_link        = var.vpc_link
-  connection_type = var.connection_type
+  source       = "../endpoint-proxy"
+  api_gateway  = var.api_gateway
+  backend_url  = "${var.backend_url}/v1/fw-alerts/{proxy}"
+  method       = "ANY"
+  api_resource = module.v1_fw_alerts_proxy_resource.aws_api_gateway_resource
 }

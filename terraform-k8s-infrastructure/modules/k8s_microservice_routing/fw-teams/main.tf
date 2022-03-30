@@ -80,40 +80,18 @@ module "v1_teams_proxy_resource" {
   path_part   = "{proxy+}"
 }
 
-#module "fw_teams_post_v1_teams" {
-#  source          = "../endpoint"
-#  x_rw_domain     = var.x_rw_domain
-#  api_gateway     = var.api_gateway
-#  api_resource    = module.v1_teams_resource.aws_api_gateway_resource
-#  method          = "POST"
-#  uri             = "http://${local.api_gateway_target_url}:30529/api/v1/teams"
-#  vpc_link        = var.vpc_link
-#  connection_type = var.connection_type
-#}
-
 module "fw_teams_post_v1_teams" {
   source       = "../endpoint-proxy"
   api_gateway  = var.api_gateway
-  backend_url  = "${var.backend_url}/api/v1/teams"
+  backend_url  = "${var.backend_url}/v1/teams"
   method       = "POST"
   api_resource = module.v1_teams_resource.aws_api_gateway_resource
 }
 
-#module "fw_teams_any_v1_teams_proxy" {
-#  source          = "../endpoint"
-#  x_rw_domain     = var.x_rw_domain
-#  api_gateway     = var.api_gateway
-#  api_resource    = module.v1_teams_proxy_resource.aws_api_gateway_resource
-#  method          = "ANY"
-#  uri             = "http://${local.api_gateway_target_url}:30529/api/v1/teams/{proxy}"
-#  vpc_link        = var.vpc_link
-#  connection_type = var.connection_type
-#}
-
 module "fw_teams_any_v1_teams_proxy" {
   source       = "../endpoint-proxy"
   api_gateway  = var.api_gateway
-  backend_url  = "${var.backend_url}/api/v1/teams/{proxy}"
+  backend_url  = "${var.backend_url}/v1/teams/{proxy}"
   method       = "ANY"
   api_resource = module.v1_teams_proxy_resource.aws_api_gateway_resource
 }

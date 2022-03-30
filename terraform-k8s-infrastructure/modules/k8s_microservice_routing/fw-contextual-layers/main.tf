@@ -83,7 +83,7 @@ module "v1_contextual_layer_proxy_resource" {
 module "fw_contextual_layers_get_v1_contextual_layer" {
   source       = "../endpoint-proxy"
   api_gateway  = var.api_gateway
-  backend_url  = "${var.backend_url}/api/v1/contextual-layer"
+  backend_url  = "${var.backend_url}/v1/contextual-layer"
   method       = "GET"
   api_resource = module.v1_contextual_layer_resource.aws_api_gateway_resource
 }
@@ -91,7 +91,7 @@ module "fw_contextual_layers_get_v1_contextual_layer" {
 module "fw_contextual_layers_post_v1_contextual_layer" {
   source       = "../endpoint-proxy"
   api_gateway  = var.api_gateway
-  backend_url  = "${var.backend_url}/api/v1/contextual-layer"
+  backend_url  = "${var.backend_url}/v1/contextual-layer"
   method       = "POST"
   api_resource = module.v1_contextual_layer_resource.aws_api_gateway_resource
 }
@@ -99,7 +99,7 @@ module "fw_contextual_layers_post_v1_contextual_layer" {
 module "fw_contextual_layers_any_v1_contextual_layer_proxy" {
   source       = "../endpoint-proxy"
   api_gateway  = var.api_gateway
-  backend_url  = "${var.backend_url}/api/v1/contextual-layer/{proxy}"
+  backend_url  = "${var.backend_url}/v1/contextual-layer/{proxy}"
   method       = "ANY"
   api_resource = module.v1_contextual_layer_proxy_resource.aws_api_gateway_resource
 }

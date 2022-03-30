@@ -81,23 +81,17 @@ module "v1_forest_watcher_area_resource" {
 }
 
 module "forest_watcher_api_get_v1_forest_watcher_area_resource" {
-  source          = "../endpoint"
-  x_rw_domain     = var.x_rw_domain
-  api_gateway     = var.api_gateway
-  api_resource    = module.v1_forest_watcher_area_resource.aws_api_gateway_resource
-  method          = "GET"
-  uri             = "http://${local.api_gateway_target_url}:30525/api/v1/forest-watcher/area"
-  vpc_link        = var.vpc_link
-  connection_type = var.connection_type
+  source       = "../endpoint-proxy"
+  api_gateway  = var.api_gateway
+  backend_url  = "${var.backend_url}/v1/forest-watcher/area"
+  method       = "GET"
+  api_resource = module.v1_forest_watcher_area_resource.aws_api_gateway_resource
 }
 
 module "forest_watcher_api_post_v1_forest_watcher_area_resource" {
-  source          = "../endpoint"
-  x_rw_domain     = var.x_rw_domain
-  api_gateway     = var.api_gateway
-  api_resource    = module.v1_forest_watcher_area_resource.aws_api_gateway_resource
-  method          = "POST"
-  uri             = "http://${local.api_gateway_target_url}:30525/api/v1/forest-watcher/area"
-  vpc_link        = var.vpc_link
-  connection_type = var.connection_type
+  source       = "../endpoint-proxy"
+  api_gateway  = var.api_gateway
+  backend_url  = "${var.backend_url}/v1/forest-watcher/area"
+  method       = "POST"
+  api_resource = module.v1_forest_watcher_area_resource.aws_api_gateway_resource
 }
