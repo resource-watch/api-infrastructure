@@ -18,24 +18,10 @@ module "v1_gfw_metadata_proxy_resource" {
   path_part   = "{proxy+}"
 }
 
-resource "aws_api_gateway_method" "v1_gfw_metadata_proxy_method" {
-  rest_api_id        = var.api_gateway.id
-  resource_id        = module.v1_gfw_metadata_proxy_resource.aws_api_gateway_resource.id
-  http_method        = "ANY"
-  authorization      = "NONE"
-  request_parameters = { "method.request.path.proxy" = true }
-}
-
-resource "aws_api_gateway_integration" "gfw_metadata_proxy_integration" {
-  rest_api_id = var.api_gateway.id
-  resource_id = module.v1_gfw_metadata_proxy_resource.aws_api_gateway_resource.id
-  http_method = aws_api_gateway_method.v1_gfw_metadata_proxy_method.http_method
-
-  type                    = "HTTP_PROXY"
-  uri                     = "http://gis-gfw.wri.org/metadata/{proxy}"
-  integration_http_method = "ANY"
-
-  connection_type = "INTERNET"
-
-  request_parameters = { "integration.request.path.proxy" = "method.request.path.proxy" }
+module "v1_gfw_metadata_proxy_endpoint" {
+  source       = "../endpoint-proxy"
+  api_gateway  = var.api_gateway
+  backend_url  = "http://gis-gfw.wri.org/metadata/{proxy}"
+  method       = "ANY"
+  api_resource = module.v1_gfw_metadata_proxy_resource.aws_api_gateway_resource
 }

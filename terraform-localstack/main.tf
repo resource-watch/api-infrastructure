@@ -47,8 +47,7 @@ resource "aws_api_gateway_rest_api" "rw_api_gateway" {
   description = "API Gateway for the RW API localstack cluster"
 
   endpoint_configuration {
-    types = [
-    "REGIONAL"]
+    types = ["REGIONAL"]
   }
 }
 
@@ -73,14 +72,11 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.document-adapter.endpoints),
       jsonencode(module.fires-summary-stats.endpoints),
       jsonencode(module.forest-change.endpoints),
-      jsonencode(module.forest-watcher-api.endpoints),
-      jsonencode(module.forms.endpoints),
-      jsonencode(module.fw-alerts.endpoints),
-      jsonencode(module.fw-contextual-layers.endpoints),
-      jsonencode(module.fw-teams.endpoints),
       jsonencode(module.gee-tiles.endpoints),
       jsonencode(module.gee.endpoints),
       jsonencode(module.geostore.endpoints),
+      jsonencode(module.gfw-adapter.endpoints),
+      jsonencode(module.gfw-contact.endpoints),
       jsonencode(module.gfw-guira.endpoints),
       jsonencode(module.gfw-forma.endpoints),
       jsonencode(module.gfw-ogr.endpoints),
@@ -221,7 +217,7 @@ module "arcgis" {
   v1_download_resource      = module.query.v1_download_resource
   v1_fields_resource        = module.query.v1_fields_resource
   v1_rest_datasets_resource = module.dataset.v1_rest_datasets_resource
-  depends_on = [
+  depends_on                = [
     module.dataset,
   ]
 }
@@ -272,7 +268,7 @@ module "bigquery" {
   v1_download_resource      = module.query.v1_download_resource
   v1_fields_resource        = module.query.v1_fields_resource
   v1_rest_datasets_resource = module.dataset.v1_rest_datasets_resource
-  depends_on = [
+  depends_on                = [
     module.dataset,
     module.query,
   ]
@@ -286,7 +282,7 @@ module "biomass" {
   target_url               = var.microservice_host
   v1_resource              = module.v1_resource.aws_api_gateway_resource
   v1_biomass_loss_resource = module.analysis-gee.v1_biomass_loss_resource
-  depends_on = [
+  depends_on               = [
     module.analysis-gee
   ]
 }
@@ -302,7 +298,7 @@ module "carto" {
   v1_download_resource      = module.query.v1_download_resource
   v1_fields_resource        = module.query.v1_fields_resource
   v1_rest_datasets_resource = module.dataset.v1_rest_datasets_resource
-  depends_on = [
+  depends_on                = [
     module.dataset,
     module.query,
   ]
@@ -363,54 +359,8 @@ module "fires-summary-stats" {
   target_url      = var.microservice_host
 }
 
-module "forest-watcher-api" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/forest-watcher-api"
-  api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
-  x_rw_domain     = var.x_rw_domain
-  v1_resource     = module.v1_resource.aws_api_gateway_resource
-  connection_type = "INTERNET"
-  target_url      = var.microservice_host
-}
-
 module "forest-change" {
   source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/forest-change"
-  api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
-  x_rw_domain     = var.x_rw_domain
-  v1_resource     = module.v1_resource.aws_api_gateway_resource
-  connection_type = "INTERNET"
-  target_url      = var.microservice_host
-}
-
-module "forms" {
-  source      = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/forms"
-  api_gateway = aws_api_gateway_rest_api.rw_api_gateway
-  x_rw_domain = var.x_rw_domain
-
-  v1_resource     = module.v1_resource.aws_api_gateway_resource
-  connection_type = "INTERNET"
-  target_url      = var.microservice_host
-}
-
-module "fw-alerts" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/fw-alerts"
-  api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
-  x_rw_domain     = var.x_rw_domain
-  v1_resource     = module.v1_resource.aws_api_gateway_resource
-  connection_type = "INTERNET"
-  target_url      = var.microservice_host
-}
-
-module "fw-contextual-layers" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/fw-contextual-layers"
-  api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
-  x_rw_domain     = var.x_rw_domain
-  v1_resource     = module.v1_resource.aws_api_gateway_resource
-  connection_type = "INTERNET"
-  target_url      = var.microservice_host
-}
-
-module "fw-teams" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/fw-teams"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -471,10 +421,19 @@ module "gfw-adapter" {
   v1_download_resource      = module.query.v1_download_resource
   v1_fields_resource        = module.query.v1_fields_resource
   v1_rest_datasets_resource = module.dataset.v1_rest_datasets_resource
-  depends_on = [
+  depends_on                = [
     module.dataset,
     module.query,
   ]
+}
+
+module "gfw-contact" {
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/gfw-contact"
+  api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
+  x_rw_domain     = var.x_rw_domain
+  v1_resource     = module.v1_resource.aws_api_gateway_resource
+  connection_type = "INTERNET"
+  target_url      = var.microservice_host
 }
 
 module "gfw-forma" {
@@ -555,8 +514,9 @@ module "glad-analysis-tiled" {
   target_url              = var.microservice_host
   v1_resource             = module.v1_resource.aws_api_gateway_resource
   v1_glad_alerts_resource = module.fires-summary-stats.v1_glad_alerts_resource
-  depends_on = [
-  module.fires-summary-stats]
+  depends_on              = [
+    module.fires-summary-stats
+  ]
 }
 
 module "graph-client" {
@@ -594,7 +554,7 @@ module "imazon" {
   connection_type = "INTERNET"
   target_url      = var.microservice_host
   v2_resource     = module.v2_resource.aws_api_gateway_resource
-  depends_on = [
+  depends_on      = [
     module.v1_resource,
     module.v2_resource
   ]
@@ -643,7 +603,7 @@ module "nexgddp" {
   v1_rest_datasets_resource = module.dataset.v1_rest_datasets_resource
   v1_layer_resource         = module.layer.v1_layer_resource
   v1_layer_id_tile_resource = module.gee-tiles.v1_gee_tiles_layer_id_tile_resource
-  depends_on = [
+  depends_on                = [
     module.v1_resource,
     module.layer,
     module.gee-tiles
@@ -670,7 +630,7 @@ module "query" {
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
   target_url      = var.microservice_host
-  depends_on = [
+  depends_on      = [
     module.v1_resource
   ]
 }
@@ -682,7 +642,7 @@ module "quicc" {
   connection_type = "INTERNET"
   target_url      = var.microservice_host
   v1_resource     = module.v1_resource.aws_api_gateway_resource
-  depends_on = [
+  depends_on      = [
     module.v1_resource
   ]
 }
@@ -764,7 +724,7 @@ module "vocabulary" {
   api_gateway                      = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain                      = var.x_rw_domain
   connection_type                  = "INTERNET"
-  target_url      = var.microservice_host
+  target_url                       = var.microservice_host
   v1_resource                      = module.v1_resource.aws_api_gateway_resource
   v1_dataset_resource              = module.dataset.v1_dataset_resource
   v1_dataset_id_resource           = module.dataset.v1_dataset_id_resource

@@ -78,3 +78,8 @@ variable "namespaces" {
   description = "Namespace list"
   type        = list(string)
 }
+
+variable "fw_backend_url" {
+  type        = string
+  description = "The URL of the backend server to which the request is proxied"
+}
