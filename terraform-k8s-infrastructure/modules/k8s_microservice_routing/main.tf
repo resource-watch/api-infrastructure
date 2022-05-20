@@ -96,6 +96,7 @@ resource "aws_api_gateway_rest_api" "rw_api_gateway" {
     types = [
     "REGIONAL"]
   }
+  binary_media_types = ["multipart/form-data"]
 }
 
 data "aws_subnet_ids" "private_subnets" {
