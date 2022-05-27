@@ -593,7 +593,6 @@ module "dataset" {
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
-
 }
 
 module "doc-orchestrator" {

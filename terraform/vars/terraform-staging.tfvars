@@ -31,3 +31,4 @@ mongodb_apps_node_group_capacity_type  = "SPOT"
 mongodb_apps_node_group_instance_types = ["r5a.large", "r5.large"]
 
 aq_bucket_cors_allowed_origin = "*"
+deploy_sparkpost_templates    = false
