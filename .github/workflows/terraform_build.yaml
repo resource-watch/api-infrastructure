@@ -18,6 +18,7 @@ jobs:
         AWS_REGION: ${{ secrets.aws_region_production }}
         CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
         CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
+        SPARKPOST_API_KEY: ${{ secrets.sparkpost_api_key }}
       run: |
         ./scripts/infra plan
         ./scripts/infra apply
@@ -30,6 +31,7 @@ jobs:
         AWS_REGION: ${{ secrets.aws_region_staging }}
         CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
         CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
+        SPARKPOST_API_KEY: ${{ secrets.sparkpost_api_key }}
       run: |
         ./scripts/infra plan
         ./scripts/infra apply
@@ -42,6 +44,7 @@ jobs:
         AWS_REGION: ${{ secrets.aws_region_dev }}
         CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
         CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
+        SPARKPOST_API_KEY: ${{ secrets.sparkpost_api_key }}
       run: |
         ./scripts/infra plan
         ./scripts/infra apply

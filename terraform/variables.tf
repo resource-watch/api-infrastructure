@@ -243,3 +243,15 @@ variable "hibernate" {
 variable "aq_bucket_cors_allowed_origin" {
   type = string
 }
+
+variable "sparkpost_api_key" {
+  type = string
+  description = "Sparkpost API key"
+  default = ""
+}
+
+variable "deploy_sparkpost_templates" {
+  default     = true
+  type        = bool
+  description = "If the Sparkpost templates should be deployed"
+}
