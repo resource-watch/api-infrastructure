@@ -4,7 +4,7 @@ dns_prefix                      = "aws-staging"
 backups_bucket                  = "wri-api-staging-backups"
 log_retention_period            = 7
 backup_retention_period         = 1
-rds_engine_version              = "11.9"
+rds_engine_version              = "11.13"
 rds_instance_class              = "db.t3.medium"
 rds_instance_count              = 1
 db_instance_class               = "db.r5.large"
@@ -31,3 +31,4 @@ mongodb_apps_node_group_capacity_type  = "SPOT"
 mongodb_apps_node_group_instance_types = ["r5a.large", "r5.large"]
 
 aq_bucket_cors_allowed_origin = "*"
+deploy_sparkpost_templates    = false
