@@ -8,5 +8,5 @@ tf_core_state_bucket                     = "wri-api-terraform-staging"
 deploy_metrics_server                    = false
 elasticsearch_data_nodes_type            = "m5.large.elasticsearch"
 x_rw_domain                              = "staging-api.resourcewatch.org"
-namespaces                               = ["core", "aqueduct", "rw", "gfw", "fw", "prep", "climate-watch"]
+namespaces                               = ["core", "aqueduct", "rw", "gfw", "prep", "climate-watch"]
 fw_backend_url                           = "https://staging-fw-api.globalforestwatch.org"
