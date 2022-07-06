@@ -123,7 +123,7 @@ module "authorization_get_v1_deletion" {
   api_gateway     = var.api_gateway
   api_resource    = module.v1_deletion_resource.aws_api_gateway_resource
   method          = "GET"
-  uri             = "http://${local.api_gateway_target_url}:30505/api/deletion"
+  uri             = "http://${local.api_gateway_target_url}:30505/api/v1/deletion"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
 }
@@ -134,7 +134,7 @@ module "authorization_post_v1_deletion" {
   api_gateway     = var.api_gateway
   api_resource    = module.v1_deletion_resource.aws_api_gateway_resource
   method          = "POST"
-  uri             = "http://${local.api_gateway_target_url}:30505/api/deletion"
+  uri             = "http://${local.api_gateway_target_url}:30505/api/v1/deletion"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
 }
@@ -145,7 +145,7 @@ module "authorization_any_v1_deletion_proxy" {
   api_gateway     = var.api_gateway
   api_resource    = module.v1_deletion_proxy_resource.aws_api_gateway_resource
   method          = "ANY"
-  uri             = "http://${local.api_gateway_target_url}:30505/api/deletion/{proxy}"
+  uri             = "http://${local.api_gateway_target_url}:30505/api/v1/deletion/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
 }
