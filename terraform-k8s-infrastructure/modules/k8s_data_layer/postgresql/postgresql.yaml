@@ -3,7 +3,7 @@
 ## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ##
 global:
-  postgresql: {}
+  postgresql: { }
 #   imageRegistry: myRegistryName
 #   imagePullSecrets:
 #     - myRegistryKeySecretName
@@ -118,7 +118,7 @@ postgresqlDataDir: /bitnami/postgresql/data
 ##     value: "bar"
 ##
 # extraEnv:
-extraEnv: []
+extraEnv: [ ]
 
 ## Name of a ConfigMap containing extra env vars
 ##
@@ -222,7 +222,7 @@ service:
 
   ## Provide any additional annotations which may be required.
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
-  annotations: {}
+  annotations: { }
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
@@ -277,7 +277,7 @@ persistence:
   accessModes:
     - ReadWriteOnce
   size: 75Gi
-  annotations: {}
+  annotations: { }
 
 ## updateStrategy for PostgreSQL StatefulSet and its slaves StatefulSets
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
@@ -293,7 +293,7 @@ master:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption
-  nodeSelector: {}
+  nodeSelector: { }
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -303,18 +303,18 @@ master:
                 operator: In
                 values:
                   - core
-  tolerations: []
-  labels: {}
-  annotations: {}
-  podLabels: {}
-  podAnnotations: {}
+  tolerations: [ ]
+  labels: { }
+  annotations: { }
+  podLabels: { }
+  podAnnotations: { }
   priorityClassName: ""
   ## Additional PostgreSQL Master Volume mounts
   ##
-  extraVolumeMounts: []
+  extraVolumeMounts: [ ]
   ## Additional PostgreSQL Master Volumes
   ##
-  extraVolumes: []
+  extraVolumes: [ ]
 
 ##
 ## PostgreSQL Slave parameters
@@ -325,20 +325,20 @@ slave:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption
-  nodeSelector: {}
-  affinity: {}
-  tolerations: []
-  labels: {}
-  annotations: {}
-  podLabels: {}
-  podAnnotations: {}
+  nodeSelector: { }
+  affinity: { }
+  tolerations: [ ]
+  labels: { }
+  annotations: { }
+  podLabels: { }
+  podAnnotations: { }
   priorityClassName: ""
   ## Additional PostgreSQL Slave Volume mounts
   ##
-  extraVolumeMounts: []
+  extraVolumeMounts: [ ]
   ## Additional PostgreSQL Slave Volumes
   ##
-  extraVolumes: []
+  extraVolumes: [ ]
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -370,7 +370,7 @@ networkPolicy:
     ##
     # explicitNamespacesSelector:
     # matchLabels:
-    # role: frontend
+  # role: frontend
   # matchExpressions:
   # - {key: role, operator: In, values: [frontend]}
 
@@ -405,7 +405,7 @@ metrics:
     loadBalancerIP:
   serviceMonitor:
     enabled: false
-    additionalLabels: {}
+    additionalLabels: { }
     # namespace: monitoring
     # interval: 30s
     # scrapeTimeout: 10s
@@ -414,9 +414,9 @@ metrics:
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
   prometheusRule:
     enabled: false
-    additionalLabels: {}
+    additionalLabels: { }
     namespace: ""
-    rules: []
+    rules: [ ]
       ## These are just examples rules, please adapt them to your needs.
       ## Make sure to constraint the rules to the current postgresql service.
       # - alert: HugeReplicationLag
@@ -424,7 +424,7 @@ metrics:
       #   for: 1m
       #   labels:
       #     severity: critical
-      #   annotations:
+    #   annotations:
     #     description: replication for {{ template "postgresql.fullname" . }} PostgreSQL is lagging by {{ "{{ $value }}" }} hour(s).
     #     summary: PostgreSQL replication is lagging by {{ "{{ $value }}" }} hour(s).
   image:

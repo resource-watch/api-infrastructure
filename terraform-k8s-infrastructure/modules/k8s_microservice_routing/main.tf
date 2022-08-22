@@ -1,7 +1,7 @@
 # import core state
 data "terraform_remote_state" "core" {
   backend = "s3"
-  config = {
+  config  = {
     bucket = var.tf_core_state_bucket
     region = var.aws_region
     key    = "core.tfstate"
@@ -93,31 +93,19 @@ resource "aws_api_gateway_rest_api" "rw_api_gateway" {
   description = "API Gateway for the RW API ${var.dns_prefix} cluster"
 
   endpoint_configuration {
-    types = [
-    "REGIONAL"]
+    types = ["REGIONAL"]
   }
   binary_media_types = ["multipart/form-data"]
 }
 
 data "aws_subnets" "private_subnets" {
   filter {
-    name   = "vpc-id"
-    values = [var.vpc.id]
+    name   = "tag:tier"
+    values = ["private"]
   }
-
-  tags = {
-    tier = "private"
-  }
-}
-
-data "aws_subnets" "public_subnets" {
   filter {
     name   = "vpc-id"
     values = [var.vpc.id]
-  }
-
-  tags = {
-    tier = "public"
   }
 }
 
@@ -292,21 +280,21 @@ resource "aws_api_gateway_deployment" "prod" {
 
 // Base API Gateway resources
 module "v1_resource" {
-  source      = "./resource"
+  source      = "./microservices/resource"
   rest_api_id = aws_api_gateway_rest_api.rw_api_gateway.id
   parent_id   = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
   path_part   = "v1"
 }
 
 module "v2_resource" {
-  source      = "./resource"
+  source      = "./microservices/resource"
   rest_api_id = aws_api_gateway_rest_api.rw_api_gateway.id
   parent_id   = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
   path_part   = "v2"
 }
 
 module "v3_resource" {
-  source      = "./resource"
+  source      = "./microservices/resource"
   rest_api_id = aws_api_gateway_rest_api.rw_api_gateway.id
   parent_id   = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
   path_part   = "v3"
@@ -366,13 +354,13 @@ module "v1_redirect" {
 
 // /v1/gfw-metadata proxies to external server
 module "gfw-metadata" {
-  source      = "./gfw-metadata"
+  source      = "./microservices/gfw-metadata"
   api_gateway = aws_api_gateway_rest_api.rw_api_gateway
   v1_resource = module.v1_resource.aws_api_gateway_resource
 }
 
 module "analysis-gee" {
-  source           = "./analysis-gee"
+  source           = "./microservices/analysis-gee"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -395,7 +383,7 @@ module "analysis-gee" {
 }
 
 module "aqueduct-analysis" {
-  source           = "./aqueduct-analysis"
+  source           = "./microservices/aqueduct-analysis"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -412,7 +400,7 @@ module "aqueduct-analysis" {
 }
 
 module "arcgis" {
-  source                    = "./arcgis"
+  source                    = "./microservices/arcgis"
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca                = var.cluster_ca
   cluster_endpoint          = var.cluster_endpoint
@@ -437,7 +425,7 @@ module "arcgis" {
 }
 
 module "arcgis-proxy" {
-  source           = "./arcgis-proxy"
+  source           = "./microservices/arcgis-proxy"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -454,7 +442,7 @@ module "arcgis-proxy" {
 }
 
 module "area" {
-  source           = "./area"
+  source           = "./microservices/area"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -477,7 +465,7 @@ module "area" {
 }
 
 module "auth" {
-  source           = "./authorization"
+  source           = "./microservices/authorization"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -495,7 +483,7 @@ module "auth" {
 }
 
 module "bigquery" {
-  source                    = "./bigquery"
+  source                    = "./microservices/bigquery"
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca                = var.cluster_ca
   cluster_endpoint          = var.cluster_endpoint
@@ -521,7 +509,7 @@ module "bigquery" {
 }
 
 module "biomass" {
-  source                   = "./biomass"
+  source                   = "./microservices/biomass"
   api_gateway              = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca               = var.cluster_ca
   cluster_endpoint         = var.cluster_endpoint
@@ -543,7 +531,7 @@ module "biomass" {
 }
 
 module "carto" {
-  source                    = "./carto"
+  source                    = "./microservices/carto"
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca                = var.cluster_ca
   cluster_endpoint          = var.cluster_endpoint
@@ -569,7 +557,7 @@ module "carto" {
 }
 
 module "converter" {
-  source           = "./converter"
+  source           = "./microservices/converter"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -579,13 +567,13 @@ module "converter" {
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
   connection_type  = "VPC_LINK"
-  eks_asg_names = [
+  eks_asg_names    = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
   ]
 }
 
 module "dataset" {
-  source           = "./dataset"
+  source           = "./microservices/dataset"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -595,6 +583,9 @@ module "dataset" {
   vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
   v1_resource      = module.v1_resource.aws_api_gateway_resource
   connection_type  = "VPC_LINK"
+  require_api_key  = true
+#  authorizer_id    = aws_api_gateway_authorizer.api_key.id
+#  authorization    = "CUSTOM"
 
   eks_asg_names = [
     data.aws_autoscaling_groups.apps_autoscaling_group.names.0
@@ -602,7 +593,7 @@ module "dataset" {
 }
 
 module "doc-orchestrator" {
-  source           = "./doc-orchestrator"
+  source           = "./microservices/doc-orchestrator"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -619,7 +610,7 @@ module "doc-orchestrator" {
 }
 
 module "document-adapter" {
-  source                 = "./document-adapter"
+  source                 = "./microservices/document-adapter"
   api_gateway            = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca             = var.cluster_ca
   cluster_endpoint       = var.cluster_endpoint
@@ -645,7 +636,7 @@ module "document-adapter" {
 }
 
 module "fires-summary-stats" {
-  source           = "./fires-summary-stats"
+  source           = "./microservices/fires-summary-stats"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -662,7 +653,7 @@ module "fires-summary-stats" {
 }
 
 module "forest-watcher-api" {
-  source           = "./forest-watcher-api"
+  source           = "./microservices/forest-watcher-api"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -680,7 +671,7 @@ module "forest-watcher-api" {
 }
 
 module "forest-change" {
-  source           = "./forest-change"
+  source           = "./microservices/forest-change"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -697,7 +688,7 @@ module "forest-change" {
 }
 
 module "forms" {
-  source           = "./forms"
+  source           = "./microservices/forms"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -715,7 +706,7 @@ module "forms" {
 }
 
 module "fw-alerts" {
-  source           = "./fw-alerts"
+  source           = "./microservices/fw-alerts"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -733,7 +724,7 @@ module "fw-alerts" {
 }
 
 module "fw-contextual-layers" {
-  source           = "./fw-contextual-layers"
+  source           = "./microservices/fw-contextual-layers"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -751,7 +742,7 @@ module "fw-contextual-layers" {
 }
 
 module "fw-teams" {
-  source           = "./fw-teams"
+  source           = "./microservices/fw-teams"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -769,7 +760,7 @@ module "fw-teams" {
 }
 
 module "gee" {
-  source                    = "./gee"
+  source                    = "./microservices/gee"
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca                = var.cluster_ca
   cluster_endpoint          = var.cluster_endpoint
@@ -794,7 +785,7 @@ module "gee" {
 }
 
 module "gee-tiles" {
-  source               = "./gee-tiles"
+  source               = "./microservices/gee-tiles"
   api_gateway          = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca           = var.cluster_ca
   cluster_endpoint     = var.cluster_endpoint
@@ -817,7 +808,7 @@ module "gee-tiles" {
 }
 
 module "geostore" {
-  source           = "./geostore"
+  source           = "./microservices/geostore"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -835,7 +826,7 @@ module "geostore" {
 }
 
 module "gfw-adapter" {
-  source                    = "./gfw-adapter"
+  source                    = "./microservices/gfw-adapter"
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca                = var.cluster_ca
   cluster_endpoint          = var.cluster_endpoint
@@ -861,7 +852,7 @@ module "gfw-adapter" {
 }
 
 module "gfw-contact" {
-  source           = "./gfw-contact"
+  source           = "./microservices/gfw-contact"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -878,7 +869,7 @@ module "gfw-contact" {
 }
 
 module "gfw-forma" {
-  source           = "./gfw-forma"
+  source           = "./microservices/gfw-forma"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -895,7 +886,7 @@ module "gfw-forma" {
 }
 
 module "gfw-guira" {
-  source           = "./gfw-guira"
+  source           = "./microservices/gfw-guira"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -913,7 +904,7 @@ module "gfw-guira" {
 }
 
 module "gfw-ogr" {
-  source           = "./gfw-ogr"
+  source           = "./microservices/gfw-ogr"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -931,7 +922,7 @@ module "gfw-ogr" {
 }
 
 module "gfw-ogr-gfw-pro" {
-  source           = "./gfw-ogr-gfw-pro"
+  source           = "./microservices/gfw-ogr-gfw-pro"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -948,7 +939,7 @@ module "gfw-ogr-gfw-pro" {
 }
 
 module "gfw-prodes" {
-  source           = "./gfw-prodes"
+  source           = "./microservices/gfw-prodes"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -966,7 +957,7 @@ module "gfw-prodes" {
 }
 
 module "gfw-umd" {
-  source                    = "./gfw-umd"
+  source                    = "./microservices/gfw-umd"
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca                = var.cluster_ca
   cluster_endpoint          = var.cluster_endpoint
@@ -986,7 +977,7 @@ module "gfw-umd" {
 }
 
 module "gfw-user" {
-  source           = "./gfw-user"
+  source           = "./microservices/gfw-user"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -1004,7 +995,7 @@ module "gfw-user" {
 }
 
 module "glad-analysis-tiled" {
-  source                  = "./glad-analysis-tiled"
+  source                  = "./microservices/glad-analysis-tiled"
   api_gateway             = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca              = var.cluster_ca
   cluster_endpoint        = var.cluster_endpoint
@@ -1021,11 +1012,12 @@ module "glad-analysis-tiled" {
   ]
 
   depends_on = [
-  module.fires-summary-stats]
+    module.fires-summary-stats
+  ]
 }
 
 module "graph-client" {
-  source           = "./graph-client"
+  source           = "./microservices/graph-client"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -1042,7 +1034,7 @@ module "graph-client" {
 }
 
 module "gs-pro-config" {
-  source           = "./gs-pro-config"
+  source           = "./microservices/gs-pro-config"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -1059,7 +1051,7 @@ module "gs-pro-config" {
 }
 
 module "high-res" {
-  source           = "./high-res"
+  source           = "./microservices/high-res"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -1076,7 +1068,7 @@ module "high-res" {
 }
 
 module "imazon" {
-  source           = "./imazon"
+  source           = "./microservices/imazon"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -1099,7 +1091,7 @@ module "imazon" {
 }
 
 module "layer" {
-  source                 = "./layer"
+  source                 = "./microservices/layer"
   api_gateway            = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca             = var.cluster_ca
   cluster_endpoint       = var.cluster_endpoint
@@ -1122,7 +1114,7 @@ module "layer" {
 }
 
 module "metadata" {
-  source                           = "./metadata"
+  source                           = "./microservices/metadata"
   api_gateway                      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca                       = var.cluster_ca
   cluster_endpoint                 = var.cluster_endpoint
@@ -1145,7 +1137,7 @@ module "metadata" {
 }
 
 module "nexgddp" {
-  source                    = "./nexgddp"
+  source                    = "./microservices/nexgddp"
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca                = var.cluster_ca
   cluster_endpoint          = var.cluster_endpoint
@@ -1174,7 +1166,7 @@ module "nexgddp" {
 }
 
 module "proxy" {
-  source           = "./proxy"
+  source           = "./microservices/proxy"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -1195,7 +1187,7 @@ module "proxy" {
 }
 
 module "query" {
-  source           = "./query"
+  source           = "./microservices/query"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -1216,7 +1208,7 @@ module "query" {
 }
 
 module "quicc" {
-  source           = "./quicc"
+  source           = "./microservices/quicc"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -1237,7 +1229,7 @@ module "quicc" {
 }
 
 module "rw-lp" {
-  source           = "./rw-lp"
+  source           = "./microservices/rw-lp"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -1253,7 +1245,7 @@ module "rw-lp" {
 }
 
 module "resource-watch-manager" {
-  source           = "./resource-watch-manager"
+  source           = "./microservices/resource-watch-manager"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -1270,7 +1262,7 @@ module "resource-watch-manager" {
 }
 
 module "salesforce-connector" {
-  source           = "./salesforce-connector"
+  source           = "./microservices/salesforce-connector"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -1287,7 +1279,7 @@ module "salesforce-connector" {
 }
 
 module "story" {
-  source           = "./story"
+  source           = "./microservices/story"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -1304,7 +1296,7 @@ module "story" {
 }
 
 module "subscriptions" {
-  source           = "./subscriptions"
+  source           = "./microservices/subscriptions"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -1321,7 +1313,7 @@ module "subscriptions" {
 }
 
 module "task-executor" {
-  source           = "./task-executor"
+  source           = "./microservices/task-executor"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -1338,7 +1330,7 @@ module "task-executor" {
 }
 
 module "true-color-tiles" {
-  source           = "./true-color-tiles"
+  source           = "./microservices/true-color-tiles"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -1355,7 +1347,7 @@ module "true-color-tiles" {
 }
 
 module "viirs-fires" {
-  source           = "./viirs-fires"
+  source           = "./microservices/viirs-fires"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -1373,7 +1365,7 @@ module "viirs-fires" {
 }
 
 module "vocabulary" {
-  source                           = "./vocabulary"
+  source                           = "./microservices/vocabulary"
   api_gateway                      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca                       = var.cluster_ca
   cluster_endpoint                 = var.cluster_endpoint
@@ -1396,7 +1388,7 @@ module "vocabulary" {
 }
 
 module "webshot" {
-  source           = "./webshot"
+  source           = "./microservices/webshot"
   api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca       = var.cluster_ca
   cluster_endpoint = var.cluster_endpoint
@@ -1413,7 +1405,7 @@ module "webshot" {
 }
 
 module "widget" {
-  source                 = "./widget"
+  source                 = "./microservices/widget"
   api_gateway            = aws_api_gateway_rest_api.rw_api_gateway
   cluster_ca             = var.cluster_ca
   cluster_endpoint       = var.cluster_endpoint
@@ -1486,7 +1478,8 @@ resource "aws_api_gateway_domain_name" "aws_env_resourcewatch_org_gateway_domain
   security_policy = "TLS_1_2"
 
   depends_on = [
-  aws_acm_certificate_validation.aws_env_resourcewatch_org_domain_cert_validation]
+    aws_acm_certificate_validation.aws_env_resourcewatch_org_domain_cert_validation
+  ]
 }
 
 resource "aws_api_gateway_base_path_mapping" "aws_env_resourcewatch_org_base_path_mapping" {
@@ -1535,7 +1528,8 @@ resource "aws_api_gateway_domain_name" "env_api_resourcewatch_org_gateway_domain
   security_policy = "TLS_1_2"
 
   depends_on = [
-  aws_acm_certificate_validation.env_api_resourcewatch_org_domain_cert_validation]
+    aws_acm_certificate_validation.env_api_resourcewatch_org_domain_cert_validation
+  ]
 }
 
 resource "aws_api_gateway_base_path_mapping" "env_api_resourcewatch_org_base_path_mapping" {

@@ -167,7 +167,7 @@ resource "aws_elasticsearch_domain" "rw-api-elasticsearch" {
     ]
 
     security_group_ids = [
-    aws_security_group.elasticsearch-sg.id]
+      aws_security_group.elasticsearch-sg.id]
   }
 
   advanced_options = {

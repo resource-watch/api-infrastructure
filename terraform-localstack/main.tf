@@ -120,21 +120,21 @@ resource "aws_api_gateway_deployment" "prod" {
 
 // Base API Gateway resources
 module "v1_resource" {
-  source      = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/resource"
+  source      = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/resource"
   rest_api_id = aws_api_gateway_rest_api.rw_api_gateway.id
   parent_id   = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
   path_part   = "v1"
 }
 
 module "v2_resource" {
-  source      = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/resource"
+  source      = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/resource"
   rest_api_id = aws_api_gateway_rest_api.rw_api_gateway.id
   parent_id   = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
   path_part   = "v2"
 }
 
 module "v3_resource" {
-  source      = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/resource"
+  source      = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/resource"
   rest_api_id = aws_api_gateway_rest_api.rw_api_gateway.id
   parent_id   = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
   path_part   = "v3"
@@ -183,7 +183,7 @@ EOF
 }
 
 module "analysis-gee" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/analysis-gee"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/analysis-gee"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   connection_type = "INTERNET"
@@ -198,7 +198,7 @@ module "analysis-gee" {
 }
 
 module "aqueduct-analysis" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/aqueduct-analysis"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/aqueduct-analysis"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -207,7 +207,7 @@ module "aqueduct-analysis" {
 }
 
 module "arcgis" {
-  source                    = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/arcgis"
+  source                    = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/arcgis"
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain               = var.x_rw_domain
   connection_type           = "INTERNET"
@@ -223,7 +223,7 @@ module "arcgis" {
 }
 
 module "arcgis-proxy" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/arcgis-proxy"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/arcgis-proxy"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -232,7 +232,7 @@ module "arcgis-proxy" {
 }
 
 module "area" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/area"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/area"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -247,7 +247,7 @@ module "area" {
 }
 
 module "auth" {
-  source      = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/authorization"
+  source      = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/authorization"
   api_gateway = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain = var.x_rw_domain
 
@@ -258,7 +258,7 @@ module "auth" {
 }
 
 module "bigquery" {
-  source                    = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/bigquery"
+  source                    = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/bigquery"
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain               = var.x_rw_domain
   connection_type           = "INTERNET"
@@ -275,7 +275,7 @@ module "bigquery" {
 }
 
 module "biomass" {
-  source                   = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/biomass"
+  source                   = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/biomass"
   api_gateway              = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain              = var.x_rw_domain
   connection_type          = "INTERNET"
@@ -288,7 +288,7 @@ module "biomass" {
 }
 
 module "carto" {
-  source                    = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/carto"
+  source                    = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/carto"
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain               = var.x_rw_domain
   connection_type           = "INTERNET"
@@ -305,7 +305,7 @@ module "carto" {
 }
 
 module "converter" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/converter"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/converter"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -314,7 +314,7 @@ module "converter" {
 }
 
 module "dataset" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/dataset"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/dataset"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -324,7 +324,7 @@ module "dataset" {
 }
 
 module "doc-orchestrator" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/doc-orchestrator"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/doc-orchestrator"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -333,7 +333,7 @@ module "doc-orchestrator" {
 }
 
 module "document-adapter" {
-  source                 = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/document-adapter"
+  source                 = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/document-adapter"
   api_gateway            = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain            = var.x_rw_domain
   connection_type        = "INTERNET"
@@ -351,7 +351,7 @@ module "document-adapter" {
 }
 
 module "fires-summary-stats" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/fires-summary-stats"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/fires-summary-stats"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -360,7 +360,7 @@ module "fires-summary-stats" {
 }
 
 module "forest-change" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/forest-change"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/forest-change"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -369,7 +369,7 @@ module "forest-change" {
 }
 
 module "gee" {
-  source                    = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/gee"
+  source                    = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/gee"
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain               = var.x_rw_domain
   connection_type           = "INTERNET"
@@ -386,7 +386,7 @@ module "gee" {
 }
 
 module "gee-tiles" {
-  source               = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/gee-tiles"
+  source               = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/gee-tiles"
   api_gateway          = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain          = var.x_rw_domain
   connection_type      = "INTERNET"
@@ -401,7 +401,7 @@ module "gee-tiles" {
 }
 
 module "geostore" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/geostore"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/geostore"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -411,7 +411,7 @@ module "geostore" {
 }
 
 module "gfw-adapter" {
-  source                    = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/gfw-adapter"
+  source                    = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/gfw-adapter"
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain               = var.x_rw_domain
   connection_type           = "INTERNET"
@@ -428,7 +428,7 @@ module "gfw-adapter" {
 }
 
 module "gfw-contact" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/gfw-contact"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/gfw-contact"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -437,7 +437,7 @@ module "gfw-contact" {
 }
 
 module "gfw-forma" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/gfw-forma"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/gfw-forma"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -446,7 +446,7 @@ module "gfw-forma" {
 }
 
 module "gfw-guira" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/gfw-guira"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/gfw-guira"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -456,7 +456,7 @@ module "gfw-guira" {
 }
 
 module "gfw-ogr" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/gfw-ogr"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/gfw-ogr"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -466,7 +466,7 @@ module "gfw-ogr" {
 }
 
 module "gfw-ogr-gfw-pro" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/gfw-ogr-gfw-pro"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/gfw-ogr-gfw-pro"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -475,7 +475,7 @@ module "gfw-ogr-gfw-pro" {
 }
 
 module "gfw-prodes" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/gfw-prodes"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/gfw-prodes"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -485,7 +485,7 @@ module "gfw-prodes" {
 }
 
 module "gfw-umd" {
-  source                    = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/gfw-umd"
+  source                    = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/gfw-umd"
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain               = var.x_rw_domain
   connection_type           = "INTERNET"
@@ -497,7 +497,7 @@ module "gfw-umd" {
 }
 
 module "gfw-user" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/gfw-user"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/gfw-user"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -507,7 +507,7 @@ module "gfw-user" {
 }
 
 module "glad-analysis-tiled" {
-  source                  = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/glad-analysis-tiled"
+  source                  = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/glad-analysis-tiled"
   api_gateway             = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain             = var.x_rw_domain
   connection_type         = "INTERNET"
@@ -520,7 +520,7 @@ module "glad-analysis-tiled" {
 }
 
 module "graph-client" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/graph-client"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/graph-client"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -529,7 +529,7 @@ module "graph-client" {
 }
 
 module "gs-pro-config" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/gs-pro-config"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/gs-pro-config"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -538,7 +538,7 @@ module "gs-pro-config" {
 }
 
 module "high-res" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/high-res"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/high-res"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -547,7 +547,7 @@ module "high-res" {
 }
 
 module "imazon" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/imazon"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/imazon"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -561,7 +561,7 @@ module "imazon" {
 }
 
 module "layer" {
-  source                 = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/layer"
+  source                 = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/layer"
   api_gateway            = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain            = var.x_rw_domain
   connection_type        = "INTERNET"
@@ -576,7 +576,7 @@ module "layer" {
 }
 
 module "metadata" {
-  source                           = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/metadata"
+  source                           = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/metadata"
   api_gateway                      = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain                      = var.x_rw_domain
   connection_type                  = "INTERNET"
@@ -591,7 +591,7 @@ module "metadata" {
 }
 
 module "nexgddp" {
-  source                    = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/nexgddp"
+  source                    = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/nexgddp"
   api_gateway               = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain               = var.x_rw_domain
   connection_type           = "INTERNET"
@@ -611,7 +611,7 @@ module "nexgddp" {
 }
 
 module "proxy" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/proxy"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/proxy"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -624,7 +624,7 @@ module "proxy" {
 }
 
 module "query" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/query"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/query"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -636,7 +636,7 @@ module "query" {
 }
 
 module "quicc" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/quicc"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/quicc"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   connection_type = "INTERNET"
@@ -648,7 +648,7 @@ module "quicc" {
 }
 
 module "rw-lp" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/rw-lp"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/rw-lp"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   connection_type = "INTERNET"
@@ -656,7 +656,7 @@ module "rw-lp" {
 }
 
 module "resource-watch-manager" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/resource-watch-manager"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/resource-watch-manager"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -665,7 +665,7 @@ module "resource-watch-manager" {
 }
 
 module "salesforce-connector" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/salesforce-connector"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/salesforce-connector"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -674,7 +674,7 @@ module "salesforce-connector" {
 }
 
 module "story" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/story"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/story"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -683,7 +683,7 @@ module "story" {
 }
 
 module "subscriptions" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/subscriptions"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/subscriptions"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -692,7 +692,7 @@ module "subscriptions" {
 }
 
 module "task-executor" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/task-executor"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/task-executor"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -701,7 +701,7 @@ module "task-executor" {
 }
 
 module "true-color-tiles" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/true-color-tiles"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/true-color-tiles"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   v1_resource     = module.v1_resource.aws_api_gateway_resource
@@ -710,7 +710,7 @@ module "true-color-tiles" {
 }
 
 module "viirs-fires" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/viirs-fires"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/viirs-fires"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   connection_type = "INTERNET"
@@ -720,7 +720,7 @@ module "viirs-fires" {
 }
 
 module "vocabulary" {
-  source                           = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/vocabulary"
+  source                           = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/vocabulary"
   api_gateway                      = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain                      = var.x_rw_domain
   connection_type                  = "INTERNET"
@@ -735,7 +735,7 @@ module "vocabulary" {
 }
 
 module "webshot" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/webshot"
+  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/webshot"
   api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain     = var.x_rw_domain
   connection_type = "INTERNET"
@@ -744,7 +744,7 @@ module "webshot" {
 }
 
 module "widget" {
-  source                 = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/widget"
+  source                 = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/widget"
   api_gateway            = aws_api_gateway_rest_api.rw_api_gateway
   x_rw_domain            = var.x_rw_domain
   connection_type        = "INTERNET"

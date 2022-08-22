@@ -22,7 +22,7 @@ module "alb" {
 // File has changes - see link above for details
 data "kubectl_path_documents" "cluster_autoscaler_manifests" {
   pattern = "${path.module}/cluster_autoscaler/cluster-autoscaler-autodiscover.yaml.tmpl"
-  vars = {
+  vars    = {
     cluster_name : var.cluster_name
   }
 }
@@ -49,7 +49,7 @@ resource "kubectl_manifest" "metrics_server" {
 // File has changes - see link above for details
 data "kubectl_path_documents" "container_insights_manifests" {
   pattern = "${path.module}/container_insights/container_insights.yaml.tmpl"
-  vars = {
+  vars    = {
     aws_region : var.aws_region,
     cluster_name : var.cluster_name
   }

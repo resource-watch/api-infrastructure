@@ -12,7 +12,7 @@ resource "aws_s3_bucket" "state_bucket" {
   }
 
   tags = merge({ Resource = "Terraform State" },
-  var.tags)
+    var.tags)
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "state_bucket_encryption" {
@@ -51,6 +51,6 @@ resource "aws_dynamodb_table" "tf_lock_state" {
   tags = merge({
     Name     = var.dynamo_db_table_name
     Resource = "Terraform State"
-    },
-  var.tags)
+  },
+    var.tags)
 }
