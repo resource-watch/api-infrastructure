@@ -73,7 +73,7 @@ EOF
 
 resource "aws_api_gateway_method_settings" "rw_api_gateway_general_settings" {
   rest_api_id = aws_api_gateway_rest_api.rw_api_gateway.id
-  stage_name  = aws_api_gateway_deployment.prod.stage_name
+  stage_name  = aws_api_gateway_stage.prod.stage_name
   method_path = "*/*"
 
   settings {
@@ -204,9 +204,23 @@ resource "aws_api_gateway_vpc_link" "rw_api_gfw_lb_vpc_link" {
   }
 }
 
+resource "aws_cloudwatch_log_group" "api_gateway_custom_logs" {
+  name = "api_gateway_custom_logs"
+}
+
+resource "aws_api_gateway_stage" "prod" {
+  deployment_id = aws_api_gateway_deployment.prod.id
+  rest_api_id   = aws_api_gateway_rest_api.rw_api_gateway.id
+  stage_name    = "prod"
+
+  access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.api_gateway_custom_logs.arn
+    format = "($context.requestId), APIKey: $context.identity.apiKey, HTTP Method: $context.httpMethod, Path: $context.resourcePath, Status: $context.status, Errors: $context.error.messageString, Description: custom_log"
+  }
+}
+
 resource "aws_api_gateway_deployment" "prod" {
   rest_api_id = aws_api_gateway_rest_api.rw_api_gateway.id
-  stage_name  = "prod"
 
   triggers = {
     redeployment = sha1(join(",", tolist([
@@ -1484,7 +1498,7 @@ resource "aws_api_gateway_domain_name" "aws_env_resourcewatch_org_gateway_domain
 
 resource "aws_api_gateway_base_path_mapping" "aws_env_resourcewatch_org_base_path_mapping" {
   api_id      = aws_api_gateway_rest_api.rw_api_gateway.id
-  stage_name  = aws_api_gateway_deployment.prod.stage_name
+  stage_name  = aws_api_gateway_stage.prod.stage_name
   domain_name = aws_api_gateway_domain_name.aws_env_resourcewatch_org_gateway_domain_name.domain_name
 }
 
@@ -1534,6 +1548,6 @@ resource "aws_api_gateway_domain_name" "env_api_resourcewatch_org_gateway_domain
 
 resource "aws_api_gateway_base_path_mapping" "env_api_resourcewatch_org_base_path_mapping" {
   api_id      = aws_api_gateway_rest_api.rw_api_gateway.id
-  stage_name  = aws_api_gateway_deployment.prod.stage_name
+  stage_name  = aws_api_gateway_stage.prod.stage_name
   domain_name = aws_api_gateway_domain_name.env_api_resourcewatch_org_gateway_domain_name.domain_name
 }
