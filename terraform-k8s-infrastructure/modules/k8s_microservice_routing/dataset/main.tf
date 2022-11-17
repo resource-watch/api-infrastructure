@@ -80,6 +80,22 @@ module "rest_datasets_resource" {
   path_part   = "rest-datasets"
 }
 
+// /v1/dataset/by-user
+module "dataset_by_user_resource" {
+  source      = "../resource"
+  rest_api_id = var.api_gateway.id
+  parent_id   = module.dataset_resource.aws_api_gateway_resource.id
+  path_part   = "by-user"
+}
+
+// /v1/dataset/by-user/{userId}
+module "dataset_by_user_id_resource" {
+  source      = "../resource"
+  rest_api_id = var.api_gateway.id
+  parent_id   = module.dataset_by_user_resource.aws_api_gateway_resource.id
+  path_part   = "{userId}"
+}
+
 // /v1/dataset/{datasetId}
 module "dataset_id_resource" {
   source      = "../resource"
@@ -165,6 +181,17 @@ module "dataset_post_dataset" {
   uri             = "http://${local.api_gateway_target_url}:30516/api/v1/dataset"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+}
+
+module "dataset_delete_dataset_id_proxy" {
+  source                      = "../endpoint"
+  x_rw_domain                 = var.x_rw_domain
+  api_gateway                 = var.api_gateway
+  api_resource                = module.dataset_by_user_id_resource.aws_api_gateway_resource
+  method                      = "DELETE"
+  uri                         = "http://${local.api_gateway_target_url}:30516/api/v1/dataset/by-user/{userId}"
+  vpc_link                    = var.vpc_link
+  connection_type             = var.connection_type
 }
 
 module "dataset_any_dataset_id_proxy" {

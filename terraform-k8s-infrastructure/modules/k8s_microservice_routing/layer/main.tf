@@ -89,6 +89,22 @@ module "layer_find_by_ids_resource" {
   path_part   = "find-by-ids"
 }
 
+// /v1/layer/by-user
+module "layer_by_user_resource" {
+  source      = "../resource"
+  rest_api_id = var.api_gateway.id
+  parent_id   = module.layer_resource.aws_api_gateway_resource.id
+  path_part   = "by-user"
+}
+
+// /v1/layer/by-user/{layerId}
+module "layer_by_user_layer_id_resource" {
+  source      = "../resource"
+  rest_api_id = var.api_gateway.id
+  parent_id   = module.layer_by_user_resource.aws_api_gateway_resource.id
+  path_part   = "{layerId}"
+}
+
 // /v1/layer/change-environment
 module "layer_change_environment_resource" {
   source      = "../resource"
@@ -242,6 +258,17 @@ module "layer_post_layer_find_by_ids" {
   api_resource    = module.layer_find_by_ids_resource.aws_api_gateway_resource
   method          = "POST"
   uri             = "http://${local.api_gateway_target_url}:30546/api/v1/layer/find-by-ids"
+  vpc_link        = var.vpc_link
+  connection_type = var.connection_type
+}
+
+module "layer_post_layer_by_user_layer_id" {
+  source          = "../endpoint"
+  x_rw_domain     = var.x_rw_domain
+  api_gateway     = var.api_gateway
+  api_resource    = module.layer_by_user_layer_id_resource.aws_api_gateway_resource
+  method          = "DELETE"
+  uri             = "http://${local.api_gateway_target_url}:30546/api/v1/layer/by-user/{layerId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
 }
