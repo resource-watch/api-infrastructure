@@ -1,3 +1,4 @@
+# This docker image uses an old version of Terraform, and needs to be updated before it can be used again
 version: "3.7"
 services:
   terraform:

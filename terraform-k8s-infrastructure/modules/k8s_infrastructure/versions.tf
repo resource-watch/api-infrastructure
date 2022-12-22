@@ -2,20 +2,20 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 3.36"
+      version = "~> 4.48.0"
     }
 
     kubectl = {
       source  = "gavinbunney/kubectl"
-      version = "~> 1.10.0"
+      version = "~> 1.14.0"
     }
 
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.0.2"
+      version = "~> 2.8.0"
     }
   }
-  required_version = "0.13.3"
+  required_version = "1.3.6"
 }
 
 provider "aws" {
@@ -27,7 +27,7 @@ provider "helm" {
     host                   = var.cluster_endpoint
     cluster_ca_certificate = base64decode(var.cluster_ca)
     exec {
-      api_version = "client.authentication.k8s.io/v1alpha1"
+      api_version = "client.authentication.k8s.io/v1beta1"
       args = [
         "eks",
         "get-token",

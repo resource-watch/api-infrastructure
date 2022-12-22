@@ -46,6 +46,7 @@ module "eks" {
   environment    = var.environment
   backups_bucket = var.backups_bucket
   eks_version    = var.eks_version
+  aws_region     = var.aws_region
   subnet_ids     = [
     module.vpc.private_subnets[0].id,
     module.vpc.private_subnets[1].id,
@@ -200,9 +201,9 @@ module "gateway-node-group" {
 }
 
 module "documentdb" {
-  source                          = "./modules/document_db"
-  log_retention_period            = var.log_retention_period
-  private_subnet_ids              = [
+  source               = "./modules/document_db"
+  log_retention_period = var.log_retention_period
+  private_subnet_ids   = [
     module.vpc.private_subnets[0].id, module.vpc.private_subnets[1].id, module.vpc.private_subnets[3].id
   ]
   project                         = local.project
@@ -217,7 +218,7 @@ module "documentdb" {
   enabled_cloudwatch_logs_exports = var.db_logs_exports
   cluster_parameters              = [
     {
-      apply_method = "immediate"
+      apply_method = "pending-reboot"
       name         = "profiler"
       value        = "disabled"
     },
@@ -235,13 +236,13 @@ module "documentdb" {
 }
 
 module "postgresql" {
-  source                      = "./modules/postgresql"
-  availability_zone_names     = [
+  source                  = "./modules/postgresql"
+  availability_zone_names = [
     module.vpc.private_subnets[0].availability_zone, module.vpc.private_subnets[1].availability_zone,
     module.vpc.private_subnets[3].availability_zone
   ]
-  log_retention_period        = var.log_retention_period
-  private_subnet_ids          = [
+  log_retention_period = var.log_retention_period
+  private_subnet_ids   = [
     module.vpc.private_subnets[0].id, module.vpc.private_subnets[1].id, module.vpc.private_subnets[3].id
   ]
   project                     = local.project
@@ -269,7 +270,7 @@ module "jenkins" {
 }
 
 module "email-templates" {
-  count = var.deploy_sparkpost_templates ? 1 : 0
+  count             = var.deploy_sparkpost_templates ? 1 : 0
   source            = "./modules/email-templates"
   sparkpost_api_key = var.sparkpost_api_key
 }

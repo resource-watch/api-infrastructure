@@ -1,5 +1,8 @@
-data "aws_subnet_ids" "private_subnets" {
-  vpc_id = var.vpc.id
+data "aws_subnets" "private_subnets" {
+  filter {
+    name   = "vpc-id"
+    values = [var.vpc.id]
+  }
 
   tags = {
     tier = "private"
@@ -158,9 +161,9 @@ resource "aws_elasticsearch_domain" "rw-api-elasticsearch" {
 
   vpc_options {
     subnet_ids = [
-      sort(data.aws_subnet_ids.private_subnets.ids)[3],
-      sort(data.aws_subnet_ids.private_subnets.ids)[4],
-      sort(data.aws_subnet_ids.private_subnets.ids)[2]
+      sort(data.aws_subnets.private_subnets.ids)[3],
+      sort(data.aws_subnets.private_subnets.ids)[4],
+      sort(data.aws_subnets.private_subnets.ids)[2]
     ]
 
     security_group_ids = [

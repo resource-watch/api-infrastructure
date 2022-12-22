@@ -12,7 +12,7 @@ provider "kubernetes" {
   host                   = var.cluster_endpoint
   cluster_ca_certificate = base64decode(var.cluster_ca)
   exec {
-    api_version = "client.authentication.k8s.io/v1alpha1"
+    api_version = "client.authentication.k8s.io/v1beta1"
     args        = ["eks", "get-token", "--cluster-name", var.cluster_name]
     command     = "aws"
   }
@@ -99,16 +99,22 @@ resource "aws_api_gateway_rest_api" "rw_api_gateway" {
   binary_media_types = ["multipart/form-data"]
 }
 
-data "aws_subnet_ids" "private_subnets" {
-  vpc_id = var.vpc.id
+data "aws_subnets" "private_subnets" {
+  filter {
+    name   = "vpc-id"
+    values = [var.vpc.id]
+  }
 
   tags = {
     tier = "private"
   }
 }
 
-data "aws_subnet_ids" "public_subnets" {
-  vpc_id = var.vpc.id
+data "aws_subnets" "public_subnets" {
+  filter {
+    name   = "vpc-id"
+    values = [var.vpc.id]
+  }
 
   tags = {
     tier = "public"
@@ -154,7 +160,7 @@ resource "aws_lb" "api_gateway_apps_nlb" {
   name                             = "rw-api-apps-nlb"
   internal                         = true
   load_balancer_type               = "network"
-  subnets                          = data.aws_subnet_ids.private_subnets.ids
+  subnets                          = data.aws_subnets.private_subnets.ids
   enable_cross_zone_load_balancing = true
 
   enable_deletion_protection = false
@@ -174,7 +180,7 @@ resource "aws_lb" "api_gateway_core_nlb" {
   name                             = "rw-api-core-nlb"
   internal                         = true
   load_balancer_type               = "network"
-  subnets                          = data.aws_subnet_ids.private_subnets.ids
+  subnets                          = data.aws_subnets.private_subnets.ids
   enable_cross_zone_load_balancing = true
 
   enable_deletion_protection = false
@@ -194,7 +200,7 @@ resource "aws_lb" "api_gateway_gfw_nlb" {
   name                             = "rw-api-gfw-nlb"
   internal                         = true
   load_balancer_type               = "network"
-  subnets                          = data.aws_subnet_ids.private_subnets.ids
+  subnets                          = data.aws_subnets.private_subnets.ids
   enable_cross_zone_load_balancing = true
 
   enable_deletion_protection = false
@@ -215,7 +221,7 @@ resource "aws_api_gateway_deployment" "prod" {
   stage_name  = "prod"
 
   triggers = {
-    redeployment = sha1(join(",", list(
+    redeployment = sha1(join(",", tolist([
       jsonencode(module.analysis-gee.endpoints),
       jsonencode(module.aqueduct-analysis.endpoints),
       jsonencode(module.arcgis-proxy.endpoints),
@@ -272,7 +278,7 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.webshot.endpoints),
       jsonencode(module.widget.endpoints),
       jsonencode(module.v1_redirect.endpoints),
-    )))
+    ])))
   }
 
   lifecycle {

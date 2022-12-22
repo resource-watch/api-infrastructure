@@ -1,15 +1,28 @@
 resource "aws_s3_bucket" "aq_bucket" {
   bucket = "wri-api-${var.environment}-aqueduct"
 
-  # Tells AWS to encrypt the S3 bucket at rest by default
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+  tags = merge({ Resource = "Aqueduct" }, var.tags)
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "aq_bucket_encryption" {
+  bucket = aws_s3_bucket.aq_bucket.bucket
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm     = "AES256"
     }
   }
+}
 
+resource "aws_s3_bucket_versioning" "aq_bucket_versioning" {
+  bucket = aws_s3_bucket.aq_bucket.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_cors_configuration" "aq_bucket_cors_configuration" {
+  bucket = aws_s3_bucket.aq_bucket.id
   cors_rule {
     allowed_headers = ["*"]
     allowed_methods = ["GET"]
@@ -17,28 +30,27 @@ resource "aws_s3_bucket" "aq_bucket" {
     expose_headers  = ["ETag"]
     max_age_seconds = 3000
   }
+}
 
-  lifecycle_rule {
+resource "aws_s3_bucket_lifecycle_configuration" "aq_bucket_lifecycle_configuration" {
+  bucket = aws_s3_bucket.aq_bucket.id
+
+  rule {
     id      = "expiration_period"
-    enabled = true
+    status = "Enabled"
 
-    prefix = "food-supply-chain/"
+    filter {
+      prefix = "food-supply-chain/"
+    }
 
     expiration {
       days = var.retention_period
     }
   }
-
-  # Tells AWS to keep a version history of the state file
-  versioning {
-    enabled = true
-  }
-
-  tags = merge({ Resource = "Aqueduct" }, var.tags)
 }
 
-resource "aws_s3_bucket_object" "object" {
-  bucket       = aws_s3_bucket.aq_bucket.id
+resource "aws_s3_object" "object" {
+  bucket = aws_s3_bucket.aq_bucket.id
   acl          = "private"
   key          = "food-supply-chain/"
   content_type = "application/x-directory"

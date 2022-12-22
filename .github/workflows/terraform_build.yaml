@@ -1,50 +1,50 @@
 name: Run tests and apply terraform changes for current branch
 
-on: [push]
-
-jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v1
-    - name: Deploy production
-      if: github.ref == 'refs/heads/production'
-      env:
-        ENV: production
-        AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_production }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_production }}
-        AWS_REGION: ${{ secrets.aws_region_production }}
-        CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
-        CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
-        TF_VAR_sparkpost_api_key: ${{ secrets.sparkpost_api_key }}
-      run: |
-        ./scripts/infra plan
-        ./scripts/infra apply
-    - name: Deploy staging
-      if: github.ref == 'refs/heads/staging'
-      env:
-        ENV: staging
-        AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_staging }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_staging }}
-        AWS_REGION: ${{ secrets.aws_region_staging }}
-        CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
-        CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
-        TF_VAR_sparkpost_api_key: ${{ secrets.sparkpost_api_key }}
-      run: |
-        ./scripts/infra plan
-        ./scripts/infra apply
-    - name: Deploy dev
-      if: github.ref == 'refs/heads/dev'
-      env:
-        ENV: dev
-        AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_dev }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_dev }}
-        AWS_REGION: ${{ secrets.aws_region_dev }}
-        CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
-        CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
-        TF_VAR_sparkpost_api_key: ${{ secrets.sparkpost_api_key }}
-      run: |
-        ./scripts/infra plan
-        ./scripts/infra apply
+#on: [push]
+#
+#jobs:
+#  build:
+#
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#    - uses: actions/checkout@v1
+#    - name: Deploy production
+#      if: github.ref == 'refs/heads/production'
+#      env:
+#        ENV: production
+#        AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_production }}
+#        AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_production }}
+#        AWS_REGION: ${{ secrets.aws_region_production }}
+#        CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
+#        CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
+#        TF_VAR_sparkpost_api_key: ${{ secrets.sparkpost_api_key }}
+#      run: |
+#        ./scripts/infra plan
+#        ./scripts/infra apply
+#    - name: Deploy staging
+#      if: github.ref == 'refs/heads/staging'
+#      env:
+#        ENV: staging
+#        AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_staging }}
+#        AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_staging }}
+#        AWS_REGION: ${{ secrets.aws_region_staging }}
+#        CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
+#        CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
+#        TF_VAR_sparkpost_api_key: ${{ secrets.sparkpost_api_key }}
+#      run: |
+#        ./scripts/infra plan
+#        ./scripts/infra apply
+#    - name: Deploy dev
+#      if: github.ref == 'refs/heads/dev'
+#      env:
+#        ENV: dev
+#        AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_dev }}
+#        AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_dev }}
+#        AWS_REGION: ${{ secrets.aws_region_dev }}
+#        CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
+#        CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
+#        TF_VAR_sparkpost_api_key: ${{ secrets.sparkpost_api_key }}
+#      run: |
+#        ./scripts/infra plan
+#        ./scripts/infra apply

@@ -9,25 +9,12 @@ provider "kubectl" {
   load_config_file       = false
 }
 
-// https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html
-// ALB Ingress Controller v1.1.8
-// RBAC roles file is as-is
-// Main file has changes - see link above for details
-data "kubectl_path_documents" "alb_ingress_controller_rbac_role_manifests" {
-  pattern = "${path.module}/alb_ingress/rbac-role.yaml"
-}
-
-resource "kubectl_manifest" "alb_ingress_controller_rbac_role" {
-  count     = length(data.kubectl_path_documents.alb_ingress_controller_rbac_role_manifests.documents)
-  yaml_body = element(data.kubectl_path_documents.alb_ingress_controller_rbac_role_manifests.documents, count.index)
-}
-
-resource "kubectl_manifest" "alb_ingress_controller_main" {
-  yaml_body = templatefile("${path.module}/alb_ingress/alb-ingress-controller.yaml.tmpl", {
-    vpc_id : var.vpc_id,
-    aws_region : var.aws_region,
-    cluster_name : var.cluster_name
-  })
+#// https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html
+#// ALB Ingress Controller
+module "alb" {
+  source = "./alb_ingress"
+  aws_region = var.aws_region
+  cluster_name = var.cluster_name
 }
 
 // https://docs.aws.amazon.com/eks/latest/userguide/cluster-autoscaler.html
@@ -35,7 +22,7 @@ resource "kubectl_manifest" "alb_ingress_controller_main" {
 // File has changes - see link above for details
 data "kubectl_path_documents" "cluster_autoscaler_manifests" {
   pattern = "${path.module}/cluster_autoscaler/cluster-autoscaler-autodiscover.yaml.tmpl"
-  vars = {
+  vars    = {
     cluster_name : var.cluster_name
   }
 }
@@ -62,7 +49,7 @@ resource "kubectl_manifest" "metrics_server" {
 // File has changes - see link above for details
 data "kubectl_path_documents" "container_insights_manifests" {
   pattern = "${path.module}/container_insights/container_insights.yaml.tmpl"
-  vars = {
+  vars    = {
     aws_region : var.aws_region,
     cluster_name : var.cluster_name
   }

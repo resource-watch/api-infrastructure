@@ -2,21 +2,22 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 3.44"
+      version = "~> 4.48.0"
     }
     cloudflare = {
-      source  = "terraform-providers/cloudflare"
-      version = "~> 2.0"
+      source  = "cloudflare/cloudflare"
+      version = "~> 3.30.0"
     }
     sparkpost = {
       source  = "SurveyMonkey/sparkpost"
-      version = "~> 0.2.1"
+      version = "~> 0.2.2"
     }
     template = {
       source = "hashicorp/template"
+      version = "~> 2.2.0"
     }
   }
-  required_version = "0.13.3"
+  required_version = "1.3.6"
 }
 
 provider "aws" {
