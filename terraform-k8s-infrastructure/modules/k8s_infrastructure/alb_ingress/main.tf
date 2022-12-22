@@ -92,6 +92,18 @@ resource "kubernetes_service_account" "this" {
   }
 }
 
+resource "kubernetes_secret_v1" "this" {
+  metadata {
+    name      = "aws-load-balancer-controller-token-secret"
+    namespace = var.k8s_namespace
+    annotations = {
+      "kubernetes.io/service-account.name"      = "aws-load-balancer-controller"
+      "kubernetes.io/service-account.namespace" = var.k8s_namespace
+    }
+  }
+  type = "kubernetes.io/service-account-token"
+}
+
 resource "kubernetes_cluster_role" "this" {
   metadata {
     name = "aws-load-balancer-controller"

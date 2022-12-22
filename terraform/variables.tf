@@ -245,9 +245,9 @@ variable "aq_bucket_cors_allowed_origin" {
 }
 
 variable "sparkpost_api_key" {
-  type = string
+  type        = string
   description = "Sparkpost API key"
-  default = ""
+  default     = ""
 }
 
 variable "deploy_sparkpost_templates" {

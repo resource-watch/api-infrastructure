@@ -43,7 +43,7 @@ locals {
 output "template-map" {
   value = [for template in local.templates : {
     template_name = template.name
-    template_id = template.id
+    template_id   = template.id
   }]
 }
 

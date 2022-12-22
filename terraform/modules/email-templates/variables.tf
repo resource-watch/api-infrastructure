@@ -1,4 +1,4 @@
 variable "sparkpost_api_key" {
-  type = string
+  type        = string
   description = "Sparkpost API key"
 }

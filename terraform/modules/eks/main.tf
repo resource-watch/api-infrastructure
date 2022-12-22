@@ -3,7 +3,7 @@
 #
 
 locals {
-  oicd_id = element(split("/", aws_eks_cluster.eks_cluster.identity.0.oidc.0.issuer), length(split("/", aws_eks_cluster.eks_cluster.identity.0.oidc.0.issuer))-1)
+  oicd_id = element(split("/", aws_eks_cluster.eks_cluster.identity.0.oidc.0.issuer), length(split("/", aws_eks_cluster.eks_cluster.identity.0.oidc.0.issuer)) - 1)
 }
 
 resource "aws_eks_cluster" "eks_cluster" {
@@ -26,8 +26,8 @@ resource "aws_eks_cluster" "eks_cluster" {
 }
 
 resource "aws_eks_addon" "aws_ebs_csi_driver" {
-  cluster_name = aws_eks_cluster.eks_cluster.name
-  addon_name   = "aws-ebs-csi-driver"
+  cluster_name             = aws_eks_cluster.eks_cluster.name
+  addon_name               = "aws-ebs-csi-driver"
   service_account_role_arn = aws_iam_role.ebs_csi_iam_role.arn
 }
 
@@ -41,7 +41,8 @@ resource "aws_security_group" "eks_cluster_security_group" {
     to_port   = 0
     protocol  = "-1"
     cidr_blocks = [
-    "0.0.0.0/0"]
+      "0.0.0.0/0"
+    ]
   }
 
   tags = {
@@ -51,7 +52,8 @@ resource "aws_security_group" "eks_cluster_security_group" {
 
 resource "aws_security_group_rule" "eks_cluster_cluster_ingress_workstation_https" {
   cidr_blocks = [
-  "0.0.0.0/0"]
+    "0.0.0.0/0"
+  ]
   # TODO: restrict for improved security
   description       = "Allow workstation to communicate with the cluster API Server"
   from_port         = 443
@@ -72,7 +74,8 @@ resource "aws_iam_role" "eks-cluster-admin" {
         Principal = {
           Service = "eks.amazonaws.com"
         }
-    }]
+      }
+    ]
     Version = "2012-10-17"
   })
 }
@@ -87,10 +90,13 @@ resource "aws_iam_role_policy_attachment" "eks-admin-AmazonEKSServicePolicy" {
   role       = aws_iam_role.eks-cluster-admin.name
 }
 
+data "external" "thumbprint" {
+  program = [format("%s/bin/get_thumbprint.sh", path.module), var.aws_region]
+}
+
 resource "aws_iam_openid_connect_provider" "example" {
-  client_id_list = [
-  "sts.amazonaws.com"]
-  thumbprint_list = []
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = [data.external.thumbprint.result.thumbprint]
   url             = aws_eks_cluster.eks_cluster.identity.0.oidc.0.issuer
 }
 
@@ -108,7 +114,8 @@ resource "aws_iam_role" "eks-node-group-iam-role" {
         Principal = {
           Service = "ec2.amazonaws.com"
         }
-    }]
+      }
+    ]
     Version = "2012-10-17"
   })
 }
@@ -180,13 +187,13 @@ resource "aws_iam_role" "ebs_csi_iam_role" {
       {
         Effect : "Allow",
         Principal : {
-          "Federated": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/oidc.eks.${var.aws_region}.amazonaws.com/id/${local.oicd_id}"
+          "Federated" : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/oidc.eks.${var.aws_region}.amazonaws.com/id/${local.oicd_id}"
         },
         Action : "sts:AssumeRoleWithWebIdentity",
         Condition : {
-          StringEquals: {
-            "oidc.eks.${var.aws_region}.amazonaws.com/id/${local.oicd_id}:aud": "sts.amazonaws.com",
-            "oidc.eks.${var.aws_region}.amazonaws.com/id/${local.oicd_id}:sub": "system:serviceaccount:kube-system:ebs-csi-controller-sa"
+          StringEquals : {
+            "oidc.eks.${var.aws_region}.amazonaws.com/id/${local.oicd_id}:aud" : "sts.amazonaws.com",
+            "oidc.eks.${var.aws_region}.amazonaws.com/id/${local.oicd_id}:sub" : "system:serviceaccount:kube-system:ebs-csi-controller-sa"
           }
         }
       }

@@ -61,7 +61,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_gs_pro_config" {
   count = var.connection_type == "VPC_LINK" ? length(var.eks_asg_names) : 0
 
   autoscaling_group_name = var.eks_asg_names[count.index]
-  alb_target_group_arn   = aws_lb_target_group.gs_pro_config_lb_target_group[0].arn
+  lb_target_group_arn   = aws_lb_target_group.gs_pro_config_lb_target_group[0].arn
 }
 
 // /v1/pro-config

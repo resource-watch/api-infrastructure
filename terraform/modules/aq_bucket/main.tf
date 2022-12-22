@@ -9,7 +9,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "aq_bucket_encrypt
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm     = "AES256"
+      sse_algorithm = "AES256"
     }
   }
 }
@@ -36,7 +36,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "aq_bucket_lifecycle_configurat
   bucket = aws_s3_bucket.aq_bucket.id
 
   rule {
-    id      = "expiration_period"
+    id     = "expiration_period"
     status = "Enabled"
 
     filter {
@@ -50,7 +50,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "aq_bucket_lifecycle_configurat
 }
 
 resource "aws_s3_object" "object" {
-  bucket = aws_s3_bucket.aq_bucket.id
+  bucket       = aws_s3_bucket.aq_bucket.id
   acl          = "private"
   key          = "food-supply-chain/"
   content_type = "application/x-directory"
