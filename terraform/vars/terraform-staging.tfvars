@@ -10,8 +10,8 @@ rds_instance_count              = 1
 db_instance_class               = "db.r5.large"
 db_instance_count               = 2
 db_logs_exports                 = ["audit", "profiler"]
-eks_version                     = "1.20"
-eks_node_release_version        = "1.20.4-20210628"
+eks_version                     = "1.24"
+eks_node_release_version        = "1.24.7-20221222"
 gateway_node_group_desired_size = 0
 hibernate                       = false
 
