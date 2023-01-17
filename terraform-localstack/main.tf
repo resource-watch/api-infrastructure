@@ -56,7 +56,7 @@ resource "aws_api_gateway_deployment" "prod" {
   stage_name  = "prod"
 
   triggers = {
-    redeployment = sha1(join(",", list(
+    redeployment = sha1(join(",", tolist([
       jsonencode(module.analysis-gee.endpoints),
       jsonencode(module.aqueduct-analysis.endpoints),
       jsonencode(module.arcgis-proxy.endpoints),
@@ -106,7 +106,7 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.vocabulary.endpoints),
       jsonencode(module.webshot.endpoints),
       jsonencode(module.widget.endpoints),
-    )))
+    ])))
   }
 
   lifecycle {
