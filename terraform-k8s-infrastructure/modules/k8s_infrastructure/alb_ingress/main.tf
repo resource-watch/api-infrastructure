@@ -32,6 +32,13 @@ data "aws_iam_policy_document" "eks_oidc_assume_role" {
     effect  = "Allow"
     condition {
       test     = "StringEquals"
+      variable = "${replace(data.aws_eks_cluster.selected.identity[0].oidc[0].issuer, "https://", "")}:aud"
+      values   = [
+        "sts.amazonaws.com"
+      ]
+    }
+    condition {
+      test     = "StringEquals"
       variable = "${replace(data.aws_eks_cluster.selected.identity[0].oidc[0].issuer, "https://", "")}:sub"
       values   = [
         "system:serviceaccount:${var.k8s_namespace}:aws-load-balancer-controller"
@@ -56,7 +63,6 @@ resource "aws_iam_role" "lb-controller-iam-role" {
 }
 
 data "aws_iam_policy_document" "lb-controller-iam-policy-document" {
-  #  source_json = file("${path.module}/iam_policy.json")
   source_policy_documents = [
     file("${path.module}/iam_policy.json")
   ]
