@@ -146,7 +146,7 @@ module "metadata-get" {
   s3_artifact_location = "cw-syn-results-534760749991-us-east-1/canary/metadata-get-c3b-fed40ded7a59"
   execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
   hostname             = "api.resourcewatch.org"
-  path                 = "/v1/metadata"
+  path                 = "/v1/metadata?limit=10"
   verb                 = "GET"
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
@@ -274,14 +274,15 @@ module "fw-area-get" {
   schedule_expression  = "rate(1 hour)"
 }
 
-module "beta-cw-org" {
-  source               = "./url-canary"
-  name                 = "beta-cw-org"
-  s3_artifact_location = "cw-syn-results-534760749991-us-east-1/canary/beta-cw-org-327-b5c21e538f29"
-  execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
-  hostname             = "http://beta.climatewatchdata.org"
-  schedule_expression  = "rate(1 hour)"
-}
+# Redirects to the main CW site
+#module "beta-cw-org" {
+#  source               = "./url-canary"
+#  name                 = "beta-cw-org"
+#  s3_artifact_location = "cw-syn-results-534760749991-us-east-1/canary/beta-cw-org-327-b5c21e538f29"
+#  execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
+#  hostname             = "http://beta.climatewatchdata.org"
+#  schedule_expression  = "rate(1 hour)"
+#}
 
 module "areas-get" {
   source               = "./api-endpoint-canary"
@@ -620,18 +621,21 @@ module "emissionspathways-org" {
   schedule_expression  = "rate(1 hour)"
 }
 
-module "terrai-alert-get" {
-  source               = "./api-endpoint-canary"
-  name                 = "terrai-alert-get"
-  s3_artifact_location = "cw-syn-results-534760749991-us-east-1/canary/terrai-alert-get-d1a-1ea213039d95"
-  execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
-  hostname             = "api.resourcewatch.org"
-  path                 = "/v1/terrai-alerts?geostore=610f5194e26f58c7f3395f70446524fd"
-  verb                 = "GET"
-  hostname_secret_id   = "wri-api/smoke-tests-host"
-  token_secret_id      = "gfw-api/token"
-  schedule_expression  = "rate(1 hour)"
-}
+# This endpoint a geo intersection query in ElasticSearch/Amazon OpenSearch which relies on a geo_intersects function
+# that exists in vanilla ES but not on AWS.
+# See https://gfw.atlassian.net/browse/GTC-1234 and https://gfw.atlassian.net/browse/GTC-1086
+#module "terrai-alert-get" {
+#  source               = "./api-endpoint-canary"
+#  name                 = "terrai-alert-get"
+#  s3_artifact_location = "cw-syn-results-534760749991-us-east-1/canary/terrai-alert-get-d1a-1ea213039d95"
+#  execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
+#  hostname             = "api.resourcewatch.org"
+#  path                 = "/v1/terrai-alerts?geostore=610f5194e26f58c7f3395f70446524fd"
+#  verb                 = "GET"
+#  hostname_secret_id   = "wri-api/smoke-tests-host"
+#  token_secret_id      = "gfw-api/token"
+#  schedule_expression  = "rate(1 hour)"
+#}
 
 module "story-get-by-id" {
   source                 = "./api-endpoint-canary"
@@ -709,11 +713,12 @@ module "doc-orch-tasks-get" {
   schedule_expression  = "rate(1 hour)"
 }
 
-module "indonesia-cwdata-org" {
-  source               = "./url-canary"
-  name                 = "indonesia-cwdata-org"
-  s3_artifact_location = "cw-syn-results-534760749991-us-east-1/canary/indonesia-cwdata-org-57d-c3e6b0104130"
-  execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
-  hostname             = "https://indonesia.climatewatchdata.org"
-  schedule_expression  = "rate(1 hour)"
-}
+# DNS no longer resolves to AWS
+#module "indonesia-cwdata-org" {
+#  source               = "./url-canary"
+#  name                 = "indonesia-cwdata-org"
+#  s3_artifact_location = "cw-syn-results-534760749991-us-east-1/canary/indonesia-cwdata-org-57d-c3e6b0104130"
+#  execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
+#  hostname             = "https://indonesia.climatewatchdata.org"
+#  schedule_expression  = "rate(1 hour)"
+#}

@@ -24,7 +24,7 @@ resource "aws_synthetics_canary" "canary" {
   execution_role_arn   = var.execution_role_arn
   handler              = "index.handler"
   zip_file             = "${path.module}/tmp/${sha256(local.js_content)}.zip"
-  runtime_version      = "syn-nodejs-puppeteer-3.1"
+  runtime_version      = "syn-nodejs-puppeteer-3.8"
   start_canary         = true
 
 

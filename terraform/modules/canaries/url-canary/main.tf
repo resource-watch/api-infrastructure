@@ -19,7 +19,7 @@ resource "aws_synthetics_canary" "canary" {
   execution_role_arn   = var.execution_role_arn
   handler              = "index.handler"
   zip_file             = "${path.module}/tmp/${var.name}.zip"
-  runtime_version      = "syn-nodejs-puppeteer-3.1"
+  runtime_version      = "syn-nodejs-puppeteer-3.8"
 
   schedule {
     expression = var.schedule_expression
