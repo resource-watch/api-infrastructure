@@ -30,3 +30,8 @@ provider "sparkpost" {
   # Sparkpost API url can be overridden to use the EU region
   base_url = "https://api.sparkpost.com"
 }
+
+provider "cloudflare" {
+  api_key = var.cloudflare_api_key
+  email   = var.cloudflare_email
+}

@@ -158,7 +158,8 @@ variable "gfw_node_group_capacity_type" {
 
 variable "core_node_group_instance_types" {
   type    = list(string)
-  default = ["c5.xlarge"] # core node group has to run in a specific AZ due to its persistent storage. The AZ we initially chose does not have c5a instances.
+  default = ["c5.xlarge"]
+  # core node group has to run in a specific AZ due to its persistent storage. The AZ we initially chose does not have c5a instances.
 }
 variable "core_node_group_min_size" {
   type    = number
@@ -250,8 +251,24 @@ variable "sparkpost_api_key" {
   default     = ""
 }
 
+variable "cloudflare_api_key" {
+  type        = string
+  description = "Cloudflare API key"
+}
+
+variable "cloudflare_email" {
+  type        = string
+  description = "Cloudflare email"
+}
+
 variable "deploy_sparkpost_templates" {
   default     = true
   type        = bool
   description = "If the Sparkpost templates should be deployed"
+}
+
+variable "email_recipients" {
+  type        = list(string)
+  description = "List of email addresses to contact in case an alert fails"
+  default     = []
 }

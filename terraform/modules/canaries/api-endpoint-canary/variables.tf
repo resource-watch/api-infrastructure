@@ -48,3 +48,8 @@ variable "schedule_expression" {
   type        = string
   description = "Expression defining how often the canary runs"
 }
+
+variable "sns_topic_arn" {
+  type = string
+  description = "ARN of the AWS SNS topic to use in case of alert"
+}
