@@ -47,5 +47,8 @@ terraform/modules/canaries/api-endpoint-canary/tmp/*
 terraform/modules/canaries/url-canary/tmp/*
 !terraform/modules/canaries/url-canary/tmp/.gitkeep
 
+terraform/vars/private.tfvars
+terraform-k8s-infrastructure/vars/private.tfvars
+
 terraform.tfstate
 terraform.tfstate.backup

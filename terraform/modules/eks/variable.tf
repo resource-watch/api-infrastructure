@@ -25,6 +25,11 @@ variable "eks_version" {
   description = "Version of EKS (kubernetes) to deploy"
 }
 
+variable "ebs_csi_addon_version" {
+  type        = string
+  description = "Version of AWS EBS CRI driver to use"
+}
+
 variable "backups_bucket" {
   type        = string
   description = "S3 bucket to which backups will be performed"

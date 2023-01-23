@@ -3,9 +3,19 @@
 # NOTE: this is not fully blown, and for now it focuses only on the canary script
 # Known limitations/TODO:
 # - Most changes in the config are not picked up by TF, and require changes in the resource config to force a redeploy
-# - Alarms are not covered, so this can be used to create a new canary, but it will not trigger emails to anyone if it fails.
-#
 ####
+
+resource "aws_sns_topic" "cloudwatch-alarm-recipients" {
+  name = "CloudWatch-Alarms-Topic-API-Support"
+}
+
+resource "aws_sns_topic_subscription" "cloudwatch-alarm-recipients-addresses" {
+  count = length(var.email_recipients)
+
+  topic_arn = aws_sns_topic.cloudwatch-alarm-recipients.arn
+  protocol  = "email"
+  endpoint  = var.email_recipients[count.index]
+}
 
 module "convert-fs2sql" {
   source               = "./api-endpoint-canary"
@@ -18,6 +28,7 @@ module "convert-fs2sql" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "vocabulary-get" {
@@ -31,6 +42,7 @@ module "vocabulary-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "india-cwdata-org" {
@@ -40,6 +52,7 @@ module "india-cwdata-org" {
   execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
   hostname             = "http://india.climatewatchdata.org"
   schedule_expression  = "rate(5 minutes)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "post-and-get-geostore" {
@@ -54,6 +67,7 @@ module "post-and-get-geostore" {
   token_secret_id        = "gfw-api/token"
   schedule_expression    = "rate(1 hour)"
   template_relative_path = "../custom-templates/post-and-get-geostore.js.tpl"
+  sns_topic_arn          = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "subscriptions-get" {
@@ -67,6 +81,7 @@ module "subscriptions-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "fields-get" {
@@ -80,6 +95,7 @@ module "fields-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "get-gee-tile" {
@@ -94,6 +110,7 @@ module "get-gee-tile" {
   token_secret_id        = "gfw-api/token"
   schedule_expression    = "rate(1 hour)"
   template_relative_path = "../custom-templates/get-gee-tile.js.tpl"
+  sns_topic_arn          = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "jiminy-get" {
@@ -107,6 +124,7 @@ module "jiminy-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "climatedata-org" {
@@ -116,6 +134,7 @@ module "climatedata-org" {
   execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
   hostname             = "https://climatedata.org"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "widget-get" {
@@ -129,6 +148,7 @@ module "widget-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "indiacexplorer-org" {
@@ -138,6 +158,7 @@ module "indiacexplorer-org" {
   execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
   hostname             = "http://indiaclimateexplorer.org"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "metadata-get" {
@@ -151,6 +172,7 @@ module "metadata-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "layer-get-by-id" {
@@ -165,6 +187,7 @@ module "layer-get-by-id" {
   token_secret_id        = "gfw-api/token"
   schedule_expression    = "rate(1 hour)"
   template_relative_path = "../custom-templates/layer-get-by-id.js.tpl"
+  sns_topic_arn          = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "post-widget-find-ids" {
@@ -179,6 +202,7 @@ module "post-widget-find-ids" {
   token_secret_id        = "gfw-api/token"
   schedule_expression    = "rate(1 hour)"
   template_relative_path = "../custom-templates/post-widget-find-ids.js.tpl"
+  sns_topic_arn          = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "similar-dataset-get" {
@@ -193,6 +217,7 @@ module "similar-dataset-get" {
   token_secret_id        = "gfw-api/token"
   schedule_expression    = "rate(1 hour)"
   template_relative_path = "../custom-templates/similar-dataset-get.js.tpl"
+  sns_topic_arn          = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "prepdata-org" {
@@ -202,6 +227,7 @@ module "prepdata-org" {
   execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
   hostname             = "https://prepdata.org"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "topic-get" {
@@ -215,6 +241,7 @@ module "topic-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "staging-rw-org" {
@@ -224,6 +251,7 @@ module "staging-rw-org" {
   execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
   hostname             = "https://staging.resourcewatch.org"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "convert-sql2fs" {
@@ -237,6 +265,7 @@ module "convert-sql2fs" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "resourcewatch-org" {
@@ -246,6 +275,7 @@ module "resourcewatch-org" {
   execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
   hostname             = "https://resourcewatch.org"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "dashboard-get" {
@@ -259,6 +289,7 @@ module "dashboard-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "fw-area-get" {
@@ -272,6 +303,7 @@ module "fw-area-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 # Redirects to the main CW site
@@ -282,6 +314,7 @@ module "fw-area-get" {
 #  execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
 #  hostname             = "http://beta.climatewatchdata.org"
 #  schedule_expression  = "rate(1 hour)"
+#  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 #}
 
 module "areas-get" {
@@ -295,6 +328,7 @@ module "areas-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "geostore-find-by-ids" {
@@ -309,6 +343,7 @@ module "geostore-find-by-ids" {
   token_secret_id        = "gfw-api/token"
   schedule_expression    = "rate(1 hour)"
   template_relative_path = "../custom-templates/geostore-find-by-ids.js.tpl"
+  sns_topic_arn          = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "viirrs-fires-get" {
@@ -322,6 +357,7 @@ module "viirrs-fires-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "convert-checksql" {
@@ -335,6 +371,7 @@ module "convert-checksql" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "dataset-get-id-layer" {
@@ -349,6 +386,7 @@ module "dataset-get-id-layer" {
   token_secret_id        = "gfw-api/token"
   schedule_expression    = "rate(1 hour)"
   template_relative_path = "../custom-templates/dataset-get-id-layer.js.tpl"
+  sns_topic_arn          = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "questionnaire-get" {
@@ -362,6 +400,7 @@ module "questionnaire-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "preproduction-rw-org" {
@@ -371,6 +410,7 @@ module "preproduction-rw-org" {
   execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
   hostname             = "https://preproduction.resourcewatch.org"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "ct-check-logged" {
@@ -384,6 +424,7 @@ module "ct-check-logged" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "get-contxt-loss-layer" {
@@ -393,6 +434,7 @@ module "get-contxt-loss-layer" {
   execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
   hostname             = "https://api.resourcewatch.org/contextual-layer/loss-layer/2014/2015/2/3/1.png"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "story-get" {
@@ -406,6 +448,7 @@ module "story-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "dataset-widget-by-id" {
@@ -420,6 +463,7 @@ module "dataset-widget-by-id" {
   token_secret_id        = "gfw-api/token"
   schedule_expression    = "rate(1 hour)"
   template_relative_path = "../custom-templates/dataset-widget-by-id.js.tpl"
+  sns_topic_arn          = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "prod-api-gfw-org" {
@@ -429,6 +473,7 @@ module "prod-api-gfw-org" {
   execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
   hostname             = "https://production-api.globalforestwatch.org"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "metadata-get-dataset" {
@@ -443,6 +488,7 @@ module "metadata-get-dataset" {
   token_secret_id        = "gfw-api/token"
   schedule_expression    = "rate(1 hour)"
   template_relative_path = "../custom-templates/metadata-get-dataset.js.tpl"
+  sns_topic_arn          = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "fw-context-layer-get" {
@@ -456,6 +502,7 @@ module "fw-context-layer-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "gfw-user-get" {
@@ -469,6 +516,7 @@ module "gfw-user-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "dataset-get" {
@@ -482,6 +530,7 @@ module "dataset-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "dataset-get-widgets" {
@@ -496,6 +545,7 @@ module "dataset-get-widgets" {
   token_secret_id        = "gfw-api/token"
   schedule_expression    = "rate(1 hour)"
   template_relative_path = "../custom-templates/dataset-get-widgets.js.tpl"
+  sns_topic_arn          = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "dataset-layer-by-id" {
@@ -510,6 +560,7 @@ module "dataset-layer-by-id" {
   token_secret_id        = "gfw-api/token"
   schedule_expression    = "rate(1 hour)"
   template_relative_path = "../custom-templates/dataset-layer-by-id.js.tpl"
+  sns_topic_arn          = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "layer-get" {
@@ -523,6 +574,7 @@ module "layer-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "geodescriber-get" {
@@ -536,6 +588,7 @@ module "geodescriber-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "task-get" {
@@ -549,6 +602,7 @@ module "task-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "query-get" {
@@ -562,6 +616,7 @@ module "query-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "partner-get" {
@@ -575,6 +630,7 @@ module "partner-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 minute)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "geostore-get-by-id" {
@@ -588,6 +644,7 @@ module "geostore-get-by-id" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "story-get-by-user" {
@@ -601,6 +658,7 @@ module "story-get-by-user" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "climatewatchdata-org" {
@@ -610,6 +668,7 @@ module "climatewatchdata-org" {
   execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
   hostname             = "https://climatewatchdata.org"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "emissionspathways-org" {
@@ -619,6 +678,7 @@ module "emissionspathways-org" {
   execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
   hostname             = "http://emissionspathways.org"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 # This endpoint a geo intersection query in ElasticSearch/Amazon OpenSearch which relies on a geo_intersects function
@@ -635,6 +695,7 @@ module "emissionspathways-org" {
 #  hostname_secret_id   = "wri-api/smoke-tests-host"
 #  token_secret_id      = "gfw-api/token"
 #  schedule_expression  = "rate(1 hour)"
+#  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 #}
 
 module "story-get-by-id" {
@@ -649,6 +710,7 @@ module "story-get-by-id" {
   token_secret_id        = "gfw-api/token"
   schedule_expression    = "rate(1 hour)"
   template_relative_path = "../custom-templates/story-get-by-id.js.tpl"
+  sns_topic_arn          = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "api-resourcewatch-org" {
@@ -658,6 +720,7 @@ module "api-resourcewatch-org" {
   execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
   hostname             = "https://api.resourcewatch.org"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "widget-get-by-id" {
@@ -672,6 +735,7 @@ module "widget-get-by-id" {
   token_secret_id        = "gfw-api/token"
   schedule_expression    = "rate(1 hour)"
   template_relative_path = "../custom-templates/get-widget-by-id.js.tpl"
+  sns_topic_arn          = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "dataset-get-by-id" {
@@ -685,6 +749,7 @@ module "dataset-get-by-id" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "glad-alerts-admin-get" {
@@ -698,6 +763,7 @@ module "glad-alerts-admin-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 module "doc-orch-tasks-get" {
@@ -711,6 +777,7 @@ module "doc-orch-tasks-get" {
   hostname_secret_id   = "wri-api/smoke-tests-host"
   token_secret_id      = "gfw-api/token"
   schedule_expression  = "rate(1 hour)"
+  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 }
 
 # DNS no longer resolves to AWS
@@ -721,4 +788,5 @@ module "doc-orch-tasks-get" {
 #  execution_role_arn   = "arn:aws:iam::534760749991:role/CloudWatchSyntheticsRole-CanaryRunWithSecretsAccess"
 #  hostname             = "https://indonesia.climatewatchdata.org"
 #  schedule_expression  = "rate(1 hour)"
+#  sns_topic_arn        = aws_sns_topic.cloudwatch-alarm-recipients.arn
 #}

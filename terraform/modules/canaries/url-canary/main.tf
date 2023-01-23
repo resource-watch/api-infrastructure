@@ -27,3 +27,23 @@ resource "aws_synthetics_canary" "canary" {
 
   depends_on = [data.archive_file.canary_archive_file]
 }
+
+resource "aws_cloudwatch_metric_alarm" "canary-alarm" {
+  alarm_name          = "Synthetics-Alarm-${aws_synthetics_canary.canary.name}-1"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "SuccessPercent"
+  namespace           = "CloudWatchSynthetics"
+  period              = "3600"
+  statistic           = "Average"
+  threshold           = "100"
+  treat_missing_data  = "breaching"
+  alarm_description   = "This alarm monitors the success rate of the ${aws_synthetics_canary.canary.name} canary"
+  datapoints_to_alarm = 1
+  alarm_actions       = [
+    var.sns_topic_arn
+  ]
+  dimensions = {
+    CanaryName = aws_synthetics_canary.canary.name
+  }
+}

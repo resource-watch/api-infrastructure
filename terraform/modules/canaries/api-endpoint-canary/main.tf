@@ -27,10 +27,29 @@ resource "aws_synthetics_canary" "canary" {
   runtime_version      = "syn-nodejs-puppeteer-3.8"
   start_canary         = true
 
-
   schedule {
     expression = var.schedule_expression
   }
 
   depends_on = [data.archive_file.canary_archive_file, local.js_content]
+}
+
+resource "aws_cloudwatch_metric_alarm" "canary-alarm" {
+  alarm_name          = "Synthetics-Alarm-${aws_synthetics_canary.canary.name}-1"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "SuccessPercent"
+  namespace           = "CloudWatchSynthetics"
+  period              = "3600"
+  statistic           = "Average"
+  threshold           = "100"
+  treat_missing_data  = "breaching"
+  alarm_description   = "This alarm monitors the success rate of the ${aws_synthetics_canary.canary.name} canary"
+  datapoints_to_alarm = 1
+  alarm_actions       = [
+    var.sns_topic_arn
+  ]
+  dimensions = {
+    CanaryName = aws_synthetics_canary.canary.name
+  }
 }
