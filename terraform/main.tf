@@ -40,14 +40,15 @@ module "vpc" {
 
 # Create a k8s cluster using AWS EKS
 module "eks" {
-  source         = "./modules/eks"
-  project        = local.project
-  vpc_id         = module.vpc.id
-  environment    = var.environment
-  backups_bucket = var.backups_bucket
-  eks_version    = var.eks_version
-  aws_region     = var.aws_region
-  subnet_ids     = [
+  source                = "./modules/eks"
+  project               = local.project
+  vpc_id                = module.vpc.id
+  environment           = var.environment
+  backups_bucket        = var.backups_bucket
+  eks_version           = var.eks_version
+  aws_region            = var.aws_region
+  ebs_csi_addon_version = var.ebs_csi_addon_version
+  subnet_ids            = [
     module.vpc.private_subnets[0].id,
     module.vpc.private_subnets[1].id,
     module.vpc.private_subnets[2].id,

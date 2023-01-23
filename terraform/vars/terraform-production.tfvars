@@ -12,6 +12,7 @@ db_instance_count               = 3
 db_logs_exports                 = ["audit", "profiler"]
 eks_version                     = "1.24"
 eks_node_release_version        = "1.24.7-20230105"
+ebs_csi_addon_version           = "v1.15.0-eksbuild.1"
 deploy_canaries                 = true
 gateway_node_group_desired_size = 2
 hibernate                       = false

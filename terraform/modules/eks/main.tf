@@ -12,7 +12,7 @@ resource "aws_eks_cluster" "eks_cluster" {
   version  = var.eks_version
 
   vpc_config {
-    subnet_ids = var.subnet_ids
+    subnet_ids              = var.subnet_ids
     # At the time of this writing, AWS wasn't accepting EKS on us-east-1e
     security_group_ids      = [aws_security_group.eks_cluster_security_group.id]
     endpoint_private_access = true
@@ -28,6 +28,7 @@ resource "aws_eks_cluster" "eks_cluster" {
 resource "aws_eks_addon" "aws_ebs_csi_driver" {
   cluster_name             = aws_eks_cluster.eks_cluster.name
   addon_name               = "aws-ebs-csi-driver"
+  addon_version            = var.ebs_csi_addon_version
   service_account_role_arn = aws_iam_role.ebs_csi_iam_role.arn
 }
 
@@ -37,9 +38,9 @@ resource "aws_security_group" "eks_cluster_security_group" {
   vpc_id      = var.vpc_id
 
   egress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = [
       "0.0.0.0/0"
     ]
@@ -69,8 +70,8 @@ resource "aws_iam_role" "eks-cluster-admin" {
   assume_role_policy = jsonencode({
     Statement = [
       {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
+        Action    = "sts:AssumeRole"
+        Effect    = "Allow"
         Principal = {
           Service = "eks.amazonaws.com"
         }
@@ -109,8 +110,8 @@ resource "aws_iam_role" "eks-node-group-iam-role" {
   assume_role_policy = jsonencode({
     Statement = [
       {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
+        Action    = "sts:AssumeRole"
+        Effect    = "Allow"
         Principal = {
           Service = "ec2.amazonaws.com"
         }
