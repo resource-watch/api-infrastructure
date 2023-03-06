@@ -92,5 +92,6 @@ resource "sparkpost_template" "request-webinar-en" {
   options_open_tracking  = false
   options_transactional  = true
   published              = true
+  template_id            = "request-webinar-en"
   content_html           = file("${path.module}/templates/request-webinar-en.html")
 }
