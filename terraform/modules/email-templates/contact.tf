@@ -83,3 +83,14 @@ resource "sparkpost_template" "contact-form-confirmation-en" {
   published              = true
   content_html           = file("${path.module}/templates/contact-form-confirmation-en.html")
 }
+
+resource "sparkpost_template" "request-webinar-en" {
+  content_from_email     = "no-reply@globalforestwatch.org"
+  content_subject        = "Webinar request from Global Forest Watch user."
+  name                   = "Webinar request EN"
+  options_click_tracking = false
+  options_open_tracking  = false
+  options_transactional  = true
+  published              = true
+  content_html           = file("${path.module}/templates/request-webinar-en.html")
+}
