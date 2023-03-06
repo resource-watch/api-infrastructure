@@ -10,7 +10,7 @@ terraform {
     }
     sparkpost = {
       source  = "SurveyMonkey/sparkpost"
-      version = "~> 0.2.2"
+      version = "~> 0.2.7"
     }
     template = {
       source  = "hashicorp/template"
