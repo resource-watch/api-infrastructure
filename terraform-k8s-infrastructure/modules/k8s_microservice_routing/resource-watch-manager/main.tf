@@ -120,19 +120,11 @@ module "v1_topic_resource" {
   path_part   = "topic"
 }
 
-// /v1/topic/{topicId}
-module "v1_topic_id_resource" {
+// /v1/topic/{proxy+}
+module "v1_topic_proxy_resource" {
   source      = "../resource"
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_topic_resource.aws_api_gateway_resource.id
-  path_part   = "{topicId}"
-}
-
-// /v1/topic/{proxy+}
-module "v1_topic_id_proxy_resource" {
-  source      = "../resource"
-  rest_api_id = var.api_gateway.id
-  parent_id   = module.v1_topic_id_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
 }
 
@@ -365,24 +357,13 @@ module "resource_watch_manager_delete_v1_static_page_id" {
   connection_type = var.connection_type
 }
 
-module "resource_watch_manager_get_v1_topic_page" {
+module "resource_watch_manager_get_v1_topic" {
   source          = "../endpoint"
   x_rw_domain     = var.x_rw_domain
   api_gateway     = var.api_gateway
   api_resource    = module.v1_topic_resource.aws_api_gateway_resource
   method          = "GET"
   uri             = "http://${local.api_gateway_target_url}:30558/api/topics"
-  vpc_link        = var.vpc_link
-  connection_type = var.connection_type
-}
-
-module "resource_watch_manager_any_v1_topic_id_proxy_page" {
-  source          = "../endpoint"
-  x_rw_domain     = var.x_rw_domain
-  api_gateway     = var.api_gateway
-  api_resource    = module.v1_topic_id_proxy_resource.aws_api_gateway_resource
-  method          = "ANY"
-  uri             = "http://${local.api_gateway_target_url}:30558/api/topics/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
 }
@@ -398,46 +379,13 @@ module "resource_watch_manager_post_v1_topic" {
   connection_type = var.connection_type
 }
 
-module "resource_watch_manager_get_v1_topic_id" {
+module "resource_watch_manager_any_v1_topic_proxy" {
   source          = "../endpoint"
   x_rw_domain     = var.x_rw_domain
   api_gateway     = var.api_gateway
-  api_resource    = module.v1_topic_id_resource.aws_api_gateway_resource
-  method          = "GET"
-  uri             = "http://${local.api_gateway_target_url}:30558/api/topics/{topicId}"
-  vpc_link        = var.vpc_link
-  connection_type = var.connection_type
-}
-
-module "resource_watch_manager_patch_v1_topic_id" {
-  source          = "../endpoint"
-  x_rw_domain     = var.x_rw_domain
-  api_gateway     = var.api_gateway
-  api_resource    = module.v1_topic_id_resource.aws_api_gateway_resource
-  method          = "PATCH"
-  uri             = "http://${local.api_gateway_target_url}:30558/api/topics/{topicId}"
-  vpc_link        = var.vpc_link
-  connection_type = var.connection_type
-}
-
-module "resource_watch_manager_put_v1_topic_id" {
-  source          = "../endpoint"
-  x_rw_domain     = var.x_rw_domain
-  api_gateway     = var.api_gateway
-  api_resource    = module.v1_topic_id_resource.aws_api_gateway_resource
-  method          = "PUT"
-  uri             = "http://${local.api_gateway_target_url}:30558/api/topics/{topicId}"
-  vpc_link        = var.vpc_link
-  connection_type = var.connection_type
-}
-
-module "resource_watch_manager_delete_v1_topic_id" {
-  source          = "../endpoint"
-  x_rw_domain     = var.x_rw_domain
-  api_gateway     = var.api_gateway
-  api_resource    = module.v1_topic_id_resource.aws_api_gateway_resource
-  method          = "DELETE"
-  uri             = "http://${local.api_gateway_target_url}:30558/api/topics/{topicId}"
+  api_resource    = module.v1_topic_proxy_resource.aws_api_gateway_resource
+  method          = "ANY"
+  uri             = "http://${local.api_gateway_target_url}:30558/api/topics/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
 }
