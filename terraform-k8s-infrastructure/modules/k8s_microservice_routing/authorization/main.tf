@@ -96,6 +96,38 @@ module "v1_deletion_proxy_resource" {
   path_part   = "{proxy+}"
 }
 
+// /v1/organization
+module "v1_organization_resource" {
+  source      = "../resource"
+  rest_api_id = var.api_gateway.id
+  parent_id   = var.v1_resource.id
+  path_part   = "organization"
+}
+
+// /v1/organization/{proxy+}
+module "v1_organization_proxy_resource" {
+  source      = "../resource"
+  rest_api_id = var.api_gateway.id
+  parent_id   = module.v1_organization_resource.aws_api_gateway_resource.id
+  path_part   = "{proxy+}"
+}
+
+// /v1/application
+module "v1_application_resource" {
+  source      = "../resource"
+  rest_api_id = var.api_gateway.id
+  parent_id   = var.v1_resource.id
+  path_part   = "application"
+}
+
+// /v1/application/{proxy+}
+module "v1_application_proxy_resource" {
+  source      = "../resource"
+  rest_api_id = var.api_gateway.id
+  parent_id   = module.v1_application_resource.aws_api_gateway_resource.id
+  path_part   = "{proxy+}"
+}
+
 module "authorization_any_proxy" {
   source          = "../endpoint"
   x_rw_domain     = var.x_rw_domain
@@ -117,6 +149,7 @@ module "authorization_get" {
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
 }
+
 module "authorization_get_v1_deletion" {
   source          = "../endpoint"
   x_rw_domain     = var.x_rw_domain
@@ -146,6 +179,72 @@ module "authorization_any_v1_deletion_proxy" {
   api_resource    = module.v1_deletion_proxy_resource.aws_api_gateway_resource
   method          = "ANY"
   uri             = "http://${local.api_gateway_target_url}:30505/api/v1/deletion/{proxy}"
+  vpc_link        = var.vpc_link
+  connection_type = var.connection_type
+}
+
+module "authorization_get_v1_organization" {
+  source          = "../endpoint"
+  x_rw_domain     = var.x_rw_domain
+  api_gateway     = var.api_gateway
+  api_resource    = module.v1_organization_resource.aws_api_gateway_resource
+  method          = "GET"
+  uri             = "http://${local.api_gateway_target_url}:30505/api/v1/organization"
+  vpc_link        = var.vpc_link
+  connection_type = var.connection_type
+}
+
+module "authorization_post_v1_organization" {
+  source          = "../endpoint"
+  x_rw_domain     = var.x_rw_domain
+  api_gateway     = var.api_gateway
+  api_resource    = module.v1_organization_resource.aws_api_gateway_resource
+  method          = "POST"
+  uri             = "http://${local.api_gateway_target_url}:30505/api/v1/organization"
+  vpc_link        = var.vpc_link
+  connection_type = var.connection_type
+}
+
+module "authorization_any_v1_organization_proxy" {
+  source          = "../endpoint"
+  x_rw_domain     = var.x_rw_domain
+  api_gateway     = var.api_gateway
+  api_resource    = module.v1_organization_proxy_resource.aws_api_gateway_resource
+  method          = "ANY"
+  uri             = "http://${local.api_gateway_target_url}:30505/api/v1/organization/{proxy}"
+  vpc_link        = var.vpc_link
+  connection_type = var.connection_type
+}
+
+module "authorization_get_v1_application" {
+  source          = "../endpoint"
+  x_rw_domain     = var.x_rw_domain
+  api_gateway     = var.api_gateway
+  api_resource    = module.v1_application_resource.aws_api_gateway_resource
+  method          = "GET"
+  uri             = "http://${local.api_gateway_target_url}:30505/api/v1/application"
+  vpc_link        = var.vpc_link
+  connection_type = var.connection_type
+}
+
+module "authorization_post_v1_application" {
+  source          = "../endpoint"
+  x_rw_domain     = var.x_rw_domain
+  api_gateway     = var.api_gateway
+  api_resource    = module.v1_application_resource.aws_api_gateway_resource
+  method          = "POST"
+  uri             = "http://${local.api_gateway_target_url}:30505/api/v1/application"
+  vpc_link        = var.vpc_link
+  connection_type = var.connection_type
+}
+
+module "authorization_any_v1_application_proxy" {
+  source          = "../endpoint"
+  x_rw_domain     = var.x_rw_domain
+  api_gateway     = var.api_gateway
+  api_resource    = module.v1_application_proxy_resource.aws_api_gateway_resource
+  method          = "ANY"
+  uri             = "http://${local.api_gateway_target_url}:30505/api/v1/application/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
 }
