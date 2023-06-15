@@ -18,3 +18,4 @@ sudo apt-get upgrade -y
 # Set a hostname that identifies the cluster properly, so we avoid mistakes
 #
 hostnamectl set-hostname "${hostname}"
+echo -e "${hostname}" | sudo tee -a /etc/hostname
