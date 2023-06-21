@@ -24,6 +24,6 @@ variable "schedule_expression" {
 }
 
 variable "sns_topic_arn" {
-  type = string
+  type        = string
   description = "ARN of the AWS SNS topic to use in case of alert"
 }

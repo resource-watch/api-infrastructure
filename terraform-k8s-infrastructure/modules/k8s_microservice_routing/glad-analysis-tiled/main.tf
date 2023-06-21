@@ -61,7 +61,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_glad_analysis_tiled" {
   count = var.connection_type == "VPC_LINK" ? length(var.eks_asg_names) : 0
 
   autoscaling_group_name = var.eks_asg_names[count.index]
-  lb_target_group_arn   = aws_lb_target_group.glad_analysis_tiled_lb_target_group[0].arn
+  lb_target_group_arn    = aws_lb_target_group.glad_analysis_tiled_lb_target_group[0].arn
 }
 
 // /v1/glad-alerts/admin
