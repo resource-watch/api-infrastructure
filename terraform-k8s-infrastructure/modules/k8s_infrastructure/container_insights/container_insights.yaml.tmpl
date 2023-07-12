@@ -75,8 +75,9 @@ data:
       tag *
       read_from_head true
       <parse>
-        @type json
+        @type regexp
         time_format %Y-%m-%dT%H:%M:%S.%NZ
+        expression /^(?<time>.+) (?<stream>stdout|stderr)( (?<logtag>.))? (?<log>.*)$/
       </parse>
     </source>
 
@@ -151,7 +152,7 @@ spec:
       labels:
         k8s-app: fluentd-cloudwatch
       annotations:
-        configHash: 8915de4cf9c3551a8dc74c0137a3e83569d28c71044b0359c2578d2e0461825
+        configHash: bfc6b4b2689f21a923bb6cabd61cf32bca3f821110fc966503ac0ec68c7b180d
     spec:
       serviceAccountName: fluentd
       terminationGracePeriodSeconds: 30
