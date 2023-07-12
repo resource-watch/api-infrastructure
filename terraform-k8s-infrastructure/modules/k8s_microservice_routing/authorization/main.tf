@@ -96,6 +96,22 @@ module "v1_deletion_proxy_resource" {
   path_part   = "{proxy+}"
 }
 
+// /v1/request
+module "v1_request_resource" {
+  source      = "../resource"
+  rest_api_id = var.api_gateway.id
+  parent_id   = var.v1_resource.id
+  path_part   = "request"
+}
+
+// /v1/request/validate
+module "v1_request_validate_resource" {
+  source      = "../resource"
+  rest_api_id = var.api_gateway.id
+  parent_id   = module.v1_request_resource.aws_api_gateway_resource.id
+  path_part   = "validate"
+}
+
 // /v1/organization
 module "v1_organization_resource" {
   source      = "../resource"
@@ -245,6 +261,17 @@ module "authorization_any_v1_application_proxy" {
   api_resource    = module.v1_application_proxy_resource.aws_api_gateway_resource
   method          = "ANY"
   uri             = "http://${local.api_gateway_target_url}:30505/api/v1/application/{proxy}"
+  vpc_link        = var.vpc_link
+  connection_type = var.connection_type
+}
+
+module "authorization_post_v1_request_validate" {
+  source          = "../endpoint"
+  x_rw_domain     = var.x_rw_domain
+  api_gateway     = var.api_gateway
+  api_resource    = module.v1_request_validate_resource.aws_api_gateway_resource
+  method          = "POST"
+  uri             = "http://${local.api_gateway_target_url}:30505/api/v1/request/validate"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
 }
