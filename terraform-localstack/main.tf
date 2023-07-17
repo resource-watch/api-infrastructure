@@ -217,7 +217,7 @@ module "arcgis" {
   v1_download_resource      = module.query.v1_download_resource
   v1_fields_resource        = module.query.v1_fields_resource
   v1_rest_datasets_resource = module.dataset.v1_rest_datasets_resource
-  depends_on                = [
+  depends_on = [
     module.dataset,
   ]
 }
@@ -268,7 +268,7 @@ module "bigquery" {
   v1_download_resource      = module.query.v1_download_resource
   v1_fields_resource        = module.query.v1_fields_resource
   v1_rest_datasets_resource = module.dataset.v1_rest_datasets_resource
-  depends_on                = [
+  depends_on = [
     module.dataset,
     module.query,
   ]
@@ -282,7 +282,7 @@ module "biomass" {
   target_url               = var.microservice_host
   v1_resource              = module.v1_resource.aws_api_gateway_resource
   v1_biomass_loss_resource = module.analysis-gee.v1_biomass_loss_resource
-  depends_on               = [
+  depends_on = [
     module.analysis-gee
   ]
 }
@@ -298,7 +298,7 @@ module "carto" {
   v1_download_resource      = module.query.v1_download_resource
   v1_fields_resource        = module.query.v1_fields_resource
   v1_rest_datasets_resource = module.dataset.v1_rest_datasets_resource
-  depends_on                = [
+  depends_on = [
     module.dataset,
     module.query,
   ]
@@ -421,7 +421,7 @@ module "gfw-adapter" {
   v1_download_resource      = module.query.v1_download_resource
   v1_fields_resource        = module.query.v1_fields_resource
   v1_rest_datasets_resource = module.dataset.v1_rest_datasets_resource
-  depends_on                = [
+  depends_on = [
     module.dataset,
     module.query,
   ]
@@ -514,7 +514,7 @@ module "glad-analysis-tiled" {
   target_url              = var.microservice_host
   v1_resource             = module.v1_resource.aws_api_gateway_resource
   v1_glad_alerts_resource = module.fires-summary-stats.v1_glad_alerts_resource
-  depends_on              = [
+  depends_on = [
     module.fires-summary-stats
   ]
 }
@@ -554,7 +554,7 @@ module "imazon" {
   connection_type = "INTERNET"
   target_url      = var.microservice_host
   v2_resource     = module.v2_resource.aws_api_gateway_resource
-  depends_on      = [
+  depends_on = [
     module.v1_resource,
     module.v2_resource
   ]
@@ -603,7 +603,7 @@ module "nexgddp" {
   v1_rest_datasets_resource = module.dataset.v1_rest_datasets_resource
   v1_layer_resource         = module.layer.v1_layer_resource
   v1_layer_id_tile_resource = module.gee-tiles.v1_gee_tiles_layer_id_tile_resource
-  depends_on                = [
+  depends_on = [
     module.v1_resource,
     module.layer,
     module.gee-tiles
@@ -630,7 +630,7 @@ module "query" {
   v1_resource     = module.v1_resource.aws_api_gateway_resource
   connection_type = "INTERNET"
   target_url      = var.microservice_host
-  depends_on      = [
+  depends_on = [
     module.v1_resource
   ]
 }
@@ -642,7 +642,7 @@ module "quicc" {
   connection_type = "INTERNET"
   target_url      = var.microservice_host
   v1_resource     = module.v1_resource.aws_api_gateway_resource
-  depends_on      = [
+  depends_on = [
     module.v1_resource
   ]
 }

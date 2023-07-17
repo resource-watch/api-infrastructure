@@ -61,7 +61,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_dataset" {
   count = var.connection_type == "VPC_LINK" ? length(var.eks_asg_names) : 0
 
   autoscaling_group_name = var.eks_asg_names[count.index]
-  lb_target_group_arn   = aws_lb_target_group.dataset_lb_target_group[0].arn
+  lb_target_group_arn    = aws_lb_target_group.dataset_lb_target_group[0].arn
 }
 
 // /v1/dataset
@@ -184,14 +184,14 @@ module "dataset_post_dataset" {
 }
 
 module "dataset_delete_dataset_id_proxy" {
-  source                      = "../endpoint"
-  x_rw_domain                 = var.x_rw_domain
-  api_gateway                 = var.api_gateway
-  api_resource                = module.dataset_by_user_id_resource.aws_api_gateway_resource
-  method                      = "DELETE"
-  uri                         = "http://${local.api_gateway_target_url}:30516/api/v1/dataset/by-user/{userId}"
-  vpc_link                    = var.vpc_link
-  connection_type             = var.connection_type
+  source          = "../endpoint"
+  x_rw_domain     = var.x_rw_domain
+  api_gateway     = var.api_gateway
+  api_resource    = module.dataset_by_user_id_resource.aws_api_gateway_resource
+  method          = "DELETE"
+  uri             = "http://${local.api_gateway_target_url}:30516/api/v1/dataset/by-user/{userId}"
+  vpc_link        = var.vpc_link
+  connection_type = var.connection_type
 }
 
 module "dataset_any_dataset_id_proxy" {

@@ -62,7 +62,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_authorization" {
   count = var.connection_type == "VPC_LINK" ? length(var.eks_asg_names) : 0
 
   autoscaling_group_name = var.eks_asg_names[count.index]
-  lb_target_group_arn   = aws_lb_target_group.authorization_lb_target_group[0].arn
+  lb_target_group_arn    = aws_lb_target_group.authorization_lb_target_group[0].arn
 }
 
 // /auth
@@ -94,6 +94,22 @@ module "v1_deletion_proxy_resource" {
   rest_api_id = var.api_gateway.id
   parent_id   = module.v1_deletion_resource.aws_api_gateway_resource.id
   path_part   = "{proxy+}"
+}
+
+// /v1/request
+module "v1_request_resource" {
+  source      = "../resource"
+  rest_api_id = var.api_gateway.id
+  parent_id   = var.v1_resource.id
+  path_part   = "request"
+}
+
+// /v1/request/validate
+module "v1_request_validate_resource" {
+  source      = "../resource"
+  rest_api_id = var.api_gateway.id
+  parent_id   = module.v1_request_resource.aws_api_gateway_resource.id
+  path_part   = "validate"
 }
 
 // /v1/organization
@@ -245,6 +261,17 @@ module "authorization_any_v1_application_proxy" {
   api_resource    = module.v1_application_proxy_resource.aws_api_gateway_resource
   method          = "ANY"
   uri             = "http://${local.api_gateway_target_url}:30505/api/v1/application/{proxy}"
+  vpc_link        = var.vpc_link
+  connection_type = var.connection_type
+}
+
+module "authorization_post_v1_request_validate" {
+  source          = "../endpoint"
+  x_rw_domain     = var.x_rw_domain
+  api_gateway     = var.api_gateway
+  api_resource    = module.v1_request_validate_resource.aws_api_gateway_resource
+  method          = "POST"
+  uri             = "http://${local.api_gateway_target_url}:30505/api/v1/request/validate"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
 }

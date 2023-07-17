@@ -10,7 +10,7 @@ resource "aws_api_gateway_integration" "endpoint_proxy_integration" {
   rest_api_id = var.api_gateway.id
   resource_id = var.api_resource.id
   http_method = var.method
-  type                    = "MOCK"
+  type        = "MOCK"
 
   request_templates = {
     "application/json" : "{\"statusCode\": 503}"

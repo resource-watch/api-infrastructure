@@ -18,12 +18,12 @@ module "bootstrap" {
 
 # Internal module which defines the VPC
 module "vpc" {
-  source              = "./modules/vpc"
-  region              = var.aws_region
-  user_data           = data.template_file.bastion_setup.rendered
-  bastion_ami         = data.aws_ami.latest-ubuntu-lts.id
-  project             = local.project
-  tags                = local.tags
+  source      = "./modules/vpc"
+  region      = var.aws_region
+  user_data   = data.template_file.bastion_setup.rendered
+  bastion_ami = data.aws_ami.latest-ubuntu-lts.id
+  project     = local.project
+  tags        = local.tags
   private_subnet_tags = {
     "kubernetes.io/cluster/${lower(replace(local.project, " ", "-"))}-k8s-cluster-${var.environment}" : "shared"
     "kubernetes.io/role/internal-elb" : 1
@@ -48,7 +48,7 @@ module "eks" {
   eks_version           = var.eks_version
   aws_region            = var.aws_region
   ebs_csi_addon_version = var.ebs_csi_addon_version
-  subnet_ids            = [
+  subnet_ids = [
     module.vpc.private_subnets[0].id,
     module.vpc.private_subnets[1].id,
     module.vpc.private_subnets[2].id,
@@ -70,7 +70,7 @@ module "mongodb-apps-node-group" {
   node_role_arn            = module.eks.node_role_arn
   eks_node_release_version = var.eks_node_release_version
   capacity_type            = var.mongodb_apps_node_group_capacity_type
-  subnet_ids               = [
+  subnet_ids = [
     module.vpc.private_subnets[0].id,
     module.vpc.private_subnets[1].id,
     module.vpc.private_subnets[2].id
@@ -93,7 +93,7 @@ module "apps-node-group" {
   node_role_arn            = module.eks.node_role_arn
   eks_node_release_version = var.eks_node_release_version
   capacity_type            = var.apps_node_group_capacity_type
-  subnet_ids               = [
+  subnet_ids = [
     module.vpc.private_subnets[0].id,
     module.vpc.private_subnets[1].id,
     module.vpc.private_subnets[2].id,
@@ -118,7 +118,7 @@ module "webapps-node-group" {
   node_role_arn            = module.eks.node_role_arn
   eks_node_release_version = var.eks_node_release_version
   capacity_type            = var.webapps_node_group_capacity_type
-  subnet_ids               = [
+  subnet_ids = [
     module.vpc.private_subnets[0].id,
     module.vpc.private_subnets[1].id,
     module.vpc.private_subnets[2].id,
@@ -143,7 +143,7 @@ module "core-node-group" {
   node_role_arn            = module.eks.node_role_arn
   eks_node_release_version = var.eks_node_release_version
   capacity_type            = var.core_node_group_capacity_type
-  subnet_ids               = [
+  subnet_ids = [
     module.vpc.private_subnets[5].id
   ]
   labels = {
@@ -164,7 +164,7 @@ module "gfw-node-group" {
   node_role_arn            = module.eks.node_role_arn
   eks_node_release_version = var.eks_node_release_version
   capacity_type            = var.gfw_node_group_capacity_type
-  subnet_ids               = [
+  subnet_ids = [
     module.vpc.private_subnets[0].id,
     module.vpc.private_subnets[1].id,
     module.vpc.private_subnets[2].id,
@@ -189,7 +189,7 @@ module "gateway-node-group" {
   node_role_arn            = module.eks.node_role_arn
   eks_node_release_version = var.eks_node_release_version
   capacity_type            = "ON_DEMAND"
-  subnet_ids               = [
+  subnet_ids = [
     module.vpc.private_subnets[0].id,
     module.vpc.private_subnets[1].id,
     module.vpc.private_subnets[2].id,
@@ -204,7 +204,7 @@ module "gateway-node-group" {
 module "documentdb" {
   source               = "./modules/document_db"
   log_retention_period = var.log_retention_period
-  private_subnet_ids   = [
+  private_subnet_ids = [
     module.vpc.private_subnets[0].id, module.vpc.private_subnets[1].id, module.vpc.private_subnets[3].id
   ]
   project                         = local.project
@@ -217,7 +217,7 @@ module "documentdb" {
   vpc_cidr_block                  = module.vpc.cidr_block
   engine_version                  = "3.6.0"
   enabled_cloudwatch_logs_exports = var.db_logs_exports
-  cluster_parameters              = [
+  cluster_parameters = [
     {
       apply_method = "immediate"
       name         = "profiler"
@@ -237,13 +237,13 @@ module "documentdb" {
 }
 
 module "postgresql" {
-  source                  = "./modules/postgresql"
+  source = "./modules/postgresql"
   availability_zone_names = [
     module.vpc.private_subnets[0].availability_zone, module.vpc.private_subnets[1].availability_zone,
     module.vpc.private_subnets[3].availability_zone
   ]
   log_retention_period = var.log_retention_period
-  private_subnet_ids   = [
+  private_subnet_ids = [
     module.vpc.private_subnets[0].id, module.vpc.private_subnets[1].id, module.vpc.private_subnets[3].id
   ]
   project                     = local.project
