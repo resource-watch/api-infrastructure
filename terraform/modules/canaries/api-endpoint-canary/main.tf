@@ -46,7 +46,7 @@ resource "aws_cloudwatch_metric_alarm" "canary-alarm" {
   treat_missing_data  = "breaching"
   alarm_description   = "This alarm monitors the success rate of the ${aws_synthetics_canary.canary.name} canary"
   datapoints_to_alarm = 1
-  alarm_actions       = [
+  alarm_actions = [
     var.sns_topic_arn
   ]
   dimensions = {

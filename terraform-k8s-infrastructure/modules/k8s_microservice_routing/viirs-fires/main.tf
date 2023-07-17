@@ -62,7 +62,7 @@ resource "aws_autoscaling_attachment" "asg_attachment_viirs_active_fires" {
   count = var.connection_type == "VPC_LINK" ? length(var.eks_asg_names) : 0
 
   autoscaling_group_name = var.eks_asg_names[count.index]
-  lb_target_group_arn   = aws_lb_target_group.viirs_active_fires_lb_target_group[0].arn
+  lb_target_group_arn    = aws_lb_target_group.viirs_active_fires_lb_target_group[0].arn
 }
 
 

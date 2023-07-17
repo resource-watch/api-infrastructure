@@ -1,2 +1,2 @@
 microservice_host = ""
-x_rw_domain = "localhost"
+x_rw_domain       = "localhost"
