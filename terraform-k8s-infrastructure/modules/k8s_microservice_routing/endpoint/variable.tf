@@ -47,25 +47,7 @@ variable "connection_type" {
   description = "API Gateway integration type"
 }
 
-variable "authorizer_id" {
-  type    = string
-  default = null
-}
-
 variable "require_api_key" {
   type    = bool
   default = false
-}
-
-variable "authorization" {
-  default = "NONE"
-  validation {
-    condition = contains([
-      "NONE",
-      "CUSTOM",
-      "AWS_IAM",
-      "COGNITO_USER_POOLS"
-    ], var.authorization)
-    error_message = "Unknown authorization method."
-  }
 }

@@ -89,6 +89,7 @@ module "gfw_forma_get_v1_forma_alerts" {
   uri             = "http://${local.api_gateway_target_url}:30534/api/v1/forma-alerts"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_forma_post_v1_forma_alerts" {
@@ -100,6 +101,7 @@ module "gfw_forma_post_v1_forma_alerts" {
   uri             = "http://${local.api_gateway_target_url}:30534/api/v1/forma-alerts"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_forma_any_v1_forma_alerts_proxy" {
@@ -111,4 +113,5 @@ module "gfw_forma_any_v1_forma_alerts_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30534/api/v1/forma-alerts/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

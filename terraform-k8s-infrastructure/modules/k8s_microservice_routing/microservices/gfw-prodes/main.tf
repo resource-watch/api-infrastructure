@@ -106,6 +106,7 @@ module "gfw_prodes_loss_get_v2_prodes_loss" {
   uri             = "http://${local.api_gateway_target_url}:30537/api/v2/prodes-loss"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_prodes_loss_post_v2_prodes_loss" {
@@ -117,6 +118,7 @@ module "gfw_prodes_loss_post_v2_prodes_loss" {
   uri             = "http://${local.api_gateway_target_url}:30537/api/v2/prodes-loss"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_prodes_loss_any_v2_prodes_loss_proxy" {
@@ -128,6 +130,7 @@ module "gfw_prodes_loss_any_v2_prodes_loss_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30537/api/v2/prodes-loss/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_prodes_loss_any_v1_prodes_loss_proxy" {
@@ -139,6 +142,7 @@ module "gfw_prodes_loss_any_v1_prodes_loss_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30537/api/v1/prodes-loss/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_prodes_loss_get_v1_prodes_loss" {
@@ -150,6 +154,7 @@ module "gfw_prodes_loss_get_v1_prodes_loss" {
   uri             = "http://${local.api_gateway_target_url}:30537/api/v1/prodes-loss"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_prodes_loss_post_v1_prodes_loss" {
@@ -161,4 +166,5 @@ module "gfw_prodes_loss_post_v1_prodes_loss" {
   uri             = "http://${local.api_gateway_target_url}:30537/api/v1/prodes-loss"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

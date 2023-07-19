@@ -89,4 +89,5 @@ module "aqueduct_analysis_any_v1_aqueduct_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30501/api/v1/aqueduct/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

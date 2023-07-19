@@ -106,6 +106,7 @@ module "gfw_ogr_any_v2_ogr_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30536/api/v2/ogr/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_ogr_any_v1_ogr_proxy" {
@@ -117,4 +118,5 @@ module "gfw_ogr_any_v1_ogr_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30536/api/v1/ogr/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

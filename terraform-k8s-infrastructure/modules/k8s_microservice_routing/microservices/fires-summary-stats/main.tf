@@ -113,6 +113,7 @@ module "fires_summary_stats_any_fire_alerts_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30523/api/v1/fire-alerts/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "fires_summary_stats_any_glad_alerts_summary_stats_proxy" {
@@ -124,5 +125,6 @@ module "fires_summary_stats_any_glad_alerts_summary_stats_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30523/api/v1/glad-alerts/summary-stats/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 

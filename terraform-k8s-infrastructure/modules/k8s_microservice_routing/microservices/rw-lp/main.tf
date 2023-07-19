@@ -96,6 +96,7 @@ module "rw_lp_get_home" {
   uri             = "http://${local.api_gateway_target_url}:30559/"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "rw_lp_get_rw_lp_proxy" {
@@ -107,5 +108,6 @@ module "rw_lp_get_rw_lp_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30559/rw-lp/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 

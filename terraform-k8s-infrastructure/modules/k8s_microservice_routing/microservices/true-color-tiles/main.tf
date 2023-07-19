@@ -89,5 +89,6 @@ module "true_color_tiles_get_v1_true_color_tiles_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30563/api/v1/true-color-tiles/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 

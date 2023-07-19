@@ -89,6 +89,7 @@ module "quicc_get_v1_quicc_alerts" {
   uri             = "http://${local.api_gateway_target_url}:30556/api/v1/quicc-alerts"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "quicc_any_v1_quicc_alerts_proxy" {
@@ -100,4 +101,5 @@ module "quicc_any_v1_quicc_alerts_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30556/api/v1/quicc-alerts/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

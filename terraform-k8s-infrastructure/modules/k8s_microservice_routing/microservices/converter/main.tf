@@ -89,4 +89,5 @@ module "converter_any_convert_fs2sql" {
   uri             = "http://${local.api_gateway_target_url}:30514/api/v1/convert/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

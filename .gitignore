@@ -52,4 +52,3 @@ terraform-k8s-infrastructure/vars/private.tfvars
 
 terraform.tfstate
 terraform.tfstate.backup
-/terraform-k8s-infrastructure/modules/k8s_microservice_routing/lambda.zip

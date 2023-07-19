@@ -89,4 +89,5 @@ module "doc_orchestrator_any_doc_importer_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30518/api/v1/doc-importer/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

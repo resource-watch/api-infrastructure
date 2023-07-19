@@ -114,6 +114,7 @@ module "widget_get_widget" {
   uri             = "http://${local.api_gateway_target_url}:30567/api/v1/widget"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "widget_post_widget" {
@@ -125,6 +126,7 @@ module "widget_post_widget" {
   uri             = "http://${local.api_gateway_target_url}:30567/api/v1/widget"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "widget_any_widget_proxy" {
@@ -136,6 +138,7 @@ module "widget_any_widget_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30567/api/v1/widget/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "widget_any_dataset_id_widget" {

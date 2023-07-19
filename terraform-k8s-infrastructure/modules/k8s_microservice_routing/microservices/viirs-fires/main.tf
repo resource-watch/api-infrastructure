@@ -107,6 +107,7 @@ module "viirs_fires_get_v1_viirs_active_fires" {
   uri             = "http://${local.api_gateway_target_url}:30564/api/v1/viirs-active-fires"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "viirs_fires_post_v1_viirs_active_fires" {
@@ -118,6 +119,7 @@ module "viirs_fires_post_v1_viirs_active_fires" {
   uri             = "http://${local.api_gateway_target_url}:30564/api/v1/viirs-active-fires"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "viirs_fires_any_v1_viirs_active_fires_proxy" {
@@ -129,6 +131,7 @@ module "viirs_fires_any_v1_viirs_active_fires_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30564/api/v1/viirs-active-fires/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "viirs_fires_get_v2_viirs_active_fires" {
@@ -140,6 +143,7 @@ module "viirs_fires_get_v2_viirs_active_fires" {
   uri             = "http://${local.api_gateway_target_url}:30564/api/v2/viirs-active-fires"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "viirs_fires_post_v2_viirs_active_fires" {
@@ -151,6 +155,7 @@ module "viirs_fires_post_v2_viirs_active_fires" {
   uri             = "http://${local.api_gateway_target_url}:30564/api/v2/viirs-active-fires"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "viirs_fires_any_v2_viirs_active_fires_proxy" {
@@ -162,4 +167,5 @@ module "viirs_fires_any_v2_viirs_active_fires_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30564/api/v2/viirs-active-fires/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

@@ -89,5 +89,6 @@ module "high_res_get_v1_high_res_sensor" {
   uri             = "http://${local.api_gateway_target_url}:30544/api/v1/high-res/{sensor}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 

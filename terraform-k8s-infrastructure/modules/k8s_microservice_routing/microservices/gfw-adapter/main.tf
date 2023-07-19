@@ -138,6 +138,7 @@ module "gfw_get_v1_query_gfw_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:${local.port}/api/v1/gfw/query/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_post_v1_query_gfw_dataset_id" {
@@ -149,6 +150,7 @@ module "gfw_post_v1_query_gfw_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:${local.port}/api/v1/gfw/query/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_get_v1_download_gfw_dataset_id" {
@@ -160,6 +162,7 @@ module "gfw_get_v1_download_gfw_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:${local.port}/api/v1/gfw/download/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_post_v1_download_gfw_dataset_id" {
@@ -171,6 +174,7 @@ module "gfw_post_v1_download_gfw_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:${local.port}/api/v1/gfw/download/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_get_v1_fields_gfw_dataset_id" {
@@ -182,6 +186,7 @@ module "gfw_get_v1_fields_gfw_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:${local.port}/api/v1/gfw/fields/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_post_v1_rest_datasets_gfw" {
@@ -193,6 +198,7 @@ module "gfw_post_v1_rest_datasets_gfw" {
   uri             = "http://${local.api_gateway_target_url}:${local.port}/api/v1/gfw/rest-datasets/gfw"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_delete_v1_rest_datasets_gfw_dataset_id" {
@@ -204,5 +210,6 @@ module "gfw_delete_v1_rest_datasets_gfw_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:${local.port}/api/v1/gfw/rest-datasets/gfw/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 

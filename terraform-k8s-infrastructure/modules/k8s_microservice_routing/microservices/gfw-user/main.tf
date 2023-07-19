@@ -105,6 +105,7 @@ module "gfw_user_get_v1_user" {
   uri             = "http://${local.api_gateway_target_url}:30540/api/v1/user"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_user_post_v1_user" {
@@ -116,6 +117,7 @@ module "gfw_user_post_v1_user" {
   uri             = "http://${local.api_gateway_target_url}:30540/api/v1/user"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_user_any_v1_user_proxy" {
@@ -127,6 +129,7 @@ module "gfw_user_any_v1_user_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30540/api/v1/user/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_user_get_v2_user" {
@@ -138,6 +141,7 @@ module "gfw_user_get_v2_user" {
   uri             = "http://${local.api_gateway_target_url}:30540/api/v2/user"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_user_post_v2_user" {
@@ -149,6 +153,7 @@ module "gfw_user_post_v2_user" {
   uri             = "http://${local.api_gateway_target_url}:30540/api/v2/user"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_user_any_v2_user_proxy" {
@@ -160,4 +165,5 @@ module "gfw_user_any_v2_user_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30540/api/v2/user/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

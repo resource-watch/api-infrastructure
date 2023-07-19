@@ -137,6 +137,7 @@ module "arcgis_get_v1_query_featureservice_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30502/api/v1/arcgis/query/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "arcgis_post_v1_query_featureservice_dataset_id" {
@@ -148,6 +149,7 @@ module "arcgis_post_v1_query_featureservice_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30502/api/v1/arcgis/query/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "arcgis_get_v1_download_featureservice_dataset_id" {
@@ -159,6 +161,7 @@ module "arcgis_get_v1_download_featureservice_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30502/api/v1/arcgis/download/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "arcgis_post_v1_download_featureservice_dataset_id" {
@@ -170,6 +173,7 @@ module "arcgis_post_v1_download_featureservice_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30502/api/v1/arcgis/download/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "arcgis_get_v1_fields_featureservice_dataset_id" {
@@ -181,6 +185,7 @@ module "arcgis_get_v1_fields_featureservice_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30502/api/v1/arcgis/fields/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "arcgis_post_v1_rest_datasets_featureservice" {
@@ -192,6 +197,7 @@ module "arcgis_post_v1_rest_datasets_featureservice" {
   uri             = "http://${local.api_gateway_target_url}:30502/api/v1/arcgis/rest-datasets/featureservice"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "arcgis_delete_v1_rest_datasets_featureservice_dataset_id" {
@@ -203,4 +209,5 @@ module "arcgis_delete_v1_rest_datasets_featureservice_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30502/api/v1/arcgis/rest-datasets/featureservice/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

@@ -130,6 +130,7 @@ module "query_get_query" {
   uri             = "http://${local.api_gateway_target_url}:30555/api/v1/query"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "query_post_query" {
@@ -141,6 +142,7 @@ module "query_post_query" {
   uri             = "http://${local.api_gateway_target_url}:30555/api/v1/query"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "query_get_query_id" {
@@ -152,6 +154,7 @@ module "query_get_query_id" {
   uri             = "http://${local.api_gateway_target_url}:30555/api/v1/query/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "query_post_query_id" {
@@ -163,6 +166,7 @@ module "query_post_query_id" {
   uri             = "http://${local.api_gateway_target_url}:30555/api/v1/query/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "download_get_download" {
@@ -174,6 +178,7 @@ module "download_get_download" {
   uri             = "http://${local.api_gateway_target_url}:30555/api/v1/download"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "download_post_download" {
@@ -185,6 +190,7 @@ module "download_post_download" {
   uri             = "http://${local.api_gateway_target_url}:30555/api/v1/download"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "download_get_download_id" {
@@ -196,6 +202,7 @@ module "download_get_download_id" {
   uri             = "http://${local.api_gateway_target_url}:30555/api/v1/download/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "download_post_download_id" {
@@ -207,6 +214,7 @@ module "download_post_download_id" {
   uri             = "http://${local.api_gateway_target_url}:30555/api/v1/download/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "jiminy_get_jiminy" {
@@ -218,6 +226,7 @@ module "jiminy_get_jiminy" {
   uri             = "http://${local.api_gateway_target_url}:30555/api/v1/jiminy"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "jiminy_post_jiminy" {
@@ -229,6 +238,7 @@ module "jiminy_post_jiminy" {
   uri             = "http://${local.api_gateway_target_url}:30555/api/v1/jiminy"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "fields_get_id" {
@@ -240,4 +250,5 @@ module "fields_get_id" {
   uri             = "http://${local.api_gateway_target_url}:30555/api/v1/fields/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

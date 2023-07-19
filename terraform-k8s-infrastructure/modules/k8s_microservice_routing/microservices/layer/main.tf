@@ -154,6 +154,7 @@ module "layer_get" {
   uri             = "http://${local.api_gateway_target_url}:30546/api/v1/layer"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "layer_get_dataset_id_layer" {
@@ -189,6 +190,7 @@ module "layer_get_layer_id" {
   uri             = "http://${local.api_gateway_target_url}:30546/api/v1/layer/{layerId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "layer_post_dataset_id_layer" {
@@ -260,10 +262,11 @@ module "layer_post_layer_find_by_ids" {
   uri             = "http://${local.api_gateway_target_url}:30546/api/v1/layer/find-by-ids"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "layer_post_layer_by_user_layer_id" {
-  source          = "../endpoint"
+  source          = "../../endpoint"
   x_rw_domain     = var.x_rw_domain
   api_gateway     = var.api_gateway
   api_resource    = module.layer_by_user_layer_id_resource.aws_api_gateway_resource
@@ -271,6 +274,7 @@ module "layer_post_layer_by_user_layer_id" {
   uri             = "http://${local.api_gateway_target_url}:30546/api/v1/layer/by-user/{layerId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "layer_delete_layer_id_expire_cache" {

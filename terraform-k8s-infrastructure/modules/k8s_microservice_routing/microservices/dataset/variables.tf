@@ -47,6 +47,11 @@ variable "vpc_link" {
   default     = { id : null, target_arns : [] }
 }
 
+variable "require_api_key" {
+  type    = bool
+  default = false
+}
+
 variable "eks_asg_names" {
   type        = list(any)
   description = "List of the EKS ASG names"
@@ -68,27 +73,4 @@ variable "v1_resource" {
 variable "connection_type" {
   type        = string
   description = "API Gateway integration type"
-}
-
-variable "authorizer_id" {
-  type    = string
-  default = ""
-}
-
-variable "require_api_key" {
-  type    = bool
-  default = false
-}
-
-variable "authorization" {
-  default = "NONE"
-  validation {
-    condition = contains([
-      "NONE",
-      "CUSTOM",
-      "AWS_IAM",
-      "COGNITO_USER_POOLS"
-    ], var.authorization)
-    error_message = "Unknown authorization method."
-  }
 }

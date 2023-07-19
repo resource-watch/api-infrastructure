@@ -89,4 +89,5 @@ module "gfw_ogr_any_v1_gfw_pro_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30568/api/v1/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

@@ -90,6 +90,7 @@ module "task_async_get_task" {
   uri             = "http://${local.api_gateway_target_url}:30562/api/v1/task"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "task_async_any_task_proxy" {
@@ -101,5 +102,6 @@ module "task_async_any_task_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30562/api/v1/task/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 

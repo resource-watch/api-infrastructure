@@ -137,6 +137,7 @@ module "carto_get_v1_query_cartodb_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30507/api/v1/carto/query/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "carto_post_v1_query_cartodb_dataset_id" {
@@ -148,6 +149,7 @@ module "carto_post_v1_query_cartodb_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30507/api/v1/carto/query/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "carto_get_v1_download_cartodb_dataset_id" {
@@ -159,6 +161,7 @@ module "carto_get_v1_download_cartodb_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30507/api/v1/carto/download/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "carto_post_v1_download_cartodb_dataset_id" {
@@ -170,6 +173,7 @@ module "carto_post_v1_download_cartodb_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30507/api/v1/carto/download/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "carto_get_v1_fields_cartodb_dataset_id" {
@@ -181,6 +185,7 @@ module "carto_get_v1_fields_cartodb_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30507/api/v1/carto/fields/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "carto_post_v1_rest_datasets_cartodb" {
@@ -192,6 +197,7 @@ module "carto_post_v1_rest_datasets_cartodb" {
   uri             = "http://${local.api_gateway_target_url}:30507/api/v1/carto/rest-datasets/cartodb"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "carto_delete_v1_rest_datasets_cartodb_dataset_id" {
@@ -203,5 +209,6 @@ module "carto_delete_v1_rest_datasets_cartodb_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30507/api/v1/carto/rest-datasets/cartodb/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 

@@ -276,6 +276,10 @@ module "email-templates" {
   sparkpost_api_key = var.sparkpost_api_key
 }
 
+module "cloudwatch-charts" {
+  source = "./modules/cloudwatch-charts"
+}
+
 # module "eks_scaling" {
 #   source                            = "./modules/eks_scaling"
 #   eks_cluster_name                  = module.eks.cluster_name

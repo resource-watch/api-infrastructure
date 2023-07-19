@@ -125,4 +125,5 @@ module "gee_tiles_any_gee_layer_gee_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30531/api/v1/layer/gee/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

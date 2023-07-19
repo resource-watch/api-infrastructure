@@ -47,6 +47,11 @@ variable "vpc_link" {
   default     = { id : null, target_arns : [] }
 }
 
+variable "require_api_key" {
+  type    = bool
+  default = false
+}
+
 variable "connection_type" {
   type        = string
   description = "API Gateway integration type"

@@ -90,6 +90,7 @@ module "webshot_get_v1_webshot" {
   uri             = "http://${local.api_gateway_target_url}:30566/api/v1/webshot"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "webshot_any_v1_webshot_proxy" {
@@ -101,4 +102,5 @@ module "webshot_any_v1_webshot_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30566/api/v1/webshot/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

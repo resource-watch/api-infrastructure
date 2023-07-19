@@ -106,6 +106,7 @@ module "gfw_guira_get_v2_guira_loss" {
   uri             = "http://${local.api_gateway_target_url}:30535/api/v2/guira-loss"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_guira_post_v2_guira_loss" {
@@ -117,6 +118,7 @@ module "gfw_guira_post_v2_guira_loss" {
   uri             = "http://${local.api_gateway_target_url}:30535/api/v2/guira-loss"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_guira_any_v2_guira_loss_proxy" {
@@ -128,6 +130,7 @@ module "gfw_guira_any_v2_guira_loss_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30535/api/v2/guira-loss/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_guira_get_v1_guira_loss" {
@@ -139,6 +142,7 @@ module "gfw_guira_get_v1_guira_loss" {
   uri             = "http://${local.api_gateway_target_url}:30535/api/v1/guira-loss"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_guira_post_v1_guira_loss" {
@@ -150,6 +154,7 @@ module "gfw_guira_post_v1_guira_loss" {
   uri             = "http://${local.api_gateway_target_url}:30535/api/v1/guira-loss"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_guira_any_v1_guira_loss_proxy" {
@@ -161,4 +166,5 @@ module "gfw_guira_any_v1_guira_loss_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30535/api/v1/guira-loss/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

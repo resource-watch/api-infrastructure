@@ -340,6 +340,7 @@ module "analysis_gee_get_v1_recent_tiles_classifier" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/recent-tiles-classifier"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_get_v1_composite_service" {
@@ -351,6 +352,7 @@ module "analysis_gee_get_v1_composite_service" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/composite-service"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_post_v1_mc_analysis" {
@@ -362,6 +364,7 @@ module "analysis_gee_post_v1_mc_analysis" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/mc-analysis"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_get_v1_composite_service_geom" {
@@ -373,6 +376,7 @@ module "analysis_gee_get_v1_composite_service_geom" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/composite-service/geom"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_post_v1_composite_service_geom" {
@@ -384,6 +388,7 @@ module "analysis_gee_post_v1_composite_service_geom" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/composite-service/geom"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_get_v1_geodescriber" {
@@ -395,6 +400,7 @@ module "analysis_gee_get_v1_geodescriber" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/geodescriber"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_get_v1_geodescriber_geom" {
@@ -406,6 +412,7 @@ module "analysis_gee_get_v1_geodescriber_geom" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/geodescriber/geom"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_post_v1_geodescriber_geom" {
@@ -417,6 +424,7 @@ module "analysis_gee_post_v1_geodescriber_geom" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/geodescriber/geom"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_get_v1_umd_loss_gain" {
@@ -428,6 +436,7 @@ module "analysis_gee_get_v1_umd_loss_gain" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/umd-loss-gain"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_post_v1_umd_loss_gain" {
@@ -439,6 +448,7 @@ module "analysis_gee_post_v1_umd_loss_gain" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/umd-loss-gain"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_any_v1_umd_loss_gain_proxy" {
@@ -450,6 +460,7 @@ module "analysis_gee_any_v1_umd_loss_gain_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/umd-loss-gain/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_get_v1_whrc_biomass" {
@@ -461,6 +472,7 @@ module "analysis_gee_get_v1_whrc_biomass" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/whrc-biomass"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_post_v1_whrc_biomass" {
@@ -472,6 +484,7 @@ module "analysis_gee_post_v1_whrc_biomass" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/whrc-biomass"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_any_v1_whrc_biomass_proxy" {
@@ -483,6 +496,7 @@ module "analysis_gee_any_v1_whrc_biomass_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/whrc-biomass/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_post_v1_mangrove_biomass" {
@@ -494,6 +508,7 @@ module "analysis_gee_post_v1_mangrove_biomass" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/mangrove-biomass"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_get_v1_mangrove_biomass" {
@@ -505,6 +520,7 @@ module "analysis_gee_get_v1_mangrove_biomass" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/mangrove-biomass"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_any_v1_mangrove_biomass_proxy" {
@@ -516,6 +532,7 @@ module "analysis_gee_any_v1_mangrove_biomass_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/mangrove-biomass/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_get_v1_population" {
@@ -527,6 +544,7 @@ module "analysis_gee_get_v1_population" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/population"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_post_v1_population" {
@@ -538,6 +556,7 @@ module "analysis_gee_post_v1_population" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/population"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_any_v1_population_proxy" {
@@ -549,6 +568,7 @@ module "analysis_gee_any_v1_population_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/population/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_get_v1_soil_carbon" {
@@ -560,6 +580,7 @@ module "analysis_gee_get_v1_soil_carbon" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/soil-carbon"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_any_v1_soil_carbon_proxy" {
@@ -571,6 +592,7 @@ module "analysis_gee_any_v1_soil_carbon_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/soil-carbon/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_post_v1_forma250gfw" {
@@ -582,6 +604,7 @@ module "analysis_gee_post_v1_forma250gfw" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/forma250gfw"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_get_v1_forma250gfw" {
@@ -593,6 +616,7 @@ module "analysis_gee_get_v1_forma250gfw" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/forma250gfw"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_any_v1_forma250gfw_proxy" {
@@ -604,6 +628,7 @@ module "analysis_gee_any_v1_forma250gfw_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/forma250gfw/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_get_v1_biomass_loss" {
@@ -615,6 +640,7 @@ module "analysis_gee_get_v1_biomass_loss" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/biomass-loss"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_post_v1_biomass_loss" {
@@ -626,6 +652,7 @@ module "analysis_gee_post_v1_biomass_loss" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/biomass-loss"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_any_v1_biomass_loss_proxy" {
@@ -637,6 +664,7 @@ module "analysis_gee_any_v1_biomass_loss_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/biomass-loss/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_get_v1_loss_by_landcover" {
@@ -648,6 +676,7 @@ module "analysis_gee_get_v1_loss_by_landcover" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/loss-by-landcover"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_post_v1_loss_by_landcover" {
@@ -659,6 +688,7 @@ module "analysis_gee_post_v1_loss_by_landcover" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/loss-by-landcover"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_get_v1_landcover" {
@@ -670,6 +700,7 @@ module "analysis_gee_get_v1_landcover" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/landcover"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_post_v1_landcover" {
@@ -681,6 +712,7 @@ module "analysis_gee_post_v1_landcover" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/landcover"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_any_v1_landsat_tiles_proxy" {
@@ -692,6 +724,7 @@ module "analysis_gee_any_v1_landsat_tiles_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/landsat-tiles/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_get_v1_sentinel_tiles" {
@@ -703,6 +736,7 @@ module "analysis_gee_get_v1_sentinel_tiles" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/sentinel-tiles"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_get_v1_recent_tiles" {
@@ -714,6 +748,7 @@ module "analysis_gee_get_v1_recent_tiles" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/recent-tiles"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_any_v1_recent_tiles_proxy" {
@@ -725,6 +760,7 @@ module "analysis_gee_any_v1_recent_tiles_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v1/recent-tiles/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_any_v2_landsat_tiles_proxy" {
@@ -736,6 +772,7 @@ module "analysis_gee_any_v2_landsat_tiles_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v2/landsat-tiles/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_get_v2_nlcd_landcover" {
@@ -747,6 +784,7 @@ module "analysis_gee_get_v2_nlcd_landcover" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v2/nlcd-landcover"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_post_v2_nlcd_landcover" {
@@ -758,6 +796,7 @@ module "analysis_gee_post_v2_nlcd_landcover" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v2/nlcd-landcover"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_any_v2_nlcd_landcover_proxy" {
@@ -769,6 +808,7 @@ module "analysis_gee_any_v2_nlcd_landcover_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v2/nlcd-landcover/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_get_v2_biomass_loss" {
@@ -780,6 +820,7 @@ module "analysis_gee_get_v2_biomass_loss" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v2/biomass-loss"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_post_v2_biomass_loss" {
@@ -791,6 +832,7 @@ module "analysis_gee_post_v2_biomass_loss" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v2/biomass-loss"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "analysis_gee_any_v2_biomass_loss_proxy" {
@@ -802,4 +844,5 @@ module "analysis_gee_any_v2_biomass_loss_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30500/api/v2/biomass-loss/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

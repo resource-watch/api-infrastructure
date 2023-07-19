@@ -89,6 +89,7 @@ module "story_get_v1_story" {
   uri             = "http://${local.api_gateway_target_url}:30560/api/v1/story"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "story_post_v1_story" {
@@ -100,6 +101,7 @@ module "story_post_v1_story" {
   uri             = "http://${local.api_gateway_target_url}:30560/api/v1/story"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "story_any_v1_story_proxy" {
@@ -111,4 +113,5 @@ module "story_any_v1_story_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30560/api/v1/story/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

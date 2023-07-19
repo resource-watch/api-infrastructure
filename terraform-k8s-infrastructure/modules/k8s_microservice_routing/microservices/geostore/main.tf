@@ -94,6 +94,7 @@ module "geostore_post_v1_geostore" {
   uri             = "http://${local.api_gateway_target_url}:30532/api/v1/geostore"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "geostore_any_v1_geostore_proxy" {
@@ -105,6 +106,7 @@ module "geostore_any_v1_geostore_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30532/api/v1/geostore/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 #
@@ -136,6 +138,7 @@ module "geostore_any_v1_coverage_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30532/api/v1/coverage/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 #
@@ -167,6 +170,7 @@ module "geostore_post_v2_geostore" {
   uri             = "http://${local.api_gateway_target_url}:30532/api/v2/geostore"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "geostore_any_v2_geostore_proxy" {
@@ -178,6 +182,7 @@ module "geostore_any_v2_geostore_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30532/api/v2/geostore/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 #
@@ -209,4 +214,5 @@ module "geostore_any_v2_coverage_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30532/api/v2/coverage/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

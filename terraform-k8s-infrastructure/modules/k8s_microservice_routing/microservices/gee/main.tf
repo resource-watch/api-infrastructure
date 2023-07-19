@@ -137,6 +137,7 @@ module "gee_get_query_gee_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30530/api/v1/earthengine/query/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gee_post_query_gee_dataset_id" {
@@ -148,6 +149,7 @@ module "gee_post_query_gee_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30530/api/v1/earthengine/query/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gee_get_download_gee_dataset_id" {
@@ -159,6 +161,7 @@ module "gee_get_download_gee_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30530/api/v1/earthengine/download/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gee_post_download_gee_dataset_id" {
@@ -170,6 +173,7 @@ module "gee_post_download_gee_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30530/api/v1/earthengine/download/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gee_get_fields_gee_dataset_id" {
@@ -181,6 +185,7 @@ module "gee_get_fields_gee_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30530/api/v1/earthengine/fields/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gee_get_rest_datasets_gee" {
@@ -192,6 +197,7 @@ module "gee_get_rest_datasets_gee" {
   uri             = "http://${local.api_gateway_target_url}:30530/api/v1/earthengine/rest-datasets/gee"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gee_delete_rest_datasets_gee_dataset_id" {
@@ -203,4 +209,5 @@ module "gee_delete_rest_datasets_gee_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30530/api/v1/earthengine/rest-datasets/gee/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

@@ -89,5 +89,6 @@ module "gs_pro_config_get_v1_pro_config_tech_title" {
   uri             = "http://${local.api_gateway_target_url}:30543/api/v1/pro-config/{techTitle}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 

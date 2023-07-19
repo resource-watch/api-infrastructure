@@ -89,6 +89,7 @@ module "forest_change_get_v1_terrai_alerts" {
   uri             = "http://${local.api_gateway_target_url}:30524/api/v2/ms/terrai-alerts"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "forest_change_post_v1_terrai_alerts" {
@@ -100,6 +101,7 @@ module "forest_change_post_v1_terrai_alerts" {
   uri             = "http://${local.api_gateway_target_url}:30524/api/v2/ms/terrai-alerts"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "forest_change_any_v1_terrai_alerts_admin_iso_code" {
@@ -111,4 +113,5 @@ module "forest_change_any_v1_terrai_alerts_admin_iso_code" {
   uri             = "http://${local.api_gateway_target_url}:30524/api/v2/ms/terrai-alerts/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

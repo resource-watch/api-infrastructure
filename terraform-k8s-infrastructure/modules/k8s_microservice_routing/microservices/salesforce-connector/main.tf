@@ -89,4 +89,5 @@ module "salesforce_connector_any_v1_user_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30569/api/v1/salesforce/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

@@ -121,6 +121,7 @@ module "gfw_umd_loss_any_v1_umd_loss_gain_admin_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30539/api/v1/umd-loss-gain/admin/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_umd_loss_any_v2_umd_loss_proxy" {
@@ -132,6 +133,7 @@ module "gfw_umd_loss_any_v2_umd_loss_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30539/api/v2/umd-loss-gain/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gfw_umd_loss_any_v3_umd_loss_proxy" {
@@ -143,4 +145,5 @@ module "gfw_umd_loss_any_v3_umd_loss_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30539/api/v3/umd-loss-gain/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

@@ -89,6 +89,7 @@ module "subscriptions_get_v1_subscriptions" {
   uri             = "http://${local.api_gateway_target_url}:30561/api/v1/subscriptions"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "subscriptions_post_v1_subscriptions" {
@@ -100,6 +101,7 @@ module "subscriptions_post_v1_subscriptions" {
   uri             = "http://${local.api_gateway_target_url}:30561/api/v1/subscriptions"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "subscriptions_any_v1_subscriptions_proxy" {
@@ -111,4 +113,5 @@ module "subscriptions_any_v1_subscriptions_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30561/api/v1/subscriptions/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

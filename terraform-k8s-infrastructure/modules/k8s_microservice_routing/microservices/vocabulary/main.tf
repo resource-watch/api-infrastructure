@@ -94,6 +94,7 @@ module "vocabulary_get_vocabulary" {
   uri             = "http://${local.api_gateway_target_url}:30565/api/v1/vocabulary"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "vocabulary_post_vocabulary" {
@@ -105,6 +106,7 @@ module "vocabulary_post_vocabulary" {
   uri             = "http://${local.api_gateway_target_url}:30565/api/v1/vocabulary"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "vocabulary_any_vocabulary_proxy" {
@@ -116,6 +118,7 @@ module "vocabulary_any_vocabulary_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30565/api/v1/vocabulary/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 #
@@ -223,6 +226,7 @@ module "vocabulary_any_dataset_vocabulary_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30565/api/v1/dataset/vocabulary/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 #
@@ -518,6 +522,7 @@ module "vocabulary_get_favourite" {
   uri             = "http://${local.api_gateway_target_url}:30565/api/v1/favourite"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "vocabulary_post_favourite" {
@@ -529,6 +534,7 @@ module "vocabulary_post_favourite" {
   uri             = "http://${local.api_gateway_target_url}:30565/api/v1/favourite"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "vocabulary_any_favourite_proxy" {
@@ -540,6 +546,7 @@ module "vocabulary_any_favourite_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30565/api/v1/favourite/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 #
@@ -571,6 +578,7 @@ module "vocabulary_get_collection" {
   uri             = "http://${local.api_gateway_target_url}:30565/api/v1/collection"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "vocabulary_any_collection_proxy" {
@@ -582,6 +590,7 @@ module "vocabulary_any_collection_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30565/api/v1/collection/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "vocabulary_post_collection" {
@@ -593,4 +602,5 @@ module "vocabulary_post_collection" {
   uri             = "http://${local.api_gateway_target_url}:30565/api/v1/collection"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

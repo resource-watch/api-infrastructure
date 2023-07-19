@@ -201,6 +201,7 @@ module "resource_watch_manager_get_v1_dashboard" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/dashboards"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_post_v1_dashboard" {
@@ -212,6 +213,7 @@ module "resource_watch_manager_post_v1_dashboard" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/dashboards"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_any_v1_dashboard_proxy" {
@@ -223,6 +225,7 @@ module "resource_watch_manager_any_v1_dashboard_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/dashboards/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_get_v1_partner" {
@@ -234,6 +237,7 @@ module "resource_watch_manager_get_v1_partner" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/partners"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_post_v1_partner" {
@@ -245,6 +249,7 @@ module "resource_watch_manager_post_v1_partner" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/partners"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_get_v1_partner_id" {
@@ -256,6 +261,7 @@ module "resource_watch_manager_get_v1_partner_id" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/partners/{partnerId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_patch_v1_partner_id" {
@@ -267,6 +273,7 @@ module "resource_watch_manager_patch_v1_partner_id" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/partners/{partnerId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_put_v1_partner_id" {
@@ -278,6 +285,7 @@ module "resource_watch_manager_put_v1_partner_id" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/partners/{partnerId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_delete_v1_partner_id" {
@@ -289,6 +297,7 @@ module "resource_watch_manager_delete_v1_partner_id" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/partners/{partnerId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_get_v1_static_page" {
@@ -300,6 +309,7 @@ module "resource_watch_manager_get_v1_static_page" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/static_pages"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_post_v1_static_page" {
@@ -311,6 +321,7 @@ module "resource_watch_manager_post_v1_static_page" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/static_pages"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_get_v1_static_page_id" {
@@ -322,6 +333,7 @@ module "resource_watch_manager_get_v1_static_page_id" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/static_pages/{staticPageId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_patch_v1_static_page_id" {
@@ -333,6 +345,7 @@ module "resource_watch_manager_patch_v1_static_page_id" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/static_pages/{staticPageId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_put_v1_static_page_id" {
@@ -344,6 +357,7 @@ module "resource_watch_manager_put_v1_static_page_id" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/static_pages/{staticPageId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_delete_v1_static_page_id" {
@@ -355,6 +369,7 @@ module "resource_watch_manager_delete_v1_static_page_id" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/static_pages/{staticPageId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_get_v1_topic" {
@@ -366,6 +381,7 @@ module "resource_watch_manager_get_v1_topic" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/topics"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_post_v1_topic" {
@@ -377,6 +393,7 @@ module "resource_watch_manager_post_v1_topic" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/topics"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_any_v1_topic_proxy" {
@@ -388,6 +405,7 @@ module "resource_watch_manager_any_v1_topic_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/topics/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_get_v1_tool" {
@@ -399,6 +417,7 @@ module "resource_watch_manager_get_v1_tool" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/tools"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_post_v1_tool" {
@@ -410,6 +429,7 @@ module "resource_watch_manager_post_v1_tool" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/tools"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_get_v1_tool_id" {
@@ -421,6 +441,7 @@ module "resource_watch_manager_get_v1_tool_id" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/tools/{toolId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_patch_v1_tool_id" {
@@ -432,6 +453,7 @@ module "resource_watch_manager_patch_v1_tool_id" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/tools/{toolId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_put_v1_tool_id" {
@@ -443,6 +465,7 @@ module "resource_watch_manager_put_v1_tool_id" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/tools/{toolId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_delete_v1_tool_id" {
@@ -454,6 +477,7 @@ module "resource_watch_manager_delete_v1_tool_id" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/tools/{toolId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_post_v1_profile" {
@@ -465,6 +489,7 @@ module "resource_watch_manager_post_v1_profile" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/profiles"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_get_v1_profile_id" {
@@ -476,6 +501,7 @@ module "resource_watch_manager_get_v1_profile_id" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/profiles/{profileId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_patch_v1_profile_id" {
@@ -487,6 +513,7 @@ module "resource_watch_manager_patch_v1_profile_id" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/profiles/{profileId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_put_v1_profile_id" {
@@ -498,6 +525,7 @@ module "resource_watch_manager_put_v1_profile_id" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/profiles/{profileId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_delete_v1_profile_id" {
@@ -509,6 +537,7 @@ module "resource_watch_manager_delete_v1_profile_id" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/profiles/{profileId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_get_v1_faq" {
@@ -520,6 +549,7 @@ module "resource_watch_manager_get_v1_faq" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/faqs"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_post_v1_faq" {
@@ -531,6 +561,7 @@ module "resource_watch_manager_post_v1_faq" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/faqs"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_any_v1_faq_proxy" {
@@ -542,6 +573,7 @@ module "resource_watch_manager_any_v1_faq_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/faqs/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_post_v1_temporary_content_image" {
@@ -553,6 +585,7 @@ module "resource_watch_manager_post_v1_temporary_content_image" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/temporary_content_images"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "resource_watch_manager_post_v1_contact_us" {
@@ -564,4 +597,5 @@ module "resource_watch_manager_post_v1_contact_us" {
   uri             = "http://${local.api_gateway_target_url}:30558/api/contact-us"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

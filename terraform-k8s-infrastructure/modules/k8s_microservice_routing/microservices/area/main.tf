@@ -139,6 +139,7 @@ module "area_get_area_v2" {
   uri             = "http://${local.api_gateway_target_url}:30504/api/v2/area"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "area_post_area_v2" {
@@ -150,6 +151,7 @@ module "area_post_area_v2" {
   uri             = "http://${local.api_gateway_target_url}:30504/api/v2/area"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "area_any_area_v2_proxy" {
@@ -161,6 +163,7 @@ module "area_any_area_v2_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30504/api/v2/area/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "area_get_v1_area" {
@@ -172,6 +175,7 @@ module "area_get_v1_area" {
   uri             = "http://${local.api_gateway_target_url}:30504/api/v1/area"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "area_post_v1_area" {
@@ -183,6 +187,7 @@ module "area_post_v1_area" {
   uri             = "http://${local.api_gateway_target_url}:30504/api/v1/area"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "area_any_v1_area_proxy" {
@@ -194,6 +199,7 @@ module "area_any_v1_area_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30504/api/v1/area/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "area_any_v1_download_tiles_proxy" {
@@ -205,6 +211,7 @@ module "area_any_v1_download_tiles_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30504/api/v1/download-tiles/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "area_any_v2_download_tiles_proxy" {
@@ -216,4 +223,5 @@ module "area_any_v2_download_tiles_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30504/api/v2/download-tiles/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

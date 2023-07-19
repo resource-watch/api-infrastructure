@@ -137,6 +137,7 @@ module "glad_analysis_tiled_any_v1_glad_alerts_admin_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30541/api/v1/glad-alerts-athena/admin/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "glad_analysis_tiled_get_v1_glad_alerts_download" {
@@ -148,6 +149,7 @@ module "glad_analysis_tiled_get_v1_glad_alerts_download" {
   uri             = "http://${local.api_gateway_target_url}:30541/api/v1/glad-alerts-athena/download"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "glad_analysis_tiled_post_v1_glad_alerts_download" {
@@ -159,6 +161,7 @@ module "glad_analysis_tiled_post_v1_glad_alerts_download" {
   uri             = "http://${local.api_gateway_target_url}:30541/api/v1/glad-alerts-athena/download"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "glad_analysis_tiled_get_v1_glad_alerts" {
@@ -170,6 +173,7 @@ module "glad_analysis_tiled_get_v1_glad_alerts" {
   uri             = "http://${local.api_gateway_target_url}:30541/api/v1/glad-alerts-athena"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "glad_analysis_tiled_post_v1_glad_alerts" {
@@ -181,6 +185,7 @@ module "glad_analysis_tiled_post_v1_glad_alerts" {
   uri             = "http://${local.api_gateway_target_url}:30541/api/v1/glad-alerts-athena"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "glad_analysis_tiled_get_v1_glad_alerts_latest" {
@@ -192,6 +197,7 @@ module "glad_analysis_tiled_get_v1_glad_alerts_latest" {
   uri             = "http://${local.api_gateway_target_url}:30541/api/v1/glad-alerts-athena/latest"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "glad_analysis_tiled_any_v1_glad_alerts_wdpa_proxy" {
@@ -203,6 +209,7 @@ module "glad_analysis_tiled_any_v1_glad_alerts_wdpa_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30541/api/v1/glad-alerts-athena/wdpa/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "glad_analysis_tiled_any_v1_glad_alerts_use_proxy" {
@@ -214,5 +221,6 @@ module "glad_analysis_tiled_any_v1_glad_alerts_use_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30541/api/v1/glad-alerts-athena/use/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 

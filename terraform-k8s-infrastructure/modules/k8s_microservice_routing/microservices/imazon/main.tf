@@ -106,6 +106,7 @@ module "imazon_get_v1_imazon_alerts" {
   uri             = "http://${local.api_gateway_target_url}:30545/api/v1/imazon-alerts"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "imazon_post_v1_imazon_alerts" {
@@ -117,6 +118,7 @@ module "imazon_post_v1_imazon_alerts" {
   uri             = "http://${local.api_gateway_target_url}:30545/api/v1/imazon-alerts"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "imazon_any_v1_imazon_alerts_proxy" {
@@ -128,6 +130,7 @@ module "imazon_any_v1_imazon_alerts_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30545/api/v1/imazon-alerts/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "imazon_get_v2_imazon_alerts" {
@@ -139,6 +142,7 @@ module "imazon_get_v2_imazon_alerts" {
   uri             = "http://${local.api_gateway_target_url}:30545/api/v2/imazon-alerts"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "imazon_post_v2_imazon_alerts" {
@@ -150,6 +154,7 @@ module "imazon_post_v2_imazon_alerts" {
   uri             = "http://${local.api_gateway_target_url}:30545/api/v2/imazon-alerts"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "imazon_any_v2_imazon_alerts_proxy" {
@@ -161,4 +166,5 @@ module "imazon_any_v2_imazon_alerts_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30545/api/v2/imazon-alerts/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

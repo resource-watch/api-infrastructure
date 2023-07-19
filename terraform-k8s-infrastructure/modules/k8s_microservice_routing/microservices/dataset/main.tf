@@ -137,9 +137,7 @@ module "dataset_get_dataset" {
   uri             = "http://${local.api_gateway_target_url}:30516/api/v1/dataset"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
-  authorizer_id   = var.authorizer_id
   require_api_key = var.require_api_key
-  authorization   = var.authorization
 }
 
 module "dataset_get_dataset_id" {
@@ -151,9 +149,7 @@ module "dataset_get_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30516/api/v1/dataset/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
-  authorizer_id   = var.authorizer_id
   require_api_key = var.require_api_key
-  authorization   = var.authorization
 }
 
 module "dataset_update_dataset_id" {
@@ -165,9 +161,7 @@ module "dataset_update_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30516/api/v1/dataset/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
-  authorizer_id   = var.authorizer_id
   require_api_key = var.require_api_key
-  authorization   = var.authorization
 }
 
 module "dataset_delete_dataset_id" {
@@ -179,9 +173,7 @@ module "dataset_delete_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30516/api/v1/dataset/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
-  authorizer_id   = var.authorizer_id
   require_api_key = var.require_api_key
-  authorization   = var.authorization
 }
 
 module "dataset_post_dataset" {
@@ -193,13 +185,11 @@ module "dataset_post_dataset" {
   uri             = "http://${local.api_gateway_target_url}:30516/api/v1/dataset"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
-  authorizer_id   = var.authorizer_id
   require_api_key = var.require_api_key
-  authorization   = var.authorization
 }
 
 module "dataset_delete_dataset_id_proxy" {
-  source          = "../endpoint"
+  source          = "../../endpoint"
   x_rw_domain     = var.x_rw_domain
   api_gateway     = var.api_gateway
   api_resource    = module.dataset_by_user_id_resource.aws_api_gateway_resource
@@ -207,6 +197,7 @@ module "dataset_delete_dataset_id_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30516/api/v1/dataset/by-user/{userId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "dataset_any_dataset_id_proxy" {
@@ -219,9 +210,7 @@ module "dataset_any_dataset_id_proxy" {
   vpc_link                    = var.vpc_link
   connection_type             = var.connection_type
   endpoint_request_parameters = ["datasetId"]
-  authorizer_id               = var.authorizer_id
   require_api_key             = var.require_api_key
-  authorization               = var.authorization
 }
 
 module "dataset_post_dataset_find_by_ids" {
@@ -233,9 +222,7 @@ module "dataset_post_dataset_find_by_ids" {
   uri             = "http://${local.api_gateway_target_url}:30516/api/v1/dataset/find-by-ids"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
-  authorizer_id   = var.authorizer_id
   require_api_key = var.require_api_key
-  authorization   = var.authorization
 }
 
 module "dataset_post_dataset_upload" {
@@ -247,7 +234,5 @@ module "dataset_post_dataset_upload" {
   uri             = "http://${local.api_gateway_target_url}:30516/api/v1/dataset/upload"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
-  authorizer_id   = var.authorizer_id
   require_api_key = var.require_api_key
-  authorization   = var.authorization
 }

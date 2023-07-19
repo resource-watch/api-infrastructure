@@ -129,6 +129,7 @@ module "bigquery_get_v1_query_bigquery_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30506/api/v1/bigquery/query/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "bigquery_post_v1_query_bigquery_dataset_id" {
@@ -140,6 +141,7 @@ module "bigquery_post_v1_query_bigquery_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30506/api/v1/bigquery/query/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "bigquery_get_v1_download_bigquery_dataset_id" {
@@ -151,6 +153,7 @@ module "bigquery_get_v1_download_bigquery_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30506/api/v1/bigquery/download/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "bigquery_post_v1_download_bigquery_dataset_id" {
@@ -162,6 +165,7 @@ module "bigquery_post_v1_download_bigquery_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30506/api/v1/bigquery/download/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "bigquery_get_v1_fields_bigquery_dataset_id" {
@@ -173,6 +177,7 @@ module "bigquery_get_v1_fields_bigquery_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30506/api/v1/bigquery/fields/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "bigquery_post_v1_rest_datasets_bigquery" {
@@ -184,5 +189,6 @@ module "bigquery_post_v1_rest_datasets_bigquery" {
   uri             = "http://${local.api_gateway_target_url}:30506/api/v1/bigquery/rest-datasets/bigquery"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 

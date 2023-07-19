@@ -90,4 +90,5 @@ module "gfw_contact_any_v1_form_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30570/api/v1/form/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

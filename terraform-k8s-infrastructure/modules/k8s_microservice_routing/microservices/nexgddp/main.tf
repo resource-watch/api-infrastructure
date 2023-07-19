@@ -274,6 +274,7 @@ module "nexgddp_get_v1_query_nexgddp_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30549/api/v1/nexgddp/query/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "nexgddp_post_v1_query_nexgddp_dataset_id" {
@@ -285,6 +286,7 @@ module "nexgddp_post_v1_query_nexgddp_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30549/api/v1/nexgddp/query/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "nexgddp_get_v1_fields_nexgddp_dataset_id" {
@@ -296,6 +298,7 @@ module "nexgddp_get_v1_fields_nexgddp_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30549/api/v1/nexgddp/fields/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "nexgddp_post_v1_rest_datasets_nexgddp" {
@@ -307,6 +310,7 @@ module "nexgddp_post_v1_rest_datasets_nexgddp" {
   uri             = "http://${local.api_gateway_target_url}:30549/api/v1/nexgddp/rest-datasets/nexgddp"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "nexgddp_delete_v1_rest_datasets_nexgddp_dataset_id" {
@@ -318,6 +322,7 @@ module "nexgddp_delete_v1_rest_datasets_nexgddp_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30549/api/v1/nexgddp/rest-datasets/nexgddp/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "nexgddp_get_v1_query_loca_dataset_id" {
@@ -329,6 +334,7 @@ module "nexgddp_get_v1_query_loca_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30549/api/v1/nexgddp/query/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "nexgddp_post_v1_query_loca_dataset_id" {
@@ -340,6 +346,7 @@ module "nexgddp_post_v1_query_loca_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30549/api/v1/nexgddp/query/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "nexgddp_get_v1_fields_loca_dataset_id" {
@@ -351,6 +358,7 @@ module "nexgddp_get_v1_fields_loca_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30549/api/v1/nexgddp/fields/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "nexgddp_post_v1_rest_datasets_loca" {
@@ -362,6 +370,7 @@ module "nexgddp_post_v1_rest_datasets_loca" {
   uri             = "http://${local.api_gateway_target_url}:30549/api/v1/nexgddp/rest-datasets/nexgddp"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "nexgddp_any_v1_nexgddp_proxy" {
@@ -373,6 +382,7 @@ module "nexgddp_any_v1_nexgddp_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30549/api/v1/nexgddp/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "nexgddp_any_v1_loca_proxy" {
@@ -384,6 +394,7 @@ module "nexgddp_any_v1_loca_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30549/api/v1/nexgddp/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "gee_tiles_any_layer_id_tile_nexgddp_proxy_resource" {

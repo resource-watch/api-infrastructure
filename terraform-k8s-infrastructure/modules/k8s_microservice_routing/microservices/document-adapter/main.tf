@@ -313,6 +313,7 @@ module "document_adapter_get_query_csv_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/query/csv/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "document_adapter_post_query_csv_dataset_id" {
@@ -324,6 +325,7 @@ module "document_adapter_post_query_csv_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/query/csv/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "document_adapter_get_query_json_dataset_id" {
@@ -335,6 +337,7 @@ module "document_adapter_get_query_json_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/query/json/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "document_adapter_post_query_json_dataset_id" {
@@ -346,6 +349,7 @@ module "document_adapter_post_query_json_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/query/json/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "document_adapter_get_query_tsv_dataset_id" {
@@ -357,6 +361,7 @@ module "document_adapter_get_query_tsv_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/query/tsv/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "document_adapter_post_query_tsv_dataset_id" {
@@ -368,6 +373,7 @@ module "document_adapter_post_query_tsv_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/query/tsv/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "document_adapter_get_query_xml_dataset_id" {
@@ -379,6 +385,7 @@ module "document_adapter_get_query_xml_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/query/xml/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "document_adapter_post_query_xml_dataset_id" {
@@ -390,6 +397,7 @@ module "document_adapter_post_query_xml_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/query/xml/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "document_adapter_get_download_csv_dataset_id" {
@@ -401,6 +409,7 @@ module "document_adapter_get_download_csv_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/download/csv/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "document_adapter_post_download_csv_dataset_id" {
@@ -412,6 +421,7 @@ module "document_adapter_post_download_csv_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/download/csv/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "document_adapter_get_download_json_dataset_id" {
@@ -423,6 +433,7 @@ module "document_adapter_get_download_json_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/download/json/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "document_adapter_post_download_json_dataset_id" {
@@ -434,6 +445,7 @@ module "document_adapter_post_download_json_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/download/json/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "document_adapter_get_download_tsv_dataset_id" {
@@ -445,6 +457,7 @@ module "document_adapter_get_download_tsv_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/download/tsv/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "document_adapter_post_download_tsv_dataset_id" {
@@ -456,6 +469,7 @@ module "document_adapter_post_download_tsv_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/download/tsv/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "document_adapter_get_download_xml_dataset_id" {
@@ -467,6 +481,7 @@ module "document_adapter_get_download_xml_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/download/xml/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "document_adapter_post_download_xml_dataset_id" {
@@ -478,6 +493,7 @@ module "document_adapter_post_download_xml_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/download/xml/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "document_adapter_get_fields_csv_dataset_id" {
@@ -489,6 +505,7 @@ module "document_adapter_get_fields_csv_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/fields/csv/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "document_adapter_get_fields_json_dataset_id" {
@@ -500,6 +517,7 @@ module "document_adapter_get_fields_json_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/fields/json/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "document_adapter_get_fields_tsv_dataset_id" {
@@ -511,6 +529,7 @@ module "document_adapter_get_fields_tsv_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/fields/tsv/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "document_adapter_get_fields_xml_dataset_id" {
@@ -522,6 +541,7 @@ module "document_adapter_get_fields_xml_dataset_id" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/fields/xml/{datasetId}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "document_adapter_post_dataset_id_concat" {
@@ -581,4 +601,5 @@ module "document_adapter_any_doc_datasets_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30521/api/v1/document/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }

@@ -162,6 +162,7 @@ module "metadata_get" {
   uri             = "http://${local.api_gateway_target_url}:30548/api/v1/metadata"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 // Dataset
@@ -333,6 +334,7 @@ module "metadata_dataset_post_find_by_ids" {
   uri             = "http://${local.api_gateway_target_url}:30548/api/v1/dataset/metadata/find-by-ids"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
+  require_api_key = var.require_api_key
 }
 
 module "metadata_layer_post_find_by_ids" {
