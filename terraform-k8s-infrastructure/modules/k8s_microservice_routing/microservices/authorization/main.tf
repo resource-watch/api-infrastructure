@@ -153,7 +153,7 @@ module "authorization_any_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30505/auth/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
-  require_api_key = var.require_api_key
+  require_api_key = false
 }
 
 module "authorization_get" {
@@ -165,7 +165,7 @@ module "authorization_get" {
   uri             = "http://${local.api_gateway_target_url}:30505/auth"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
-  require_api_key = var.require_api_key
+  require_api_key = false
 }
 
 module "authorization_get_v1_deletion" {
@@ -213,7 +213,7 @@ module "authorization_get_v1_organization" {
   uri             = "http://${local.api_gateway_target_url}:30505/api/v1/organization"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
-  require_api_key = var.require_api_key
+  require_api_key = false
 }
 
 module "authorization_post_v1_organization" {
@@ -225,7 +225,7 @@ module "authorization_post_v1_organization" {
   uri             = "http://${local.api_gateway_target_url}:30505/api/v1/organization"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
-  require_api_key = var.require_api_key
+  require_api_key = false
 }
 
 module "authorization_any_v1_organization_proxy" {
@@ -237,7 +237,7 @@ module "authorization_any_v1_organization_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30505/api/v1/organization/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
-  require_api_key = var.require_api_key
+  require_api_key = false
 }
 
 module "authorization_get_v1_application" {
@@ -249,7 +249,7 @@ module "authorization_get_v1_application" {
   uri             = "http://${local.api_gateway_target_url}:30505/api/v1/application"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
-  require_api_key = var.require_api_key
+  require_api_key = false
 }
 
 module "authorization_post_v1_application" {
@@ -261,7 +261,7 @@ module "authorization_post_v1_application" {
   uri             = "http://${local.api_gateway_target_url}:30505/api/v1/application"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
-  require_api_key = var.require_api_key
+  require_api_key = false
 }
 
 module "authorization_any_v1_application_proxy" {
@@ -273,7 +273,7 @@ module "authorization_any_v1_application_proxy" {
   uri             = "http://${local.api_gateway_target_url}:30505/api/v1/application/{proxy}"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
-  require_api_key = var.require_api_key
+  require_api_key = false
 }
 
 module "authorization_post_v1_request_validate" {
@@ -285,5 +285,5 @@ module "authorization_post_v1_request_validate" {
   uri             = "http://${local.api_gateway_target_url}:30505/api/v1/request/validate"
   vpc_link        = var.vpc_link
   connection_type = var.connection_type
-  require_api_key = var.require_api_key
+  require_api_key = false
 }
