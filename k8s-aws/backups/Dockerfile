@@ -34,6 +34,9 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
 RUN unzip awscliv2.zip
 RUN ./aws/install
 
+# Install Python dependencies
+RUN pip install boto3 click requests requests_aws4auth
+
 # Cron
 RUN mkdir /cronjobs && mkdir /cronjobs/backups
 
@@ -43,7 +46,7 @@ RUN mkdir /cronjobs/backups/mongo-ct
 RUN mkdir /cronjobs/backups/postgres
 RUN mkdir /cronjobs/backups/neo4j
 COPY automongobackup.sh /cronjobs/automongobackup.sh
-COPY autoelasticbackup.sh /cronjobs/autoelasticbackup.sh
+COPY autoelasticbackup.py /cronjobs/autoelasticbackup.py
 COPY autopostgresbackup.sh /cronjobs/autopostgresbackup.sh
 COPY autoneobackup.sh /cronjobs/autoneobackup.sh
 

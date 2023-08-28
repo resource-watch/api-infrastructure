@@ -12,19 +12,24 @@ spec:
         spec:
           containers:
             - name: kubecron
-              image: vizzuality/kubecron:2.0.0
+              image: vizzuality/kubecron:2.1.5
               imagePullPolicy: Always
               env:
-                - name: AWS_BACKUPS_BUCKET_URI
-                  valueFrom:
-                    secretKeyRef:
-                      name: backups
-                      key: AWS_BACKUPS_BUCKET_URI
                 - name: AWS_BACKUPS_BUCKET_NAME
                   valueFrom:
                     secretKeyRef:
                       name: backups
                       key: AWS_BACKUPS_BUCKET_NAME
+                - name: ES_URI
+                    valueFrom:
+                      secretKeyRef:
+                        name: backups
+                        key: ES_URI
+                - name: ES_BACKUP_IAM_ROLE
+                    valueFrom:
+                      secretKeyRef:
+                        name: backups
+                        key: ES_BACKUP_IAM_ROLE
               args:
                 - elasticsearch
           restartPolicy: OnFailure
