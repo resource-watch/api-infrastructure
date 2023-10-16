@@ -1,0 +1,24 @@
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "",
+			"Effect": "Allow",
+			"Action": "apigateway:*",
+			"Resource": [
+				"arn:aws:apigateway:*::/apikeys/*",
+				"arn:aws:apigateway:*::/apikeys",
+				"arn:aws:apigateway:*::/restapis/*/authorizers",
+				"arn:aws:apigateway:*::/restapis/*/authorizers/*",
+				"arn:aws:apigateway:*::/usageplans/*/keys/*",
+				"arn:aws:apigateway:*::/usageplans/*/keys"
+			]
+		},
+		{
+			"Sid": "",
+			"Effect": "Allow",
+			"Action": "apigateway:*",
+			"Resource": "arn:aws:apigateway:*::/usageplans/*"
+		}
+	]
+}
