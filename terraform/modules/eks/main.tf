@@ -181,7 +181,6 @@ data "aws_iam_policy_document" "eks-admin-APIGatewayAccessPolicy-document" {
 
 resource "aws_iam_policy" "eks-admin-APIGatewayAccessPolicy" {
   name   = "APIGatewayAccessPolicy"
-  path   = "/"
   policy = data.aws_iam_policy_document.eks-admin-APIGatewayAccessPolicy-document.json
 }
 
