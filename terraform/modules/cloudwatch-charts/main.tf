@@ -58,6 +58,20 @@ resource "aws_cloudwatch_dashboard" "rw_api_keys_usage" {
           "title": "Requests per organization",
           "view": "pie"
         }
+      },
+      {
+        "type": "log",
+        "x": 0,
+        "y": 12,
+        "width": 12,
+        "height": 6,
+        "properties": {
+          "query": "SOURCE 'api-keys-usage' | fields @message\n| stats count(*) as requests by coalesce(loggedUser.name, \"<no user>\") as requests_count\n| sort by requests_count",
+          "region": "us-east-1",
+          "stacked": false,
+          "title": "Requests per user",
+          "view": "pie"
+        }
       }
     ]
   })
