@@ -83,3 +83,7 @@ variable "fw_backend_url" {
   type        = string
   description = "The URL of the backend server to which the request is proxied"
 }
+
+variable "require_api_key" {
+  type    = bool
+}

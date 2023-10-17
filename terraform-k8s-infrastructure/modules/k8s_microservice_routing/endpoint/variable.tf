@@ -46,3 +46,8 @@ variable "connection_type" {
   type        = string
   description = "API Gateway integration type"
 }
+
+variable "require_api_key" {
+  type    = bool
+  default = false
+}

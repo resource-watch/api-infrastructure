@@ -2,8 +2,10 @@ resource "aws_api_gateway_method" "endpoint_proxy_method" {
   rest_api_id        = var.api_gateway.id
   resource_id        = var.api_resource.id
   http_method        = var.method
-  authorization      = "NONE"
   request_parameters = { "method.request.path.proxy" = true }
+  authorization      = var.authorization
+  api_key_required   = var.require_api_key
+  authorizer_id      = var.authorizer_id
 }
 
 resource "aws_api_gateway_integration" "endpoint_proxy_integration" {

@@ -219,7 +219,7 @@ module "documentdb" {
   enabled_cloudwatch_logs_exports = var.db_logs_exports
   cluster_parameters = [
     {
-      apply_method = "immediate"
+      apply_method = "pending-reboot"
       name         = "profiler"
       value        = "disabled"
     },
@@ -274,6 +274,10 @@ module "email-templates" {
   count             = var.deploy_sparkpost_templates ? 1 : 0
   source            = "./modules/email-templates"
   sparkpost_api_key = var.sparkpost_api_key
+}
+
+module "cloudwatch-charts" {
+  source = "./modules/cloudwatch-charts"
 }
 
 # module "eks_scaling" {

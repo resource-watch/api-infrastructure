@@ -30,12 +30,12 @@ kind: ClusterRole
 metadata:
   name: fluentd-role
 rules:
-  - apiGroups: [""]
+  - apiGroups: [ "" ]
     resources:
       - namespaces
       - pods
       - pods/logs
-    verbs: ["get", "list", "watch"]
+    verbs: [ "get", "list", "watch" ]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -162,7 +162,7 @@ spec:
       initContainers:
         - name: copy-fluentd-config
           image: busybox
-          command: ['sh', '-c', 'cp /config-volume/..data/* /fluentd/etc']
+          command: [ 'sh', '-c', 'cp /config-volume/..data/* /fluentd/etc' ]
           volumeMounts:
             - name: config-volume
               mountPath: /config-volume
@@ -170,7 +170,7 @@ spec:
               mountPath: /fluentd/etc
         - name: update-log-driver
           image: busybox
-          command: ['sh','-c','']
+          command: [ 'sh','-c','' ]
       containers:
         - name: fluentd-cloudwatch
           image: fluent/fluentd-kubernetes-daemonset:v1.7.3-debian-cloudwatch-1.0
@@ -214,7 +214,7 @@ spec:
           configMap:
             name: fluentd-config
         - name: fluentdconf
-          emptyDir: {}
+          emptyDir: { }
         - name: varlog
           hostPath:
             path: /var/log

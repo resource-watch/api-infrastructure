@@ -51,6 +51,7 @@ module "k8s_microservice_routing" {
   tf_core_state_bucket = var.tf_core_state_bucket
   x_rw_domain          = var.x_rw_domain
   fw_backend_url       = var.fw_backend_url
+  require_api_key      = var.require_api_key
 }
 
 module "k8s_namespaces" {
