@@ -49,13 +49,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "aq_bucket_lifecycle_configurat
   }
 }
 
-resource "aws_s3_object" "object" {
-  bucket       = aws_s3_bucket.aq_bucket.id
-  acl          = "private"
-  key          = "food-supply-chain/"
-  content_type = "application/x-directory"
-}
-
 resource "aws_iam_user" "aq_s3_user" {
   name = "aq_s3_user"
 

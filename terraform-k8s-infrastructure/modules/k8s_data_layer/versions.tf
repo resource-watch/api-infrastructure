@@ -50,7 +50,8 @@ provider "helm" {
         "eks",
         "get-token",
         "--cluster-name",
-      var.cluster_name]
+        var.cluster_name
+      ]
       command = "aws"
     }
   }
