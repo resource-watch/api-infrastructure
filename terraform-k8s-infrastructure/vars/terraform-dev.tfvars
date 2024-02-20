@@ -10,4 +10,4 @@ elasticsearch_data_nodes_type            = "m5.large.elasticsearch"
 x_rw_domain                              = "dev-api.resourcewatch.org"
 namespaces                               = ["core", "aqueduct", "rw", "gfw", "prep", "climate-watch"]
 fw_backend_url                           = "https://dev-fw-api.globalforestwatch.org"
-require_api_key                          = true
+require_api_key                          = false
