@@ -175,6 +175,15 @@ resource "aws_iam_policy" "eks-admin-DatabaseBackupToS3Policy" {
   policy = data.aws_iam_policy_document.eks-admin-DatabaseBackupToS3-document.json
 }
 
+data "aws_iam_policy_document" "eks-admin-APIGatewayAccessPolicy-document" {
+  source_policy_documents = [file("${path.module}/api-gateway-access-policy.json")]
+}
+
+resource "aws_iam_policy" "eks-admin-APIGatewayAccessPolicy" {
+  name   = "APIGatewayAccessPolicy"
+  policy = data.aws_iam_policy_document.eks-admin-APIGatewayAccessPolicy-document.json
+}
+
 resource "aws_iam_role" "ebs_csi_iam_role" {
   name = "AmazonEKS_EBS_CSI_DriverRole"
 
@@ -242,5 +251,10 @@ resource "aws_iam_role_policy_attachment" "ebs-csi-service-role-AmazonEKS_EBS_CS
 
 resource "aws_iam_role_policy_attachment" "eks-node-group-admin-AmazonEKS_EBS_CSI_DriverRole" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+  role       = aws_iam_role.eks-node-group-iam-role.name
+}
+
+resource "aws_iam_role_policy_attachment" "eks-node-group-admin-APIGatewayAccessPolicy" {
+  policy_arn = aws_iam_policy.eks-admin-APIGatewayAccessPolicy.arn
   role       = aws_iam_role.eks-node-group-iam-role.name
 }
