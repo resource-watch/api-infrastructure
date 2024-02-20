@@ -3,7 +3,7 @@ port: 27017
 
 replicaSetName: mongodb-apps
 
-podDisruptionBudget: { }
+podDisruptionBudget: {}
 # maxUnavailable: 1
 # minAvailable: 2
 
@@ -21,7 +21,7 @@ image:
   pullPolicy: IfNotPresent
 
 # Annotations to be added to MongoDB pods
-podAnnotations: { }
+podAnnotations: {}
 
 resources:
   requests:
@@ -33,7 +33,7 @@ resources:
 
 ## Node selector
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
-nodeSelector: { }
+nodeSelector: {}
 
 affinity:
   nodeAffinity:
@@ -67,10 +67,10 @@ persistentVolume:
   accessModes:
     - ReadWriteOnce
   size: 50Gi
-  annotations: { }
+  annotations: {}
 
 # Annotations to be added to the service
-serviceAnnotations: { }
+serviceAnnotations: {}
 
 tls:
   # Enable or disable MongoDB TLS support
