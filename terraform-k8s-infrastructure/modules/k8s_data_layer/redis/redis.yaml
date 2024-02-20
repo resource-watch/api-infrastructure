@@ -6,8 +6,8 @@ global:
   # imageRegistry: dockerhub
   imagePullSecrets:
     - regcred
-#   storageClass: myStorageClass
-  redis: {}
+  #   storageClass: myStorageClass
+  redis: { }
 
 ## Bitnami Redis image version
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
@@ -127,8 +127,8 @@ sentinel:
     ## set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    annotations: {}
-    labels: {}
+    annotations: { }
+    labels: { }
     loadBalancerIP:
 
 ## Specifies the Kubernetes Cluster's Domain Name.
@@ -149,8 +149,8 @@ networkPolicy:
 
   ## Allow connections from other namespacess. Just set label for namespace and set label for pods (optional).
   ##
-  ingressNSMatchLabels: {}
-  ingressNSPodMatchLabels: {}
+  ingressNSMatchLabels: { }
+  ingressNSPodMatchLabels: { }
 
 serviceAccount:
   ## Specifies whether a ServiceAccount should be created
@@ -176,7 +176,7 @@ rbac:
     #      - use
     #    resourceNames:
     #      - gce.unprivileged
-    rules: []
+    rules: [ ]
 
 ## Redis pod Security Context
 securityContext:
@@ -208,10 +208,10 @@ usePassword: false
 usePasswordFile: false
 
 ## Persist data to a persistent volume (Redis Master)
-persistence: {}
+persistence: { }
   ## A manually managed Persistent Volume and Claim
   ## Requires persistence.enabled: true
-  ## If defined, PVC must be created manually before volume will be bound
+## If defined, PVC must be created manually before volume will be bound
 # existingClaim:
 
 # Redis port
@@ -237,7 +237,7 @@ master:
   ## extraFlags:
   ##  - "--maxmemory-policy volatile-ttl"
   ##  - "--repl-backlog-size 1024mb"
-  extraFlags: []
+  extraFlags: [ ]
   ## Comma-separated list of Redis commands to disable
   ##
   ## Can be used to disable Redis commands for security reasons.
@@ -250,8 +250,8 @@ master:
 
   ## Redis Master additional pod labels and annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  podLabels: {}
-  podAnnotations: {}
+  podLabels: { }
+  podAnnotations: { }
 
   ## Redis Master resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -318,8 +318,8 @@ master:
     ## set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    annotations: {}
-    labels: {}
+    annotations: { }
+    labels: { }
     loadBalancerIP:
     # loadBalancerSourceRanges: ["10.0.0.0/8"]
 
@@ -347,8 +347,8 @@ master:
     size: 20Gi
     ## Persistent Volume selectors
     ## https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector
-    matchLabels: {}
-    matchExpressions: {}
+    matchLabels: { }
+    matchExpressions: { }
 
   ## Update strategy, can be set to RollingUpdate or onDelete by default.
   ## https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
@@ -382,8 +382,8 @@ slave:
     ## set the LoadBalancer service type to internal only.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
-    annotations: {}
-    labels: {}
+    annotations: { }
+    labels: { }
     loadBalancerIP:
     # loadBalancerSourceRanges: ["10.0.0.0/8"]
 
@@ -397,7 +397,7 @@ slave:
   ##
   configmap:
   ## Redis extra flags
-  extraFlags: []
+  extraFlags: [ ]
   ## List of Redis commands to disable
   disableCommands:
     - FLUSHDB
@@ -449,8 +449,8 @@ slave:
   # schedulerName:
 
   ## Redis slave pod Annotation and Labels
-  podLabels: {}
-  podAnnotations: {}
+  podLabels: { }
+  podAnnotations: { }
 
   ## Redis slave pod priorityClassName
   # priorityClassName: {}
@@ -479,8 +479,8 @@ slave:
     size: 8Gi
     ## Persistent Volume selectors
     ## https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector
-    matchLabels: {}
-    matchExpressions: {}
+    matchLabels: { }
+    matchExpressions: { }
 
   ## Update strategy, can be set to RollingUpdate or onDelete by default.
   ## https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
@@ -543,17 +543,17 @@ metrics:
     ## Use serviceLoadBalancerIP to request a specific static IP,
     ## otherwise leave blank
     # loadBalancerIP:
-    annotations: {}
-    labels: {}
+    annotations: { }
+    labels: { }
 
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
   prometheusRule:
     enabled: false
-    additionalLabels: {}
+    additionalLabels: { }
     namespace: ""
-    rules: []
+    rules: [ ]
       ## These are just examples rules, please adapt them to your needs.
       ## Make sure to constraint the rules to the current postgresql service.
       #  - alert: RedisDown
@@ -582,7 +582,7 @@ metrics:
       #    labels:
       #      severity: error
       #    annotations:
-      #      summary: Redis instance {{ "{{ $instance }}" }} has evicted keys
+    #      summary: Redis instance {{ "{{ $instance }}" }} has evicted keys
     #      description: Redis instance {{ "{{ $instance }}" }} has evicted {{ "{{ $value }}" }} keys in the last 5 minutes.
 
 ##
@@ -602,7 +602,7 @@ volumePermissions:
     ##
     # pullSecrets:
     #   - myRegistryKeySecretName
-  resources: {}
+  resources: { }
   # resources:
   #   requests:
   #     memory: 128Mi
@@ -621,7 +621,7 @@ configmap: |-
 ## used to perform sysctl operation to modify Kernel settings (needed sometimes to avoid warnings)
 sysctlImage:
   enabled: false
-  command: []
+  command: [ ]
   registry: docker.io
   repository: bitnami/minideb
   tag: buster
