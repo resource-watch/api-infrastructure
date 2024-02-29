@@ -16,5 +16,5 @@ ebs_csi_addon_version           = "v1.27.0-eksbuild.1"
 deploy_canaries                 = true
 gateway_node_group_desired_size = 2
 hibernate                       = false
-aq_bucket_cors_allowed_origin   = "https://wri.org/"
+aq_bucket_cors_allowed_origin   = "https://www.wri.org"
 deploy_sparkpost_templates      = true
