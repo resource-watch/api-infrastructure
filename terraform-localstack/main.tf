@@ -80,7 +80,6 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.gfw-guira.endpoints),
       jsonencode(module.gfw-forma.endpoints),
       jsonencode(module.gfw-ogr.endpoints),
-      jsonencode(module.gfw-ogr-gfw-pro.endpoints),
       jsonencode(module.gfw-prodes.endpoints),
       jsonencode(module.gfw-umd.endpoints),
       jsonencode(module.gfw-user.endpoints),
@@ -463,15 +462,6 @@ module "gfw-ogr" {
   connection_type = "INTERNET"
   target_url      = var.microservice_host
   v2_resource     = module.v2_resource.aws_api_gateway_resource
-}
-
-module "gfw-ogr-gfw-pro" {
-  source          = "../terraform-k8s-infrastructure/modules/k8s_microservice_routing/microservices/gfw-ogr-gfw-pro"
-  api_gateway     = aws_api_gateway_rest_api.rw_api_gateway
-  x_rw_domain     = var.x_rw_domain
-  v1_resource     = module.v1_resource.aws_api_gateway_resource
-  connection_type = "INTERNET"
-  target_url      = var.microservice_host
 }
 
 module "gfw-prodes" {

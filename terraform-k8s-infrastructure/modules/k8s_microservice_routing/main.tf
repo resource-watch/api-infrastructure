@@ -263,7 +263,6 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.gfw-guira.endpoints),
       jsonencode(module.gfw-forma.endpoints),
       jsonencode(module.gfw-ogr.endpoints),
-      jsonencode(module.gfw-ogr-gfw-pro.endpoints),
       jsonencode(module.gfw-prodes.endpoints),
       jsonencode(module.gfw-umd.endpoints),
       jsonencode(module.gfw-user.endpoints),
@@ -971,23 +970,6 @@ module "gfw-ogr" {
   ]
 }
 
-module "gfw-ogr-gfw-pro" {
-  source           = "./microservices/gfw-ogr-gfw-pro"
-  api_gateway      = aws_api_gateway_rest_api.rw_api_gateway
-  cluster_ca       = var.cluster_ca
-  cluster_endpoint = var.cluster_endpoint
-  cluster_name     = var.cluster_name
-  x_rw_domain      = var.x_rw_domain
-  vpc              = var.vpc
-  vpc_link         = aws_api_gateway_vpc_link.rw_api_apps_lb_vpc_link
-  v1_resource      = module.v1_resource.aws_api_gateway_resource
-  connection_type  = "VPC_LINK"
-  require_api_key  = var.require_api_key
-
-  eks_asg_names = [
-    data.aws_autoscaling_groups.gfw_autoscaling_group.names.0
-  ]
-}
 
 module "gfw-prodes" {
   source           = "./microservices/gfw-prodes"
