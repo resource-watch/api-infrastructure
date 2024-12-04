@@ -3,5 +3,5 @@ output "api_gateway_id" {
 }
 
 output "access_url" {
-  value = "http://host.docker.internal:4566/restapis/${aws_api_gateway_rest_api.rw_api_gateway.id}/prod/_user_request_"
+  value = "http://host.docker.internal:4566/_aws/execute-api/${aws_api_gateway_rest_api.rw_api_gateway.id}/prod"
 }
