@@ -8,7 +8,7 @@ In local development, we use localstack to emulate API Gateway functionality of 
 docker run --rm -it -p 4566:4566 localstack/localstack:4.0.3
 ```
 
-2 - Terraform apply the content of this folder and confirm the changes in the prompt (use terraform version `v1.3.6`). This will output an `access_url` of the form `http://host.docker.internal:4566/restapis/{gateway_id}/prod/_user_request_`. If you choose to use a different port in Step 1, update the access_url variable in outputs.tf to reflect the chosen port..
+2 - Terraform apply the content of this folder and confirm the changes in the prompt (use terraform version `v1.3.6`). This will output an `access_url` of the form `http://host.docker.internal:4566/_aws/execute-api/{gateway_id}/prod`. If you choose to use a different port in Step 1, update the access_url variable in outputs.tf to reflect the chosen port..
 ```bash
 terraform apply
 ```
