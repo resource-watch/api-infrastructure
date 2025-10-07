@@ -9,16 +9,19 @@ global:
   #   storageClass: myStorageClass
   redis: { }
 
+## Architecture (required in v16+)
+architecture: standalone
+
 ## Bitnami Redis image version
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
 ##
 image:
   registry: docker.io
-  repository: bitnami/redis
+  repository: bitnamilegacy/redis
   ## Bitnami Redis image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 5.0.8-debian-10-r11
+  tag: "6.2.14"
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -179,9 +182,12 @@ rbac:
     rules: [ ]
 
 ## Redis pod Security Context
-securityContext:
+podSecurityContext:
   enabled: true
   fsGroup: 1001
+
+containerSecurityContext:
+  enabled: true
   runAsUser: 1001
   ## sysctl settings for master and slave pods
   ##
@@ -192,7 +198,8 @@ securityContext:
   #   value: "10000"
 
 ## Use password authentication
-usePassword: false
+auth:
+  enabled: false
 ## Redis password (both master and slave)
 ## Defaults to a random 10-character alphanumeric string if not set and usePassword is true
 ## ref: https://github.com/bitnami/bitnami-docker-redis#setting-the-server-password-on-first-run
@@ -225,7 +232,8 @@ master:
   ##
   ## Can be used to specify command line arguments, for example:
   ##
-  command: "/run.sh"
+  # command:
+  #   - "/run.sh"
   ## Additional Redis configuration for the master nodes
   ## ref: https://redis.io/topics/config
   ##
@@ -307,7 +315,8 @@ master:
   service:
     ##  Redis Master Service type
     type: ClusterIP
-    port: 6379
+    ports:
+      redis: 6379
 
     ## Specify the nodePort value for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
@@ -362,17 +371,19 @@ master:
   # priorityClassName: {}
 
 ##
-## Redis Slave properties
+## Redis Replica properties (renamed from Slave)
 ## Note: service.type is a mandatory parameter
 ## The rest of the parameters are either optional or, if undefined, will inherit those declared in Redis Master
 ##
-slave:
-  ## Slave Service properties
+replica:
+  replicaCount: 0
+  ## Replica Service properties
   service:
-    ## Redis Slave Service type
+    ## Redis Replica Service type
     type: ClusterIP
     ## Redis port
-    port: 6379
+    ports:
+      redis: 6379
     ## Specify the nodePort value for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
@@ -387,12 +398,13 @@ slave:
     loadBalancerIP:
     # loadBalancerSourceRanges: ["10.0.0.0/8"]
 
-  ## Redis slave port
+  ## Redis replica port
   port: 6379
   ## Can be used to specify command line arguments, for example:
   ##
-  command: "/run.sh"
-  ## Additional Redis configuration for the slave nodes
+  # command:
+  #   - "/run.sh"
+  ## Additional Redis configuration for the replica nodes
   ## ref: https://redis.io/topics/config
   ##
   configmap:
@@ -403,7 +415,7 @@ slave:
     - FLUSHDB
     - FLUSHALL
 
-  ## Redis Slave pod/node affinity/anti-affinity
+  ## Redis Replica pod/node affinity/anti-affinity
   ##
   affinity:
     nodeAffinity:
@@ -415,7 +427,7 @@ slave:
                 values:
                   - core
 
-  ## Configure extra options for Redis Slave liveness and readiness probes
+  ## Configure extra options for Redis Replica liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ##
   livenessProbe:
@@ -433,13 +445,13 @@ slave:
     successThreshold: 1
     failureThreshold: 5
 
-  ## Redis slave Resource
+  ## Redis replica Resource
   # resources:
   #   requests:
   #     memory: 256Mi
   #     cpu: 100m
 
-  ## Redis slave selectors and tolerations for pod assignment
+  ## Redis replica selectors and tolerations for pod assignment
   # nodeSelector: {"beta.kubernetes.io/arch": "amd64"}
   # tolerations: []
 
@@ -448,11 +460,11 @@ slave:
   ##
   # schedulerName:
 
-  ## Redis slave pod Annotation and Labels
+  ## Redis replica pod Annotation and Labels
   podLabels: { }
   podAnnotations: { }
 
-  ## Redis slave pod priorityClassName
+  ## Redis replica pod priorityClassName
   # priorityClassName: {}
 
   ## Enable persistence using Persistent Volume Claims
@@ -611,7 +623,7 @@ volumePermissions:
 ## Redis config file
 ## ref: https://redis.io/topics/config
 ##
-configmap: |-
+commonConfiguration: |-
   # Enable AOF https://redis.io/topics/persistence#append-only-file
   appendonly yes
   # Disable RDB persistence, AOF persistence already enabled.
@@ -619,7 +631,7 @@ configmap: |-
 
 ## Sysctl InitContainer
 ## used to perform sysctl operation to modify Kernel settings (needed sometimes to avoid warnings)
-sysctlImage:
+sysctl:
   enabled: false
   command: [ ]
   registry: docker.io
