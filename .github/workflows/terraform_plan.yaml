@@ -1,13 +1,13 @@
 name: Plan terraform changes for base branch
 
-#on: [pull_request]
-#
-#jobs:
-#  plan:
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#    - uses: actions/checkout@v1
+on: [pull_request]
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
 #    - name: Plan production
 #      if: github.base_ref == 'production'
 #      env:
@@ -30,14 +30,14 @@ name: Plan terraform changes for base branch
 #        CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
 #        TF_VAR_sparkpost_api_key: ${{ secrets.sparkpost_api_key }}
 #      run: ./scripts/infra plan
-#    - name: Plan dev
-#      if: github.base_ref == 'dev'
-#      env:
-#        ENV: dev
-#        AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_dev }}
-#        AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_dev }}
-#        AWS_REGION: ${{ secrets.aws_region_dev }}
-#        CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
-#        CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
-#        TF_VAR_sparkpost_api_key: ${{ secrets.sparkpost_api_key }}
-#      run: ./scripts/infra plan
+    - name: Plan dev
+      if: github.base_ref == 'dev'
+      env:
+        ENV: dev
+        AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_dev }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_dev }}
+        AWS_REGION: ${{ secrets.aws_region_dev }}
+        CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
+        CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
+        TF_VAR_sparkpost_api_key: ${{ secrets.sparkpost_api_key }}
+      run: ./scripts/infra plan
