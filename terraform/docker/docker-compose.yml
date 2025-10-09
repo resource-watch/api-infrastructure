@@ -18,4 +18,4 @@ services:
       - CLOUDFLARE_API_KEY
       - TF_VAR_sparkpost_api_key
     working_dir: /usr/local/src
-    entrypoint: scripts/infra
+    #entrypoint: scripts/infra
