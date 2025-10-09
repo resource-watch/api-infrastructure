@@ -22,6 +22,6 @@ ebs_csi_addon_version    = "v1.27.0-eksbuild.1"
 # gfw_node_group_desired_size       = 4
 # gfw_node_group_min_size_upscaled  = 2
 gateway_node_group_desired_size = 0
-hibernate                       = false
+hibernate                       = true
 aq_bucket_cors_allowed_origin   = "*"
 deploy_sparkpost_templates      = false
