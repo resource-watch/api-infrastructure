@@ -62,6 +62,7 @@ resource "aws_subnet" "private" {
   vpc_id            = aws_vpc.default.id
   cidr_block        = var.private_subnet_cidr_blocks[count.index]
   availability_zone = var.availability_zones[count.index]
+  region            = var.region
 
   tags = merge(
     {
@@ -80,6 +81,7 @@ resource "aws_subnet" "public" {
   cidr_block              = var.public_subnet_cidr_blocks[count.index]
   availability_zone       = var.availability_zones[count.index]
   map_public_ip_on_launch = true
+  region                  = var.region
 
   tags = merge(
     {
@@ -126,8 +128,9 @@ resource "aws_vpc_endpoint" "s3" {
 #
 resource "aws_eip" "nat" {
   count = length(var.public_subnet_cidr_blocks)
+  region = var.region
 
-  vpc = true
+  #vpc = true
 
   tags = merge(
     {
