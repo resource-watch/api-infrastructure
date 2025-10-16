@@ -37,7 +37,7 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_dev }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_dev }}
         AWS_REGION: ${{ secrets.aws_region_dev }}
-      run: ./scripts/infra -chdir=terraform init -backend-config=vars/backend-${{ env }}.tfvars
+      run: ./scripts/infra -chdir=terraform init -backend-config=vars/backend-${{ ENV }}.tfvars
 
     - name: TF Plan (Dev Only)
       if: github.base_ref == 'dev'
