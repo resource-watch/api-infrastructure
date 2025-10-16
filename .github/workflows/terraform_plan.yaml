@@ -49,4 +49,4 @@ jobs:
         CLOUDFLARE_API_KEY: ${{ secrets.cloudflare_api_key }}
         CLOUDFLARE_EMAIL: ${{ secrets.cloudflare_email }}
         TF_VAR_sparkpost_api_key: ${{ secrets.sparkpost_api_key }}
-      run: ./scripts/infra -chdir=terraform plan
+      run: ./scripts/infra -chdir=terraform plan  -vars=vars/terraform-$ENV.tfvars
