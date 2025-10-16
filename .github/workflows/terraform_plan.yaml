@@ -46,7 +46,7 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_dev }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_dev }}
         AWS_REGION: ${{ secrets.aws_region_dev }}
-        TF_VAR_cloudflare_api_key: ${{ secrets.cloudflare_api_key }}
+        TF_VAR_cloudflare_api_key: ${{ secrets.CLOUDFLARE_API_KEY }}
         TF_VAR_cloudflare_email: ${{ secrets.cloudflare_email }}
         TF_VAR_sparkpost_api_key: ${{ secrets.sparkpost_api_key }}
       run: ./scripts/infra -chdir=terraform plan -var-file=vars/terraform-$ENV.tfvars
