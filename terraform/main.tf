@@ -8,6 +8,12 @@ terraform {
   }
 }
 
+# Get the actual ARN for the "AWSAdministratorAccess" permission set.
+data aws_iam_roles admin_arn {
+  name_regex = "^AWSReservedSSO_AWSAdministratorAccess_(?P<slug>[0-9a-f]{16})$$"
+  path_prefix = "/aws-reserved/sso.amazonaws.com/"
+}
+
 # Call the seed_module to build our ADO seed info
 module "bootstrap" {
   source               = "./modules/bootstrap"
@@ -48,6 +54,7 @@ module "eks" {
   eks_version           = var.eks_version
   aws_region            = var.aws_region
   ebs_csi_addon_version = var.ebs_csi_addon_version
+  admin_role_arns       = data.aws_iam_roles.admin_arn.arns
   subnet_ids = [
     module.vpc.private_subnets[0].id,
     module.vpc.private_subnets[1].id,
