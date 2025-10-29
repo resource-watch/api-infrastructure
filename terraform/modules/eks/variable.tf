@@ -34,3 +34,8 @@ variable "backups_bucket" {
   type        = string
   description = "S3 bucket to which backups will be performed"
 }
+
+variable "admin_role_arns" {
+  type        = list(string)
+  description = "ARN of the Role used for admin cluster access."
+}

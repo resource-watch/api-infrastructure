@@ -15,6 +15,7 @@ jobs:
       TF_VAR_cloudflare_api_key: ${{ secrets.cloudflare_api_key }}
       TF_VAR_cloudflare_email: ${{ secrets.cloudflare_email }}
       TF_VAR_sparkpost_api_key: ${{ secrets.sparkpost_api_key }}
+      TF_VAR_eks_admin_role: ${{ secrets.admin_role_dev }}
 
     steps:
     - uses: actions/checkout@v1
