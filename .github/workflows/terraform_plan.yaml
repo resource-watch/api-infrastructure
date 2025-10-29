@@ -6,6 +6,15 @@ jobs:
   plan:
     runs-on: ubuntu-latest
 
+    env:
+      ENV: dev
+      AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_dev }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_dev }}
+      AWS_REGION: ${{ secrets.aws_region_dev }}
+      TF_VAR_cloudflare_api_key: ${{ secrets.cloudflare_api_key }}
+      TF_VAR_cloudflare_email: ${{ secrets.cloudflare_email }}
+      TF_VAR_sparkpost_api_key: ${{ secrets.sparkpost_api_key }}
+
     steps:
     - uses: actions/checkout@v1
 #    - name: Plan production
@@ -32,21 +41,9 @@ jobs:
 #      run: ./scripts/infra plan
     - name: TF Init
       if: github.base_ref == 'dev'
-      env:
-        ENV: dev
-        AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_dev }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_dev }}
-        AWS_REGION: ${{ secrets.aws_region_dev }}
       run: ./scripts/infra -chdir=terraform init -backend-config=vars/backend-$ENV.tfvars
 
     - name: TF Plan (Dev Only)
       if: github.base_ref == 'dev'
-      env:
-        ENV: dev
-        AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_dev }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_dev }}
-        AWS_REGION: ${{ secrets.aws_region_dev }}
-        TF_VAR_cloudflare_api_key: ${{ secrets.CLOUDFLARE_API_KEY }}
-        TF_VAR_cloudflare_email: ${{ secrets.cloudflare_email }}
-        TF_VAR_sparkpost_api_key: ${{ secrets.sparkpost_api_key }}
+      run: env | grep TF_VAR
       run: ./scripts/infra -chdir=terraform plan -var-file=vars/terraform-$ENV.tfvars
