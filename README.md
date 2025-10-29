@@ -10,7 +10,8 @@ To setup the cluster cloud resources, use the following command:
 
 ```shell script
 cd ./terraform
-export CLOUDFLARE_API_KEY=<cloudflare api key> CLOUDFLARE_EMAIL=<cloudflare account email address>
+export TF_VAR_cloudflare_api_key=<cloudflare api key>
+export TF_VAR_cloudflare_email=<cloudflare account email address>
 terraform init -backend-config=vars/backend-<env>.tfvars
 terraform plan -var-file=vars/terraform-<env>.tfvars
 ```
