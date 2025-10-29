@@ -56,7 +56,7 @@ jobs:
           -var "sparkpost_api_key=${TF_VAR_sparkpost_api_key}"
     - name: TF Apply
       run: |
-        ./scripts/infra -chdir=terraform apply -var-file=vars/terraform-$ENV.tfvars \
+        ./scripts/infra -chdir=terraform apply -auto-approve -var-file=vars/terraform-$ENV.tfvars \
           -var "cloudflare_api_key=${TF_VAR_cloudflare_api_key}" \
           -var "cloudflare_email=${TF_VAR_cloudflare_email}" \
           -var "sparkpost_api_key=${TF_VAR_sparkpost_api_key}"
