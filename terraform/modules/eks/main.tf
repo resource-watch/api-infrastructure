@@ -100,9 +100,9 @@ resource "aws_iam_role_policy_attachment" "eks-admin-AmazonEKSServicePolicy" {
 }
 
 # TODO: Remove this as the old approach
-data "external" "thumbprint" {
-  program = [format("%s/bin/get_thumbprint.sh", path.module), var.aws_region]
-}
+#data "external" "thumbprint" {
+#  program = [format("%s/bin/get_thumbprint.sh", path.module), var.aws_region]
+#}
 
 data "tls_certificate" "eks_certificate" {
   url = aws_eks_cluster.eks_cluster.identity.0.oidc.0.issuer
