@@ -3,7 +3,7 @@ name: Plan terraform changes for base branch
 on: [pull_request]
 
 jobs:
-  plan:
+  plan_dev:
     runs-on: ubuntu-latest
     if: github.base_ref == 'dev'
 
@@ -15,7 +15,6 @@ jobs:
       TF_VAR_cloudflare_api_key: ${{ secrets.cloudflare_api_key }}
       TF_VAR_cloudflare_email: ${{ secrets.cloudflare_email }}
       TF_VAR_sparkpost_api_key: ${{ secrets.sparkpost_api_key }}
-      TF_VAR_eks_admin_role: ${{ secrets.admin_role_dev }}
 
     steps:
     - uses: actions/checkout@v1
@@ -43,9 +42,6 @@ jobs:
 #      run: ./scripts/infra plan
     - name: TF Init
       run: ./scripts/infra -chdir=terraform init -backend-config=vars/backend-$ENV.tfvars
-
-    - name: Test var
-      run: env | grep TF_VAR
 
     - name: TF Plan (Dev Only)
       run: |
