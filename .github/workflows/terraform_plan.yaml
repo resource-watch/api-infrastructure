@@ -5,6 +5,7 @@ on: [pull_request]
 jobs:
   plan:
     runs-on: ubuntu-latest
+    if: github.base_ref == 'dev'
 
     env:
       ENV: dev
@@ -40,10 +41,10 @@ jobs:
 #        TF_VAR_sparkpost_api_key: ${{ secrets.sparkpost_api_key }}
 #      run: ./scripts/infra plan
     - name: TF Init
-      if: github.base_ref == 'dev'
       run: ./scripts/infra -chdir=terraform init -backend-config=vars/backend-$ENV.tfvars
 
-    - name: TF Plan (Dev Only)
-      if: github.base_ref == 'dev'
+    - name: Test var
       run: env | grep TF_VAR
+
+    - name: TF Plan (Dev Only)
       run: ./scripts/infra -chdir=terraform plan -var-file=vars/terraform-$ENV.tfvars
