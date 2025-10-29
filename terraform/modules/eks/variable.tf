@@ -36,6 +36,6 @@ variable "backups_bucket" {
 }
 
 variable "admin_role_arns" {
-  type        = list(string)
+  type        = set(string)
   description = "ARN of the Role used for admin cluster access."
 }
