@@ -47,4 +47,8 @@ jobs:
       run: env | grep TF_VAR
 
     - name: TF Plan (Dev Only)
-      run: ./scripts/infra -chdir=terraform plan -var-file=vars/terraform-$ENV.tfvars
+      run: |
+        ./scripts/infra -chdir=terraform plan -var-file=vars/terraform-$ENV.tfvars \
+          -var cloudflare_api_key=TF_VAR_cloudflare_api_key \
+          -var cloudflare_email=TF_VAR_cloudflare_email \
+          -var sparkpost_api_key=TF_VAR_sparkpost_api_key
