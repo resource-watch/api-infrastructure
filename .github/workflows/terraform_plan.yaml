@@ -32,7 +32,7 @@ jobs:
     - name: TF Init
       run: ./scripts/infra -chdir=terraform init -backend-config=vars/backend-$ENV.tfvars
 
-    - name: TF Plan (Dev Only)
+    - name: TF Plan
       run: |
         ./scripts/infra -chdir=terraform plan -var-file=vars/terraform-$ENV.tfvars \
           -var "cloudflare_api_key=${TF_VAR_cloudflare_api_key}" \
