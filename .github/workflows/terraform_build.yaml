@@ -2,17 +2,26 @@ name: Run tests and apply terraform changes for current branch
 
 on:
   push:
-    branches: [dev]
+    branches: [dev, staging]
 
 jobs:
   build_dev:
     runs-on: ubuntu-latest
 
     env:
-        ENV: dev
-        AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_dev }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_dev }}
-        AWS_REGION: ${{ secrets.aws_region_dev }}
+        ENV: ${{ github.ref_name }}
+        AWS_ACCESS_KEY_ID: >-
+          ${{ github.ref_name == 'production' && secrets.aws_key_production || 
+              github.ref_name == 'staging' && secrets.aws_key_staging ||
+              secrets.aws_key_dev }}
+        AWS_SECRET_ACCESS_KEY: >-
+          ${{ github.ref_name == 'production' && secrets.aws_secret_production ||
+              github.ref_name == 'staging' && secrets.aws_secret_staging ||
+              secrets.aws_secret_dev }}
+        AWS_REGION: >-
+          ${{ github.ref_name == 'production' && secrets.aws_region_production ||
+              github.ref_name == 'staging' && secrets.aws_region_staging ||
+              secrets.aws_region_dev }}
         TF_VAR_cloudflare_api_key: ${{ secrets.cloudflare_api_key }}
         TF_VAR_cloudflare_email: ${{ secrets.cloudflare_email }}
         TF_VAR_sparkpost_api_key: ${{ secrets.sparkpost_api_key }}
