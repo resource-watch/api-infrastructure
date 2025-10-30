@@ -2,7 +2,7 @@ name: Plan terraform changes for base branch
 
 on:
   pull_request:
-    branches: [ "dev", "staging" ]
+    branches: [ dev, staging ]
 
 jobs:
   plan:
