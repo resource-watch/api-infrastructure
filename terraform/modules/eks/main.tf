@@ -10,13 +10,25 @@ resource "aws_eks_cluster" "eks_cluster" {
   name     = "${replace(var.project, " ", "-")}-k8s-cluster-${var.environment}"
   role_arn = aws_iam_role.eks-cluster-admin.arn
   version  = var.eks_version
+  region   = var.aws_region
+
+  deletion_protection = false
+
+  access_config {
+    authentication_mode = "API_AND_CONFIG_MAP"
+    bootstrap_cluster_creator_admin_permissions = true
+  }
 
   vpc_config {
     subnet_ids              = var.subnet_ids
     # At the time of this writing, AWS wasn't accepting EKS on us-east-1e
     security_group_ids      = [aws_security_group.eks_cluster_security_group.id]
     endpoint_private_access = true
-    endpoint_public_access  = false
+    endpoint_public_access  = true
+  }
+
+  upgrade_policy {
+    support_type = "EXTENDED"
   }
 
   depends_on = [
@@ -87,13 +99,13 @@ resource "aws_iam_role_policy_attachment" "eks-admin-AmazonEKSServicePolicy" {
   role       = aws_iam_role.eks-cluster-admin.name
 }
 
-data "external" "thumbprint" {
-  program = [format("%s/bin/get_thumbprint.sh", path.module), var.aws_region]
+data "tls_certificate" "eks_certificate" {
+  url = aws_eks_cluster.eks_cluster.identity.0.oidc.0.issuer
 }
 
 resource "aws_iam_openid_connect_provider" "example" {
   client_id_list  = ["sts.amazonaws.com"]
-  thumbprint_list = [data.external.thumbprint.result.thumbprint]
+  thumbprint_list = [data.tls_certificate.eks_certificate.certificates.0.sha1_fingerprint]
   url             = aws_eks_cluster.eks_cluster.identity.0.oidc.0.issuer
 }
 
@@ -243,4 +255,28 @@ resource "aws_iam_role_policy_attachment" "ebs-csi-service-role-AmazonEKS_EBS_CS
 resource "aws_iam_role_policy_attachment" "eks-node-group-admin-AmazonEKS_EBS_CSI_DriverRole" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
   role       = aws_iam_role.eks-node-group-iam-role.name
+}
+
+resource "aws_eks_access_entry" "admin_role" {
+  for_each = var.admin_role_arns
+
+  cluster_name  = aws_eks_cluster.eks_cluster.name
+  principal_arn = each.value
+  type          = "STANDARD"
+}
+
+resource "aws_eks_access_policy_association" "admin_policy" {
+  for_each = var.admin_role_arns
+
+  cluster_name    = aws_eks_cluster.eks_cluster.name
+  policy_arn      = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
+  principal_arn   = each.value
+
+  access_scope {
+    type = "cluster"
+  }
+
+  depends_on = [
+    aws_eks_access_entry.admin_role
+  ]
 }

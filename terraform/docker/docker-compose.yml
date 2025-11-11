@@ -1,8 +1,6 @@
-# This docker image uses an old version of Terraform, and needs to be updated before it can be used again
-version: "3.7"
 services:
   terraform:
-    image: globalforestwatch/terraform:1.2.2
+    image: hashicorp/terraform:1.3.6
     volumes:
       - ../../:/usr/local/src
       - $HOME/.aws:/root/.aws:ro
@@ -18,4 +16,4 @@ services:
       - CLOUDFLARE_API_KEY
       - TF_VAR_sparkpost_api_key
     working_dir: /usr/local/src
-    entrypoint: infra
+    #entrypoint: scripts/infra

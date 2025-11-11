@@ -34,6 +34,7 @@ resource "aws_s3_bucket_cors_configuration" "aq_bucket_cors_configuration" {
 
 resource "aws_s3_bucket_lifecycle_configuration" "aq_bucket_lifecycle_configuration" {
   bucket = aws_s3_bucket.aq_bucket.id
+  transition_default_minimum_object_size = "varies_by_storage_class"
 
   rule {
     id     = "expiration_period"
