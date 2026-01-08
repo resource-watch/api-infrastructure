@@ -75,7 +75,7 @@ module "mongodb-apps-node-group" {
   max_size                 = var.mongodb_apps_node_group_max_size
   desired_size             = var.mongodb_apps_node_group_desired_size
   node_role_arn            = module.eks.node_role_arn
-  eks_node_release_version = var.eks_node_release_version
+#  eks_node_release_version = var.eks_node_release_version
   capacity_type            = var.mongodb_apps_node_group_capacity_type
   subnet_ids = [
     module.vpc.private_subnets[0].id,
@@ -98,7 +98,7 @@ module "apps-node-group" {
   max_size                 = var.apps_node_group_max_size
   desired_size             = var.apps_node_group_desired_size
   node_role_arn            = module.eks.node_role_arn
-  eks_node_release_version = var.eks_node_release_version
+#  eks_node_release_version = var.eks_node_release_version
   capacity_type            = var.apps_node_group_capacity_type
   subnet_ids = [
     module.vpc.private_subnets[0].id,
@@ -123,7 +123,7 @@ module "webapps-node-group" {
   max_size                 = var.webapps_node_group_max_size
   desired_size             = var.webapps_node_group_desired_size
   node_role_arn            = module.eks.node_role_arn
-  eks_node_release_version = var.eks_node_release_version
+#  eks_node_release_version = var.eks_node_release_version
   capacity_type            = var.webapps_node_group_capacity_type
   subnet_ids = [
     module.vpc.private_subnets[0].id,
@@ -148,7 +148,7 @@ module "core-node-group" {
   max_size                 = var.core_node_group_max_size
   desired_size             = var.core_node_group_desired_size
   node_role_arn            = module.eks.node_role_arn
-  eks_node_release_version = var.eks_node_release_version
+#  eks_node_release_version = var.eks_node_release_version
   capacity_type            = var.core_node_group_capacity_type
   subnet_ids = [
     module.vpc.private_subnets[5].id
@@ -169,7 +169,7 @@ module "gfw-node-group" {
   max_size                 = var.gfw_node_group_max_size
   desired_size             = var.gfw_node_group_desired_size
   node_role_arn            = module.eks.node_role_arn
-  eks_node_release_version = var.eks_node_release_version
+#  eks_node_release_version = var.eks_node_release_version
   capacity_type            = var.gfw_node_group_capacity_type
   subnet_ids = [
     module.vpc.private_subnets[0].id,
@@ -194,7 +194,7 @@ module "gateway-node-group" {
   max_size                 = var.gateway_node_group_max_size
   desired_size             = var.gateway_node_group_desired_size
   node_role_arn            = module.eks.node_role_arn
-  eks_node_release_version = var.eks_node_release_version
+#  eks_node_release_version = var.eks_node_release_version
   capacity_type            = "ON_DEMAND"
   subnet_ids = [
     module.vpc.private_subnets[0].id,
