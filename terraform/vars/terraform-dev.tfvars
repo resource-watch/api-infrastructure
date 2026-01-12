@@ -13,6 +13,7 @@ db_logs_exports          = ["audit", "profiler"]
 eks_version              = "1.30"
 # eks_node_release_version = "1.29.0-20240202"
 ebs_csi_addon_version    = "v1.30.0-eksbuild.1"
+kube_proxy_addon_version = "v1.30.14-eksbuild.18"
 # apps_node_group_min_size          = 1
 # apps_node_group_max_size          = 16
 # apps_node_group_desired_size      = 3
