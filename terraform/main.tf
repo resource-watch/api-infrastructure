@@ -54,6 +54,7 @@ module "eks" {
   eks_version           = var.eks_version
   aws_region            = var.aws_region
   ebs_csi_addon_version = var.ebs_csi_addon_version
+  kube_proxy_addon_version = var.kube_proxy_addon_version
   admin_role_arns       = data.aws_iam_roles.admin_arn.arns
   subnet_ids = [
     module.vpc.private_subnets[0].id,

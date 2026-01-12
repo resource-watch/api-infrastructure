@@ -44,6 +44,12 @@ resource "aws_eks_addon" "aws_ebs_csi_driver" {
   service_account_role_arn = aws_iam_role.ebs_csi_iam_role.arn
 }
 
+resource "aws_eks_addon" "kube_proxy" {
+  cluster_name             = aws_eks_cluster.eks_cluster.name
+  addon_name               = "kube-proxy"
+  addon_version            = var.kube_proxy_addon_version
+}
+
 resource "aws_security_group" "eks_cluster_security_group" {
   name        = "${replace(var.project, " ", "-")}eks-cluster-security-group"
   description = "Cluster communication with worker nodes"

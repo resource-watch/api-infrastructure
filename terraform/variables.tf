@@ -241,6 +241,11 @@ variable "ebs_csi_addon_version" {
   description = "Version of AWS EBS CRI driver to use"
 }
 
+variable "kube_proxy_addon_version" {
+  type        = string
+  description = "Version of kube-proxy to use"
+} 
+
 variable "hibernate" {
   description = "If set to true, the EKS cluster will be scaled down and its services unavailable"
   type        = bool
