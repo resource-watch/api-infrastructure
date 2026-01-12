@@ -232,7 +232,7 @@ variable "eks_version" {
 
 variable "eks_node_release_version" {
   type        = string
-  default = ""
+  default     = ""
   description = "Version of EKS (kubernetes) node AMI to deploy"
 }
 
