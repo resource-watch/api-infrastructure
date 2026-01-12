@@ -238,7 +238,6 @@ variable "eks_node_release_version" {
 
 variable "ebs_csi_addon_version" {
   type        = string
-  default     = null
   description = "Version of AWS EBS CRI driver to use"
 }
 
