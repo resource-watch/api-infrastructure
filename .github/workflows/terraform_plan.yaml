@@ -5,7 +5,7 @@ on:
     branches: [dev, staging]
 
 jobs:
-  plan:
+  plan-infra:
     runs-on: ubuntu-latest
 
     env:
@@ -35,6 +35,39 @@ jobs:
     - name: TF Plan
       run: |
         ./scripts/infra -chdir=terraform plan -var-file=vars/terraform-$ENV.tfvars \
+          -var "cloudflare_api_key=${TF_VAR_cloudflare_api_key}" \
+          -var "cloudflare_email=${TF_VAR_cloudflare_email}" \
+          -var "sparkpost_api_key=${TF_VAR_sparkpost_api_key}"
+  
+  plan-k8s:
+    runs-on: ubuntu-latest
+
+    env:
+      ENV: ${{ github.base_ref }}
+      AWS_ACCESS_KEY_ID: >-
+        ${{ github.base_ref == 'production' && secrets.aws_key_production || 
+            github.base_ref == 'staging' && secrets.aws_key_staging ||
+            secrets.aws_key_dev }}
+      AWS_SECRET_ACCESS_KEY: >-
+        ${{ github.base_ref == 'production' && secrets.aws_secret_production ||
+            github.base_ref == 'staging' && secrets.aws_secret_staging ||
+            secrets.aws_secret_dev }}
+      AWS_REGION: >-
+        ${{ github.base_ref == 'production' && secrets.aws_region_production ||
+            github.base_ref == 'staging' && secrets.aws_region_staging ||
+            secrets.aws_region_dev }}
+      TF_VAR_cloudflare_api_key: ${{ secrets.cloudflare_api_key }}
+      TF_VAR_cloudflare_email: ${{ secrets.cloudflare_email }}
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: TF Init
+      run: ./scripts/infra -chdir=terraform-k8s-infrastructure init -backend-config=vars/backend-$ENV.tfvars
+
+    - name: TF Plan
+      run: |
+        ./scripts/infra -chdir=terraform-k8s-infrastructure plan -var-file=vars/terraform-$ENV.tfvars \
           -var "cloudflare_api_key=${TF_VAR_cloudflare_api_key}" \
           -var "cloudflare_email=${TF_VAR_cloudflare_email}" \
           -var "sparkpost_api_key=${TF_VAR_sparkpost_api_key}"

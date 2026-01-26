@@ -15,3 +15,8 @@ terraform {
   }
   required_version = "1.3.6"
 }
+
+provider "cloudflare" {
+  api_key = var.cloudflare_api_key
+  email   = var.cloudflare_email
+}
