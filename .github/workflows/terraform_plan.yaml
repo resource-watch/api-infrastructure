@@ -27,29 +27,31 @@ jobs:
       TF_VAR_sparkpost_api_key: ${{ secrets.sparkpost_api_key }}
 
     steps:
-    - uses: actions/checkout@v1
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-    - name: Install AWS CLI
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y awscli
+    - name: Setup terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.3.6
 
     - name: TF Init
-      run: ./scripts/infra -chdir=terraform init -backend-config=vars/backend-$ENV.tfvars
+      #run: ./scripts/infra -chdir=terraform init -backend-config=vars/backend-$ENV.tfvars
+      run: terraform -chdir=terraform init -backend-config=vars/backend-$ENV.tfvars
 
     - name: TF Plan
       run: |
-        ./scripts/infra -chdir=terraform plan -var-file=vars/terraform-$ENV.tfvars \
+        terraform -chdir=terraform plan -var-file=vars/terraform-$ENV.tfvars \
           -var "cloudflare_api_key=${TF_VAR_cloudflare_api_key}" \
           -var "cloudflare_email=${TF_VAR_cloudflare_email}" \
           -var "sparkpost_api_key=${TF_VAR_sparkpost_api_key}"
     
     - name: TF Init
-      run: ./scripts/infra -chdir=terraform-k8s-infrastructure init -backend-config=vars/backend-$ENV.tfvars
+      run: terraform -chdir=terraform-k8s-infrastructure init -backend-config=vars/backend-$ENV.tfvars
 
     - name: TF Plan
       run: |
-        ./scripts/infra -chdir=terraform-k8s-infrastructure plan -var-file=vars/terraform-$ENV.tfvars \
+        terraform -chdir=terraform-k8s-infrastructure plan -var-file=vars/terraform-$ENV.tfvars \
           -var "cloudflare_api_key=${TF_VAR_cloudflare_api_key}" \
           -var "cloudflare_email=${TF_VAR_cloudflare_email}"
 
