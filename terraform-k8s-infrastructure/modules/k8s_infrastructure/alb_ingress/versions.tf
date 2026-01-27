@@ -11,7 +11,3 @@ terraform {
   }
   required_version = "~> 1.3.2"
 }
-
-provider "kubernetes" {
-  config_path = "~/.kube/config"
-}

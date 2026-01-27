@@ -49,6 +49,9 @@ jobs:
     - name: TF Init
       run: terraform -chdir=terraform-k8s-infrastructure init -backend-config=vars/backend-$ENV.tfvars
 
+    - name: Configure Kubeconfig
+      run: aws eks update-kubeconfig --region us-east-1 --name core-k8s-cluster-$ENV
+
     - name: TF Plan
       run: |
         terraform -chdir=terraform-k8s-infrastructure plan -var-file=vars/terraform-$ENV.tfvars \
