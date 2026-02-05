@@ -16,6 +16,15 @@ data "aws_vpc" "eks_vpc" {
   cidr_block = "10.0.0.0/16"
 }
 
+module "k8s_namespaces" {
+  source           = "./modules/k8s_namespaces"
+  cluster_endpoint = "${data.aws_eks_cluster.rw_api.endpoint}:${var.cluster_port}"
+  cluster_ca       = data.aws_eks_cluster.rw_api.certificate_authority.0.data
+  cluster_name     = data.aws_eks_cluster.rw_api.name
+  kubectl_context  = "aws-rw-${var.environment}"
+  namespaces       = var.namespaces
+}
+
 module "k8s_infrastructure" {
   source                = "./modules/k8s_infrastructure"
   cluster_endpoint      = "${data.aws_eks_cluster.rw_api.endpoint}:${var.cluster_port}"
@@ -56,13 +65,4 @@ module "k8s_microservice_routing" {
   require_api_key      = var.require_api_key
   cloudflare_api_key    = var.cloudflare_api_key
   cloudflare_email      = var.cloudflare_email
-}
-
-module "k8s_namespaces" {
-  source           = "./modules/k8s_namespaces"
-  cluster_endpoint = "${data.aws_eks_cluster.rw_api.endpoint}:${var.cluster_port}"
-  cluster_ca       = data.aws_eks_cluster.rw_api.certificate_authority.0.data
-  cluster_name     = data.aws_eks_cluster.rw_api.name
-  kubectl_context  = "aws-rw-${var.environment}"
-  namespaces       = var.namespaces
 }
