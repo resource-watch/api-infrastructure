@@ -283,3 +283,8 @@ variable "email_recipients" {
   description = "List of email addresses to contact in case an alert fails"
   default     = []
 }
+
+variable "gha_role_arn" {
+  type        = string
+  description = "ARN of the Role used for Github Actions."
+}
