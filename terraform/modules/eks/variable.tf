@@ -44,3 +44,8 @@ variable "admin_role_arns" {
   type        = set(string)
   description = "ARN of the Role used for admin cluster access."
 }
+
+variable "gha_role_arn" {
+  type        = string
+  description = "ARN of the Role used for Github Actions."
+}

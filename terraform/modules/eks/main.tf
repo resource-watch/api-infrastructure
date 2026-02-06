@@ -286,3 +286,23 @@ resource "aws_eks_access_policy_association" "admin_policy" {
     aws_eks_access_entry.admin_role
   ]
 }
+
+resource "aws_eks_access_entry" "gha_role" {
+  cluster_name  = aws_eks_cluster.eks_cluster.name
+  principal_arn = var.gha_role_arn
+  type          = "STANDARD"
+}
+
+resource "aws_eks_access_policy_association" "gha_policy" {
+  cluster_name    = aws_eks_cluster.eks_cluster.name
+  policy_arn      = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  principal_arn   = var.gha_role_arn
+
+  access_scope {
+    type = "cluster"
+  }
+
+  depends_on = [
+    aws_eks_access_entry.gha_role
+  ]
+}
