@@ -26,3 +26,4 @@ gateway_node_group_desired_size = 0
 hibernate                       = false
 aq_bucket_cors_allowed_origin   = "*"
 deploy_sparkpost_templates      = false
+gha_role_arn                    = "arn:aws:iam::842534099497:role/wri-api-dev-githubactions-role"
