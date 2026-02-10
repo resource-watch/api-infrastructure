@@ -47,12 +47,12 @@ jobs:
           -var "cloudflare_api_key=${TF_VAR_cloudflare_api_key}" \
           -var "cloudflare_email=${TF_VAR_cloudflare_email}" \
           -var "sparkpost_api_key=${TF_VAR_sparkpost_api_key}" \
-          -out tf_eks_${{ github.event.pull_request.number }}.plan
+          -out tf_eks-${{ github.event.pull_request.number }}.plan
     
     - name: Upload EKS Cluster Plan File
       uses: actions/upload-artifact@v4
       with:
-        name: tf_eks_${{ github.event.pull_request.number }}.plan
+        name: tf_eks-${{ github.event.pull_request.number }}.plan
         path: "terraform/tf_eks_${{ github.event.pull_request.number }}.plan"
         if-no-files-found: 'error'
         overwrite: true
@@ -100,13 +100,13 @@ jobs:
       run: |
         terraform -chdir=terraform-k8s-infrastructure plan -var-file=vars/terraform-$ENV.tfvars \
           -var "cloudflare_api_key=${TF_VAR_cloudflare_api_key}" \
-          -var "cloudflare_email=${TF_VAR_cloudflare_email}" |
-          -out tf_k8s_infra-${{ github.event.pull_request.nubmer }}.plan
+          -var "cloudflare_email=${TF_VAR_cloudflare_email}" \
+          -out tf_k8s_infra-${{ github.event.pull_request.number }}.plan
     
     - name: Upload K8s Infrastructure Plan File
       uses: actions/upload-artifact@v4
       with:
         name: tf_k8s_infra_${{ github.event.pull_request.number }}.plan
-        path: "terraform-k8s-infrastructure/tf_k8s_infra_${{ github.event.pull_request.number }}.plan"
+        path: "terraform-k8s-infrastructure/tf_k8s_infra-${{ github.event.pull_request.number }}.plan"
         if-no-files-found: 'error'
         overwrite: true
