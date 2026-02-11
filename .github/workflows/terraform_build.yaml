@@ -132,5 +132,5 @@ jobs:
 
       - name: TF Apply
         run: |
-          terraform -chdir=terraform_k8s_infrastructure apply \
+          terraform -chdir=terraform-k8s-infrastructure apply \
             tf_k8s_infra-${{ steps.findpr.outputs.pr }}.plan
