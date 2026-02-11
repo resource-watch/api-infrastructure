@@ -69,11 +69,7 @@ jobs:
 
     - name: TF Apply
       run: |
-        terraform -chdir=terraform apply -var-file=vars/terraform-$ENV.tfvars \
-          -var "cloudflare_api_key=${TF_VAR_cloudflare_api_key}" \
-          -var "cloudflare_email=${TF_VAR_cloudflare_email}" \
-          -var "sparkpost_api_key=${TF_VAR_sparkpost_api_key}" \
-          tf_eks-${{ steps.findpr.outputs.pr }}.plan
+        terraform -chdir=terraform apply tf_eks-${{ steps.findpr.outputs.pr }}.plan
 
   build_k8s_infra:
     runs-on: ubuntu-latest
@@ -136,8 +132,5 @@ jobs:
 
       - name: TF Apply
         run: |
-          terraform -chdir=terraform_k8s_infrastructure apply -var-file=vars/terraform-$ENV.tfvars \
-            -var "cloudflare_api_key=${TF_VAR_cloudflare_api_key}" \
-            -var "cloudflare_email=${TF_VAR_cloudflare_email}" \
-            -var "sparkpost_api_key=${TF_VAR_sparkpost_api_key}" \
+          terraform -chdir=terraform_k8s_infrastructure apply \
             tf_k8s_infra-${{ steps.findpr.outputs.pr }}.plan
