@@ -8,6 +8,10 @@ resource "helm_release" "redis" {
   values = [
     file("${path.module}/redis/redis.yaml")
   ]
+
+  // Enable force update and pod recreation
+  force_update  = true
+  recreate_pods = true
 }
 
 
