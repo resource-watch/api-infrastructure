@@ -11,11 +11,3 @@ terraform {
   }
   required_version = "1.3.6"
 }
-
-provider "aws" {
-  region = var.aws_region
-}
-
-provider "kubernetes" {
-  config_path = "~/.kube/config"
-}

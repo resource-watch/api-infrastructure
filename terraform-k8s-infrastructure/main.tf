@@ -16,19 +16,30 @@ data "aws_vpc" "eks_vpc" {
   cidr_block = "10.0.0.0/16"
 }
 
+module "k8s_namespaces" {
+  source           = "./modules/k8s_namespaces"
+  cluster_endpoint = "${data.aws_eks_cluster.rw_api.endpoint}:${var.cluster_port}"
+  cluster_ca       = data.aws_eks_cluster.rw_api.certificate_authority.0.data
+  cluster_name     = data.aws_eks_cluster.rw_api.name
+  kubectl_context  = "aws-rw-${var.environment}"
+  namespaces       = var.namespaces
+}
+
 module "k8s_infrastructure" {
   source                = "./modules/k8s_infrastructure"
-  cluster_endpoint      = "${data.aws_eks_cluster.rw_api.endpoint}:4433"
+  cluster_endpoint      = "${data.aws_eks_cluster.rw_api.endpoint}:${var.cluster_port}"
   cluster_ca            = data.aws_eks_cluster.rw_api.certificate_authority.0.data
   cluster_name          = data.aws_eks_cluster.rw_api.name
   aws_region            = var.aws_region
   vpc_id                = data.aws_vpc.eks_vpc.id
   deploy_metrics_server = var.deploy_metrics_server
+  cloudflare_api_key    = var.cloudflare_api_key
+  cloudflare_email      = var.cloudflare_email
 }
 
 module "k8s_data_layer" {
   source                                   = "./modules/k8s_data_layer"
-  cluster_endpoint                         = "${data.aws_eks_cluster.rw_api.endpoint}:4433"
+  cluster_endpoint                         = "${data.aws_eks_cluster.rw_api.endpoint}:${var.cluster_port}"
   cluster_ca                               = data.aws_eks_cluster.rw_api.certificate_authority.0.data
   cluster_name                             = data.aws_eks_cluster.rw_api.name
   aws_region                               = var.aws_region
@@ -45,20 +56,13 @@ module "k8s_microservice_routing" {
   environment          = var.environment
   dns_prefix           = var.dns_prefix
   vpc                  = data.aws_vpc.eks_vpc
-  cluster_endpoint     = "${data.aws_eks_cluster.rw_api.endpoint}:4433"
+  cluster_endpoint     = "${data.aws_eks_cluster.rw_api.endpoint}:${var.cluster_port}"
   cluster_ca           = data.aws_eks_cluster.rw_api.certificate_authority.0.data
   cluster_name         = data.aws_eks_cluster.rw_api.name
   tf_core_state_bucket = var.tf_core_state_bucket
   x_rw_domain          = var.x_rw_domain
   fw_backend_url       = var.fw_backend_url
   require_api_key      = var.require_api_key
-}
-
-module "k8s_namespaces" {
-  source           = "./modules/k8s_namespaces"
-  cluster_endpoint = "${data.aws_eks_cluster.rw_api.endpoint}:4433"
-  cluster_ca       = data.aws_eks_cluster.rw_api.certificate_authority.0.data
-  cluster_name     = data.aws_eks_cluster.rw_api.name
-  kubectl_context  = "aws-rw-${var.environment}"
-  namespaces       = var.namespaces
+  cloudflare_api_key    = var.cloudflare_api_key
+  cloudflare_email      = var.cloudflare_email
 }

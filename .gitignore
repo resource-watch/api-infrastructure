@@ -53,3 +53,6 @@ terraform-k8s-infrastructure/vars/private.tfvars
 
 terraform.tfstate
 terraform.tfstate.backup
+
+# Snyk Security Extension - AI Rules (auto-generated)
+.github/instructions/snyk_rules.instructions.md

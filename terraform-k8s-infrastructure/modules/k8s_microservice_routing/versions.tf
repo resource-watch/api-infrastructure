@@ -15,3 +15,19 @@ terraform {
   }
   required_version = "1.3.6"
 }
+
+#data "aws_eks_cluster_auth" "cluster" {
+#  name = var.cluster_name
+#}
+
+provider "kubernetes" {
+  host                    = var.cluster_endpoint
+  config_path            = "~/.kube/config"
+  cluster_ca_certificate  = base64decode(var.cluster_ca)
+  #token                   = data.aws_eks_cluster_auth.cluster.token
+  #exec {
+  #  api_version = "client.authentication.k8s.io/v1beta1"
+  #  args        = ["eks", "get-token", "--cluster-name", var.cluster_name]
+  #  command     = "aws"
+  #}
+}

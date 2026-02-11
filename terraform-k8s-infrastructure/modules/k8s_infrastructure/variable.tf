@@ -28,3 +28,13 @@ variable "deploy_metrics_server" {
   type        = bool
   description = "If AWS Metrics server should be deployed"
 }
+
+variable "cloudflare_api_key" {
+  type        = string
+  description = "Cloudflare API key"
+}
+
+variable "cloudflare_email" {
+  type        = string
+  description = "Cloudflare email"
+}
