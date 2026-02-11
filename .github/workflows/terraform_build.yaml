@@ -55,7 +55,7 @@ jobs:
       uses: jwalton/gh-find-current-pr@master
       id: findpr
       with:
-        state: all
+        state: closed
 
     - name: Download TF EKS Cluster Plan
       uses: dawidd6/action-download-artifact@v3
@@ -122,7 +122,7 @@ jobs:
         uses: jwalton/gh-find-current-pr@master
         id: findpr
         with:
-          state: all
+          state: closed
 
       - name: Download TF k8s Infra Plan
         uses: dawidd6/action-download-artifact@v3
