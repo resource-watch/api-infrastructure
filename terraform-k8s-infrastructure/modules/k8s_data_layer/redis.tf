@@ -1,6 +1,7 @@
 resource "helm_release" "redis" {
   name      = "redis"
-  chart     = "bitnami/redis"
+  repository = "https://charts.bitnami.com/bitnami"
+  chart     = "redis"
   namespace = "core"
   version   = "16.13.2"
 
