@@ -53,7 +53,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: tf_eks-${{ github.event.pull_request.number }}.plan
-        path: "terraform/tf_eks_${{ github.event.pull_request.number }}.plan"
+        path: "terraform/tf_eks-${{ github.event.pull_request.number }}.plan"
         if-no-files-found: 'error'
         overwrite: true
 
