@@ -1,5 +1,9 @@
 name: Run tests and apply terraform changes for current branch
 
+concurrency:
+  group: deploy-terraform
+  cancel-in-progress: false
+
 on:
   push:
     branches: [dev, staging]
