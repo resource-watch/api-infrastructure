@@ -1,5 +1,9 @@
 name: Terraform Plan
 
+concurrency:
+  group: deploy-terraform
+  cancel-in-progress: false
+
 on:
   pull_request:
     branches: [dev, staging]

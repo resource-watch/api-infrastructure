@@ -9,7 +9,7 @@ resource "helm_release" "postgresql" {
   repository = "https://charts.bitnami.com/bitnami"
   chart     = "postgresql"
   namespace = "core"
-  version   = "8.6.4"
+  version   = "18.3.0"
 
   values = [
     file("${path.module}/postgresql/postgresql.yaml")
