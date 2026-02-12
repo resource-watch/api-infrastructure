@@ -6,7 +6,8 @@ data "kubernetes_secret" "rabbitmq_core" {
 }
 resource "helm_release" "rabbitmq" {
   name      = "rabbitmq"
-  chart     = "bitnami/rabbitmq"
+  repository = "https://charts.bitnami.com/bitnami"
+  chart     = "rabbitmq"
   namespace = "core"
   version   = "6.18.2"
 
