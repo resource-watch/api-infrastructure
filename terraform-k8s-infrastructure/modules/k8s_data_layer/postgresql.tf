@@ -6,7 +6,8 @@ data "kubernetes_secret" "postgresql_core" {
 }
 resource "helm_release" "postgresql" {
   name      = "postgresql"
-  chart     = "bitnami/postgresql"
+  repository = "https://charts.bitnami.com/bitnami"
+  chart     = "postgresql"
   namespace = "core"
   version   = "8.6.4"
 
