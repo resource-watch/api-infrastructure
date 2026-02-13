@@ -10,6 +10,7 @@ resource "helm_release" "postgresql" {
   chart     = "postgresql"
   namespace = "core"
   version   = "18.3.0"
+  verify    = false # Temporarily necessery
 
   values = [
     file("${path.module}/postgresql/postgresql.yaml")
