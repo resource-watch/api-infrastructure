@@ -1,6 +1,8 @@
 resource "helm_release" "redis" {
   name      = "redis"
-  repository = "oci://registry-1.docker.io/bitnamicharts"
+  // For some reason the OCI: registry doesn't work here, even though
+  // it is required for the others?
+  repository = "https://charts.bitnami.com/bitnami"
   chart     = "redis"
   namespace = "core"
   version   = "16.13.2"

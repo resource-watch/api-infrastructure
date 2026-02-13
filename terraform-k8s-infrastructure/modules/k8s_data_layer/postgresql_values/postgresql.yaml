@@ -23,7 +23,7 @@ global:
   ##
   security:
     ## @param global.security.allowInsecureImages Allows skipping image verification
-    allowInsecureImages: false
+    allowInsecureImages: true
   #postgresql:
     ## @param global.postgresql.fullnameOverride Full chart name (overrides `fullnameOverride`)
     ## @param global.postgresql.auth.postgresPassword Password for the "postgres" admin user (overrides `auth.postgresPassword`)
@@ -120,8 +120,8 @@ diagnosticMode:
 ##
 image:
   registry: docker.io
-  repository: bitnami/postgresql
-  tag: 9.6-debian-10
+  repository: bitnamilegacy/postgresql
+  tag: 9.6.10-r64
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -484,7 +484,7 @@ primary:
   resources:
      requests:
        cpu: 250m
-       memory: 256mi
+       memory: 256Mi
      limits:
        cpu: 2
        memory: 8Gi
@@ -959,7 +959,7 @@ readReplicas:
   resources:
     requests:
       cpu: 250m
-      memory: 256mi
+      memory: 256Mi
     limits:
       cpu: 2
       memory: 8Gi
