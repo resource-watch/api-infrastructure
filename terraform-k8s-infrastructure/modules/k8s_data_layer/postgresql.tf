@@ -13,7 +13,7 @@ resource "helm_release" "postgresql" {
   verify    = false # Temporarily necessery
 
   values = [
-    file("${path.module}/postgresql/postgresql.yaml")
+    file("${path.module}/postgresql_values/postgresql.yaml")
   ]
 
   depends_on = [

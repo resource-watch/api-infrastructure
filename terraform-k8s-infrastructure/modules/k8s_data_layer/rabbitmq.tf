@@ -12,7 +12,7 @@ resource "helm_release" "rabbitmq" {
   version   = "6.18.2"
 
   values = [
-    file("${path.module}/rabbitmq/rabbitmq.yaml")
+    file("${path.module}/rabbitmq_values/rabbitmq.yaml")
   ]
 
   depends_on = [
