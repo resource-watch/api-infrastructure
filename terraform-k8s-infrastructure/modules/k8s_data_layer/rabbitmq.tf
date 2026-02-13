@@ -9,7 +9,7 @@ resource "helm_release" "rabbitmq" {
   repository = "https://charts.bitnami.com/bitnami"
   chart     = "rabbitmq"
   namespace = "core"
-  version   = "6.18.2"
+  version   = "16.0.14"
 
   values = [
     file("${path.module}/rabbitmq_values/rabbitmq.yaml")
