@@ -11,6 +11,7 @@ resource "helm_release" "postgresql" {
   namespace = "core"
   version   = "18.3.0"
   verify    = false # Temporarily necessery
+  timeout   = 1200
 
   values = [
     file("${path.module}/postgresql_values/postgresql.yaml")
