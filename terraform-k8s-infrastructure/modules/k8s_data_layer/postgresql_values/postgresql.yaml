@@ -7,7 +7,7 @@
 global:
   ## @param global.imageRegistry Global Docker image registry
   ##
-  imageRegistry: ""
+  #imageRegistry: ""
   ## @param global.imagePullSecrets Global Docker registry secret names as an array
   ## e.g.
   ## imagePullSecrets:
@@ -15,10 +15,10 @@ global:
   ##
   imagePullSecrets: []
   ## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
-## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
+  ## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
   ##
-  defaultStorageClass: ""
-  storageClass: ""
+  #defaultStorageClass: ""
+  #storageClass: ""
   ## Security parameters
   ##
   security:
@@ -66,16 +66,16 @@ global:
 
 ## @param kubeVersion Override Kubernetes version
 ##
-kubeVersion: ""
+#kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride: ""
+#nameOverride: "postgresql"
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
-fullnameOverride: ""
+fullnameOverride: "postgresql-postgresql"
 ## @param namespaceOverride String to fully override common.names.namespace
 ##
-namespaceOverride: ""
+#namespaceOverride: ""
 ## @param clusterDomain Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
@@ -320,7 +320,11 @@ primary:
   ## @param primary.pgHbaConfiguration PostgreSQL Primary client authentication configuration
   ## ref: https://www.postgresql.org/docs/current/static/auth-pg-hba-conf.html
   ## e.g:#
-  ## pgHbaConfiguration: |-
+  #pgHbaConfiguration: |-
+  #  host  all   all   0.0.0.0/0   scram-sha-256
+    # Allow local connections
+  #  local all   all   trust
+
   ##   local all all trust
   ##   host all all localhost trust
   ##   host mydatabase mysuser 192.168.0.0/24 md5
@@ -333,7 +337,9 @@ primary:
   ## @param primary.extendedConfiguration Extended PostgreSQL Primary configuration (appended to main or default configuration)
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
   ##
-  # extendedConfiguration: ""
+  #extendedConfiguration: |-
+  #  hba_file = '/bitnami/postgresql/conf/pg_hba.conf'
+  
   ## @param primary.existingExtendedConfigmap Name of an existing ConfigMap with PostgreSQL Primary extended configuration
   ## NOTE: `primary.extendedConfiguration` will be ignored
   ##
@@ -498,7 +504,7 @@ primary:
   ## @param primary.podSecurityContext.fsGroup Group ID for the pod
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
     fsGroupChangePolicy: Always
     sysctls: []
     supplementalGroups: []
@@ -1613,8 +1619,8 @@ volumePermissions:
   ##
   image:
     registry: docker.io
-    #repository: bitnami/os-shell
-    #tag: 12-debian-12-r51
+    repository: bitnamilegacy/os-shell
+    tag: 12-debian-12-r51
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1672,7 +1678,7 @@ serviceBindings:
 serviceAccount:
   ## @param serviceAccount.create Enable creation of ServiceAccount for PostgreSQL pod
   ##
-  create: true
+  create: false
   ## @param serviceAccount.name The name of the ServiceAccount to use.
   ## If not set and create is true, a name is generated using the common.names.fullname template
   ##
