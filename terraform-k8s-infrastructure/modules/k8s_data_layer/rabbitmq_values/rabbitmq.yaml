@@ -21,7 +21,7 @@ image:
   ## set to true if you would like to see extra information on logs
   ## it turns BASH and NAMI debugging in minideb
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
-  debug: false
+  debug: true
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -66,7 +66,7 @@ rbac:
 podManagementPolicy: OrderedReady
 
 ## section of specific values for rabbitmq
-auth:
+rabbitmq:
   ## RabbitMQ application username
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
@@ -89,60 +89,60 @@ auth:
   ##
   # rabbitmqClusterNodeName:
 
-## Value for the RABBITMQ_LOGS environment variable
-## ref: https://www.rabbitmq.com/logging.html#log-file-location
-##
-logs: '-'
+  ## Value for the RABBITMQ_LOGS environment variable
+  ## ref: https://www.rabbitmq.com/logging.html#log-file-location
+  ##
+  logs: '-'
 
-## RabbitMQ Max File Descriptors
-## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
-## ref: https://www.rabbitmq.com/install-debian.html#kernel-resource-limits
-##
-# setUlimitNofiles: true # No longer used it seems
-ulimitNofiles: '65536'
+  ## RabbitMQ Max File Descriptors
+  ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
+  ## ref: https://www.rabbitmq.com/install-debian.html#kernel-resource-limits
+  ##
+  # setUlimitNofiles: true # No longer used it seems
+  ulimitNofiles: '65536'
 
-## RabbitMQ maximum available scheduler threads and online scheduler threads
-## ref: https://hamidreza-s.github.io/erlang/scheduling/real-time/preemptive/migration/2016/02/09/erlang-scheduler-details.html#scheduler-threads
-##
-maxAvailableSchedulers: 2
-onlineSchedulers: 1
+  ## RabbitMQ maximum available scheduler threads and online scheduler threads
+  ## ref: https://hamidreza-s.github.io/erlang/scheduling/real-time/preemptive/migration/2016/02/09/erlang-scheduler-details.html#scheduler-threads
+  ##
+  maxAvailableSchedulers: 2
+  onlineSchedulers: 1
 
-## Plugins to enable
-plugins: "rabbitmq_management"
+  ## Plugins to enable
+  plugins: "rabbitmq_management"
 
-## Extra plugins to enable
-## Use this instead of `plugins` to add new plugins
-# extraPlugins: "rabbitmq_auth_backend_ldap"
+  ## Extra plugins to enable
+  ## Use this instead of `plugins` to add new plugins
+  # extraPlugins: "rabbitmq_auth_backend_ldap"
 
-## Clustering settings
-clustering:
-  address_type: hostname
-  #k8s_domain: cluster.local # Apparently no longer used
-  ## Rebalance master for queues in cluster when new replica is created
-  ## ref: https://www.rabbitmq.com/rabbitmq-queues.8.html#rebalance
-  rebalance: false
+  ## Clustering settings
+  clustering:
+    address_type: hostname
+    #k8s_domain: cluster.local # Apparently no longer used
+    ## Rebalance master for queues in cluster when new replica is created
+    ## ref: https://www.rabbitmq.com/rabbitmq-queues.8.html#rebalance
+    rebalance: false
 
-loadDefinition:
-  enabled: false
-  existingSecret: load-definition
+  loadDefinition:
+    enabled: false
+    existingSecret: load-definition
 
-## environment variables to configure rabbitmq
-## ref: https://www.rabbitmq.com/configure.html#customise-environment
-env: { }
+  ## environment variables to configure rabbitmq
+  ## ref: https://www.rabbitmq.com/configure.html#customise-environment
+  env: { }
 
-## Configuration file content: required cluster configuration
-## Do not override unless you know what you are doing. To add more configuration, use `extraConfiguration` of `advancedConfiguration` instead
-configuration: |-
-  # queue master locator
-  queue_master_locator=min-masters
-  # enable guest user
-  loopback_users.guest = false
+  ## Configuration file content: required cluster configuration
+  ## Do not override unless you know what you are doing. To add more configuration, use `extraConfiguration` of `advancedConfiguration` instead
+  configuration: |-
+    # queue master locator
+    queue_master_locator=min-masters
+    # enable guest user
+    loopback_users.guest = false
 
-## Configuration file content: extra configuration
-## Use this instead of `configuration` to add more configuration
-extraConfiguration: |-
-  #disk_free_limit.absolute = 50MB
-  #management.load_definitions = /app/load_definition.json
+  ## Configuration file content: extra configuration
+  ## Use this instead of `configuration` to add more configuration
+  extraConfiguration: |-
+    #disk_free_limit.absolute = 50MB
+    #management.load_definitions = /app/load_definition.json
 
   ## Configuration file content: advanced configuration
   ## Use this as additional configuraton in classic config format (Erlang term configuration format)
@@ -415,13 +415,14 @@ metrics:
 ## volumePermissions: Change the owner of the persist volume mountpoint to RunAsUser:fsGroup
 ##
 volumePermissions:
-  enabled: false
+  enabled: true
 
 ## forceBoot: executes 'rabbitmqctl force_boot' to force boot cluster shut down unexpectedly in an
 ## unknown order.
 ## ref: https://www.rabbitmq.com/rabbitmqctl.8.html#force_boot
 ##
-forceBoot: false
+forceBoot:
+  enabled: false
 
 ## Optionally specify extra secrets to be created by the chart.
 ## This can be useful when combined with load_definitions to automatically create the secret containing the definitions to be loaded.
