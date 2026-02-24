@@ -6,11 +6,11 @@ data "kubernetes_secret" "postgresql_core" {
 }
 resource "helm_release" "postgresql" {
   name      = "postgresql"
-  repository = "oci://registry-1.docker.io/bitnamicharts"
-  chart     = "postgresql"
+  #repository = "oci://registry-1.docker.io/bitnamicharts"
+  chart     = "${path.module}/charts/postgresql"
   namespace = "core"
-  version   = "18.3.0"
-  verify    = false # Temporarily necessery
+  #version   = "18.3.0"
+  #verify    = false # Temporarily necessery
 
   values = [
     file("${path.module}/postgresql_values/postgresql.yaml")

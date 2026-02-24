@@ -6,10 +6,11 @@ data "kubernetes_secret" "rabbitmq_core" {
 }
 resource "helm_release" "rabbitmq" {
   name      = "rabbitmq"
-  repository = "oci://registry-1.docker.io/bitnamicharts"
-  chart     = "rabbitmq"
+  #repository = "oci://registry-1.docker.io/bitnamicharts"
+  #chart     = "rabbitmq"
+  chart     = "${path.module}/charts/rabbitmq"
   namespace = "core"
-  version   = "16.0.14"
+  #version   = "16.0.14"
 
   values = [
     file("${path.module}/rabbitmq_values/rabbitmq.yaml")
