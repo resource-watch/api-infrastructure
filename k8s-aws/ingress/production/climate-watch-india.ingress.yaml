@@ -7,7 +7,7 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/healthcheck-path: /health_check
-    alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-east-1:534760749991:certificate/828679d0-d1fa-4ace-8a97-d5ca866e9178'
+    alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-east-1:534760749991:certificate/b3caff30-2da5-42bc-90e6-3c6e18d776a8'
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
 spec:
   tls:
