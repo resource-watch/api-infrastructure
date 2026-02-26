@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volume-debugger
+spec:
+  volumes:
+    - name: volume-to-debug
+      persistentVolumeClaim:
+        claimName: ${PVC_NAME} # Replace with your PVC name
+  containers:
+    - name: debugger
+      image: busybox:stable
+      command: ['sleep', '3600'] # Keeps the pod running
+      volumeMounts:
+        - mountPath: "/data" # The path where the volume will be mounted
+          name: volume-to-debug
+  restartPolicy: Never

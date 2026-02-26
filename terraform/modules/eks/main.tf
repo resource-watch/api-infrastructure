@@ -306,3 +306,52 @@ resource "aws_eks_access_policy_association" "gha_policy" {
     aws_eks_access_entry.gha_role
   ]
 }
+
+# Default pod Service Account role and policy
+resource "aws_iam_role" "default_sa_role" {
+  name = "default-irsa-${var.environment}"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Federated = aws_iam_openid_connect_provider.example.arn
+        }
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "${replace(aws_eks_cluster.eks_cluster.identity[0].oidc[0].issuer, "https://", "")}:sub" = "system:serviceaccount:core:default"
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "default_sa_policy" {
+  name        = "default-sa-policy-${var.environment}"
+  description = ""
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:DescribeLogStreams"
+        ]
+        Resource = "arn:aws:logs:us-east-1:*:log-group:*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "authorization_attach" {
+  role       = aws_iam_role.default_sa_role.name
+  policy_arn = aws_iam_policy.default_sa_policy.arn
+}
