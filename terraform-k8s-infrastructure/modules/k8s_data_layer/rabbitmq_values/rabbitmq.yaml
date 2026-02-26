@@ -415,7 +415,7 @@ metrics:
 ## volumePermissions: Change the owner of the persist volume mountpoint to RunAsUser:fsGroup
 ##
 volumePermissions:
-  enabled: true
+  enabled: false
 
 ## forceBoot: executes 'rabbitmqctl force_boot' to force boot cluster shut down unexpectedly in an
 ## unknown order.
