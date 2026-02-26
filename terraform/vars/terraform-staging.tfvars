@@ -13,6 +13,7 @@ db_logs_exports                 = ["audit", "profiler"]
 eks_version                     = "1.29"
 eks_node_release_version        = "1.29.0-20240202"
 ebs_csi_addon_version           = "v1.27.0-eksbuild.1"
+kube_proxy_addon_version        = "v1.29.15-eksbuild.28"
 gateway_node_group_desired_size = 0
 hibernate                       = false
 
@@ -33,3 +34,4 @@ mongodb_apps_node_group_instance_types = ["r5a.large", "r5.large"]
 
 aq_bucket_cors_allowed_origin = "*"
 deploy_sparkpost_templates    = false
+gha_role_arn                  = "arn:aws:iam::843801476059:role/wri-api-staging-githubactions-role"

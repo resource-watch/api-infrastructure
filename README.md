@@ -4,6 +4,9 @@
 
 For a description of the setup, see the infrastructure [section](https://resource-watch.github.io/doc-api/developer.html#infrastructure-configuration) of the developer documentation.
 
+# Github Actions
+Github Actions (GHA) has been setup to run `terraform plan` when a PR is opened to either the `dev`, `staging`, or `production` (TODO) branches, and `terraform apply` when the PR is merged. This makes use of an OIDC role as described here: https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws.  The role for each environment was created manually, and is specified using the `gha_role_arn` Terraform variable.
+
 ## Setting up the AWS resources
 
 To setup the cluster cloud resources, use the following command:
