@@ -308,7 +308,7 @@ resource "aws_eks_access_policy_association" "gha_policy" {
 }
 
 # Default pod Service Account role and policy
-resource "aws_iam_role" "default_irsa" {
+resource "aws_iam_role" "default_sa_role" {
   name = "default-irsa-${var.environment}"
 
   assume_role_policy = jsonencode({
@@ -352,6 +352,6 @@ resource "aws_iam_policy" "default_sa_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "authorization_attach" {
-  role       = aws_iam_role.default_irsa.name
-  policy_arn = aws_iam_policy.default_irsa_policy.arn
+  role       = aws_iam_role.default_sa_role.name
+  policy_arn = aws_iam_policy.default_sa_policy.arn
 }
