@@ -45,9 +45,10 @@ resource "aws_eks_addon" "aws_ebs_csi_driver" {
 }
 
 resource "aws_eks_addon" "kube_proxy" {
-  cluster_name             = aws_eks_cluster.eks_cluster.name
-  addon_name               = "kube-proxy"
-  addon_version            = var.kube_proxy_addon_version
+  cluster_name                = aws_eks_cluster.eks_cluster.name
+  addon_name                  = "kube-proxy"
+  addon_version               = var.kube_proxy_addon_version
+  resolve_conflicts_on_create = "OVERWRITE"
 }
 
 resource "aws_security_group" "eks_cluster_security_group" {
