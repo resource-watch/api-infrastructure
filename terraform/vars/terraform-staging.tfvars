@@ -31,6 +31,8 @@ core_node_group_instance_types = ["c5a.large", "c5a.xlarge", "c5.large", "c5.xla
 
 mongodb_apps_node_group_capacity_type  = "SPOT"
 mongodb_apps_node_group_instance_types = ["r5a.large", "r5.large"]
+# Temporary fix for pvc/az mismatch
+mongodb_apps_node_group_max_size = 4
 
 aq_bucket_cors_allowed_origin = "*"
 deploy_sparkpost_templates    = false
