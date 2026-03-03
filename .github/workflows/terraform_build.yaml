@@ -83,7 +83,7 @@ jobs:
       ENV: ${{ github.ref_name }}
       AWS_ROLE: >-
         ${{ github.base_ref == 'production' && 'TBD' || 
-            github.base_ref == 'staging' && 'TBD' ||
+            github.base_ref == 'staging' && 'arn:aws:iam::843801476059:role/wri-api-staging-githubactions-role' ||
             'arn:aws:iam::842534099497:role/wri-api-dev-githubactions-role' }}
       AWS_REGION: >-
         ${{ github.ref_name == 'production' && secrets.aws_region_production ||
