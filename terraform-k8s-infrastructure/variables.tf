@@ -15,6 +15,12 @@ variable "aws_region" {
   description = "A valid AWS region to configure the underlying AWS SDK."
 }
 
+variable "cluster_port" {
+  type        = string
+  description = "THe k8s cluster port, if different from 443."
+  default     = "443"
+}
+
 variable "dns_prefix" {
   type        = string
   description = "DNS prefix for public URLs created in this project."
@@ -87,3 +93,14 @@ variable "fw_backend_url" {
 variable "require_api_key" {
   type    = bool
 }
+
+variable "cloudflare_api_key" {
+  type        = string
+  description = "Cloudflare API key"
+}
+
+variable "cloudflare_email" {
+  type        = string
+  description = "Cloudflare email"
+}
+

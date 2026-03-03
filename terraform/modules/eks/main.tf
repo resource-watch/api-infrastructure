@@ -44,6 +44,13 @@ resource "aws_eks_addon" "aws_ebs_csi_driver" {
   service_account_role_arn = aws_iam_role.ebs_csi_iam_role.arn
 }
 
+resource "aws_eks_addon" "kube_proxy" {
+  cluster_name                = aws_eks_cluster.eks_cluster.name
+  addon_name                  = "kube-proxy"
+  addon_version               = var.kube_proxy_addon_version
+  resolve_conflicts_on_create = "OVERWRITE"
+}
+
 resource "aws_security_group" "eks_cluster_security_group" {
   name        = "${replace(var.project, " ", "-")}eks-cluster-security-group"
   description = "Cluster communication with worker nodes"
@@ -269,7 +276,7 @@ resource "aws_eks_access_policy_association" "admin_policy" {
   for_each = var.admin_role_arns
 
   cluster_name    = aws_eks_cluster.eks_cluster.name
-  policy_arn      = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
+  policy_arn      = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
   principal_arn   = each.value
 
   access_scope {
@@ -279,4 +286,73 @@ resource "aws_eks_access_policy_association" "admin_policy" {
   depends_on = [
     aws_eks_access_entry.admin_role
   ]
+}
+
+resource "aws_eks_access_entry" "gha_role" {
+  cluster_name  = aws_eks_cluster.eks_cluster.name
+  principal_arn = var.gha_role_arn
+  type          = "STANDARD"
+}
+
+resource "aws_eks_access_policy_association" "gha_policy" {
+  cluster_name    = aws_eks_cluster.eks_cluster.name
+  policy_arn      = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  principal_arn   = var.gha_role_arn
+
+  access_scope {
+    type = "cluster"
+  }
+
+  depends_on = [
+    aws_eks_access_entry.gha_role
+  ]
+}
+
+# Default pod Service Account role and policy
+resource "aws_iam_role" "default_sa_role" {
+  name = "default-irsa-${var.environment}"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Federated = aws_iam_openid_connect_provider.example.arn
+        }
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "${replace(aws_eks_cluster.eks_cluster.identity[0].oidc[0].issuer, "https://", "")}:sub" = "system:serviceaccount:core:default"
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "default_sa_policy" {
+  name        = "default-sa-policy-${var.environment}"
+  description = ""
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:DescribeLogStreams"
+        ]
+        Resource = "arn:aws:logs:us-east-1:*:log-group:*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "authorization_attach" {
+  role       = aws_iam_role.default_sa_role.name
+  policy_arn = aws_iam_policy.default_sa_policy.arn
 }

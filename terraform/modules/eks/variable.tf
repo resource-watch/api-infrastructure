@@ -30,6 +30,11 @@ variable "ebs_csi_addon_version" {
   description = "Version of AWS EBS CRI driver to use"
 }
 
+variable "kube_proxy_addon_version" {
+  type        = string
+  description = "Version of kube-proxy to use"
+} 
+
 variable "backups_bucket" {
   type        = string
   description = "S3 bucket to which backups will be performed"
@@ -38,4 +43,9 @@ variable "backups_bucket" {
 variable "admin_role_arns" {
   type        = set(string)
   description = "ARN of the Role used for admin cluster access."
+}
+
+variable "gha_role_arn" {
+  type        = string
+  description = "ARN of the Role used for Github Actions."
 }

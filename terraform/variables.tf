@@ -232,6 +232,7 @@ variable "eks_version" {
 
 variable "eks_node_release_version" {
   type        = string
+  default     = ""
   description = "Version of EKS (kubernetes) node AMI to deploy"
 }
 
@@ -239,6 +240,11 @@ variable "ebs_csi_addon_version" {
   type        = string
   description = "Version of AWS EBS CRI driver to use"
 }
+
+variable "kube_proxy_addon_version" {
+  type        = string
+  description = "Version of kube-proxy to use"
+} 
 
 variable "hibernate" {
   description = "If set to true, the EKS cluster will be scaled down and its services unavailable"
@@ -276,4 +282,9 @@ variable "email_recipients" {
   type        = list(string)
   description = "List of email addresses to contact in case an alert fails"
   default     = []
+}
+
+variable "gha_role_arn" {
+  type        = string
+  description = "ARN of the Role used for Github Actions."
 }

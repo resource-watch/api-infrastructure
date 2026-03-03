@@ -5,36 +5,20 @@ terraform {
       version = "~> 4.48.0"
     }
 
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 3.30.0"
+    }
+
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.16.1"
+    }
+
     kubectl = {
       source  = "gavinbunney/kubectl"
       version = "~> 1.14.0"
     }
-
-    helm = {
-      source  = "hashicorp/helm"
-      version = "~> 2.8.0"
-    }
   }
   required_version = "1.3.6"
-}
-
-provider "aws" {
-  region = var.aws_region
-}
-
-provider "helm" {
-  kubernetes {
-    host                   = var.cluster_endpoint
-    cluster_ca_certificate = base64decode(var.cluster_ca)
-    exec {
-      api_version = "client.authentication.k8s.io/v1beta1"
-      args = [
-        "eks",
-        "get-token",
-        "--cluster-name",
-        var.cluster_name
-      ]
-      command = "aws"
-    }
-  }
 }

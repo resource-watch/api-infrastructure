@@ -6,12 +6,14 @@ data "kubernetes_secret" "rabbitmq_core" {
 }
 resource "helm_release" "rabbitmq" {
   name      = "rabbitmq"
-  chart     = "bitnami/rabbitmq"
+  #repository = "oci://registry-1.docker.io/bitnamicharts"
+  #chart     = "rabbitmq"
+  chart     = "${path.module}/charts/rabbitmq"
   namespace = "core"
-  version   = "6.18.2"
+  #version   = "16.0.14"
 
   values = [
-    file("${path.module}/rabbitmq/rabbitmq.yaml")
+    file("${path.module}/rabbitmq_values/rabbitmq.yaml")
   ]
 
   depends_on = [

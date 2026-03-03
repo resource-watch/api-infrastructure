@@ -25,6 +25,7 @@ crash.log
 # version control.
 #
 # example.tfvars
+*.auto.tfvars
 
 # Ignore override files as they are usually used to override resources locally and so
 # are not checked in
@@ -52,3 +53,6 @@ terraform-k8s-infrastructure/vars/private.tfvars
 
 terraform.tfstate
 terraform.tfstate.backup
+
+# Snyk Security Extension - AI Rules (auto-generated)
+.github/instructions/snyk_rules.instructions.md

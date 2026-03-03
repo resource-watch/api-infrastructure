@@ -66,3 +66,13 @@ variable "require_api_key" {
   type    = bool
   default = false
 }
+
+variable "cloudflare_api_key" {
+  type        = string
+  description = "Cloudflare API key"
+}
+
+variable "cloudflare_email" {
+  type        = string
+  description = "Cloudflare email"
+}

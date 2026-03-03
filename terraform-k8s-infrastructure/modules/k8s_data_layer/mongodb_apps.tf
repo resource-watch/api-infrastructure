@@ -5,7 +5,7 @@ resource "helm_release" "mongodb_apps" {
   version   = "3.15.0"
 
   values = [
-    file("${path.module}/mongodb_apps/mongodb-apps-values.yaml")
+    file("${path.module}/mongodb_apps_values/mongodb-apps-values.yaml")
   ]
 }
 
