@@ -1,12 +1,11 @@
 resource "helm_release" "mongodb_apps" {
   name      = "mongodb-apps"
-  chart     = "stable/mongodb-replicaset"
+  #chart     = "stable/mongodb-replicaset"
+  chart     = "${path.module}/charts/mongodb-replicaset"
   namespace = "core"
-  version   = "3.15.0"
+  #version   = "3.15.0"
 
   values = [
     file("${path.module}/mongodb_apps_values/mongodb-apps-values.yaml")
   ]
 }
-
-
