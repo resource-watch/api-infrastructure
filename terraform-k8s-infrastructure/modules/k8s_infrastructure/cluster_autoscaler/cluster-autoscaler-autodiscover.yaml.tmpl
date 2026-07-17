@@ -7,6 +7,8 @@ metadata:
     k8s-app: cluster-autoscaler
   name: cluster-autoscaler
   namespace: kube-system
+  annotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::${aws_account_id}:role/eks-node-group-admin"
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -140,7 +142,7 @@ spec:
     spec:
       serviceAccountName: cluster-autoscaler
       containers:
-        - image: eu.gcr.io/k8s-artifacts-prod/autoscaling/cluster-autoscaler:v1.16.5
+        - image: eu.gcr.io/k8s-artifacts-prod/autoscaling/cluster-autoscaler:v1.30.7
           name: cluster-autoscaler
           resources:
             limits:
@@ -160,6 +162,9 @@ spec:
             - --balance-similar-node-groups
             - --skip-nodes-with-system-pods=false
             - --aws-use-static-instance-list=true
+          env:
+            - name: AWS_REGION
+              value: "us-east-1"
           volumeMounts:
             - name: ssl-certs
               mountPath: /etc/ssl/certs/ca-certificates.crt
