@@ -181,3 +181,8 @@ terraform apply -var-file=vars/terraform-<your environment>.tfvars
 ```
 
 The command above will provision most of the resources needed by the API. However, some resources will still require manual deployment after this - check the `k8s-aws` folder and its sub-folders for more details.
+
+### Upgrading Kuberentes
+
+Be sure to follow the steps described here: https://docs.aws.amazon.com/eks/latest/userguide/update-cluster.html#update-cluster-summary.  This cluster uses `cluster-autoscaler` which will need to be updated along with the various addons.
+
