@@ -130,6 +130,18 @@ resource "aws_iam_role" "eks-node-group-iam-role" {
         Principal = {
           Service = "ec2.amazonaws.com"
         }
+      },
+      {
+        Effect    = "Allow"
+        Principal = {
+          Federated = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/oidc.eks.${var.aws_region}.amazonaws.com/id/${local.oicd_id}"
+        }
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "oidc.eks.${var.aws_region}.amazonaws.com/id/${local.oicd_id}:aud" : "sts.amazonaws.com"
+          }
+        }
       }
     ]
     Version = "2012-10-17"
