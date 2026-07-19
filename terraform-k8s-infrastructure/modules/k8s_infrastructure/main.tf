@@ -16,6 +16,7 @@ data "kubectl_path_documents" "cluster_autoscaler_manifests" {
   vars = {
     cluster_name : var.cluster_name
     aws_account_id : data.aws_caller_identity.current.account_id
+    cluster_autoscaler_version: var.cluster_autoscaler_version
   }
 }
 

@@ -26,15 +26,16 @@ module "k8s_namespaces" {
 }
 
 module "k8s_infrastructure" {
-  source                = "./modules/k8s_infrastructure"
-  cluster_endpoint      = "${data.aws_eks_cluster.rw_api.endpoint}:${var.cluster_port}"
-  cluster_ca            = data.aws_eks_cluster.rw_api.certificate_authority.0.data
-  cluster_name          = data.aws_eks_cluster.rw_api.name
-  aws_region            = var.aws_region
-  vpc_id                = data.aws_vpc.eks_vpc.id
-  deploy_metrics_server = var.deploy_metrics_server
-  cloudflare_api_key    = var.cloudflare_api_key
-  cloudflare_email      = var.cloudflare_email
+  source                      = "./modules/k8s_infrastructure"
+  cluster_endpoint            = "${data.aws_eks_cluster.rw_api.endpoint}:${var.cluster_port}"
+  cluster_ca                  = data.aws_eks_cluster.rw_api.certificate_authority.0.data
+  cluster_name                = data.aws_eks_cluster.rw_api.name
+  aws_region                  = var.aws_region
+  vpc_id                      = data.aws_vpc.eks_vpc.id
+  deploy_metrics_server       = var.deploy_metrics_server
+  cloudflare_api_key          = var.cloudflare_api_key
+  cloudflare_email            = var.cloudflare_email
+  cluster_autoscaler_version  = var.cluster_autoscaler_version
 }
 
 module "k8s_data_layer" {
