@@ -19,11 +19,25 @@ data "kubectl_path_documents" "namespace_serviceaccount_manifests" {
   pattern = "${path.module}/namespace-serviceaccount.yaml.tmpl"
   vars = {
     aws_account_id : data.aws_caller_identity.current.account_id
-    namespaces : join(",", var.namespaces)
+    namespaces : join(",", concat(var.namespaces, ["default"]))
   }
 }
 
 resource "kubectl_manifest" "service_accounts" {
   for_each = data.kubectl_path_documents.namespace_serviceaccount_manifests.manifests
   yaml_body = each.value
+}
+
+# Add it to the default SA in the all namespaces as well, to avoid having to change Jenkins deployments.
+resource "kubernetes_annotations" "default_service_account" {
+  count = length(var.namespaces)
+  api_version = "v1"
+  kind        = "ServiceAccount"
+  metadata {
+    name = "default"
+    namespace = var.namespaces[count.index]
+  }
+  annotations = {
+    "eks.amazonaws.com/role-arn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/eks-node-group-admin"
+  }
 }

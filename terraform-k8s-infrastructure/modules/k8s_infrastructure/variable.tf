@@ -38,3 +38,8 @@ variable "cloudflare_email" {
   type        = string
   description = "Cloudflare email"
 }
+
+variable "cluster_autoscaler_version" {
+  type        = string
+  description = "The version of the cluster autoscaler to deploy"
+}
