@@ -41,3 +41,16 @@ resource "kubernetes_annotations" "default_service_account" {
     "eks.amazonaws.com/role-arn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/eks-node-group-admin"
   }
 }
+
+# And the default namespace
+resource "kubernetes_annotations" "default_service_account_default_namespace" {
+  api_version = "v1"
+  kind        = "ServiceAccount"
+  metadata {
+    name = "default"
+    namespace = "default"
+  }
+  annotations = {
+    "eks.amazonaws.com/role-arn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/eks-node-group-admin"
+  }
+}
