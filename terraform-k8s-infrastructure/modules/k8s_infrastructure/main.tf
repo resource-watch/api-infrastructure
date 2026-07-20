@@ -6,6 +6,8 @@ module "alb" {
   cluster_name = var.cluster_name
 }
 
+data "aws_caller_identity" "current" {}
+
 // https://docs.aws.amazon.com/eks/latest/userguide/cluster-autoscaler.html
 // AWS Cluster autoscaler
 // File has changes - see link above for details
@@ -13,6 +15,8 @@ data "kubectl_path_documents" "cluster_autoscaler_manifests" {
   pattern = "${path.module}/cluster_autoscaler/cluster-autoscaler-autodiscover.yaml.tmpl"
   vars = {
     cluster_name : var.cluster_name
+    aws_account_id : data.aws_caller_identity.current.account_id
+    cluster_autoscaler_version: var.cluster_autoscaler_version
   }
 }
 

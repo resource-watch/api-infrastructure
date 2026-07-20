@@ -11,3 +11,4 @@ x_rw_domain                              = "api.resourcewatch.org"
 namespaces                               = ["core", "aqueduct", "rw", "gfw", "prep", "climate-watch", "gateway"]
 fw_backend_url                           = "https://fw-api.globalforestwatch.org"
 require_api_key                          = false
+cluster_autoscaler_version               = "v1.16.5"
