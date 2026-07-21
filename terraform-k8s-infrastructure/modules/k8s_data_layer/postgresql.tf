@@ -4,6 +4,7 @@ data "kubernetes_secret" "postgresql_core" {
     namespace = "core"
   }
 }
+
 resource "helm_release" "postgresql" {
   name      = "postgresql"
   #repository = "oci://registry-1.docker.io/bitnamicharts"
@@ -11,6 +12,9 @@ resource "helm_release" "postgresql" {
   namespace = "core"
   #version   = "18.3.0"
   #verify    = false # Temporarily necessery
+
+  # In a degraded state, so don't wait for it to be ready.
+  wait = false
 
   values = [
     file("${path.module}/postgresql_values/postgresql.yaml")
