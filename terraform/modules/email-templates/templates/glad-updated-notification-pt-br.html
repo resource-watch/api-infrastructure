@@ -3,7 +3,7 @@
   xmlns:v="urn:schemas-microsoft-com:vml">
 
 <head>
-  <title>Alertas de desmatamento detectados em {{ alert_name }}</title>
+  <title>Resumo dos alertas de perturbações e incêndios para {{ alert_name }}</title>
   <!-- The title tag shows in email notifications, like Android 4.4. -->
   <meta charset="utf-8"> <!-- utf-8 works for most cases -->
   <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
@@ -367,7 +367,7 @@
     <!-- Visually Hidden Preview Text : BEGIN -->
     <div
       style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-      Alertas de desmatamento detectados em {{ alert_name }}
+      Resumo dos alertas de perturbações e incêndios para {{ alert_name }}
     </div>
     <!-- Visually Hidden Preview Text : END -->
 
@@ -439,9 +439,9 @@
                   <tr>
                     <td
                       style="font-family: arial, sans-serif; font-size: 15px; line-height: 140%; color: #333333; text-align: left; padding: 15px 0 25px;">
-                      <h1
-                        style="font-weight: bold; font-size: 32px; line-height: 37px; color: #333333;">
-                        <b style="color: #F26798">Alertas de desmatamento </b>detectados em {{ alert_name }}</h1>
+                      <h1 style="font-weight: bold; font-size: 32px; line-height: 37px; color: #333333;">
+                          <b style="color: #F26798">Resumo dos alertas de perturbações e incêndios</b> para {{ alert_name }}
+                      </h1>
                     </td>
                   </tr>
                   <!-- Subtitle and meta : BEGIN -->
@@ -487,7 +487,7 @@
               <tr>
                 <td style="font-family: arial, sans-serif; padding-bottom: 40px;">
                   <h2 style="font-weight: bold; font-size: 16px; line-height: 20px; color: #555555;">
-                    ALERTAS DE DESMATAMENTO
+                    ALERTAS DE PERTURBAÇÃO
                   </h2>
                 </td>
               </tr>
@@ -518,8 +518,7 @@
                     <tr>
                       <td valign="top" style="font-family: arial, sans-serif; font-size: 18px; line-height: 30px; color: #4A4A4A; text-align: left; vertical-align: top;">
                         <p>
-                          Houve <b style="color: #F26798;">{{ glad_count }} {{ glad_alert_type }}</b> relatados na semana de {{ week_of }} (de {{ week_start }} até {{ week_end }}).
-	                        Os alertas cobriram um total de <b style="color: #F26798;">{{ area_ha_sum }} hectares</b>.
+                            Foram relatados <b style="color: #F26798;">{{ glad_count }} {{ glad_alert_type }}</b> alertas na cobertura arbórea na semana de {{ week_of }}. Os alertas abrangeram um total de <b style="color: #F26798;">{{ area_ha_sum }} hectares</b>.
                         </p>
                       </td>
                     </tr>
@@ -531,13 +530,30 @@
               </table>
               <![endif]-->
             </div>
+            
+            <!-- Integrated Disturbance Alerts Warning  -->
+            <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+              <tr>
+                <td style="padding-bottom: 40px">
+                  <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                    <tr>
+                      <td style="border: 2px solid #97BD3D; border-radius: 5px; padding: 20px; background-color: #F9FDF4;">
+                        <p style="font-family: arial, sans-serif; font-size: 14px; line-height: 21px; color: #555; margin: 0;">
+                          A camada integrada de alertas de desflorestação foi atualizada para incluir alertas globais de perturbação da vegetação (DIST-ALERT). Esses e-mails incluem alertas sobre a cobertura arbórea. Você pode visualizar os alertas em toda a vegetação no mapa ou no painel.
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
 
             <!-- Component : Secondary heading -->
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
               <tr>
                 <td style="font-family: arial, sans-serif; padding-bottom: 10px;">
                   <h3 style="font-weight: bold; font-size: 13px; line-height: 20px; color: #555555; text-transform: uppercase;">
-                    ALERTAS DE DESMATAMENTO EM ÁREAS PRIORITÁRIAS
+                    ALERTAS DE PERTURBAÇÃO EM ÁREAS PRIORITÁRIAS
                   </h3>
                 </td>
               </tr>
@@ -703,7 +719,7 @@
                             <tr>
                               <td width="100%" height="40" style="border-radius: 25px; width: 100%; background: #fff; text-align: center; height: 40px; border: solid 1px #97BD3D; display: block;">
                                 <a href="{{{ alert_link }}}"
-                                  style="padding: 11px 17px; display: block; height: 100%; border-radius: 25px; font-weight: bold;font-family: arial, sans-serif; font-size: 17px; line-height: 17px; color: #333; text-align: center; text-decoration: none; white-space: nowrap;">
+                                  style="padding: 11px 17px; display: block; border-radius: 25px; font-weight: bold;font-family: arial, sans-serif; font-size: 17px; line-height: 17px; color: #333; text-align: center; text-decoration: none; white-space: nowrap;">
                                   VER NO MAPA
                                 </a>
                               </td>

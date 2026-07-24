@@ -5,7 +5,7 @@
 resource "sparkpost_template" "glad-updated-notification-id" {
   content_from_email     = "no-reply@globalforestwatch.org"
   content_from_name      = "Global Forest Watch"
-  content_subject        = "Peringatan perubahan hutan"
+  content_subject        = "Peringatan gangguan hutan"
   name                   = "GLAD Notifications v2 ID"
   options_click_tracking = true
   options_open_tracking  = true
@@ -17,7 +17,7 @@ resource "sparkpost_template" "glad-updated-notification-id" {
 resource "sparkpost_template" "glad-updated-notification-es-mx" {
   content_from_email     = "no-reply@globalforestwatch.org"
   content_from_name      = "Global Forest Watch"
-  content_subject        = "Alertas de deforestación"
+  content_subject        = "Alertas de perturbaciones forestales"
   name                   = "GLAD Notifications v2 ES-MX"
   options_click_tracking = true
   options_open_tracking  = true
@@ -41,7 +41,7 @@ resource "sparkpost_template" "glad-updated-notification-fr" {
 resource "sparkpost_template" "glad-updated-notification-en" {
   content_from_email     = "no-reply@globalforestwatch.org"
   content_from_name      = "Global Forest Watch"
-  content_subject        = "Forest change alert"
+  content_subject        = "Forest disturbance alerts"
   name                   = "GLAD Notifications v2 EN"
   options_click_tracking = true
   options_open_tracking  = true
@@ -53,7 +53,7 @@ resource "sparkpost_template" "glad-updated-notification-en" {
 resource "sparkpost_template" "glad-updated-notification-pt-br" {
   content_from_email     = "no-reply@globalforestwatch.org"
   content_from_name      = "Global Forest Watch"
-  content_subject        = "Alertas de desmatamento"
+  content_subject        = "Alertas de perturbação florestal"
   name                   = "GLAD Notifications v2 PT-BR"
   options_click_tracking = true
   options_open_tracking  = true
@@ -65,7 +65,7 @@ resource "sparkpost_template" "glad-updated-notification-pt-br" {
 resource "sparkpost_template" "glad-updated-notification-zh" {
   content_from_email     = "no-reply@globalforestwatch.org"
   content_from_name      = "Global Forest Watch"
-  content_subject        = "森林变化预警"
+  content_subject        = "森林扰动警报"
   name                   = "GLAD Notifications v2 ZH"
   options_click_tracking = true
   options_open_tracking  = true
