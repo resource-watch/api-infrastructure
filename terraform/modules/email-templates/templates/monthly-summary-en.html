@@ -1,9 +1,10 @@
+<!-- V 1.1 -->
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office"
   xmlns:v="urn:schemas-microsoft-com:vml">
 
 <head>
-  <title>Summary of deforestation and fire alerts for {{ alert_name }}</title>
+  <title>Summary of disturbance and fire alerts for {{ alert_name }}</title>
   <!-- The title tag shows in email notifications, like Android 4.4. -->
   <meta charset="utf-8"> <!-- utf-8 works for most cases -->
   <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
@@ -292,7 +293,7 @@
     <!-- Visually Hidden Preview Text : BEGIN -->
     <div
       style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-      Summary of deforestation and fire alerts for {{ alert_name }}
+      Summary of disturbance and fire alerts for {{ alert_name }}
     </div>
     <!-- Visually Hidden Preview Text : END -->
 
@@ -366,7 +367,7 @@
                       style="font-family: arial, sans-serif; font-size: 15px; line-height: 140%; color: #333333; text-align: left; padding: 15px 0 25px;">
                       <h1
                         style="font-weight: bold; font-size: 32px; line-height: 37px; color: #333333;">
-                        <b style="color: #97BD3D;">Summary</b> of deforestation and fire alerts for {{ alert_name }}</h1>
+                        <b style="color: #97BD3D;">Summary</b> of disturbance and fire alerts for {{ alert_name }}</h1>
                     </td>
                   </tr>
                   <!-- Subtitle and meta : BEGIN -->
@@ -424,7 +425,7 @@
                 <td
                   style="font-family: arial, sans-serif; font-size: 18px; line-height: 30px; color: #4A4A4A; text-align: left; padding-bottom: 40px;">
                   <p>
-                    A total of <b>{{ glad_count }} GLAD deforestation and {{ viirs_count }} VIIRS fire alerts</b> were reported in the month of {{ month }} {{ year }}.
+                    A total of <b>{{ glad_count }} disturbance and {{ viirs_count }} VIIRS fire alerts</b> were reported in the month of {{ month }} {{ year }}.
                   </p>
                 </td>
               </tr>
@@ -447,9 +448,9 @@
               <!--[if mso]>
                 <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                 <tr>
-                <td width="16.6%">
+                <td width="24.9%">
                 <![endif]-->
-                  <div style="display:inline-block; width: 16.6%; vertical-align: top;" class="stack-column">
+                  <div style="display:inline-block; width: 24.9%; vertical-align: top;" class="stack-column">
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 20px;">
                       <tr>
                         <td width="60" height="60" valign="top" align="center">
@@ -472,9 +473,9 @@
                   </div>
               <!--[if mso]>
               </td>
-              <td width="16.6%">
+              <td width="24.9%">
               <![endif]-->
-                <div style="display:inline-block; margin: 0; width: 16.6%; vertical-align: top;" class="stack-column">
+                <div style="display:inline-block; margin: 0; width: 24.9%; vertical-align: top;" class="stack-column">
                   <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 20px;">
                     <tr>
                       <td width="60" height="60" valign="top" align="center">
@@ -497,9 +498,9 @@
                 </div>
               <!--[if mso]>
               </td>
-              <td width="16.6%">
+              <td width="24.9%">
               <![endif]-->
-                <div style="display:inline-block; margin: 0; width: 16.6%; vertical-align: top;" class="stack-column">
+                <div style="display:inline-block; margin: 0; width: 24.9%; vertical-align: top;" class="stack-column">
                   <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 20px;">
                     <tr>
                       <td width="60" height="60" valign="top" align="center">
@@ -522,9 +523,9 @@
                 </div>
               <!--[if mso]>
               </td>
-              <td width="16.6%">
+              <td width="24.9%">
               <![endif]-->
-                <div style="display:inline-block; margin: 0; width: 16.6%; vertical-align: top;" class="stack-column">
+                <div style="display:inline-block; margin: 0; width: 24.9%; vertical-align: top;" class="stack-column">
                   <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 20px;">
                     <tr>
                       <td width="60" height="60" valign="top" align="center">
@@ -545,62 +546,6 @@
                     </tr>
                   </table>
                 </div>
-              <!--[if mso]>
-              </td>
-              <td width="16.6%">
-              <![endif]-->
-                <div style="display:inline-block; margin: 0; width: 16.6%; vertical-align: top;" class="stack-column">
-                  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 20px;">
-                    <tr>
-                      <td width="60" height="60" valign="top" align="center">
-                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="60" height="60" style="height: 60px;">
-                          <tr>
-                            <td width="60" height="60" valign="middle" align="center" style="font-family: arial, sans-serif; font-size: 18px; font-weight: bold; color: #fff; text-align: center; vertical-align: middle; background-color: #333; width: 60px; height: 60px; border-radius: 30px;">
-                              {{ formatted_priority_areas.plantations }}
-                            </td>
-                          </tr>
-                        </table>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td align="center"
-                        style="font-family: arial, sans-serif; font-size: 12px; color: #555; text-align: center; padding-top: 15px;">
-                        PLANTATIONS
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-              <!--[if mso]>
-              </td>
-              <td width="16.6%">
-              <![endif]-->
-                <div style="display:inline-block; margin: 0; width: 16.6%; vertical-align: top;" class="stack-column">
-                  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 20px;">
-                    <tr>
-                      <td width="60" height="60" valign="top" align="center">
-                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="60" height="60" style="height: 60px;">
-                          <tr>
-                            <td width="60" height="60" valign="middle" align="center" style="font-family: arial, sans-serif; font-size: 18px; font-weight: bold; color: #fff; text-align: center; vertical-align: middle; background-color: #333; width: 60px; height: 60px; border-radius: 30px;">
-                              {{ formatted_priority_areas.other }}
-                            </td>
-                          </tr>
-                        </table>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td align="center"
-                        style="font-family: arial, sans-serif; font-size: 12px; color: #555; text-align: center; padding-top: 15px;">
-                        OTHER NON-FOREST
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-              <!--[if mso]>
-              </td>
-              </tr>
-              </table>
-              <![endif]-->
-            </div>
 
           </td>
         </tr>
@@ -622,7 +567,7 @@
               <tr>
                 <td style="font-family: arial, sans-serif; padding-bottom: 40px;">
                   <h2 style="font-weight: bold; font-size: 16px; line-height: 20px; color: #555555;">
-                    DEFORESTATION ALERTS
+                    DISTURBANCE ALERTS
                   </h2>
                 </td>
               </tr>
@@ -653,7 +598,7 @@
                     <tr>
                       <td valign="top" style="font-family: arial, sans-serif; font-size: 18px; line-height: 30px; color: #4A4A4A; text-align: left; vertical-align: top;">
                         <p>
-                          There were <b style="color: #F26798;">{{ glad_count }} GLAD deforestation alerts</b> reported in the week of the {{ week_of }} (from {{ week_start }} to {{ week_end }}).
+                          There were <b style="color: #F26798;">{{ glad_count }} disturbance alerts</b> reported in tree cover in the week of the {{ week_of }} (from {{ week_start }} to {{ week_end }}).
 	                        This is <b style="color: #F26798;">{{ glad_frequency }}</b> compared to the same week in previous years.
                         </p>
                       </td>
@@ -666,6 +611,23 @@
               </table>
               <![endif]-->
             </div>
+            
+            <!-- Integrated Disturbance Alerts Warning  -->
+            <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+              <tr>
+                <td style="padding-bottom: 40px">
+                  <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                    <tr>
+                      <td style="border: 2px solid #97BD3D; border-radius: 5px; padding: 20px; background-color: #F9FDF4;">
+                        <p style="font-family: arial, sans-serif; font-size: 14px; line-height: 21px; color: #555; margin: 0;">
+                          The integrated deforestation alerts layer has been updated to include global vegetation disturbance alerts (DIST-ALERT). These emails include alerts in tree cover. You can view alerts in all vegetation on the map or dashboard.
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
 
             <!-- Component : Secondary heading -->
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
@@ -674,7 +636,7 @@
                   style="font-family: arial, sans-serif; padding-bottom: 30px;">
                   <h3
                     style="font-weight: bold; font-size: 13px; line-height: 20px; color: #555555; text-transform: uppercase;">
-                    DEFORESTATION ALERTS IN PRIORITY AREAS</h3>
+                    DISTURBANCE ALERTS IN PRIORITY AREAS</h3>
                 </td>
               </tr>
             </table>
@@ -1030,7 +992,7 @@
                           <tr>
                             <td width="100%" height="40" style="border-radius: 25px; width: 100%; background: #97BD3D; text-align: center; height: 40px;">
                               <a href="{{{ dashboard_link }}}"
-                                style="padding: 11px 17px; display: block; height: 100%; border-radius: 25px; font-weight: bold;font-family: arial, sans-serif; font-size: 17px; line-height: 17px; color: #ffffff; text-align: center; text-decoration: none; white-space: nowrap;">
+                                style="padding: 11px 17px; display: block; border-radius: 25px; font-weight: bold;font-family: arial, sans-serif; font-size: 17px; line-height: 17px; color: #ffffff; text-align: center; text-decoration: none; white-space: nowrap;">
                                 OPEN DASHBOARD
                               </a>
                             </td>
@@ -1061,13 +1023,21 @@
               <tr>
                 <td
                   style="padding-bottom: 10px; font-size: 14px; line-height: 21px; font-family: arial, sans-serif; color: #555; text-align: left;">
-                  This notification reports new alerts for the area you subscribed to. You will receive a separate email for each. Please note that this information is subject to the
+                  This notification reports new alerts for the area you subscribed to. You will receive a separate email for each.
+                </td>
+              </tr>
+              <tr>
+                <td
+                  style="padding-bottom: 10px; font-size: 14px; line-height: 21px; font-family: arial, sans-serif; color: #555; text-align: left;">
                     <a href="https://www.globalforestwatch.org/terms" style="color:#9abe16;">
-                      Global Forest Watch Terms of Service
-                    </a>
-                    . You can unsubscribe or manage your subscriptions
-                    <a href="{{{ unsubscribe_url }}}" target="_blank" style="color:#9abe16;">
-                      here</a>.
+                      Terms of Service
+                    </a> |
+                    <a href="https://www.globalforestwatch.org/my-gfw/" style="color:#9abe16;">
+                      Unsuscribe from alerts
+                    </a> |
+                    <a href="https://www.globalforestwatch.org/my-gfw/?profile=true" target="_blank" style="color:#9abe16;">
+                      Update profile
+                    </a> to receive news and events from GFW
                 </td>
               </tr>
             </table>

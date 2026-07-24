@@ -1,9 +1,10 @@
+<!-- V 1.1 -->
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office"
   xmlns:v="urn:schemas-microsoft-com:vml">
 
 <head>
-  <title>Deforestation Alerts detected in {{ alert_name }}</title>
+  <title>Forest Disturbance Alerts detected in {{ alert_name }}</title>
   <!-- The title tag shows in email notifications, like Android 4.4. -->
   <meta charset="utf-8"> <!-- utf-8 works for most cases -->
   <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
@@ -441,7 +442,7 @@
                       style="font-family: arial, sans-serif; font-size: 15px; line-height: 140%; color: #333333; text-align: left; padding: 15px 0 25px;">
                       <h1
                         style="font-weight: bold; font-size: 32px; line-height: 37px; color: #333333;">
-                        <b style="color: #F26798">Deforestation Alerts</b> detected in {{ alert_name }}</h1>
+                        <b style="color: #F26798">Forest disturbance alerts</b> detected in {{ alert_name }}</h1>
                     </td>
                   </tr>
                   <!-- Subtitle and meta : BEGIN -->
@@ -487,7 +488,7 @@
               <tr>
                 <td style="font-family: arial, sans-serif; padding-bottom: 40px;">
                   <h2 style="font-weight: bold; font-size: 16px; line-height: 20px; color: #555555;">
-                    DEFORESTATION ALERTS
+                    DISTURBANCE ALERTS
                   </h2>
                 </td>
               </tr>
@@ -518,7 +519,7 @@
                     <tr>
                       <td valign="top" style="font-family: arial, sans-serif; font-size: 18px; line-height: 30px; color: #4A4A4A; text-align: left; vertical-align: top;">
                         <p>
-                          There were <b style="color: #F26798;">{{ glad_count }} GLAD deforestation alerts</b> reported in the week of the {{ week_of }} (From {{ week_start }} to {{ week_end }}).
+                          There were <b style="color: #F26798;">{{ glad_count }} disturbance alerts</b> reported in tree cover the week of the {{ week_of }} (From {{ week_start }} to {{ week_end }}).
 	                          This is <b style="color: #F26798;">{{ glad_frequency }}</b> compared to the same week in previous years.
                         </p>
                       </td>
@@ -531,13 +532,30 @@
               </table>
               <![endif]-->
             </div>
+            
+            <!-- Integrated Disturbance Alerts Warning  -->
+            <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+              <tr>
+                <td style="padding-bottom: 40px">
+                  <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                    <tr>
+                      <td style="border: 2px solid #97BD3D; border-radius: 5px; padding: 20px; background-color: #F9FDF4;">
+                        <p style="font-family: arial, sans-serif; font-size: 14px; line-height: 21px; color: #555; margin: 0;">
+                          The integrated deforestation alerts layer has been updated to include global vegetation disturbance alerts (DIST-ALERT). These emails include alerts in tree cover. You can view alerts in all vegetation on the map or dashboard.
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
 
             <!-- Component : Secondary heading -->
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
               <tr>
                 <td style="font-family: arial, sans-serif; padding-bottom: 10px;">
                   <h3 style="font-weight: bold; font-size: 13px; line-height: 20px; color: #555555; text-transform: uppercase;">
-                    DEFORESTATION ALERTS IN PRIORITY AREAS
+                    DISTURBANCE ALERTS IN PRIORITY AREAS
                   </h3>
                 </td>
               </tr>
@@ -795,10 +813,21 @@
 
               <tr>
                 <td style="padding: 30px 0; font-size: 14px; line-height: 21px; font-family: arial, sans-serif; color: #555; text-align: left;">
-                  This notification reports new alerts for the area you subscribed to. You will receive a separate email for each. Please note that this information is subject to the
+                  This notification reports new alerts for the area you subscribed to. You will receive a separate email for each.
+                </td>
+              </tr>
+              <tr>
+                <td
+                  style="padding-bottom: 10px; font-size: 14px; line-height: 21px; font-family: arial, sans-serif; color: #555; text-align: left;">
                     <a href="https://www.globalforestwatch.org/terms" style="color:#9abe16;">
-                      Global Forest Watch Terms of Service</a>. You can unsubscribe or manage your subscriptions
-                    <a href="{{{ unsubscribe_url }}}" target="_blank" style="color:#9abe16;">here</a>.
+                      Terms of Service
+                    </a> |
+                    <a href="https://www.globalforestwatch.org/my-gfw/" style="color:#9abe16;">
+                      Unsuscribe from alerts
+                    </a> |
+                    <a href="https://www.globalforestwatch.org/my-gfw/?profile=true" target="_blank" style="color:#9abe16;">
+                      Update profile
+                    </a> to receive news and events from GFW
                 </td>
               </tr>
             </table>

@@ -367,7 +367,7 @@
     <!-- Visually Hidden Preview Text : BEGIN -->
     <div
       style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-      Alertes de déforestation détectées à {{ alert_name }}
+      Alertes de perturbation détectées à {{ alert_name }}
     </div>
     <!-- Visually Hidden Preview Text : END -->
 
@@ -439,10 +439,7 @@
                   <tr>
                     <td
                       style="font-family: arial, sans-serif; font-size: 15px; line-height: 140%; color: #333333; text-align: left; padding: 15px 0 25px;">
-                      <h1
-                        style="font-weight: bold; font-size: 32px; line-height: 37px; color: #333333;">
-                        <b style="color: #F26798">Alertes de déforestation</b> détectées à {{ alert_name }}</h1>
-                    </td>
+                          <h1 style="font-weight: bold; font-size: 32px; line-height: 37px; color: #333333;"><b style="color: #F26798">Alertes de perturbation forestière</b> détectées dans {{ alert_name }}</h1>
                   </tr>
                   <!-- Subtitle and meta : BEGIN -->
                   <tr>
@@ -487,7 +484,7 @@
               <tr>
                 <td style="font-family: arial, sans-serif; padding-bottom: 40px;">
                   <h2 style="font-weight: bold; font-size: 16px; line-height: 20px; color: #555555;">
-                    ALERTES DE DÉFORESTATION
+                    ALERTES DE PERTURBATION
                   </h2>
                 </td>
               </tr>
@@ -518,8 +515,7 @@
                     <tr>
                       <td valign="top" style="font-family: arial, sans-serif; font-size: 18px; line-height: 30px; color: #4A4A4A; text-align: left; vertical-align: top;">
                         <p>
-                          Il y a eu <b style="color: #F26798;">{{ glad_count }} {{ glad_alert_type }}</b> signalées au cours de la semaine du {{ week_of }} (du {{ week_start }} au {{ week_end }}).
-	                        Les alertes couvraient un total de <b style="color: #F26798;">{{ area_ha_sum }} hectares</b>.
+                            Au cours de la semaine du {{ week_of }}, <b style="color: #F26798;">{{ glad_count }} {{ glad_alert_type }}</b> alertes ont été signalées **dans la couverture forestière**. Ces alertes concernaient une superficie totale de <b style="color: #F26798;">{{ area_ha_sum }} hectares</b>.
                         </p>
                       </td>
                     </tr>
@@ -532,12 +528,29 @@
               <![endif]-->
             </div>
 
+            <!-- Integrated Disturbance Alerts Warning  -->
+            <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+              <tr>
+                <td style="padding-bottom: 40px">
+                  <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                    <tr>
+                      <td style="border: 2px solid #97BD3D; border-radius: 5px; padding: 20px; background-color: #F9FDF4;">
+                        <p style="font-family: arial, sans-serif; font-size: 14px; line-height: 21px; color: #555; margin: 0;">
+                          La couche intégrée d'alertes de déforestation a été mise à jour afin d'inclure les alertes mondiales de perturbation de la végétation (DIST-ALERT). Ces e-mails comprennent des alertes concernant le couvert forestier. Vous pouvez consulter les alertes concernant l'ensemble de la végétation sur la carte ou le tableau de bord.
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+
             <!-- Component : Secondary heading -->
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
               <tr>
                 <td style="font-family: arial, sans-serif; padding-bottom: 10px;">
                   <h3 style="font-weight: bold; font-size: 13px; line-height: 20px; color: #555555; text-transform: uppercase;">
-                    ALERTES DE DÉFORESTATION DANS LES ZONES PRIORITAIRES
+                    ALERTES DE PERTURBATION DANS LES ZONES PRIORITAIRES
                   </h3>
                 </td>
               </tr>
@@ -703,7 +716,7 @@
                             <tr>
                               <td width="100%" height="40" style="border-radius: 25px; width: 100%; background: #fff; text-align: center; height: 40px; border: solid 1px #97BD3D; display: block;">
                                 <a href="{{{ alert_link }}}"
-                                  style="padding: 11px 17px; display: block; height: 100%; border-radius: 25px; font-weight: bold;font-family: arial, sans-serif; font-size: 17px; line-height: 17px; color: #333; text-align: center; text-decoration: none; white-space: nowrap;">
+                                  style="padding: 11px 17px; display: block; border-radius: 25px; font-weight: bold;font-family: arial, sans-serif; font-size: 17px; line-height: 17px; color: #333; text-align: center; text-decoration: none; white-space: nowrap;">
                                   VOIR SUR LA CARTE
                                 </a>
                               </td>
