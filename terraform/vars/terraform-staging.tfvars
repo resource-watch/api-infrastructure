@@ -13,7 +13,7 @@ db_logs_exports                 = ["audit", "profiler"]
 eks_version                     = "1.30"
 eks_node_release_version        = "1.30.14-20251209"
 ebs_csi_addon_version           = "v1.30.0-eksbuild.1"
-kube_proxy_addon_version        = "v1.29.15-eksbuild.28"
+kube_proxy_addon_version        = "v1.30.14-eksbuild.18"
 gateway_node_group_desired_size = 0
 hibernate                       = false
 
