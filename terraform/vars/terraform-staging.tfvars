@@ -12,8 +12,8 @@ db_instance_count               = 2
 db_logs_exports                 = ["audit", "profiler"]
 eks_version                     = "1.31"
 eks_node_release_version        = "1.31.13-20251209"
-ebs_csi_addon_version           = "v1.30.0-eksbuild.1"
-kube_proxy_addon_version        = "v1.30.14-eksbuild.18"
+ebs_csi_addon_version           = "v1.63.1-eksbuild.1"
+kube_proxy_addon_version        = "v1.31.14-eksbuild.24"
 gateway_node_group_desired_size = 0
 hibernate                       = false
 
