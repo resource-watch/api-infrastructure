@@ -288,3 +288,8 @@ variable "gha_role_arn" {
   type        = string
   description = "ARN of the Role used for Github Actions."
 }
+
+variable "ami_type" {
+  type        = string
+  description = "Type of AMI to use for the EKS nodes"
+}

@@ -70,3 +70,7 @@ variable "eks_node_release_version" {
   description = "Version of EKS (kubernetes) node AMI to deploy"
 }
 
+variable "ami_type" {
+  type        = string
+  description = "Type of AMI to use for the EKS nodes"
+}

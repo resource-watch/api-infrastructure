@@ -14,6 +14,7 @@ eks_version                     = "1.30"
 eks_node_release_version        = "1.29.0-20240202"
 ebs_csi_addon_version           = "v1.27.0-eksbuild.1"
 kube_proxy_addon_version        = "v1.29.15-eksbuild.28"
+ami_type                        = "AL2_x86_64"
 deploy_canaries                 = true
 gateway_node_group_desired_size = 2
 hibernate                       = false
