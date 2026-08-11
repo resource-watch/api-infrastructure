@@ -6,6 +6,7 @@ resource "random_id" "eks-node-group" {
     # `terraform taint module.core-node-group.random_id.eks_node_group`
     instance_types = join(",", var.instance_types)
     capacity_type  = var.capacity_type
+    ami_type       = var.ami_type
   }
   byte_length = 8
 }
