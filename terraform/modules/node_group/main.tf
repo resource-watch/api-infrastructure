@@ -6,14 +6,14 @@ resource "random_id" "eks-node-group" {
     # `terraform taint module.core-node-group.random_id.eks_node_group`
     instance_types = join(",", var.instance_types)
     capacity_type  = var.capacity_type
-    ami_type       = var.ami_type
   }
   byte_length = 8
 }
 
 resource "aws_eks_node_group" "eks-node-group" {
   cluster_name    = var.cluster_name
-  node_group_name = "${var.node_group_name}-${random_id.eks-node-group.hex}"
+#  node_group_name = "${var.node_group_name}-${random_id.eks-node-group.hex}"
+  node_group_name_prefix="${var.node_group_name}"
   node_role_arn   = var.node_role_arn
   subnet_ids      = var.subnet_ids
   release_version = var.eks_node_release_version
