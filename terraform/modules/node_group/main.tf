@@ -12,7 +12,8 @@ resource "random_id" "eks-node-group" {
 
 resource "aws_eks_node_group" "eks-node-group" {
   cluster_name    = var.cluster_name
-  node_group_name = "${var.node_group_name}-${random_id.eks-node-group.hex}"
+#  node_group_name = "${var.node_group_name}-${random_id.eks-node-group.hex}"
+  node_group_name_prefix="${var.node_group_name}"
   node_role_arn   = var.node_role_arn
   subnet_ids      = var.subnet_ids
   release_version = var.eks_node_release_version
