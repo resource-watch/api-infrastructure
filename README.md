@@ -186,3 +186,8 @@ The command above will provision most of the resources needed by the API. Howeve
 
 Be sure to follow the steps described here: https://docs.aws.amazon.com/eks/latest/userguide/update-cluster.html#update-cluster-summary.  This cluster uses `cluster-autoscaler` which will need to be updated along with the various addons.
 
+### Switch to Gateway API Notes:
+
+1. Update the ALB Ingress Controller to the latest helm chart and apply using `--target=module.k8s_infrastructure` (TODO: Might need to create CRDS first?)
+1. Create CRDS, Gateway Classes, etc. using `--target=module.k8s_api_gatway_ingress`
+1. 

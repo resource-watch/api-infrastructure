@@ -207,7 +207,7 @@ resource "helm_release" "alb_controller" {
       "serviceAccount.name"   = kubernetes_service_account.this.metadata[0].name
       "region"                = local.aws_region_name
       "vpcId"                 = local.aws_vpc_id
-      "image.tag"             = var.aws_load_balancer_controller_version
+      #"image.tag"             = var.aws_load_balancer_controller_version
       "replicaCount"          = 1
     }
     content {

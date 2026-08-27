@@ -4,6 +4,7 @@ module "alb" {
   source       = "./alb_ingress"
   aws_region   = var.aws_region
   cluster_name = var.cluster_name
+  aws_load_balancer_controller_chart_version = var.aws_load_balancer_controller_chart_version
 }
 
 data "aws_caller_identity" "current" {}

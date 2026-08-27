@@ -12,3 +12,4 @@ namespaces                               = ["core", "aqueduct", "rw", "gfw", "pr
 fw_backend_url                           = "https://dev-fw-api.globalforestwatch.org"
 require_api_key                          = false
 cluster_autoscaler_version               = "v1.30.7"
+aws_load_balancer_controller_chart_version = "3.5.0"

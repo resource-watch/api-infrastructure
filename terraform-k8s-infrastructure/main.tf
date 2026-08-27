@@ -36,6 +36,7 @@ module "k8s_infrastructure" {
   cloudflare_api_key          = var.cloudflare_api_key
   cloudflare_email            = var.cloudflare_email
   cluster_autoscaler_version  = var.cluster_autoscaler_version
+  aws_load_balancer_controller_chart_version = var.aws_load_balancer_controller_chart_version
 }
 
 module "k8s_data_layer" {
@@ -66,4 +67,14 @@ module "k8s_microservice_routing" {
   require_api_key      = var.require_api_key
   cloudflare_api_key    = var.cloudflare_api_key
   cloudflare_email      = var.cloudflare_email
+}
+
+module "k8s_api_gateway_ingress" {
+  source           = "./modules/k8s_api_gateway_ingress"
+  #cluster_endpoint = "${data.aws_eks_cluster.rw_api.endpoint}:${var.cluster_port}"
+  #cluster_ca       = data.aws_eks_cluster.rw_api.certificate_authority.0.data
+  #cluster_name     = data.aws_eks_cluster.rw_api.name
+  #kubectl_context  = "aws-rw-${var.environment}"
+  #namespaces       = var.namespaces
+  depends_on = [module.k8s_infrastructure]
 }

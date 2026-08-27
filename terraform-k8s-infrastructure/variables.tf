@@ -108,3 +108,9 @@ variable "cluster_autoscaler_version" {
   type        = string
   description = "The version of the cluster autoscaler to deploy"
 }
+
+variable "aws_load_balancer_controller_chart_version" {
+  description = "The AWS Load Balancer Controller chart version to use. See https://artifacthub.io/packages/helm/aws/aws-load-balancer-controller for available versions"
+  type        = string
+  default     = "1.6.2"
+}
