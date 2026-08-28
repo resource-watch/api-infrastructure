@@ -18,16 +18,16 @@ resource "aws_api_gateway_method" "v1_redirect_proxy_method" {
   request_parameters = { "method.request.path.proxy" = true }
 }
 
-resource "aws_api_gateway_integration" "v1_redirect_proxy_integration" {
-  rest_api_id = var.api_gateway.id
-  resource_id = module.v1_redirect_proxy_resource.aws_api_gateway_resource.id
-  http_method = aws_api_gateway_method.v1_redirect_proxy_method.http_method
+#resource "aws_api_gateway_integration" "v1_redirect_proxy_integration" {
+#  rest_api_id = var.api_gateway.id
+#  resource_id = module.v1_redirect_proxy_resource.aws_api_gateway_resource.id
+#  http_method = aws_api_gateway_method.v1_redirect_proxy_method.http_method
 
-  type                    = "HTTP_PROXY"
-  uri                     = "https://${var.target_domain}/v1/{proxy}"
-  integration_http_method = "ANY"
+#  type                    = "HTTP_PROXY"
+#  uri                     = "https://${var.target_domain}/v1/{proxy}"
+# integration_http_method = "ANY"
 
-  connection_type = "INTERNET"
+# connection_type = "INTERNET"
 
-  request_parameters = { "integration.request.path.proxy" = "method.request.path.proxy" }
-}
+# request_parameters = { "integration.request.path.proxy" = "method.request.path.proxy" }
+#}

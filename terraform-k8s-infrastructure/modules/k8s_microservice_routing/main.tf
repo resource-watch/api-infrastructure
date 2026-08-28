@@ -89,6 +89,14 @@ resource "aws_api_gateway_rest_api" "rw_api_gateway" {
   api_key_source     = "HEADER"
 }
 
+data "aws_eks_cluster" "selected" {
+  name = var.cluster_name
+}
+
+data "aws_vpc" "selected" {
+  id = data.aws_eks_cluster.selected.vpc_config[0].vpc_id
+}
+
 data "aws_subnets" "private_subnets" {
   filter {
     name   = "tag:tier"
@@ -225,6 +233,13 @@ resource "aws_api_gateway_deployment" "prod" {
 
   triggers = {
     redeployment = sha1(join(",", tolist([
+      jsonencode([
+        #aws_api_gateway_resource.proxy.id,
+        #aws_api_gateway_method.proxy_any.id,
+        module.v1_redirect.aws_api_gateway_resource.id,
+        module.v1_redirect.aws_api_gateway_method.id,
+        aws_api_gateway_integration.shared_gateway_proxy.id
+      ]),
       jsonencode(module.analysis-gee.endpoints),
       jsonencode(module.aqueduct-analysis.endpoints),
       jsonencode(module.arcgis-proxy.endpoints),
@@ -279,7 +294,7 @@ resource "aws_api_gateway_deployment" "prod" {
       jsonencode(module.vocabulary.endpoints),
       jsonencode(module.webshot.endpoints),
       jsonencode(module.widget.endpoints),
-      jsonencode(module.v1_redirect.endpoints),
+      #jsonencode(module.v1_redirect.endpoints),
     ])))
   }
 
@@ -1584,4 +1599,93 @@ resource "aws_api_gateway_base_path_mapping" "env_api_resourcewatch_org_base_pat
   api_id      = aws_api_gateway_rest_api.rw_api_gateway.id
   stage_name  = aws_api_gateway_stage.prod.stage_name
   domain_name = aws_api_gateway_domain_name.env_api_resourcewatch_org_gateway_domain_name.domain_name
+}
+
+### New approach using Kubernetes for routing
+data "aws_lb" "shared_gateway_alb" {
+  tags = {
+    "gateway.k8s.aws.alb/stack" = "core/shared-gateway"
+  }
+}
+
+#data "aws_lb_listener" "shared_gateway_http" {
+#  load_balancer_arn = data.aws_lb.shared_gateway_alb.arn
+#  port = 80
+#}
+
+resource "aws_lb" "shared_gateway_nlb" {
+  name               = "eks-${var.dns_prefix}-shared-gateway-nlb"
+  load_balancer_type = "network"
+  internal           = true
+  subnets            = data.aws_subnets.private_subnets.ids
+}
+
+resource "aws_lb_target_group" "shared_gateway_alb_target" {
+  name        = "eks-${var.dns_prefix}-gtw-alb-target"
+  target_type = "alb"
+  port        = 80
+  protocol    = "TCP"
+  vpc_id      = data.aws_vpc.selected.id
+
+  health_check {
+    protocol = "HTTP"
+    path     = "/"
+    port     = "80"
+  }
+}
+
+resource "aws_lb_target_group_attachment" "shared_gateway_alb_target_attachment" {
+  target_group_arn = aws_lb_target_group.shared_gateway_alb_target.arn
+  target_id        = data.aws_lb.shared_gateway_alb.arn
+  port             = 80
+}
+
+resource "aws_lb_listener" "shared_gateway_route" {
+  load_balancer_arn = aws_lb.shared_gateway_nlb.arn
+  port              = 80
+  protocol          = "TCP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.shared_gateway_alb_target.arn
+  }
+}
+
+resource "aws_api_gateway_vpc_link" "shared_gateway_vpc_link" {
+  name = "eks-${var.dns_prefix}-gtw-vpc-link"
+  target_arns = [aws_lb.shared_gateway_nlb.arn]
+}
+
+#resource "aws_api_gateway_resource" "proxy" {
+#  rest_api_id = aws_api_gateway_rest_api.rw_api_gateway.id
+#  parent_id   = aws_api_gateway_rest_api.rw_api_gateway.root_resource_id
+#  path_part   = "{proxy+}"
+#}
+
+#resource "aws_api_gateway_method" "proxy_any" {
+#  rest_api_id   = aws_api_gateway_rest_api.rw_api_gateway.id
+#  resource_id   = aws_api_gateway_resource.proxy.id
+#  http_method   = "ANY"
+#  authorization = "NONE"
+
+#  request_parameters = {
+#    "method.request.path.proxy" = true
+#  }
+#}
+
+resource "aws_api_gateway_integration" "shared_gateway_proxy" {
+  rest_api_id             = aws_api_gateway_rest_api.rw_api_gateway.id
+  #resource_id             = aws_api_gateway_resource.proxy.id
+  resource_id             = module.v1_redirect.aws_api_gateway_resource.id
+  #http_method             = aws_api_gateway_method.proxy_any.http_method
+  http_method             = module.v1_redirect.aws_api_gateway_method.http_method
+  integration_http_method = "ANY"
+  type                    = "HTTP_PROXY"
+  connection_type         = "VPC_LINK"
+  connection_id           = aws_api_gateway_vpc_link.shared_gateway_vpc_link.id
+  uri                     = "http://${aws_lb.shared_gateway_nlb.dns_name}/{proxy}"
+
+  request_parameters = {
+    "integration.request.path.proxy" = "method.request.path.proxy"
+  }
 }

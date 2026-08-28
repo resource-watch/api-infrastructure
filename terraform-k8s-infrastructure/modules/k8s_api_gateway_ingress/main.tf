@@ -78,3 +78,28 @@ spec:
         from: All
 YAML
 }
+
+# Needs at least one HTTPRoute to create the ALB Listener
+# Points to the rw_lp service
+resource "kubectl_manifest" "shared_gateway_health" {
+  yaml_body = <<YAML
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: shared-gateway-health
+  namespace: default
+spec:
+  parentRefs:
+  - kind: Gateway
+    name: shared-gateway
+    namespace: core
+  rules:
+  - matches:
+    - path:
+        type: Exact
+        value: /health
+    backendRefs:
+    - name: rw-lp
+      port: 30559
+YAML
+}
